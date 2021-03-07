@@ -208,6 +208,39 @@ public class AutoArgumentsProviderSpecs {
         return context;
     }
 
+    public void hasBooleanParameters(boolean a0, Boolean a1) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_boolean_value() throws Exception {
+        var sut = new AutoArgumentsProvider();
+        var context = mock(ExtensionContext.class);
+        when(context.getTestMethod()).thenReturn(Optional.of(getMethod("hasBooleanParameters")));
+
+        int count = 100;
+        var actual = new HashSet<Boolean>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (Boolean) args.get()[0]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void sut_creates_arbitrary_Boolean_value() throws Exception {
+        var sut = new AutoArgumentsProvider();
+        var context = mock(ExtensionContext.class);
+        when(context.getTestMethod()).thenReturn(Optional.of(getMethod("hasBooleanParameters")));
+
+        int count = 100;
+        var actual = new HashSet<Boolean>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (Boolean) args.get()[1]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(2);
+    }
+
     private static Method getMethod(String methodName) {
         Method[] methods = AutoArgumentsProviderSpecs.class.getMethods();
         return stream(methods).filter(m -> m.getName().equals(methodName)).findFirst().orElse(null);

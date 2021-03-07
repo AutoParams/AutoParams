@@ -16,7 +16,7 @@ public class AutoArgumentsProvider implements ArgumentsProvider {
 
     private final ArgumentGenerator generator = new CompositeArgumentGenerator(new IntegerArgumentGenerator(),
             new FloatArgumentGenerator(), new DoubleArgumentGenerator(), new BigDecimalArgumentGenerator(),
-            new StringArgumentGenerator(), new UUIDArgumentGenerator());
+            new StringArgumentGenerator(), new UUIDArgumentGenerator(), new BooleanArgumentGenerator());
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
