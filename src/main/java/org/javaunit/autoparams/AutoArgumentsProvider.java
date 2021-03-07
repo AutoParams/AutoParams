@@ -12,11 +12,17 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 public class AutoArgumentsProvider implements ArgumentsProvider {
 
+    private static final CompositeArgumentGenerator primetiveValueGenerator = new CompositeArgumentGenerator(
+            new BooleanArgumentGenerator(), new IntegerArgumentGenerator(), new FloatArgumentGenerator(),
+            new DoubleArgumentGenerator());
+
+    private static final CompositeArgumentGenerator simpleValueObjectGenerator = new CompositeArgumentGenerator(
+            new BigDecimalArgumentGenerator(), new StringArgumentGenerator(), new UUIDArgumentGenerator());
+
     private static final Stream<Arguments> empty = stream(new Arguments[0]);
 
-    private final ArgumentGenerator generator = new CompositeArgumentGenerator(new IntegerArgumentGenerator(),
-            new FloatArgumentGenerator(), new DoubleArgumentGenerator(), new BigDecimalArgumentGenerator(),
-            new StringArgumentGenerator(), new UUIDArgumentGenerator(), new BooleanArgumentGenerator());
+    private final ArgumentGenerator generator = new CompositeArgumentGenerator(new ComplexObjectArgumentGenerator(),
+            primetiveValueGenerator, simpleValueObjectGenerator);
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
@@ -30,6 +36,7 @@ public class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private Object createArgument(Parameter parameter) {
-        return generator.generate(parameter).orElse(null);
+        var context = new ArgumentGenerationContext(parameter, generator);
+        return generator.generate(context).orElse(null);
     }
 }

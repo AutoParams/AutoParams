@@ -202,20 +202,13 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).hasSize(count);
     }
 
-    private ExtensionContext getExtensionContext(String methodName) {
-        ExtensionContext context = mock(ExtensionContext.class);
-        when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
-        return context;
-    }
-
     public void hasBooleanParameters(boolean a0, Boolean a1) {
     }
 
     @Test
     void sut_creates_arbitrary_boolean_value() throws Exception {
         var sut = new AutoArgumentsProvider();
-        var context = mock(ExtensionContext.class);
-        when(context.getTestMethod()).thenReturn(Optional.of(getMethod("hasBooleanParameters")));
+        ExtensionContext context = getExtensionContext("hasBooleanParameters");
 
         int count = 100;
         var actual = new HashSet<Boolean>();
@@ -229,8 +222,7 @@ public class AutoArgumentsProviderSpecs {
     @Test
     void sut_creates_arbitrary_Boolean_value() throws Exception {
         var sut = new AutoArgumentsProvider();
-        var context = mock(ExtensionContext.class);
-        when(context.getTestMethod()).thenReturn(Optional.of(getMethod("hasBooleanParameters")));
+        ExtensionContext context = getExtensionContext("hasBooleanParameters");
 
         int count = 100;
         var actual = new HashSet<Boolean>();
@@ -239,6 +231,25 @@ public class AutoArgumentsProviderSpecs {
         }
 
         assertThat(actual).hasSize(2);
+    }
+
+    public void hasComplexObjectParameter(ComplexObject a0) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_complex_object() throws Exception {
+        var sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasComplexObjectParameter");
+
+        Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
+
+        assertThat(actual).isInstanceOf(ComplexObject.class);
+    }
+
+    private ExtensionContext getExtensionContext(String methodName) {
+        ExtensionContext context = mock(ExtensionContext.class);
+        when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
+        return context;
     }
 
     private static Method getMethod(String methodName) {
