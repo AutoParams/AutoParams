@@ -36,7 +36,7 @@ public class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private Object createArgument(Parameter parameter) {
-        ArgumentGenerationContext context = new ArgumentGenerationContext(parameter, generator);
-        return generator.generate(context).orElse(null);
+        ArgumentGenerationContext context = new ArgumentGenerationContext(generator);
+        return generator.generate(parameter, context).orElse(null);
     }
 }

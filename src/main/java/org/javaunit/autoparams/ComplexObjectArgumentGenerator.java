@@ -12,9 +12,9 @@ import java.util.UUID;
 final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
 
     @Override
-    public Optional<Object> generate(ArgumentGenerationContext context) {
-        return resolveConstructor(context.getParameter().getType()).map(c -> createInstance(c, context.getGenerator()))
-                .map(Optional::of).orElse(Optional.empty());
+    public Optional<Object> generate(Parameter parameter, ArgumentGenerationContext context) {
+        return resolveConstructor(parameter.getType()).map(c -> createInstance(c, context)).map(Optional::of)
+                .orElse(Optional.empty());
     }
 
     private Optional<Constructor<?>> resolveConstructor(Class<?> type) {
@@ -27,18 +27,18 @@ final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
                 || type.equals(UUID.class);
     }
 
-    private Object createInstance(Constructor<?> constructor, ArgumentGenerator generator) {
+    private Object createInstance(Constructor<?> constructor, ArgumentGenerationContext context) {
         try {
-            return constructor.newInstance(resolveArguments(constructor.getParameters(), generator));
+            return constructor.newInstance(resolveArguments(constructor.getParameters(), context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Object[] resolveArguments(Parameter[] parameters, ArgumentGenerator generator) {
-        return stream(parameters).map(p -> new ArgumentGenerationContext(p, generator)).map(generator::generate)
-                .map(a -> a.orElse(null)).toArray();
+    private Object[] resolveArguments(Parameter[] parameters, ArgumentGenerationContext context) {
+        ArgumentGenerator generator = context.getGenerator();
+        return stream(parameters).map(p -> generator.generate(p, context)).map(a -> a.orElse(null)).toArray();
     }
 
 }
