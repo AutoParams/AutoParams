@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,13 +33,13 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_single_set() throws Exception {
-        var sut = new AutoArgumentsProvider();
-        var context = mock(ExtensionContext.class);
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod("hasSingleParameter")));
 
-        Stream<? extends Arguments> actual = sut.provideArguments(context);
+        List<Arguments> actual = sut.provideArguments(context).collect(Collectors.toList());
 
-        assertThat(actual).hasSize(1);
+        assertThat(actual.size()).isEqualTo(1);
     }
 
     public void hasTwoParameters(int a0, int a1) {
@@ -47,8 +48,8 @@ public class AutoArgumentsProviderSpecs {
     @ParameterizedTest
     @CsvSource({ "hasSingleParameter, 1", "hasTwoParameters, 2" })
     void sut_provides_arguments_as_many_as_parameters(String methodName, int count) throws Exception {
-        var sut = new AutoArgumentsProvider();
-        var context = mock(ExtensionContext.class);
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
 
         Stream<? extends Arguments> actual = sut.provideArguments(context);
@@ -63,11 +64,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_int_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasIntegerParameters");
 
         int count = 100;
-        var actual = new HashSet<Integer>();
+        HashSet<Integer> actual = new HashSet<Integer>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Integer) args.get()[0]).forEach(actual::add);
         }
@@ -77,11 +78,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_Integer_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasIntegerParameters");
 
         int count = 100;
-        var actual = new HashSet<Integer>();
+        HashSet<Integer> actual = new HashSet<Integer>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Integer) args.get()[1]).forEach(actual::add);
         }
@@ -94,11 +95,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_float_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasFloatParameters");
 
         int count = 100;
-        var actual = new HashSet<Float>();
+        HashSet<Float> actual = new HashSet<Float>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Float) args.get()[0]).forEach(actual::add);
         }
@@ -108,11 +109,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_Float_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasFloatParameters");
 
         int count = 100;
-        var actual = new HashSet<Float>();
+        HashSet<Float> actual = new HashSet<Float>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Float) args.get()[1]).forEach(actual::add);
         }
@@ -125,11 +126,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_double_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasDoubleParameters");
 
         int count = 100;
-        var actual = new HashSet<Double>();
+        HashSet<Double> actual = new HashSet<Double>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Double) args.get()[0]).forEach(actual::add);
         }
@@ -139,11 +140,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_Double_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasDoubleParameters");
 
         int count = 100;
-        var actual = new HashSet<Double>();
+        HashSet<Double> actual = new HashSet<Double>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Double) args.get()[1]).forEach(actual::add);
         }
@@ -156,11 +157,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_BigDecimal_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasBigDecimalParameters");
 
         int count = 100;
-        var actual = new HashSet<BigDecimal>();
+        HashSet<BigDecimal> actual = new HashSet<BigDecimal>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (BigDecimal) args.get()[0]).forEach(actual::add);
         }
@@ -173,11 +174,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_String_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasStringParameters");
 
         int count = 100;
-        var actual = new HashSet<String>();
+        HashSet<String> actual = new HashSet<String>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (String) args.get()[0]).forEach(actual::add);
         }
@@ -190,11 +191,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_UUID_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasUUIDParameters");
 
         int count = 100;
-        var actual = new HashSet<UUID>();
+        HashSet<UUID> actual = new HashSet<UUID>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (UUID) args.get()[0]).forEach(actual::add);
         }
@@ -207,11 +208,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_boolean_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasBooleanParameters");
 
         int count = 100;
-        var actual = new HashSet<Boolean>();
+        HashSet<Boolean> actual = new HashSet<Boolean>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Boolean) args.get()[0]).forEach(actual::add);
         }
@@ -221,11 +222,11 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_Boolean_value() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasBooleanParameters");
 
         int count = 100;
-        var actual = new HashSet<Boolean>();
+        HashSet<Boolean> actual = new HashSet<Boolean>();
         for (int i = 0; i < count; i++) {
             sut.provideArguments(context).map(args -> (Boolean) args.get()[1]).forEach(actual::add);
         }
@@ -238,7 +239,7 @@ public class AutoArgumentsProviderSpecs {
 
     @Test
     void sut_creates_arbitrary_complex_object() throws Exception {
-        var sut = new AutoArgumentsProvider();
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasComplexObjectParameter");
 
         Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
