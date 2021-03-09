@@ -4,15 +4,15 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
 
     @Override
-    public Optional<Object> generate(Parameter parameter, ArgumentGenerationContext context) {
+    public Optional<Object> generate(ParameterDescriptor parameter, ArgumentGenerationContext context) {
         return resolveConstructor(parameter.getType()).map(c -> createInstance(c, context)).map(Optional::of)
                 .orElse(Optional.empty());
     }
@@ -29,16 +29,18 @@ final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
 
     private Object createInstance(Constructor<?> constructor, ArgumentGenerationContext context) {
         try {
-            return constructor.newInstance(resolveArguments(constructor.getParameters(), context));
+            Stream<ParameterDescriptor> parameters = stream(constructor.getParameters())
+                    .map(ParameterDescriptor::create);
+            return constructor.newInstance(resolveArguments(parameters, context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Object[] resolveArguments(Parameter[] parameters, ArgumentGenerationContext context) {
+    private Object[] resolveArguments(Stream<ParameterDescriptor> parameters, ArgumentGenerationContext context) {
         ArgumentGenerator generator = context.getGenerator();
-        return stream(parameters).map(p -> generator.generate(p, context)).map(a -> a.orElse(null)).toArray();
+        return parameters.map(p -> generator.generate(p, context)).map(a -> a.orElse(null)).toArray();
     }
 
 }

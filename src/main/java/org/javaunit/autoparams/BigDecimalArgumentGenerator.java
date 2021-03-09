@@ -1,13 +1,12 @@
 package org.javaunit.autoparams;
 
-import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.Optional;
 
 final class BigDecimalArgumentGenerator implements ArgumentGenerator {
 
     @Override
-    public Optional<Object> generate(Parameter parameter, ArgumentGenerationContext context) {
+    public Optional<Object> generate(ParameterDescriptor parameter, ArgumentGenerationContext context) {
         Class<?> type = parameter.getType();
         return type.equals(BigDecimal.class) ? factory() : Optional.empty();
     }
