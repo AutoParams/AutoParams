@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
+final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ParameterDescriptor parameter, ArgumentGenerationContext context) {
-        return resolveConstructor(parameter.getType()).map(c -> createInstance(c, context)).map(Optional::of)
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        return resolveConstructor(query.getType()).map(c -> createInstance(c, context)).map(Optional::of)
                 .orElse(Optional.empty());
     }
 
@@ -27,20 +27,19 @@ final class ComplexObjectArgumentGenerator implements ArgumentGenerator {
                 || type.equals(UUID.class);
     }
 
-    private Object createInstance(Constructor<?> constructor, ArgumentGenerationContext context) {
+    private Object createInstance(Constructor<?> constructor, ObjectGenerationContext context) {
         try {
-            Stream<ParameterDescriptor> parameters = stream(constructor.getParameters())
-                    .map(ParameterDescriptor::create);
-            return constructor.newInstance(resolveArguments(parameters, context));
+            Stream<ObjectQuery> queries = stream(constructor.getParameters()).map(ObjectQuery::create);
+            return constructor.newInstance(resolveArguments(queries, context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Object[] resolveArguments(Stream<ParameterDescriptor> parameters, ArgumentGenerationContext context) {
-        ArgumentGenerator generator = context.getGenerator();
-        return parameters.map(p -> generator.generate(p, context)).map(a -> a.orElse(null)).toArray();
+    private Object[] resolveArguments(Stream<ObjectQuery> queries, ObjectGenerationContext context) {
+        ObjectGenerator generator = context.getGenerator();
+        return queries.map(p -> generator.generate(p, context)).map(a -> a.orElse(null)).toArray();
     }
 
 }

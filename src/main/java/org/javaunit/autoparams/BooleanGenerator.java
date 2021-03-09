@@ -2,11 +2,11 @@ package org.javaunit.autoparams;
 
 import java.util.Optional;
 
-final class BooleanArgumentGenerator implements ArgumentGenerator {
+final class BooleanGenerator implements ObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ParameterDescriptor parameter, ArgumentGenerationContext context) {
-        Class<?> type = parameter.getType();
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        Class<?> type = query.getType();
         return type.equals(boolean.class) || type.equals(Boolean.class) ? factory() : Optional.empty();
     }
 

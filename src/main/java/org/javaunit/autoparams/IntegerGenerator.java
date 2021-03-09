@@ -2,11 +2,11 @@ package org.javaunit.autoparams;
 
 import java.util.Optional;
 
-final class IntegerArgumentGenerator implements ArgumentGenerator {
+final class IntegerGenerator implements ObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ParameterDescriptor parameter, ArgumentGenerationContext context) {
-        Class<?> type = parameter.getType();
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        Class<?> type = query.getType();
         return type.equals(int.class) || type.equals(Integer.class) ? factory() : Optional.empty();
     }
 

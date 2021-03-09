@@ -12,16 +12,16 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 public class AutoArgumentsProvider implements ArgumentsProvider {
 
-    private static final CompositeArgumentGenerator primetiveValueGenerator = new CompositeArgumentGenerator(
-            new BooleanArgumentGenerator(), new IntegerArgumentGenerator(), new FloatArgumentGenerator(),
-            new DoubleArgumentGenerator());
+    private static final CompositeObjectGenerator primetiveValueGenerator = new CompositeObjectGenerator(
+            new BooleanGenerator(), new IntegerGenerator(), new FloatGenerator(),
+            new DoubleGenerator());
 
-    private static final CompositeArgumentGenerator simpleValueObjectGenerator = new CompositeArgumentGenerator(
-            new BigDecimalArgumentGenerator(), new StringArgumentGenerator(), new UUIDArgumentGenerator());
+    private static final CompositeObjectGenerator simpleValueObjectGenerator = new CompositeObjectGenerator(
+            new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator());
 
     private static final Stream<Arguments> empty = stream(new Arguments[0]);
 
-    private final ArgumentGenerator generator = new CompositeArgumentGenerator(new ComplexObjectArgumentGenerator(),
+    private final ObjectGenerator generator = new CompositeObjectGenerator(new ComplexObjectGenerator(),
             primetiveValueGenerator, simpleValueObjectGenerator);
 
     @Override
@@ -36,7 +36,7 @@ public class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private Object createArgument(Parameter parameter) {
-        ArgumentGenerationContext context = new ArgumentGenerationContext(generator);
-        return generator.generate(ParameterDescriptor.create(parameter), context).orElse(null);
+        ObjectGenerationContext context = new ObjectGenerationContext(generator);
+        return generator.generate(ObjectQuery.create(parameter), context).orElse(null);
     }
 }
