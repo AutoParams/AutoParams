@@ -9,24 +9,30 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
-public class AutoArgumentsProvider implements ArgumentsProvider {
+public class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
 
-    private static final CompositeObjectGenerator primetiveValueGenerator = new CompositeObjectGenerator(
-            new BooleanGenerator(), new IntegerGenerator(), new FloatGenerator(),
-            new DoubleGenerator());
+    private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
-    private static final CompositeObjectGenerator simpleValueObjectGenerator = new CompositeObjectGenerator(
+    private static final ObjectGenerator PRIMETIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
+            new BooleanGenerator(), new IntegerGenerator(), new FloatGenerator(), new DoubleGenerator());
+
+    private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
             new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator());
 
-    private static final Stream<Arguments> empty = stream(new Arguments[0]);
+    private static final ObjectGenerator ARRAY_GENERATOR = new CompositeObjectGenerator(new IntegerArrayGenerator());
 
-    private final ObjectGenerator generator = new CompositeObjectGenerator(new ComplexObjectGenerator(),
-            primetiveValueGenerator, simpleValueObjectGenerator);
+    private final ObjectGenerator generator;
+
+    public AutoArgumentsProvider() {
+        generator = new CompositeObjectGenerator(PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR,
+                ARRAY_GENERATOR, new ComplexObjectGenerator());
+    }
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-        return context.getTestMethod().map(method -> createArguments(method)).orElse(empty);
+        return context.getTestMethod().map(method -> createArguments(method)).orElse(EMPTY);
     }
 
     private Stream<Arguments> createArguments(Method method) {
@@ -36,7 +42,12 @@ public class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private Object createArgument(Parameter parameter) {
+        ObjectQuery query = ObjectQuery.create(parameter);
         ObjectGenerationContext context = new ObjectGenerationContext(generator);
-        return generator.generate(ObjectQuery.create(parameter), context).orElse(null);
+        return generator.generate(query, context).orElse(null);
+    }
+
+    @Override
+    public void accept(AutoSource annotation) {
     }
 }
