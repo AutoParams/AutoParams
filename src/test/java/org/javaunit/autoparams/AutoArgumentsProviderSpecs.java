@@ -247,6 +247,19 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).isInstanceOf(ComplexObject.class);
     }
 
+    public void hasMoreComplexObjectParameter(MoreComplexObject a0) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_object_having_complex_object() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasMoreComplexObjectParameter");
+
+        Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
+
+        assertThat(actual).isInstanceOf(MoreComplexObject.class);
+    }
+
     private ExtensionContext getExtensionContext(String methodName) {
         ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
