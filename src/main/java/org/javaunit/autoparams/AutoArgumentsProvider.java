@@ -21,11 +21,21 @@ public class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsu
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
             new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator());
 
+    private static final ObjectGenerator ENUMERABLE_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
+            new CollectionGenerator(), new StreamGenerator());
+
+    public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
+            PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, ENUMERABLE_GENERATOR,
+            new ComplexObjectGenerator());
+
     private final ObjectGenerator generator;
 
     public AutoArgumentsProvider() {
-        generator = new CompositeObjectGenerator(PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR,
-                new ArrayGenerator(), new ComplexObjectGenerator());
+        this(DEFAULT_OBJECT_GENERATOR);
+    }
+
+    public AutoArgumentsProvider(ObjectGenerator generator) {
+        this.generator = generator;
     }
 
     @Override

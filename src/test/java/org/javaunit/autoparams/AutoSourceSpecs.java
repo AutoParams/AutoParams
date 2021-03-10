@@ -2,7 +2,12 @@ package org.javaunit.autoparams;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -46,4 +51,56 @@ public class AutoSourceSpecs {
 
         assertThat(set).hasSize(array.length);
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_array_list(ArrayList<ComplexObject> arrayList) {
+        assertThat(arrayList).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_fills_array_list(ArrayList<UUID> arrayList) {
+        HashSet<UUID> set = new HashSet<UUID>();
+        for (UUID x : arrayList) {
+            set.add(x);
+        }
+
+        assertThat(arrayList).hasSize(3);
+        assertThat(set).hasSize(arrayList.size());
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_list(List<ComplexObject> list) {
+        assertThat(list).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_collection(Collection<ComplexObject> collection) {
+        assertThat(collection).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_iterable(Iterable<ComplexObject> iterable) {
+        assertThat(iterable).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_stream(Stream<UUID> stream) {
+        assertThat(stream).isNotNull();
+
+        Object[] array = stream.toArray();
+        HashSet<UUID> set = new HashSet<UUID>();
+        for (int i = 0; i < array.length; i++) {
+            set.add((UUID) array[i]);
+        }
+
+        assertThat(array).hasSize(3);
+        assertThat(set).hasSize(array.length);
+    }
+
 }
