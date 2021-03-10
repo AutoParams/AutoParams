@@ -57,6 +57,6 @@ void myTestMethod(ComplexObject x1) {
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(int[] array1, ComplexObject array2) {
+void myTestMethod(int[] array1, ComplexObject[] array2) {
 }
 ```
