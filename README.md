@@ -54,11 +54,31 @@ void myTestMethod(ComplexObject x1) {
 }
 ```
 
-### Generate arrays
+### Generate collections and streams
+
+#### Array
 
 ```java
 @ParameterizedTest
 @AutoSource
 void myTestMethod(int[] array1, ComplexObject[] array2) {
+}
+```
+
+#### List
+
+```java
+@ParameterizedTest
+@AutoSource
+void myTestMethod(List<ComplexObject> list) {
+}
+```
+
+#### Stream
+
+```java
+@ParameterizedTest
+@AutoSource
+void myTestMethod(Stream<ComplexObject> stream) {
 }
 ```
