@@ -25,4 +25,25 @@ public class AutoSourceSpecs {
         assertThat(set).hasSize(array.length);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_fills_array_of_Integer_with_arbitrary_values(Integer[] array) {
+        HashSet<Integer> set = new HashSet<Integer>();
+        for (int i = 0; i < array.length; i++) {
+            set.add(array[i]);
+        }
+
+        assertThat(set).hasSize(array.length);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_fills_array_of_complex_type_with_arbitary_objects(ComplexObject[] array) {
+        HashSet<ComplexObject> set = new HashSet<ComplexObject>();
+        for (int i = 0; i < array.length; i++) {
+            set.add(array[i]);
+        }
+
+        assertThat(set).hasSize(array.length);
+    }
 }
