@@ -90,6 +90,37 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).hasSize(count);
     }
 
+    public void hasLongParameters(long a0, Long a1) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_long_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasLongParameters");
+
+        int count = 100;
+        HashSet<Long> actual = new HashSet<Long>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (Long) args.get()[0]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(count);
+    }
+
+    @Test
+    void sut_creates_arbitrary_Long_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasLongParameters");
+
+        int count = 100;
+        HashSet<Long> actual = new HashSet<Long>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (Long) args.get()[1]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(count);
+    }
+
     public void hasFloatParameters(float a0, Float a1) {
     }
 
