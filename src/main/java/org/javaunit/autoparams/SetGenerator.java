@@ -1,14 +1,13 @@
 package org.javaunit.autoparams;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-final class SetGenerator implements ObjectGenerator {
+final class SetGenerator extends GenericObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return isSet(type) ? Optional.of(factory(getComponentType(query), context)) : Optional.empty();
     }
@@ -17,9 +16,8 @@ final class SetGenerator implements ObjectGenerator {
         return type.equals(HashSet.class) || type.equals(Set.class);
     }
 
-    private static Class<?> getComponentType(ObjectQuery query) {
-        ParameterizedType parameterizedType = (ParameterizedType) query.getParameterizedType();
-        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    private static Class<?> getComponentType(GenericObjectQuery query) {
+        return (Class<?>) query.getParameterizedType().getActualTypeArguments()[0];
     }
 
     @SuppressWarnings("unchecked")

@@ -59,4 +59,5 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     @Override
     public void accept(AutoSource annotation) {
     }
+
 }

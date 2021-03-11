@@ -1,14 +1,13 @@
 package org.javaunit.autoparams;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-final class MapGenerator implements ObjectGenerator {
+final class MapGenerator extends GenericObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return isMap(type) ? Optional.of(factory(query, context)) : Optional.empty();
     }
@@ -17,7 +16,7 @@ final class MapGenerator implements ObjectGenerator {
         return type.equals(HashMap.class) || type.equals(Map.class);
     }
 
-    private Object factory(ObjectQuery query, ObjectGenerationContext context) {
+    private Object factory(GenericObjectQuery query, ObjectGenerationContext context) {
         return factory(getKeyType(query), getValueType(query), context);
     }
 
@@ -37,14 +36,12 @@ final class MapGenerator implements ObjectGenerator {
         return instance;
     }
 
-    private Class<?> getKeyType(ObjectQuery query) {
-        ParameterizedType parameterizedType = (ParameterizedType) query.getParameterizedType();
-        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    private Class<?> getKeyType(GenericObjectQuery query) {
+        return (Class<?>) query.getParameterizedType().getActualTypeArguments()[0];
     }
 
-    private Class<?> getValueType(ObjectQuery query) {
-        ParameterizedType parameterizedType = (ParameterizedType) query.getParameterizedType();
-        return (Class<?>) parameterizedType.getActualTypeArguments()[1];
+    private Class<?> getValueType(GenericObjectQuery query) {
+        return (Class<?>) query.getParameterizedType().getActualTypeArguments()[1];
     }
 
 }
