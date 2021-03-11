@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -123,6 +124,24 @@ public class AutoSourceSpecs {
     @AutoSource
     void sut_creates_map(Map<Integer, String> map) {
         assertThat(map).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_hash_set(HashSet<String> set) {
+        assertThat(set).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_fills_hash_set(HashSet<String> set) {
+        assertThat(set).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_set(Set<String> set) {
+        assertThat(set).isNotNull();
     }
 
     @ParameterizedTest

@@ -23,7 +23,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
             new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
-            new CollectionGenerator(), new StreamGenerator(), new MapGenerator());
+            new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
             PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
