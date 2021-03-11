@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -101,6 +103,26 @@ public class AutoSourceSpecs {
 
         assertThat(array).hasSize(3);
         assertThat(set).hasSize(array.length);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_hash_map(HashMap<Integer, String> map) {
+        assertThat(map).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_fills_hash_map(HashMap<Integer, String> map) {
+        assertThat(map).hasSize(3);
+        HashSet<String> set = new HashSet<String>(map.values());
+        assertThat(set).hasSize(map.keySet().size());
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_map(Map<Integer, String> map) {
+        assertThat(map).isNotNull();
     }
 
     @ParameterizedTest

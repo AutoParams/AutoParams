@@ -11,7 +11,7 @@ Arbitrary test data generator for parameterized tests in Java.
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(boolean x1, int x2, float x3, double x4) {
+void myTestMethod(boolean x1, int x2, long x3, float x4, double x5) {
 }
 ```
 
@@ -51,6 +51,37 @@ class ComplexObject {
 @ParameterizedTest
 @AutoSource
 void myTestMethod(ComplexObject x1) {
+}
+```
+
+### Generate generic objects
+
+```java
+public class GenericObject<T1, T2> {
+
+    private final T1 value1;
+    private final T2 value2;
+
+    public GenericObject(T1 value1, T2 value2) {
+        this.value1 = value1;
+        this.value2 = value2;
+    }
+
+    public T1 getValue1() {
+        return value2;
+    }
+
+    public T2 getValue2() {
+        return value3;
+    }
+
+}
+
+@ParameterizedTest
+@AutoSource
+void myTestMethod(
+    GenericObject<String, ComplexObject> x1,
+    GenericObject<UUID, GenericObject<String, ComplexObject>> x2) {
 }
 ```
 

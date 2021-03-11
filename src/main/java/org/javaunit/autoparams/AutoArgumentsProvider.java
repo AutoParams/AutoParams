@@ -22,11 +22,11 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
             new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator());
 
-    private static final ObjectGenerator ENUMERABLE_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
-            new CollectionGenerator(), new StreamGenerator());
+    private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
+            new CollectionGenerator(), new StreamGenerator(), new MapGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, ENUMERABLE_GENERATOR,
+            PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
             new ComplexObjectGenerator());
 
     private final ObjectGenerator generator;
