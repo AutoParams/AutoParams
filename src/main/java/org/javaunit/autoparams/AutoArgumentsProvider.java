@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-public class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
+public final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
@@ -34,7 +34,7 @@ public class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsu
         this(DEFAULT_OBJECT_GENERATOR);
     }
 
-    public AutoArgumentsProvider(ObjectGenerator generator) {
+    private AutoArgumentsProvider(ObjectGenerator generator) {
         this.generator = generator;
     }
 
