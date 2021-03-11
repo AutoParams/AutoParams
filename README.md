@@ -57,7 +57,7 @@ void myTestMethod(ComplexObject x1) {
 ### Generate generic objects
 
 ```java
-public class GenericObject<T1, T2> {
+class GenericObject<T1, T2> {
 
     private final T1 value1;
     private final T2 value2;
@@ -102,6 +102,24 @@ void myTestMethod(int[] array1, ComplexObject[] array2) {
 @ParameterizedTest
 @AutoSource
 void myTestMethod(List<ComplexObject> list) {
+}
+```
+
+#### Set
+
+```java
+@ParameterizedTest
+@AutoSource
+void myTestMethod(Set<UUID> set) {
+}
+```
+
+#### Map
+
+```java
+@ParameterizedTest
+@AutoSource
+void myTestMethod(Map<UUID, ComplexObject> map) {
 }
 ```
 
