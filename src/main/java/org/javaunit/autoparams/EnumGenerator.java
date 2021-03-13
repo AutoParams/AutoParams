@@ -6,7 +6,8 @@ import java.util.Optional;
 public class EnumGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        return query.getType().getSuperclass().equals(Enum.class) ? factory(query.getType()) : Optional.empty();
+        Class<?> superType = query.getType().getSuperclass();
+        return superType != null && superType.equals(Enum.class) ? factory(query.getType()) : Optional.empty();
     }
 
     private Optional<Object> factory(Class<?> type) {
