@@ -1,5 +1,7 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
@@ -18,4 +20,61 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    repositories {
+        maven {
+            name "OSSRH"
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username System.getenv("MAVEN_USERNAME")
+                password System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId 'io.github.javaunit'
+            artifactId 'autoparams'
+            version '0.0.1'
+            from components.java
+            pom {
+                name = "AutoParams"
+                description = "Arbitrary test data generator for parameterized tests in Java."
+                url = "https://github.com/JavaUnit/AutoParams"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://github.com/JavaUnit/AutoParams/blob/main/LICENSE"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "gyuwon"
+                        name = "Gyuwon Yi"
+                        email = "gyuwon@live.com"
+                    }
+                }
+                scm {
+                    connection = "https://github.com/JavaUnit/AutoParams.git"
+                    developerConnection = "https://github.com/JavaUnit/AutoParams.git"
+                    url = "https://github.com/JavaUnit/AutoParams"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = System.getenv("SIGNING_KEY")
+    def signingPassword = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.maven
 }
