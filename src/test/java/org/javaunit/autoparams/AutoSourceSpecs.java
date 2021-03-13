@@ -46,7 +46,7 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_fills_array_of_complex_type_with_arbitary_objects(ComplexObject[] array) {
+    void sut_fills_array_of_complex_type_with_arbitrary_objects(ComplexObject[] array) {
         HashSet<ComplexObject> set = new HashSet<ComplexObject>();
         for (int i = 0; i < array.length; i++) {
             set.add(array[i]);
