@@ -15,7 +15,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
-    private static final ObjectGenerator PRIMETIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
+    private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
             new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
             new DoubleGenerator());
 
@@ -26,7 +26,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
             new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            PRIMETIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
+            PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
             new ComplexObjectGenerator());
 
     private final ObjectGenerator generator;
