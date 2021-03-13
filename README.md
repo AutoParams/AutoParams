@@ -3,6 +3,7 @@
 Arbitrary test data generator for parameterized tests in Java.
 
 [![CI](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml)
+[![Publish](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml)
 
 ---
 
