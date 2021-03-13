@@ -288,7 +288,7 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).isInstanceOf(MoreComplexObject.class);
     }
 
-    public void hasEnumObjectParameter(EnumObject a0) {
+    public void hasEnumObjectParameter(EnumType a0) {
     }
 
     @Test
@@ -302,7 +302,7 @@ public class AutoArgumentsProviderSpecs {
             sut.provideArguments(context).map(args -> (Enum<?>) args.get()[0]).forEach(actual::add);
         }
 
-        assertThat(actual).hasSize(EnumObject.values().length);
+        assertThat(actual).hasSize(EnumType.values().length);
     }
 
     private ExtensionContext getExtensionContext(String methodName) {
