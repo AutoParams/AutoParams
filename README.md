@@ -4,6 +4,28 @@ Arbitrary test data generator for parameterized tests in Java.
 
 [![CI](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml)
 
+---
+
+## Install
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>io.github.javaunit</groupId>
+  <artifactId>autoparams</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+implementation 'io.github.javaunit:autoparams:0.0.1'
+```
+
+---
+
 ## Features
 
 ### Generate arbitrary test data of primitive types
