@@ -22,7 +22,7 @@ Arbitrary test data generator for parameterized tests in Java.
 ### Gradle
 
 ```groovy
-implementation 'io.github.javaunit:autoparams:0.0.1'
+testImplementation 'io.github.javaunit:autoparams:0.0.1'
 ```
 
 ---
@@ -77,7 +77,7 @@ void myTestMethod(ComplexObject x1) {
 }
 ```
 
-### Generate generic objects
+### Generate arbitrary generic objects
 
 ```java
 class GenericObject<T1, T2> {
