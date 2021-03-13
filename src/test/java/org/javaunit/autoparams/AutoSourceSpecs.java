@@ -57,6 +57,18 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
+    void sut_fills_array_of_enum_type_with_arbitrary_objects(EnumObject[] array) {
+        HashSet<EnumObject> set = new HashSet<>();
+        for (int i = 0; i < array.length; i++) {
+            set.add(array[i]);
+        }
+
+        assertThat(set.size()).isGreaterThanOrEqualTo(1);
+        assertThat(set.size()).isLessThanOrEqualTo(EnumObject.values().length);
+    }
+
+    @ParameterizedTest
+    @AutoSource
     void sut_creates_array_list(ArrayList<ComplexObject> arrayList) {
         assertThat(arrayList).isNotNull();
     }
