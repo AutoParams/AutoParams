@@ -7,10 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -289,6 +286,23 @@ public class AutoArgumentsProviderSpecs {
         Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
 
         assertThat(actual).isInstanceOf(MoreComplexObject.class);
+    }
+
+    public void hasEnumObjectParameter(EnumObject a0) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_Enum_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasEnumObjectParameter");
+
+        int count = 100;
+        HashSet<Enum<?>> actual = new HashSet<>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (Enum<?>) args.get()[0]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(EnumObject.values().length);
     }
 
     private ExtensionContext getExtensionContext(String methodName) {
