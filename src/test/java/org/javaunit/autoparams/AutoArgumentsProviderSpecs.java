@@ -7,7 +7,10 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class AutoArgumentsProviderSpecs {
 
@@ -37,6 +41,20 @@ public class AutoArgumentsProviderSpecs {
         List<Arguments> actual = sut.provideArguments(context).collect(Collectors.toList());
 
         assertThat(actual.size()).isEqualTo(1);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 2, 10 })
+    void sut_applies_repeat(int repeat) throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        AutoSource annotation = mock(AutoSource.class);
+        when(annotation.repeat()).thenReturn(repeat);
+        ExtensionContext context = getExtensionContext("hasSingleParameter");
+
+        sut.accept(annotation);
+
+        Stream<? extends Arguments> actual = sut.provideArguments(context);
+        assertThat(actual).hasSize(repeat);
     }
 
     public void hasTwoParameters(int a0, int a1) {

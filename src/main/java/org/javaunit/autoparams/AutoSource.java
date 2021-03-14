@@ -11,4 +11,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 @Retention(RetentionPolicy.RUNTIME)
 @ArgumentsSource(AutoArgumentsProvider.class)
 public @interface AutoSource {
+
+    int repeat() default 1;
+
 }
