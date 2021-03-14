@@ -54,7 +54,7 @@ void myTestMethod(String x1, UUID x2) {
 class ComplexObject {
 
     private final int value1;
-    private final Striong value2;
+    private final String value2;
 
     public ComplexObject(int value1, String value2) {
         this.value1 = value1;
