@@ -17,6 +17,8 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
+    private static final ObjectGenerator EMPTY_GENERATOR = new CompositeObjectGenerator();
+
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
             new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
             new DoubleGenerator());
@@ -33,7 +35,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private final ObjectGenerator generator;
     private int repeat;
-    private CompositeObjectGenerator autoSourceGenerator;
+    private ObjectGenerator autoSourceGenerator = EMPTY_GENERATOR;
 
     public AutoArgumentsProvider() {
         this(DEFAULT_OBJECT_GENERATOR);

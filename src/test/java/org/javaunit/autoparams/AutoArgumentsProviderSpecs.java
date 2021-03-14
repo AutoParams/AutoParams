@@ -49,6 +49,7 @@ public class AutoArgumentsProviderSpecs {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         AutoSource annotation = mock(AutoSource.class);
         when(annotation.repeat()).thenReturn(repeat);
+        when(annotation.generators()).thenReturn(new Class[0]);
         ExtensionContext context = getExtensionContext("hasSingleParameter");
 
         sut.accept(annotation);
