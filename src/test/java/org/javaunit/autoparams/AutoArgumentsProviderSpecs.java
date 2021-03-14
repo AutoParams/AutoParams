@@ -54,7 +54,7 @@ public class AutoArgumentsProviderSpecs {
         sut.accept(annotation);
 
         Stream<? extends Arguments> actual = sut.provideArguments(context);
-        assertThat(actual).hasSize(repeat);
+        assertThat(actual.toArray()).hasSize(repeat);
     }
 
     public void hasTwoParameters(int a0, int a1) {
