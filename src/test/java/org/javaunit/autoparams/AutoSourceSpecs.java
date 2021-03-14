@@ -70,13 +70,9 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_fills_array_of_IntStream_type_with_arbitrary_objects(IntStream[] array) {
-        HashSet<IntStream> set = new HashSet<>();
-        for (int i = 0; i < array.length; i++) {
-            set.add(array[i]);
-            assertThat(array[i].count()).isEqualTo(3);
-        }
-        assertThat(set).hasSize(array.length);
+    void sut_correctly_creates_InputStream(IntStream value) {
+        assertThat(value).isNotNull();
+        assertThat(value).hasSize(3);
     }
 
     @ParameterizedTest
