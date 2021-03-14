@@ -30,6 +30,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
             new ComplexObjectGenerator());
 
     private final ObjectGenerator generator;
+    private int repeat;
 
     public AutoArgumentsProvider() {
         this(DEFAULT_OBJECT_GENERATOR);
@@ -37,17 +38,27 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private AutoArgumentsProvider(ObjectGenerator generator) {
         this.generator = generator;
+        repeat = 1;
     }
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-        return context.getTestMethod().map(method -> createArguments(method)).orElse(EMPTY);
+        return context.getTestMethod().map(this::generate).orElse(EMPTY);
     }
 
-    private Stream<Arguments> createArguments(Method method) {
+    private Stream<Arguments> generate(Method method) {
+        Arguments[] streamSource = new Arguments[repeat];
+        for (int i = 0; i < streamSource.length; i++) {
+            streamSource[i] = createArguments(method);
+        }
+        
+        return stream(streamSource);
+    }
+
+    private Arguments createArguments(Method method) {
         Parameter[] parameters = method.getParameters();
         Object[] arguments = stream(parameters).map(this::createArgument).toArray();
-        return stream(new Arguments[]{Arguments.of(arguments)});
+        return Arguments.of(arguments);
     }
 
     private Object createArgument(Parameter parameter) {
@@ -58,6 +69,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     @Override
     public void accept(AutoSource annotation) {
+        repeat = annotation.repeat();
     }
 
 }
