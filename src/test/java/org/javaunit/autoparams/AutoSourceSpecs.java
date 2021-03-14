@@ -1,18 +1,11 @@
 package org.javaunit.autoparams;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.params.ParameterizedTest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.params.ParameterizedTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AutoSourceSpecs {
 
@@ -130,6 +123,45 @@ public class AutoSourceSpecs {
         assertThat(map).hasSize(3);
         HashSet<String> set = new HashSet<String>(map.values());
         assertThat(set).hasSize(map.keySet().size());
+    }
+
+    @ParameterizedTest
+    @AutoSource(generators = {FixedLengthStringEightGenerator.class})
+    void sut_customize_generators_fills_hash_map(HashMap<Integer, String> map) {
+        assertThat(map).hasSize(3);
+        HashSet<String> set = new HashSet<String>(map.values());
+        assertThat(set).hasSize(map.keySet().size());
+        assertThat(set).allMatch(s -> s.length() == 8);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_customize_parameter_generators_fills_hash_map(@AutoSourceGenerator(generators = {FixedLengthStringEightGenerator.class}) HashMap<Integer, String> map) {
+        assertThat(map).hasSize(3);
+        HashSet<String> set = new HashSet<String>(map.values());
+        assertThat(set).hasSize(map.keySet().size());
+        assertThat(set).allMatch(s -> s.length() == 8);
+    }
+
+    @ParameterizedTest
+    @AutoSource(generators = {FixedLengthStringEightGenerator.class, FixedLengthLongSixGenerator.class})
+    void sut_customize_generators_create_value(String fixedLengthString, Long fixedLengthLong) {
+        assertThat(fixedLengthString.length()).isEqualTo(8);
+        assertThat(String.valueOf(fixedLengthLong).length()).isEqualTo(6);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_customize_parameter_generators_create_value(@AutoSourceGenerator(generators = {FixedLengthStringEightGenerator.class}) String fixedLengthString, @AutoSourceGenerator(generators = {FixedLengthLongSixGenerator.class})  Long fixedLengthLong) {
+        assertThat(fixedLengthString.length()).isEqualTo(8);
+        assertThat(String.valueOf(fixedLengthLong).length()).isEqualTo(6);
+    }
+
+    @ParameterizedTest
+    @AutoSource(generators = {FixedLengthStringEightGenerator.class})
+    void sut_parameter_has_higher_priority_than_the_method(String fixedLengthString, @AutoSourceGenerator(generators = {FixedLengthStringSixGenerator.class}) String fixedLengthSixString) {
+        assertThat(fixedLengthString.length()).isEqualTo(8);
+        assertThat(String.valueOf(fixedLengthSixString).length()).isEqualTo(6);
     }
 
     @ParameterizedTest

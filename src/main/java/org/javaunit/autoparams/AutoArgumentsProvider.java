@@ -1,15 +1,17 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.util.Arrays.stream;
 
 public final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
 
@@ -31,6 +33,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private final ObjectGenerator generator;
     private int repeat;
+    private CompositeObjectGenerator autoSourceGenerator;
 
     public AutoArgumentsProvider() {
         this(DEFAULT_OBJECT_GENERATOR);
@@ -63,13 +66,45 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private Object createArgument(Parameter parameter) {
         ObjectQuery query = ObjectQuery.create(parameter);
+
+        CompositeObjectGenerator generator = extractAutoSourceGenerator(parameter)
+            .map(autoSourceGenerator -> stream(autoSourceGenerator.generators())
+                .map(this::newInstance)
+                .toArray(ObjectGenerator[]::new)
+            )
+            .map(CompositeObjectGenerator::new)
+            .map(autoSourceParameterGenerators -> new CompositeObjectGenerator(autoSourceParameterGenerators, this.autoSourceGenerator, this.generator))
+            .orElseGet(() -> new CompositeObjectGenerator(this.autoSourceGenerator, this.generator));
+
         ObjectGenerationContext context = new ObjectGenerationContext(generator);
         return generator.generate(query, context).orElse(null);
+    }
+
+
+    private Optional<AutoSourceGenerator> extractAutoSourceGenerator(Parameter parameter) {
+        try {
+            return Optional.of(parameter.getAnnotation(AutoSourceGenerator.class));
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public void accept(AutoSource annotation) {
         repeat = annotation.repeat();
+        autoSourceGenerator = new CompositeObjectGenerator(
+            stream(annotation.generators())
+            .map(this::newInstance)
+            .toArray(ObjectGenerator[]::new)
+        );
+    }
+
+    private ObjectGenerator newInstance(Class<? extends ObjectGenerator> clazz) {
+        try {
+            return clazz.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
