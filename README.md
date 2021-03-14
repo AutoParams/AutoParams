@@ -1,9 +1,25 @@
 # AutoParams
 
-Arbitrary test data generator for parameterized tests in Java.
-
 [![CI](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml)
 [![Publish](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml)
+
+AutoParams is an arbitrary test data generator for parameterized tests in Java inspired by AutoFixture.
+
+Sometimes setting all the test data manually is very annoying. Sometimes some test data is required but not that important for a particular test. AutoParams automatically generates test arguments for your parameterized test method so you can focus more on your domain and your requirements.
+
+AutoParams is very easy to use. Just decorate your parameterized test method with `@AutoSource` annocation just like using `@ValueSoruce` or `@CsvSource` annotations. That's all. Then AutoParams wiil generate arbitrary arguments for the parameters of the test method automatically.
+
+```java
+@ParameterizedTest
+@AutoSource
+void parameterizedTest(int a, int b) {
+    Calculator sut = new Calculator();
+    int actual = sut.add(a, b);s(a + b, actual);
+    assertEquals(a + b, actual);
+}
+```
+
+In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
 ---
 
@@ -29,25 +45,47 @@ testImplementation 'io.github.javaunit:autoparams:0.0.4'
 
 ## Features
 
-### Generate arbitrary test data of primitive types
+### Primitive Types
+
+AutoParams generates arbitrary test arguments of primitive types.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(boolean x1, int x2, long x3, float x4, double x5) {
+void testMethod(boolean x1, int x2, long x3, float x4, double x5) {
 }
 ```
 
-### Generate arbitrary simple objects
+### Simple Objects
+
+AutoParams generates arbitrary simple objects for the test parameters.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(String x1, UUID x2) {
+void testMethod(String x1, UUID x2) {
 }
 ```
 
-### Generate arbitrary complex objects
+### Enum Types
+
+Enum types are also supported. AutoParams randomly selects enum values.
+
+```java
+public enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+    THURSDAY, FRIDAY, SATURDAY
+}
+
+@ParameterizedTest
+@AutoSource
+void testMethod(Day day) {
+}
+```
+
+### Complex Objects
+
+AutoParams creates complex objects using a public constructor with arbitrary arguments. If the type has more than one public constructors, AutoParams chooses the constructor with the fewest parameters.
 
 ```java
 
@@ -73,11 +111,13 @@ class ComplexObject {
 
 @ParameterizedTest
 @AutoSource
-void myTestMethod(ComplexObject x1) {
+void testMethod(ComplexObject object) {
 }
 ```
 
-### Generate arbitrary generic objects
+### Generic Types
+
+AutoParams creates objects of generic type using a public constructor with arbitrary arguments. If the type has more than one public constructors, AutoParams chooses the constructor with the fewest parameters.
 
 ```java
 class GenericObject<T1, T2> {
@@ -102,55 +142,84 @@ class GenericObject<T1, T2> {
 
 @ParameterizedTest
 @AutoSource
-void myTestMethod(
-    GenericObject<String, ComplexObject> x1,
-    GenericObject<UUID, GenericObject<String, ComplexObject>> x2) {
+void testMethod(
+    GenericObject<String, ComplexObject> object1,
+    GenericObject<UUID, GenericObject<String, ComplexObject>> object2) {
 }
 ```
 
-### Generate collections and streams
+### Collection Types
 
-#### Array
+AutoParams supports a variety of collection types and streams.
+
+#### Arrays
+
+AutoParams generates an array instance with three elements.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(int[] array1, ComplexObject[] array2) {
+void testMethod(int[] array1, String[] array2) {
 }
 ```
 
-#### List
+#### List Types
+
+`List<E>` interface and `ArrayList<E>` class supported. Generated list objects contain few elements.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(List<ComplexObject> list) {
+void testMethod(List<String> list, ArrayList<UUID> arrayList) {
 }
 ```
 
-#### Set
+#### Set Types
+
+`Set<E>` interface and `HashSet<E>` class supported. Generated set objects contain few elements.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(Set<UUID> set) {
+void testMethod(Set<String> set, HashSet<UUID> hashSet) {
 }
 ```
 
-#### Map
+#### Map Interface
+
+`Map<K, V>` interface and `HashMap<K, V>` class supported. Generated map objects contain few pairs.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(Map<UUID, ComplexObject> map) {
+void testMethod(Map<String, ComplexObject> map, HashMap<UUID, ComplexObject> hashMap) {
 }
 ```
 
-#### Stream
+### Stream Types
+
+#### Generic Stream Interface
+
+AutoParams supports the generic `Stream<T>` interface. Generated stream objects provide few elements.
 
 ```java
 @ParameterizedTest
 @AutoSource
-void myTestMethod(Stream<ComplexObject> stream) {
+void testMethod(Stream<ComplexObject> stream) {
+}
+```
+
+### Repeat
+
+Unit tests can be repeated with arbitrary test data. Set `repeat` property of `@AutoSource` annotation as many times as you want to repeat.
+
+```java
+@ParameterizedTest
+@AutoSource(repeat = 10)
+void testMethod(int a, int b) {
+    // This test method is performed ten times.
+    Calculator sut = new Calculator();
+    int actual = sut.add(a, b);s(a + b, actual);
+    assertEquals(a + b, actual);
 }
 ```
