@@ -23,7 +23,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
             new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator(), new EnumGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
-            new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
+            new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator(), new IntStreamGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
             PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
@@ -47,7 +47,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     private Stream<Arguments> createArguments(Method method) {
         Parameter[] parameters = method.getParameters();
         Object[] arguments = stream(parameters).map(this::createArgument).toArray();
-        return stream(new Arguments[] { Arguments.of(arguments) });
+        return stream(new Arguments[]{Arguments.of(arguments)});
     }
 
     private Object createArgument(Parameter parameter) {

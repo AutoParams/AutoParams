@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class AutoArgumentsProviderSpecs {
     }
 
     @ParameterizedTest
-    @CsvSource({ "hasSingleParameter, 1", "hasTwoParameters, 2" })
+    @CsvSource({"hasSingleParameter, 1", "hasTwoParameters, 2"})
     void sut_provides_arguments_as_many_as_parameters(String methodName, int count) throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = mock(ExtensionContext.class);
@@ -303,6 +304,23 @@ public class AutoArgumentsProviderSpecs {
         }
 
         assertThat(actual).hasSize(EnumType.values().length);
+    }
+
+    public void hasIntStreamParameter(IntStream a0) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_IntStream_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasIntStreamParameter");
+
+        int count = 100;
+        HashSet<IntStream> actual = new HashSet<>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context).map(args -> (IntStream) args.get()[0]).forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(count);
     }
 
     private ExtensionContext getExtensionContext(String methodName) {
