@@ -57,7 +57,7 @@ public class AutoSourceSpecs {
     }
 
     @ParameterizedTest
-    @AutoSource
+    @AutoSource(repeat = 10)
     void sut_fills_array_of_enum_type_with_arbitrary_objects(EnumType[] array) {
         HashSet<EnumType> set = new HashSet<>();
         for (int i = 0; i < array.length; i++) {
