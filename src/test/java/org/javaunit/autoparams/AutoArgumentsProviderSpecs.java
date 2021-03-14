@@ -62,7 +62,7 @@ public class AutoArgumentsProviderSpecs {
     }
 
     @ParameterizedTest
-    @CsvSource({"hasSingleParameter, 1", "hasTwoParameters, 2"})
+    @CsvSource({ "hasSingleParameter, 1", "hasTwoParameters, 2" })
     void sut_provides_arguments_as_many_as_parameters(String methodName, int count) throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = mock(ExtensionContext.class);
