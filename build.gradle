@@ -43,7 +43,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'io.github.javaunit'
             artifactId 'autoparams'
-            version '0.0.1'
+            version '0.0.3'
             from components.java
             pom {
                 name = "AutoParams"
