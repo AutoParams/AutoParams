@@ -1,11 +1,11 @@
 package org.javaunit.autoparams;
 
 import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 interface ObjectGenerator {
 
-    static final Random RANDOM = new Random();
+    ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context);
 
