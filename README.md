@@ -15,14 +15,14 @@ Arbitrary test data generator for parameterized tests in Java.
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.0.1'
+testImplementation 'io.github.javaunit:autoparams:0.0.3'
 ```
 
 ---
@@ -54,7 +54,7 @@ void myTestMethod(String x1, UUID x2) {
 class ComplexObject {
 
     private final int value1;
-    private final Striong value2;
+    private final String value2;
 
     public ComplexObject(int value1, String value2) {
         this.value1 = value1;
