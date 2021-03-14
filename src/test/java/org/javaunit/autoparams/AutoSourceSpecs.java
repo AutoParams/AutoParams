@@ -74,6 +74,7 @@ public class AutoSourceSpecs {
         HashSet<IntStream> set = new HashSet<>();
         for (int i = 0; i < array.length; i++) {
             set.add(array[i]);
+            assertThat(array[i].count()).isEqualTo(3);
         }
         assertThat(set).hasSize(array.length);
     }
