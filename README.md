@@ -15,14 +15,14 @@ Arbitrary test data generator for parameterized tests in Java.
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.0.1'
+testImplementation 'io.github.javaunit:autoparams:0.0.3'
 ```
 
 ---
