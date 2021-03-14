@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,6 +66,13 @@ public class AutoSourceSpecs {
 
         assertThat(set.size()).isGreaterThanOrEqualTo(1);
         assertThat(set.size()).isLessThanOrEqualTo(EnumType.values().length);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_InputStream(IntStream value) {
+        assertThat(value).isNotNull();
+        assertThat(value).hasSize(3);
     }
 
     @ParameterizedTest
