@@ -1,24 +1,19 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Arrays.stream;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
-                .map(constructor -> generate(query, constructor, context)).map(Optional::of).orElse(Optional.empty());
+            .map(constructor -> generate(query, constructor, context)).map(Optional::of).orElse(Optional.empty());
     }
 
     private Object generate(ObjectQuery sourceQuery, Constructor<?> constructor, ObjectGenerationContext context) {
@@ -75,11 +70,11 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Object createInstance(Constructor<?> constructor, Stream<ObjectQuery> argumentQueries,
-            ObjectGenerationContext context) {
+                                  ObjectGenerationContext context) {
         try {
             return constructor.newInstance(generateArguments(argumentQueries, context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+            | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

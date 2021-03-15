@@ -1,87 +1,75 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'maven-publish'
     id 'signing'
     id 'org.ec4j.editorconfig' version '0.0.3'
 }
 
-repositories {
-    jcenter()
-}
-
-dependencies {
-    api 'org.apache.commons:commons-math3:3.6.1'
-    api 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    api 'org.junit.jupiter:junit-jupiter-params:5.6.0'
-    implementation 'com.google.guava:guava:28.2-jre'
-    testImplementation 'org.assertj:assertj-core:3.8.0'
-    testImplementation 'org.mockito:mockito-core:2.+'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-editorconfig {
-    excludes = ["build"]
-}
-
-check.dependsOn editorconfigCheck
-
-publishing {
+allprojects {
     repositories {
-        maven {
-            name "OSSRH"
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username System.getenv("MAVEN_USERNAME")
-                password System.getenv("MAVEN_PASSWORD")
-            }
-        }
+        jcenter()
     }
 
-    publications {
-        maven(MavenPublication) {
-            groupId 'io.github.javaunit'
-            artifactId 'autoparams'
-            version '0.0.4'
-            from components.java
-            pom {
-                name = "AutoParams"
-                description = "Arbitrary test data generator for parameterized tests in Java."
-                url = "https://github.com/JavaUnit/AutoParams"
-                licenses {
-                    license {
-                        name = "MIT License"
-                        url = "https://github.com/JavaUnit/AutoParams/blob/main/LICENSE"
-                    }
-                }
-                developers {
-                    developer {
-                        id = "gyuwon"
-                        name = "Gyuwon Yi"
-                        email = "gyuwon@live.com"
-                    }
-                }
-                scm {
-                    connection = "https://github.com/JavaUnit/AutoParams.git"
-                    developerConnection = "https://github.com/JavaUnit/AutoParams.git"
-                    url = "https://github.com/JavaUnit/AutoParams"
-                }
-            }
-        }
-    }
+    group = 'io.github.javaunit'
+    version = '0.0.4'
 }
 
-signing {
-    def signingKey = System.getenv("SIGNING_KEY")
-    def signingPassword = System.getenv("SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.maven
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.ec4j.editorconfig'
+
+    editorconfig {
+        excludes = ["build"]
+    }
+
+    check.dependsOn editorconfigCheck
+
+    publishing {
+        repositories {
+            maven {
+                name "OSSRH"
+                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    username System.getenv("MAVEN_USERNAME")
+                    password System.getenv("MAVEN_PASSWORD")
+                }
+            }
+        }
+
+        publications {
+            maven(MavenPublication) {
+                from components.java
+                pom {
+                    name = "AutoParams"
+                    description = "Arbitrary test data generator for parameterized tests in Java."
+                    url = "https://github.com/JavaUnit/AutoParams"
+                    licenses {
+                        license {
+                            name = "MIT License"
+                            url = "https://github.com/JavaUnit/AutoParams/blob/main/LICENSE"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "gyuwon"
+                            name = "Gyuwon Yi"
+                            email = "gyuwon@live.com"
+                        }
+                    }
+                    scm {
+                        connection = "https://github.com/JavaUnit/AutoParams.git"
+                        developerConnection = "https://github.com/JavaUnit/AutoParams.git"
+                        url = "https://github.com/JavaUnit/AutoParams"
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        def signingKey = System.getenv("SIGNING_KEY")
+        def signingPassword = System.getenv("SIGNING_PASSWORD")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications.maven
+    }
 }
