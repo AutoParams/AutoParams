@@ -23,6 +23,9 @@ In the example above, you can see that the arbitrary test data may eliminate the
 
 ---
 
+## Requirements
+- At least JDK1.8 or higher
+
 ## Install
 
 ### Maven
