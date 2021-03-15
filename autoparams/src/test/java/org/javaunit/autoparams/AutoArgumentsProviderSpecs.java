@@ -1,9 +1,12 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -14,13 +17,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import static java.util.Arrays.stream;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AutoArgumentsProviderSpecs {
 
@@ -44,7 +44,7 @@ public class AutoArgumentsProviderSpecs {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 1, 2, 10 })
+    @ValueSource(ints = {1, 2, 10})
     void sut_applies_repeat(int repeat) throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         AutoSource annotation = mock(AutoSource.class);
@@ -61,7 +61,7 @@ public class AutoArgumentsProviderSpecs {
     }
 
     @ParameterizedTest
-    @CsvSource({ "hasSingleParameter, 1", "hasTwoParameters, 2" })
+    @CsvSource({"hasSingleParameter, 1", "hasTwoParameters, 2"})
     void sut_provides_arguments_as_many_as_parameters(String methodName, int count) throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = mock(ExtensionContext.class);

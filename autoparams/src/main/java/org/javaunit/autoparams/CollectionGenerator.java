@@ -15,7 +15,7 @@ final class CollectionGenerator extends GenericObjectGenerator {
 
     private static boolean isCollection(Class<?> type) {
         return type.equals(ArrayList.class) || type.equals(List.class) || type.equals(Collection.class)
-                || type.equals(Iterable.class);
+            || type.equals(Iterable.class);
     }
 
     private static Class<?> getComponentType(GenericObjectQuery query) {

@@ -1,1 +1,3 @@
 rootProject.name = 'JavaUnit-AutoParams'
+
+include 'autoparams'
