@@ -1,6 +1,6 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
+import static java.util.Arrays.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -16,18 +16,18 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
-            new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
-            new DoubleGenerator());
+        new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
+        new DoubleGenerator());
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator(), new EnumGenerator());
+        new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator(), new EnumGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
-            new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
+        new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
-            new ComplexObjectGenerator());
+        PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
+        new ComplexObjectGenerator());
 
     private final ObjectGenerator generator;
     private int repeat;
@@ -42,7 +42,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return context.getTestMethod().map(this::generate).orElse(EMPTY);
     }
 
@@ -51,7 +51,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
         for (int i = 0; i < streamSource.length; i++) {
             streamSource[i] = createArguments(method);
         }
-        
+
         return stream(streamSource);
     }
 
