@@ -1,33 +1,33 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.support.AnnotationConsumer;
+import static java.util.Arrays.stream;
 
 public final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
-            new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
-            new DoubleGenerator());
+        new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
+        new DoubleGenerator());
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator(), new EnumGenerator());
+        new BigDecimalGenerator(), new StringGenerator(), new UUIDGenerator(), new EnumGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(new ArrayGenerator(),
-            new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
+        new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR = new CompositeObjectGenerator(
-            PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
-            new ComplexObjectGenerator());
+        PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
+        new ComplexObjectGenerator());
 
     private final ObjectGenerator generator;
     private int repeat;
@@ -51,7 +51,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
         for (int i = 0; i < streamSource.length; i++) {
             streamSource[i] = createArguments(method);
         }
-        
+
         return stream(streamSource);
     }
 

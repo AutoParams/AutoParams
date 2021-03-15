@@ -13,5 +13,5 @@ final class BooleanGenerator implements ObjectGenerator {
     private Optional<Object> factory() {
         return Optional.of(RANDOM.nextInt() % 2 == 0);
     }
-    
+
 }
