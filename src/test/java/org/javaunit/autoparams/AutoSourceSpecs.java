@@ -1,18 +1,13 @@
 package org.javaunit.autoparams;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
-
+import org.javaunit.autoparams.range.DoubleRange;
+import org.javaunit.autoparams.range.FloatRange;
+import org.javaunit.autoparams.range.IntRange;
+import org.javaunit.autoparams.range.LongRange;
 import org.junit.jupiter.params.ParameterizedTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AutoSourceSpecs {
 
@@ -173,4 +168,31 @@ public class AutoSourceSpecs {
         assertThat(value.getValue3().getValue3()).isInstanceOf(ComplexObject.class);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_int_value_in_range(@IntRange(min = 10, max = 30) int num) {
+        assertThat(num).isGreaterThanOrEqualTo(10);
+        assertThat(num).isLessThanOrEqualTo(30);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_long_value_in_range(@LongRange(min = 10, max = 30) long num) {
+        assertThat(num).isGreaterThanOrEqualTo(10);
+        assertThat(num).isLessThanOrEqualTo(30);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_float_value_in_range(@FloatRange(min = 10.0F, max = 30.0F) float num) {
+        assertThat(num).isGreaterThanOrEqualTo(10);
+        assertThat(num).isLessThanOrEqualTo(30);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_double_value_in_range(@DoubleRange(min = 10.0D, max = 30.0D) double num) {
+        assertThat(num).isGreaterThanOrEqualTo(10);
+        assertThat(num).isLessThanOrEqualTo(30);
+    }
 }
