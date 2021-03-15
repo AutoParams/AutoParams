@@ -2,7 +2,6 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id 'org.ec4j.editorconfig' version '0.0.3'
 }
 
 repositories {
@@ -27,12 +26,6 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
-
-editorconfig {
-    excludes = ["build"]
-}
-
-check.dependsOn editorconfigCheck
 
 publishing {
     repositories {

@@ -21,5 +21,4 @@ final class ComplexObjectConstructorResolver {
     private static boolean isSimpleType(Class<?> type) {
         return SIMPLE_TYPES.stream().anyMatch(type::equals);
     }
-
 }
