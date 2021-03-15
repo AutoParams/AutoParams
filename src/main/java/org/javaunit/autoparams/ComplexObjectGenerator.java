@@ -18,7 +18,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
-                .map(constructor -> generate(query, constructor, context)).map(Optional::of).orElse(Optional.empty());
+            .map(constructor -> generate(query, constructor, context)).map(Optional::of).orElse(Optional.empty());
     }
 
     private Object generate(ObjectQuery sourceQuery, Constructor<?> constructor, ObjectGenerationContext context) {
@@ -43,7 +43,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(Class<?> type, ParameterizedType parameterizedType) {
-        HashMap<TypeVariable<?>, Type> map = new HashMap<TypeVariable<?>, Type>();
+        HashMap<TypeVariable<?>, Type> map = new HashMap<>();
 
         TypeVariable<?>[] typeVariables = type.getTypeParameters();
         Type[] typeValues = parameterizedType.getActualTypeArguments();
@@ -75,11 +75,11 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Object createInstance(Constructor<?> constructor, Stream<ObjectQuery> argumentQueries,
-            ObjectGenerationContext context) {
+        ObjectGenerationContext context) {
         try {
             return constructor.newInstance(generateArguments(argumentQueries, context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+            | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

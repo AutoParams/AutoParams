@@ -15,7 +15,7 @@ final class CollectionGenerator extends GenericObjectGenerator {
 
     private static boolean isCollection(Class<?> type) {
         return type.equals(ArrayList.class) || type.equals(List.class) || type.equals(Collection.class)
-                || type.equals(Iterable.class);
+            || type.equals(Iterable.class);
     }
 
     private static Class<?> getComponentType(GenericObjectQuery query) {
@@ -24,7 +24,7 @@ final class CollectionGenerator extends GenericObjectGenerator {
 
     @SuppressWarnings("unchecked")
     public static <T> ArrayList<T> factory(Class<? extends T> componentType, ObjectGenerationContext context) {
-        ArrayList<T> instance = new ArrayList<T>();
+        ArrayList<T> instance = new ArrayList<>();
         int size = 3;
         ObjectGenerator generator = context.getGenerator();
         ObjectQuery query = new ObjectQuery(componentType);
