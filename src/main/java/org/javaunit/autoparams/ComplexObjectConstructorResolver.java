@@ -14,8 +14,8 @@ final class ComplexObjectConstructorResolver {
 
     private static boolean isSimpleType(Class<?> type) {
         return type.equals(Boolean.class) || type.equals(Integer.class) || type.equals(Long.class)
-            || type.equals(Float.class) || type.equals(Double.class) || type.equals(String.class)
-            || type.equals(BigDecimal.class) || type.equals(UUID.class);
+                || type.equals(Float.class) || type.equals(Double.class) || type.equals(String.class)
+                || type.equals(BigDecimal.class) || type.equals(UUID.class);
     }
-
+    
 }
