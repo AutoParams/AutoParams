@@ -43,7 +43,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(Class<?> type, ParameterizedType parameterizedType) {
-        HashMap<TypeVariable<?>, Type> map = new HashMap<TypeVariable<?>, Type>();
+        HashMap<TypeVariable<?>, Type> map = new HashMap<>();
 
         TypeVariable<?>[] typeVariables = type.getTypeParameters();
         Type[] typeValues = parameterizedType.getActualTypeArguments();

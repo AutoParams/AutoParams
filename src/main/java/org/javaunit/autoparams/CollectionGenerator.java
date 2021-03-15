@@ -24,7 +24,7 @@ final class CollectionGenerator extends GenericObjectGenerator {
 
     @SuppressWarnings("unchecked")
     public static <T> ArrayList<T> factory(Class<? extends T> componentType, ObjectGenerationContext context) {
-        ArrayList<T> instance = new ArrayList<T>();
+        ArrayList<T> instance = new ArrayList<>();
         int size = 3;
         ObjectGenerator generator = context.getGenerator();
         ObjectQuery query = new ObjectQuery(componentType);

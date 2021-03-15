@@ -22,7 +22,7 @@ final class SetGenerator extends GenericObjectGenerator {
 
     @SuppressWarnings("unchecked")
     public static <T> HashSet<T> factory(Class<? extends T> componentType, ObjectGenerationContext context) {
-        HashSet<T> instance = new HashSet<T>();
+        HashSet<T> instance = new HashSet<>();
         int size = 3;
         ObjectGenerator generator = context.getGenerator();
         ObjectQuery query = new ObjectQuery(componentType);
