@@ -22,6 +22,8 @@ void parameterizedTest(int a, int b) {
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
 ---
+## Requirements
+- At least JDK1.8 or higher
 
 ## Install
 
