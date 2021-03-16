@@ -42,7 +42,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return context.getTestMethod().map(this::generate).orElse(EMPTY);
     }
 
