@@ -1,5 +1,7 @@
 package org.javaunit.autoparams;
 
+import java.util.Optional;
+
 final class ObjectGenerationContext {
 
     private final ObjectGenerator generator;
@@ -9,8 +11,8 @@ final class ObjectGenerationContext {
 
     }
 
-    public ObjectGenerator getGenerator() {
-        return generator;
+    public Optional<Object> generate(ObjectQuery query) {
+        return generator.generate(query, this);
     }
 
 }
