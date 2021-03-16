@@ -22,14 +22,15 @@ final class MapGenerator extends GenericObjectGenerator {
 
     @SuppressWarnings("unchecked")
     private <K, V> HashMap<K, V> factory(Class<? extends K> keyType, Class<? extends V> valueType,
-                                         ObjectGenerationContext context) {
+        ObjectGenerationContext context) {
         HashMap<K, V> instance = new HashMap<K, V>();
         int size = 3;
         ObjectQuery keyQuery = new ObjectQuery(keyType);
         ObjectQuery valueQuery = new ObjectQuery(valueType);
         for (int i = 0; i < size; i++) {
             context.generate(keyQuery).map(x -> (K) x).ifPresent(
-                    k -> context.generate(valueQuery).map(x -> (V) x).ifPresent(v -> instance.put(k, v)));
+                k -> context.generate(valueQuery).map(x -> (V) x)
+                    .ifPresent(v -> instance.put(k, v)));
         }
 
         return instance;

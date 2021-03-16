@@ -7,14 +7,9 @@ import java.util.Optional;
 
 final class CollectionGenerator extends GenericObjectGenerator {
 
-    @Override
-    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return isCollection(type) ? Optional.of(factory(getComponentType(query), context)) : Optional.empty();
-    }
-
     private static boolean isCollection(Class<?> type) {
-        return type.equals(ArrayList.class) || type.equals(List.class) || type.equals(Collection.class)
+        return type.equals(ArrayList.class) || type.equals(List.class) || type
+            .equals(Collection.class)
             || type.equals(Iterable.class);
     }
 
@@ -23,7 +18,8 @@ final class CollectionGenerator extends GenericObjectGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ArrayList<T> factory(Class<? extends T> componentType, ObjectGenerationContext context) {
+    public static <T> ArrayList<T> factory(Class<? extends T> componentType,
+        ObjectGenerationContext context) {
         ArrayList<T> instance = new ArrayList<T>();
         int size = 3;
         ObjectQuery query = new ObjectQuery(componentType);
@@ -32,6 +28,13 @@ final class CollectionGenerator extends GenericObjectGenerator {
         }
 
         return instance;
+    }
+
+    @Override
+    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
+        Class<?> type = query.getType();
+        return isCollection(type) ? Optional.of(factory(getComponentType(query), context))
+            : Optional.empty();
     }
 
 }

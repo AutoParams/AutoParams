@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'org.ec4j.editorconfig' version '0.0.3'
+    id 'checkstyle'
 }
 
 allprojects {
@@ -18,12 +19,22 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.ec4j.editorconfig'
+    apply plugin: 'checkstyle'
 
     editorconfig {
         excludes = ["build"]
     }
 
     check.dependsOn editorconfigCheck
+
+    checkstyle {
+        configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+        configProperties = ["suppressionFile": "${project.rootDir}/config/checkstyle/checkstyle/checkstyle-suppressions.xml"]
+        toolVersion = "8.40"
+        ignoreFailures = false
+        maxErrors = 0
+        maxWarnings = 0
+    }
 
     publishing {
         repositories {
