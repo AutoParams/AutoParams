@@ -9,7 +9,8 @@ import java.util.UUID;
 final class ComplexObjectConstructorResolver {
 
     public static Optional<Constructor<?>> resolveConstructor(Class<?> type) {
-        return isSimpleType(type) ? Optional.empty()
+        return isSimpleType(type)
+            ? Optional.empty()
             : Arrays.stream(type.getConstructors()).findFirst();
     }
 

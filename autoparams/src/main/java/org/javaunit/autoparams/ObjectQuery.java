@@ -15,8 +15,8 @@ class ObjectQuery {
     public static ObjectQuery create(Parameter parameter) {
         Type parameterizedType = parameter.getParameterizedType();
         if (parameterizedType instanceof ParameterizedType) {
-            return new GenericObjectQuery(parameter.getType(),
-                (ParameterizedType) parameterizedType);
+            return new GenericObjectQuery(
+                parameter.getType(), (ParameterizedType) parameterizedType);
         } else {
             return new ObjectQuery(parameter.getType());
         }

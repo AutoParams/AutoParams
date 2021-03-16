@@ -7,7 +7,8 @@ final class EnumGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> superType = query.getType().getSuperclass();
-        return superType != null && superType.equals(Enum.class) ? factory(query.getType())
+        return superType != null && superType.equals(Enum.class)
+            ? factory(query.getType())
             : Optional.empty();
     }
 

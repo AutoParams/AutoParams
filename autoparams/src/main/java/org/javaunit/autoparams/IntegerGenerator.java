@@ -11,7 +11,8 @@ final class IntegerGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
-        return type.equals(int.class) || type.equals(Integer.class) ? Optional.of(factory())
+        return type.equals(int.class) || type.equals(Integer.class)
+            ? Optional.of(factory())
             : Optional.empty();
     }
 
