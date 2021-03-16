@@ -29,20 +29,20 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
         PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR, COLLECTION_GENERATOR,
         new ComplexObjectGenerator());
 
-    private final ObjectGenerator generator;
+    private final ObjectGenerationContext context;
     private int repeat;
 
     public AutoArgumentsProvider() {
-        this(DEFAULT_OBJECT_GENERATOR);
+        this(new ObjectGenerationContext(DEFAULT_OBJECT_GENERATOR));
     }
 
-    private AutoArgumentsProvider(ObjectGenerator generator) {
-        this.generator = generator;
-        repeat = 1;
+    private AutoArgumentsProvider(ObjectGenerationContext context) {
+        this.context = context;
+        this.repeat = 1;
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return context.getTestMethod().map(this::generate).orElse(EMPTY);
     }
 
@@ -63,8 +63,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider, Annotatio
 
     private Object createArgument(Parameter parameter) {
         ObjectQuery query = ObjectQuery.create(parameter);
-        ObjectGenerationContext context = new ObjectGenerationContext(generator);
-        return generator.generate(query, context).orElse(null);
+        return context.generate(query).orElse(null);
     }
 
     @Override
