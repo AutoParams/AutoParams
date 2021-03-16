@@ -24,10 +24,9 @@ final class SetGenerator extends GenericObjectGenerator {
     public static <T> HashSet<T> factory(Class<? extends T> componentType, ObjectGenerationContext context) {
         HashSet<T> instance = new HashSet<T>();
         int size = 3;
-        ObjectGenerator generator = context.getGenerator();
         ObjectQuery query = new ObjectQuery(componentType);
         for (int i = 0; i < size; i++) {
-            generator.generate(query, context).map(x -> (T) x).ifPresent(instance::add);
+            context.generate(query).map(x -> (T) x).ifPresent(instance::add);
         }
 
         return instance;

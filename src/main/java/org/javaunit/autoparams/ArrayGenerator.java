@@ -24,7 +24,7 @@ final class ArrayGenerator implements ObjectGenerator {
     }
 
     private void set(Object array, int index, ObjectQuery query, ObjectGenerationContext context) {
-        context.getGenerator().generate(query, context).ifPresent(element -> Array.set(array, index, element));
+        context.generate(query).ifPresent(element -> Array.set(array, index, element));
     }
 
 }
