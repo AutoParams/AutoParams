@@ -18,8 +18,9 @@ final class StreamGenerator extends GenericObjectGenerator {
             : Optional.empty();
     }
 
-    private <T> Stream<T> factory(Class<? extends T> componentType,
-        ObjectGenerationContext context) {
+    private <T> Stream<T> factory(
+        Class<? extends T> componentType, ObjectGenerationContext context) {
+
         ArrayList<T> list = CollectionGenerator.factory(componentType, context);
         return StreamSupport.stream(list.spliterator(), false);
     }
