@@ -1,12 +1,9 @@
 package org.javaunit.autoparams;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import static java.util.Arrays.stream;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -16,13 +13,20 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Arrays.stream;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class AutoArgumentsProviderSpecs {
+
+    private static Method getMethod(String methodName) {
+        Method[] methods = AutoArgumentsProviderSpecs.class.getMethods();
+        return stream(methods).filter(m -> m.getName().equals(methodName)).findFirst().orElse(null);
+    }
 
     @Test
     void sut_implements_ArgumentsProvider() {
@@ -62,7 +66,8 @@ public class AutoArgumentsProviderSpecs {
 
     @ParameterizedTest
     @CsvSource({"hasSingleParameter, 1", "hasTwoParameters, 2"})
-    void sut_provides_arguments_as_many_as_parameters(String methodName, int count) throws Exception {
+    void sut_provides_arguments_as_many_as_parameters(String methodName, int count)
+        throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
@@ -209,7 +214,8 @@ public class AutoArgumentsProviderSpecs {
         int count = 100;
         HashSet<BigDecimal> actual = new HashSet<BigDecimal>();
         for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (BigDecimal) args.get()[0]).forEach(actual::add);
+            sut.provideArguments(context).map(args -> (BigDecimal) args.get()[0])
+                .forEach(actual::add);
         }
 
         assertThat(actual).hasSize(count);
@@ -232,13 +238,13 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).hasSize(count);
     }
 
-    public void hasUUIDParameters(UUID a0) {
+    public void hasUuidParameters(UUID a0) {
     }
 
     @Test
-    void sut_creates_arbitrary_UUID_value() throws Exception {
+    void sut_creates_arbitrary_uuid_value() throws Exception {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasUUIDParameters");
+        ExtensionContext context = getExtensionContext("hasUuidParameters");
 
         int count = 100;
         HashSet<UUID> actual = new HashSet<UUID>();
@@ -288,7 +294,8 @@ public class AutoArgumentsProviderSpecs {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasComplexObjectParameter");
 
-        Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
+        Object actual = sut.provideArguments(context).map(args -> args.get()[0])
+            .collect(Collectors.toList()).get(0);
 
         assertThat(actual).isInstanceOf(ComplexObject.class);
     }
@@ -301,7 +308,8 @@ public class AutoArgumentsProviderSpecs {
         AutoArgumentsProvider sut = new AutoArgumentsProvider();
         ExtensionContext context = getExtensionContext("hasMoreComplexObjectParameter");
 
-        Object actual = sut.provideArguments(context).map(args -> args.get()[0]).collect(Collectors.toList()).get(0);
+        Object actual = sut.provideArguments(context).map(args -> args.get()[0])
+            .collect(Collectors.toList()).get(0);
 
         assertThat(actual).isInstanceOf(MoreComplexObject.class);
     }
@@ -327,11 +335,6 @@ public class AutoArgumentsProviderSpecs {
         ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
         return context;
-    }
-
-    private static Method getMethod(String methodName) {
-        Method[] methods = AutoArgumentsProviderSpecs.class.getMethods();
-        return stream(methods).filter(m -> m.getName().equals(methodName)).findFirst().orElse(null);
     }
 
 }

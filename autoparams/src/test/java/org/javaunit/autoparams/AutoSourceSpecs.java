@@ -1,11 +1,17 @@
 package org.javaunit.autoparams;
 
-import org.junit.jupiter.params.ParameterizedTest;
-
-import java.util.*;
-import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
 
 public class AutoSourceSpecs {
 
@@ -159,7 +165,8 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_correctly_creates_nested_generic_object(GenericObject<String, GenericObject<UUID, ComplexObject>> value) {
+    void sut_correctly_creates_nested_generic_object(
+        GenericObject<String, GenericObject<UUID, ComplexObject>> value) {
         assertThat(value).isNotNull();
         assertThat(value.getValue2()).isInstanceOf(String.class);
         assertThat(value.getValue3()).isInstanceOf(GenericObject.class);

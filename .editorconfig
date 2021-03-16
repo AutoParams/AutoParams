@@ -25,5 +25,5 @@ tab_width = 4
 # [no-trailing-spaces]
 trim_trailing_whitespace = true
 
-[line-length-120]
-max_line_length = 120
+# [line-length-100]
+max_line_length = 100
