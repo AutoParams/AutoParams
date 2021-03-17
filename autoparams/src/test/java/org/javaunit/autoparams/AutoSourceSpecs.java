@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -94,6 +95,21 @@ public class AutoSourceSpecs {
     @AutoSource
     void sut_creates_collection(Collection<ComplexObject> collection) {
         assertThat(collection).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_intStream(IntStream intStream) {
+        assertThat(intStream).isNotNull();
+
+        int[] array = intStream.toArray();
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < array.length; i++) {
+            set.add(array[i]);
+        }
+
+        assertThat(array).hasSize(3);
+        assertThat(set).hasSize(array.length);
     }
 
     @ParameterizedTest
