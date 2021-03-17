@@ -24,6 +24,8 @@
       arrayInitIndent 2 -> 4
     - MissingJavadocMethod remove
       MissingJavadocType remove
+    - allowMultipleEmptyLines -> false
+      allowMultipleEmptyLinesInsideClassMembers -> false
 -->
 
 <module name = "Checker">
@@ -150,6 +152,8 @@
                     STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
         </module>
         <module name="SeparatorWrap">
             <property name="id" value="SeparatorWrapDot"/>

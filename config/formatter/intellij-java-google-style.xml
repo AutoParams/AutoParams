@@ -7,6 +7,9 @@
     history of changes
     - JAVA INDENT_SIZE 2 -> 4
       JAVA TAB_SIZE 2 -> 4
+    - KEEP_BLANK_LINES_IN_DECLARATIONS -> 1
+      KEEP_BLANK_LINES_BETWEEN_PACKAGE_DECLARATION_AND_HEADER -> 1
+      KEEP_BLANK_LINES_BEFORE_RBRACE -> 1
 -->
 
     <option name="OTHER_INDENT_OPTIONS">
@@ -120,7 +123,10 @@
     </codeStyleSettings>
     <codeStyleSettings language="JAVA">
         <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+        <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
         <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+        <option name="KEEP_BLANK_LINES_BETWEEN_PACKAGE_DECLARATION_AND_HEADER" value="1" />
+        <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="1" />
         <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
         <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
         <option name="ALIGN_MULTILINE_RESOURCES" value="false" />
