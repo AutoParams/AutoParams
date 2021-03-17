@@ -17,7 +17,7 @@ public final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
         new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
-        new DoubleGenerator());
+        new DoubleGenerator(), new CharacterGenerator());
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
         new CompositeObjectGenerator(new BigDecimalGenerator(), new StringGenerator(),

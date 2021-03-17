@@ -195,4 +195,11 @@ public class AutoSourceSpecs {
         assertThat(container.getValue()).isNotNull();
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_characters(char value1, Character value2) {
+        assertThat(value1).isGreaterThanOrEqualTo(Character.MIN_VALUE);
+        assertThat(value2).isInstanceOf(Character.class);
+    }
+
 }
