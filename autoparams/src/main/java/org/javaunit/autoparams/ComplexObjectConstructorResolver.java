@@ -3,6 +3,7 @@ package org.javaunit.autoparams;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +14,9 @@ final class ComplexObjectConstructorResolver {
     public static Optional<Constructor<?>> resolveConstructor(Class<?> type) {
         return isSimpleType(type)
             ? Optional.empty()
-            : Arrays.stream(type.getConstructors()).findFirst();
+            : Arrays.stream(type.getConstructors())
+                .sorted(Comparator.comparing(c -> c.getParameterCount()))
+                .findFirst();
     }
 
     private static Set<Class<?>> SIMPLE_TYPES = new HashSet<>(

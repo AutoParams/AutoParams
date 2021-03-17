@@ -173,4 +173,10 @@ public class AutoSourceSpecs {
         assertThat(value.getValue3().getValue3()).isInstanceOf(ComplexObject.class);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_selects_constructor_with_the_fewest_parameters(HasMultipleConstructors container) {
+        assertThat(container.getValue()).isNull();
+    }
+
 }
