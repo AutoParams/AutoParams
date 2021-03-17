@@ -18,9 +18,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
-            .map(constructor -> generate(query, constructor, context))
-            .map(Optional::of)
-            .orElse(Optional.empty());
+            .map(constructor -> generate(query, constructor, context));
     }
 
     private Object generate(
@@ -57,7 +55,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     private Map<TypeVariable<?>, Type> getGenericMap(
         Class<?> type, ParameterizedType parameterizedType) {
 
-        HashMap<TypeVariable<?>, Type> map = new HashMap<TypeVariable<?>, Type>();
+        HashMap<TypeVariable<?>, Type> map = new HashMap<>();
 
         TypeVariable<?>[] typeVariables = type.getTypeParameters();
         Type[] typeValues = parameterizedType.getActualTypeArguments();

@@ -1,11 +1,12 @@
 package org.javaunit.autoparams;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 final class EnumValuesResolver {
 
-    private static HashMap<Class<?>, Object[]> CACHE = new HashMap<>();
+    private static final Map<Class<?>, Object[]> CACHE = new ConcurrentHashMap<>();
 
     public static Object[] resolveValues(Class<?> type) {
         return CACHE.computeIfAbsent(type, EnumValuesResolver::getValues);
