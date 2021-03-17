@@ -1,9 +1,12 @@
+import com.github.spotbugs.snom.SpotBugsTask
+
 plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
     id 'org.ec4j.editorconfig' version '0.0.3'
     id 'checkstyle'
+    id 'com.github.spotbugs' version '4.7.0'
 }
 
 allprojects {
@@ -20,6 +23,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.ec4j.editorconfig'
     apply plugin: 'checkstyle'
+    apply plugin: 'com.github.spotbugs'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -38,6 +42,33 @@ subprojects {
         maxErrors = 0
         maxWarnings = 0
     }
+
+    spotbugs {
+        ignoreFailures = false
+        reportLevel = "high"
+        spotbugsTest.enabled = false
+    }
+
+    tasks.withType(SpotBugsTask) {
+        reports {
+            text.enabled = true
+            xml.enabled = false
+            html.enabled = false
+        }
+    }
+
+    tasks.register("printSpotbugsMain") {
+        doLast {
+            File mainResult = file("${buildDir}/reports/spotbugs/main.txt")
+            if (mainResult.exists()) {
+                mainResult.readLines().forEach {
+                    println(it)
+                }
+            }
+        }
+    }
+
+    tasks.getByPath("spotbugsMain").finalizedBy("printSpotbugsMain")
 
     publishing {
         repositories {
