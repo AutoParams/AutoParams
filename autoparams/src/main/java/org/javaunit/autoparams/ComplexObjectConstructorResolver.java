@@ -14,7 +14,7 @@ import java.util.UUID;
 
 final class ComplexObjectConstructorResolver {
 
-    static interface ConstructorSelector {
+    interface ConstructorSelector {
 
         Optional<Constructor<?>> select(Constructor<?>[] constructors);
 
@@ -26,7 +26,7 @@ final class ComplexObjectConstructorResolver {
             : selectConstructor(type.getConstructors());
     }
 
-    private static Set<Class<?>> SIMPLE_TYPES = new HashSet<>(
+    private static final Set<Class<?>> SIMPLE_TYPES = new HashSet<>(
         Arrays.asList(Boolean.class, Integer.class, Long.class, Float.class, Double.class,
             String.class, BigDecimal.class, UUID.class));
 
@@ -40,8 +40,8 @@ final class ComplexObjectConstructorResolver {
             source -> selectWithFewestParameters(source),
         };
 
-        for (int i = 0; i < selectors.length; i++) {
-            Optional<Constructor<?>> constructor = selectors[i].select(constructors);
+        for (ConstructorSelector selector : selectors) {
+            Optional<Constructor<?>> constructor = selector.select(constructors);
             if (constructor.isPresent()) {
                 return constructor;
             }
