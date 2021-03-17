@@ -21,6 +21,9 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply plugin: 'checkstyle'
 
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
     editorconfig {
         excludes = ["build"]
     }
