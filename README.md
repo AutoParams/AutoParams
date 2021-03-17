@@ -36,14 +36,14 @@ At least JDK1.8 or higher
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.0.4'
+testImplementation 'io.github.javaunit:autoparams:0.0.5'
 ```
 
 ---
