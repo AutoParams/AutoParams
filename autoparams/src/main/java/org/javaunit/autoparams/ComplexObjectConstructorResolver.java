@@ -1,5 +1,8 @@
 package org.javaunit.autoparams;
 
+import static java.util.Arrays.stream;
+
+import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -11,12 +14,16 @@ import java.util.UUID;
 
 final class ComplexObjectConstructorResolver {
 
+    static interface ConstructorSelector {
+
+        Optional<Constructor<?>> select(Constructor<?>[] constructors);
+
+    }
+
     public static Optional<Constructor<?>> resolveConstructor(Class<?> type) {
         return isSimpleType(type)
             ? Optional.empty()
-            : Arrays.stream(type.getConstructors())
-                .sorted(Comparator.comparing(c -> c.getParameterCount()))
-                .findFirst();
+            : selectConstructor(type.getConstructors());
     }
 
     private static Set<Class<?>> SIMPLE_TYPES = new HashSet<>(
@@ -25,6 +32,38 @@ final class ComplexObjectConstructorResolver {
 
     private static boolean isSimpleType(Class<?> type) {
         return SIMPLE_TYPES.stream().anyMatch(type::equals);
+    }
+
+    private static Optional<Constructor<?>> selectConstructor(Constructor<?>[] constructors) {
+        ConstructorSelector[] selectors = new ConstructorSelector[] {
+            source -> selectWithFewestParameters(filterDecoratedWithConstructorProperties(source)),
+            source -> selectWithFewestParameters(source),
+        };
+
+        for (int i = 0; i < selectors.length; i++) {
+            Optional<Constructor<?>> constructor = selectors[i].select(constructors);
+            if (constructor.isPresent()) {
+                return constructor;
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<Constructor<?>> selectWithFewestParameters(
+        Constructor<?>[] constructors) {
+
+        return stream(constructors)
+            .sorted(Comparator.comparing(c -> c.getParameterCount()))
+            .findFirst();
+    }
+
+    private static Constructor<?>[] filterDecoratedWithConstructorProperties(
+        Constructor<?>[] constructors) {
+
+        return stream(constructors)
+           .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
+           .toArray(Constructor<?>[]::new);
     }
 
 }
