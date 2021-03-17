@@ -331,6 +331,41 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).hasSize(EnumType.values().length);
     }
 
+    public void hasCharacterParameters(char a0, Character a1) {
+    }
+
+    @Test
+    void sut_creates_arbitrary_char_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasCharacterParameters");
+
+        int count = 100;
+        HashSet<Character> actual = new HashSet<Character>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context)
+                .map(args -> (Character) args.get()[0])
+                .forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(count);
+    }
+
+    @Test
+    void sut_creates_arbitrary_Character_value() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("hasCharacterParameters");
+
+        int count = 100;
+        HashSet<Character> actual = new HashSet<Character>();
+        for (int i = 0; i < count; i++) {
+            sut.provideArguments(context)
+                .map(args -> (Character) args.get()[1])
+                .forEach(actual::add);
+        }
+
+        assertThat(actual).hasSize(count);
+    }
+
     private ExtensionContext getExtensionContext(String methodName) {
         ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
