@@ -53,6 +53,7 @@ subprojects {
 
         publications {
             maven(MavenPublication) {
+                artifactId 'autoparams'
                 from components.java
                 pom {
                     name = "AutoParams"
