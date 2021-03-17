@@ -1,18 +1,14 @@
 package org.javaunit.autoparams;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AutoSourceSpecs {
 
@@ -95,13 +91,6 @@ public class AutoSourceSpecs {
     @AutoSource
     void sut_creates_collection(Collection<ComplexObject> collection) {
         assertThat(collection).isNotNull();
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_intStream(IntStream intStream) {
-        assertThat(intStream).isNotNull();
-        assertThat(intStream).hasSize(3);
     }
 
     @ParameterizedTest
@@ -197,14 +186,11 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_creates_char_value(char character) {
-        assertThat(character).isBetween(Character.MIN_VALUE, Character.MAX_VALUE);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_Character_value(Character character) {
-        assertThat(character).isInstanceOf(Character.class);
+    void sut_correctly_creates_java_time_object(JavaTimeObject value) {
+        assertThat(value).isNotNull();
+        assertThat(value.getLocalDate()).isInstanceOf(LocalDate.class);
+        assertThat(value.getLocalTime()).isInstanceOf(LocalTime.class);
+        assertThat(value.getLocalDateTime()).isInstanceOf(LocalDateTime.class);
     }
 
 }
