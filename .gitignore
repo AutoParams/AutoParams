@@ -6,4 +6,5 @@
 .project
 build
 bin
+out
 .idea
