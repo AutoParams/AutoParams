@@ -197,9 +197,14 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_correctly_generates_characters(char value1, Character value2) {
-        assertThat(value1).isGreaterThanOrEqualTo(Character.MIN_VALUE);
-        assertThat(value2).isInstanceOf(Character.class);
+    void sut_creates_char_value(char character) {
+        assertThat(character).isBetween(Character.MIN_VALUE, Character.MAX_VALUE);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_Character_value(Character character) {
+        assertThat(character).isInstanceOf(Character.class);
     }
 
 }
