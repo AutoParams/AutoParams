@@ -101,15 +101,7 @@ public class AutoSourceSpecs {
     @AutoSource
     void sut_creates_intStream(IntStream intStream) {
         assertThat(intStream).isNotNull();
-
-        int[] array = intStream.toArray();
-        HashSet<Integer> set = new HashSet<>();
-        for (int i = 0; i < array.length; i++) {
-            set.add(array[i]);
-        }
-
-        assertThat(array).hasSize(3);
-        assertThat(set).hasSize(array.length);
+        assertThat(intStream).hasSize(3);
     }
 
     @ParameterizedTest
