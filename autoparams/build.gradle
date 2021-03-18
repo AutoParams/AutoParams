@@ -18,5 +18,7 @@ java {
 }
 
 test {
+    dependsOn('checkstyleMain', 'checkstyleTest')
+
     useJUnitPlatform()
 }
