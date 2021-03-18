@@ -2,7 +2,7 @@ package org.javaunit.autoparams;
 
 import java.util.Optional;
 
-public class CharacterGenerator implements ObjectGenerator {
+final class CharacterGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
@@ -13,7 +13,8 @@ public class CharacterGenerator implements ObjectGenerator {
     }
 
     private Optional<Object> factory() {
-        return Optional.of((char) RANDOM.nextInt(Character.MAX_VALUE + 1));
+        int exclusiveCharUpperBound = Character.MAX_VALUE + 1;
+        return Optional.of((char) RANDOM.nextInt(exclusiveCharUpperBound));
     }
 
 }
