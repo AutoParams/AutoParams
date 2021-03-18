@@ -16,17 +16,13 @@ final class ComplexObjectConstructorResolver {
     }
 
     public static Optional<Constructor<?>> resolveConstructor(Class<?> type) {
-        return selectConstructor(type.getConstructors());
-    }
-
-    private static Optional<Constructor<?>> selectConstructor(Constructor<?>[] constructors) {
         ConstructorSelector[] selectors = new ConstructorSelector[] {
             source -> selectWithFewestParameters(filterDecoratedWithConstructorProperties(source)),
             source -> selectWithFewestParameters(source),
         };
 
         for (ConstructorSelector selector : selectors) {
-            Optional<Constructor<?>> constructor = selector.select(constructors);
+            Optional<Constructor<?>> constructor = selector.select(type.getConstructors());
             if (constructor.isPresent()) {
                 return constructor;
             }
