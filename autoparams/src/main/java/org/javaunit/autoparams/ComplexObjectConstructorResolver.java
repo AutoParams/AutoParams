@@ -31,7 +31,8 @@ final class ComplexObjectConstructorResolver {
 
     private static final Set<Class<?>> SIMPLE_TYPES = new HashSet<>(
         Arrays.asList(Boolean.class, Integer.class, Long.class, Float.class, Double.class,
-            String.class, BigDecimal.class, UUID.class, LocalDate.class, LocalTime.class, LocalDateTime.class));
+            String.class, BigDecimal.class, UUID.class, LocalDate.class, LocalTime.class,
+            LocalDateTime.class));
 
     private static boolean isSimpleType(Class<?> type) {
         return SIMPLE_TYPES.stream().anyMatch(type::equals);

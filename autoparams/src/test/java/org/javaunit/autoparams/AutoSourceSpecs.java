@@ -1,14 +1,20 @@
 package org.javaunit.autoparams;
 
-import org.junit.jupiter.params.ParameterizedTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.params.ParameterizedTest;
 
 public class AutoSourceSpecs {
 
@@ -186,11 +192,23 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_correctly_creates_java_time_object(JavaTimeObject value) {
+    void sut_correctly_creates_local_date_object(LocalDate value) {
         assertThat(value).isNotNull();
-        assertThat(value.getLocalDate()).isInstanceOf(LocalDate.class);
-        assertThat(value.getLocalTime()).isInstanceOf(LocalTime.class);
-        assertThat(value.getLocalDateTime()).isInstanceOf(LocalDateTime.class);
+        assertThat(value).isInstanceOf(LocalDate.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_time_object(LocalTime value) {
+        assertThat(value).isNotNull();
+        assertThat(value).isInstanceOf(LocalTime.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_date_time_object(LocalDateTime value) {
+        assertThat(value).isNotNull();
+        assertThat(value).isInstanceOf(LocalDateTime.class);
     }
 
 }

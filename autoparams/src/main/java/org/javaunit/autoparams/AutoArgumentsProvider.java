@@ -17,14 +17,17 @@ public final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR = new CompositeObjectGenerator(
         new BooleanGenerator(), new IntegerGenerator(), new LongGenerator(), new FloatGenerator(),
-        new DoubleGenerator(), new CharacterGenerator());
+        new DoubleGenerator());
 
-    private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR = new CompositeObjectGenerator(
-        new BigDecimalGenerator(), new StringGenerator(), new UuidGenerator(), new EnumGenerator(), new JavaTimeGenerator());
+    private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
+        new CompositeObjectGenerator(
+            new BigDecimalGenerator(), new StringGenerator(), new UuidGenerator(),
+            new EnumGenerator(), new DateAndTimeGenerator()
+        );
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(
-        new ArrayGenerator(), new CollectionGenerator(), new IntStreamGenerator(),
-        new StreamGenerator(), new MapGenerator(), new SetGenerator());
+        new ArrayGenerator(),
+        new CollectionGenerator(), new StreamGenerator(), new MapGenerator(), new SetGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR,
