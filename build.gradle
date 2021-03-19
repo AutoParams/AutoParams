@@ -16,7 +16,7 @@ allprojects {
     }
 
     group = 'io.github.javaunit'
-    version = '0.0.6'
+    version = '0.0.7'
 }
 
 subprojects {
