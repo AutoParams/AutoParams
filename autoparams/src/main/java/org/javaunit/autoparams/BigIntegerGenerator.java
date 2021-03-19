@@ -10,6 +10,7 @@ final class BigIntegerGenerator implements ObjectGenerator {
     }
 
     private Optional<Object> factory() {
-        return Optional.of(new BigInteger(64, RANDOM));
+        int maxBitLength = 256;
+        return Optional.of(new BigInteger(maxBitLength, RANDOM));
     }
 }
