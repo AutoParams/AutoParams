@@ -2,6 +2,7 @@ package org.javaunit.autoparams;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -207,4 +208,9 @@ public class AutoSourceSpecs {
         assertThat(character).isInstanceOf(Character.class);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_BigInteger_value(BigInteger bigInteger) {
+        assertThat(bigInteger).isInstanceOf(BigInteger.class);
+    }
 }
