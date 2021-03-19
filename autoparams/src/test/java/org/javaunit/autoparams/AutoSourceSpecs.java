@@ -3,6 +3,9 @@ package org.javaunit.autoparams;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -212,5 +215,26 @@ public class AutoSourceSpecs {
     @AutoSource
     void sut_creates_BigInteger_value(BigInteger bigInteger) {
         assertThat(bigInteger).isInstanceOf(BigInteger.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_date_object(LocalDate value) {
+        assertThat(value).isNotNull();
+        assertThat(value).isInstanceOf(LocalDate.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_time_object(LocalTime value) {
+        assertThat(value).isNotNull();
+        assertThat(value).isInstanceOf(LocalTime.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_date_time_object(LocalDateTime value) {
+        assertThat(value).isNotNull();
+        assertThat(value).isInstanceOf(LocalDateTime.class);
     }
 }

@@ -21,7 +21,8 @@ public final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
         new CompositeObjectGenerator(new BigIntegerGenerator(), new BigDecimalGenerator(),
-            new StringGenerator(), new UuidGenerator(), new EnumGenerator());
+            new StringGenerator(), new UuidGenerator(), new EnumGenerator(),
+            new DateAndTimeGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(
         new ArrayGenerator(), new CollectionGenerator(), new IntStreamGenerator(),
