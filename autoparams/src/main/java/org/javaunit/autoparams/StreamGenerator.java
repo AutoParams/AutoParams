@@ -3,7 +3,6 @@ package org.javaunit.autoparams;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 final class StreamGenerator extends GenericObjectGenerator {
 

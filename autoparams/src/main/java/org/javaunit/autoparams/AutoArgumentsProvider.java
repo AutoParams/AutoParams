@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-public final class AutoArgumentsProvider implements ArgumentsProvider,
+final class AutoArgumentsProvider implements ArgumentsProvider,
     AnnotationConsumer<AutoSource> {
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
