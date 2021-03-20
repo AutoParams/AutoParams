@@ -21,12 +21,9 @@ void parameterizedTest(int a, int b) {
 
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
----
-
 ## Requirements
-```text
-At least JDK1.8 or higher
-```
+
+- JDK 1.8 or higher
 
 ## Install
 
@@ -46,8 +43,6 @@ At least JDK1.8 or higher
 testImplementation 'io.github.javaunit:autoparams:0.1.0'
 ```
 
----
-
 ## Features
 
 ### Primitive Types
@@ -57,7 +52,7 @@ AutoParams generates arbitrary test arguments of primitive types.
 ```java
 @ParameterizedTest
 @AutoSource
-void testMethod(boolean x1, int x2, long x3, float x4, double x5) {
+void testMethod(boolean x1, int x2, long x3, float x4, double x5, char x6) {
 }
 ```
 
@@ -68,7 +63,7 @@ AutoParams generates arbitrary simple objects for the test parameters.
 ```java
 @ParameterizedTest
 @AutoSource
-void testMethod(String x1, UUID x2) {
+void testMethod(String x1, UUID x2, BigInteger x3) {
 }
 ```
 
@@ -93,7 +88,6 @@ void testMethod(Day day) {
 AutoParams creates complex objects using a public constructor with arbitrary arguments. If the type has more than one public constructors, AutoParams chooses the constructor with the fewest parameters.
 
 ```java
-
 class ComplexObject {
 
     private final int value1;
@@ -117,6 +111,58 @@ class ComplexObject {
 @ParameterizedTest
 @AutoSource
 void testMethod(ComplexObject object) {
+}
+```
+
+#### Constructor Selection Policy
+
+When AutoParams creates objects of complex types it follows the following rules.
+
+1. The constructor decorated with `@ConstructorProperties` annotation is preferentially selected.
+2. AutoParams selects the constructor with the fewest parameters.
+
+```java
+class ComplexObject {
+
+    private final int value1;
+    private final String value2;
+    private final UUID value3;
+
+    @ConstructorProperties({"value1", "value2, value3"})
+    public ComplexObject(int value1, String value2, UUID value3) {
+        this.value1 = value1;
+        this.value2 = value2;
+        this.value3 = value3;
+    }
+
+    @ConstructorProperties({"value1", "value2"})
+    public ComplexObject(int value1, String value2) {
+        this(value1, value2, null);
+    }
+
+    public ComplexObject(int value1) {
+        this(value1, null, null);
+    }
+
+    public int getValue1() {
+        return value1;
+    }
+
+    public String getValue2() {
+        return value2;
+    }
+
+    public UUID getValue3() {
+        return value3;
+    }
+
+}
+
+@ParameterizedTest
+@AutoSource
+void testMethod(ComplexObject object) {
+    assertNotNull(object.getValue2());
+    assertNull(object.getValue3());
 }
 ```
 
