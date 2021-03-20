@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -106,6 +107,13 @@ public class AutoSourceSpecs {
     void sut_creates_intStream(IntStream intStream) {
         assertThat(intStream).isNotNull();
         assertThat(intStream).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_longStream(LongStream longStream) {
+        assertThat(longStream).isNotNull();
+        assertThat(longStream).hasSize(3);
     }
 
     @ParameterizedTest
