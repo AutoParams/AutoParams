@@ -33,14 +33,14 @@ In the example above, you can see that the arbitrary test data may eliminate the
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.1.0'
+testImplementation 'io.github.javaunit:autoparams:0.1.1'
 ```
 
 ## Features
@@ -247,6 +247,8 @@ void testMethod(Map<String, ComplexObject> map, HashMap<UUID, ComplexObject> has
 }
 ```
 
+### Streams Types
+
 #### Generic Stream Interface
 
 AutoParams supports the generic `Stream<T>` interface. Generated stream objects provide few elements.
@@ -257,6 +259,19 @@ AutoParams supports the generic `Stream<T>` interface. Generated stream objects 
 void testMethod(Stream<ComplexObject> stream) {
 }
 ```
+
+#### Stream Interfaces of Primitive Types
+
+Stream Interfaces specific to primitive types are supported.
+
+```java
+@ParameterizedTest
+@AutoSource
+void testMethod(IntStream intStream, LongStream longStream, DoubleStream doubleStream) {
+}
+```
+
+####
 
 ### Repeat
 
