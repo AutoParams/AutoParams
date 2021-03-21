@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -114,6 +115,13 @@ public class AutoSourceSpecs {
     void sut_creates_longStream(LongStream longStream) {
         assertThat(longStream).isNotNull();
         assertThat(longStream).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_doubleStream(DoubleStream doubleStream) {
+        assertThat(doubleStream).isNotNull();
+        assertThat(doubleStream).hasSize(3);
     }
 
     @ParameterizedTest
