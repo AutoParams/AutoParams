@@ -70,7 +70,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private Object createArgument(Parameter parameter) {
         ObjectQuery query = ObjectQuery.create(parameter);
-        return context.generate(query).orElse(null);
+        return context.generate(query);
     }
 
     @Override

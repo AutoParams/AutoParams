@@ -100,7 +100,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     private Object[] generateArguments(
         Stream<ObjectQuery> argumentQueries, ObjectGenerationContext context) {
 
-        return argumentQueries.map(context::generate).map(a -> a.orElse(null)).toArray();
+        return argumentQueries.map(context::generate).toArray();
     }
 
 }

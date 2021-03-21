@@ -1,7 +1,5 @@
 package org.javaunit.autoparams;
 
-import java.util.Optional;
-
 final class ObjectGenerationContext {
 
     private final ObjectGenerator generator;
@@ -11,8 +9,9 @@ final class ObjectGenerationContext {
 
     }
 
-    public Optional<Object> generate(ObjectQuery query) {
-        return generator.generate(query, this);
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public Object generate(ObjectQuery query) {
+        // This generate method always assumes that it can create values with a given query.
+        return generator.generate(query, this).get();
     }
-
 }
