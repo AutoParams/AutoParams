@@ -253,4 +253,34 @@ public class AutoSourceSpecs {
         assertThat(value).isNotNull();
         assertThat(value).isInstanceOf(LocalDateTime.class);
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_builder_generate_integer_array(Builder<Integer[]> builder) {
+        Integer[] value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_builder_generate_integer_list(Builder<List<Integer>> builder) {
+        List<Integer> value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_builder_generate_complex_type_array(Builder<ComplexObject[]> builder) {
+        ComplexObject[] value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_builder_generate_complex_type_map(
+        Builder<Map<String, ComplexObject>> builder
+    ) {
+        Map<String, ComplexObject> value = builder.build();
+        assertThat(value).isNotEmpty();
+    }
 }

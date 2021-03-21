@@ -34,7 +34,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR,
-            COLLECTION_GENERATOR, STREAM_GENERATOR, new ComplexObjectGenerator());
+            COLLECTION_GENERATOR, STREAM_GENERATOR, new BuilderGenerator(),
+            new ComplexObjectGenerator());
 
     private final ObjectGenerationContext context;
     private int repeat;
