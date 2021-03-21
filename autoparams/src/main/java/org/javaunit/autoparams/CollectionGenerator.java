@@ -23,7 +23,7 @@ final class CollectionGenerator extends GenericObjectGenerator {
         int size = 3;
         ObjectQuery query = new ObjectQuery(componentType);
         for (int i = 0; i < size; i++) {
-            context.generate(query).map(x -> (T) x).ifPresent(instance::add);
+            instance.add((T) context.generate(query));
         }
 
         return instance;

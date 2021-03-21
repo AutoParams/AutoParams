@@ -31,9 +31,8 @@ final class MapGenerator extends GenericObjectGenerator {
         ObjectQuery keyQuery = new ObjectQuery(keyType);
         ObjectQuery valueQuery = new ObjectQuery(valueType);
         for (int i = 0; i < size; i++) {
-            context.generate(keyQuery).map(x -> (K) x).ifPresent(
-                k -> context.generate(valueQuery).map(x -> (V) x)
-                    .ifPresent(v -> instance.put(k, v)));
+            instance.put(
+                (K) context.generate(keyQuery), (V) context.generate(valueQuery));
         }
 
         return instance;
