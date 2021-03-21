@@ -25,13 +25,16 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
             new DateAndTimeGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR = new CompositeObjectGenerator(
-        new ArrayGenerator(), new CollectionGenerator(), new IntStreamGenerator(),
-        new LongStreamGenerator(), new DoubleStreamGenerator(), new StreamGenerator(),
+        new ArrayGenerator(), new CollectionGenerator(),
         new MapGenerator(), new SetGenerator());
+
+    private static final ObjectGenerator STREAM_GENERATOR = new CompositeObjectGenerator(
+        new IntStreamGenerator(), new LongStreamGenerator(), new DoubleStreamGenerator(),
+        new StreamGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(PRIMITIVE_VALUE_GENERATOR, SIMPLE_VALUE_OBJECT_GENERATOR,
-            COLLECTION_GENERATOR, new ComplexObjectGenerator());
+            COLLECTION_GENERATOR, STREAM_GENERATOR, new ComplexObjectGenerator());
 
     private final ObjectGenerationContext context;
     private int repeat;
