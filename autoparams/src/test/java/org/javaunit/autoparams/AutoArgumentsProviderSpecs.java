@@ -300,6 +300,20 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).isInstanceOf(ComplexObject.class);
     }
 
+    public void has1(List<String> a0) {
+    }
+
+    @Test
+    void sut_1() throws Exception {
+        AutoArgumentsProvider sut = new AutoArgumentsProvider();
+        ExtensionContext context = getExtensionContext("has1");
+
+        Object actual = sut.provideArguments(context).map(args -> args.get()[0])
+            .collect(Collectors.toList()).get(0);
+
+        assertThat(actual).isInstanceOf(List.class);
+    }
+
     public void hasMoreComplexObjectParameter(MoreComplexObject a0) {
     }
 

@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 
-public class AutoSourceSpecs {
+public class AutoDataSpecs {
 
     @ParameterizedTest
     @AutoSource
