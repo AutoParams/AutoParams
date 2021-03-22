@@ -4,6 +4,7 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,6 +18,10 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        if (isAbstractType(query.getType())) {
+            return Optional.empty();
+        }
+
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
             .map(constructor -> generate(query, constructor, context));
     }
@@ -27,6 +32,10 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         Parameter[] parameters = constructor.getParameters();
         Stream<ObjectQuery> argumentQueries = resolveArgumentQueries(sourceQuery, parameters);
         return createInstance(constructor, argumentQueries, context);
+    }
+
+    private boolean isAbstractType(Class<?> type) {
+        return type.isInterface() || Modifier.isAbstract(type.getModifiers());
     }
 
     private Stream<ObjectQuery> resolveArgumentQueries(
