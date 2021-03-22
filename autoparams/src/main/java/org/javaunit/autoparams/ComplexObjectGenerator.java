@@ -91,9 +91,16 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
         try {
             return constructor.newInstance(generateArguments(argumentQueries, context));
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-            | InvocationTargetException e) {
-            throw new RuntimeException(e);
+        } catch (InstantiationException
+            | IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException exception) {
+            String format = "Objects cannot be generated based on the given query '%s'. "
+                + "This can happen if the query represents an abstract class.";
+
+            throw new ObjectGenerationException(
+                String.format(format, constructor.getDeclaringClass()),
+                exception);
         }
     }
 
