@@ -219,6 +219,18 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
+    void sut_creates_byte_value(byte value) {
+        assertThat(value).isBetween(Byte.MIN_VALUE, Byte.MAX_VALUE);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_Byte_value(Byte value) {
+        assertThat(value).isInstanceOf(Byte.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
     void sut_creates_char_value(char character) {
         assertThat(character).isBetween(Character.MIN_VALUE, Character.MAX_VALUE);
     }
