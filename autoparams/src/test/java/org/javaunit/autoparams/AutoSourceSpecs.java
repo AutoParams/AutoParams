@@ -1,11 +1,13 @@
 package org.javaunit.autoparams;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -283,4 +285,35 @@ public class AutoSourceSpecs {
         Map<String, ComplexObject> value = builder.build();
         assertThat(value).isNotEmpty();
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_throws_when_object_of_interface_is_requested(
+        Builder<Cloneable> builder
+    ) {
+        assertThatThrownBy(builder::build)
+            .isInstanceOf(ObjectGenerationException.class)
+            .hasMessageContaining("interface");
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_throws_when_object_of_abstract_class_is_requested(
+        Builder<AbstractList<Object>> builder
+    ) {
+        assertThatThrownBy(builder::build)
+            .isInstanceOf(ObjectGenerationException.class)
+            .hasMessageContaining("abstract");
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_throws_when_object_of_abstract_class_with_public_constructor_is_requested(
+        Builder<AbstractWithPublicConstructor> builder
+    ) {
+        assertThatThrownBy(builder::build)
+            .isInstanceOf(ObjectGenerationException.class)
+            .hasMessageContaining("abstract");
+    }
+
 }

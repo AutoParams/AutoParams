@@ -9,9 +9,12 @@ final class ObjectGenerationContext {
 
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Object generate(ObjectQuery query) {
-        // This generate method always assumes that it can create values with a given query.
-        return generator.generate(query, this).get(); // TODO: Use the orElseThrow method.
+        return generator.generate(query, this).orElseThrow(() -> {
+            String format = "An object cannot be generated with the given query '%s'. "
+                + "This can happen if the query represents an interface or abstract class.";
+
+            return new ObjectGenerationException(String.format(format, query.getType()));
+        });
     }
 }
