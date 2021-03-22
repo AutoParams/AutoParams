@@ -13,6 +13,11 @@ public final class Builder<T> {
         this.context = context;
     }
 
+    public <U> Builder<T> fix(Class<U> type, U value) {
+        this.context.fix(type, value);
+        return this;
+    }
+
     public T build() {
         return generate(this.builderQuery);
     }
