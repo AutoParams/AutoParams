@@ -12,6 +12,6 @@ final class ObjectGenerationContext {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Object generate(ObjectQuery query) {
         // This generate method always assumes that it can create values with a given query.
-        return generator.generate(query, this).get();
+        return generator.generate(query, this).get(); // TODO: Use the orElseThrow method.
     }
 }
