@@ -33,4 +33,5 @@ public final class Builder<T> {
             return new ObjectQuery((Class<?>) generateType);
         }
     }
+
 }
