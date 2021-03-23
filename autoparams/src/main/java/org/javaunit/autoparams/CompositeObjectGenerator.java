@@ -22,4 +22,15 @@ final class CompositeObjectGenerator implements ObjectGenerator {
         return Optional.empty();
     }
 
+    @Override
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+        for (ObjectGenerator generator : generators) {
+            GenerationResult result = generator.generateObject(query, context);
+            if (result.isSuccess()) {
+                return result;
+            }
+        }
+
+        return GenerationResult.failure();
+    }
 }
