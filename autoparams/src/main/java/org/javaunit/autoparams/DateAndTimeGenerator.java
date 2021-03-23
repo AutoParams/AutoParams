@@ -11,17 +11,35 @@ final class DateAndTimeGenerator implements ObjectGenerator {
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
 
         if (query.getType().equals(LocalDate.class)) {
-            return Optional.of(LocalDate.now());
+            return Optional.of(factoryDate());
         }
 
         if (query.getType().equals(LocalTime.class)) {
-            return Optional.of(LocalTime.now());
+            return Optional.of(factoryTime());
         }
 
         if (query.getType().equals(LocalDateTime.class)) {
-            return Optional.of(LocalDateTime.now());
+            return Optional.of(factoryDateTime());
         }
 
         return Optional.empty();
+    }
+
+    private LocalDateTime factoryDateTime() {
+        return LocalDateTime.of(factoryDate(), factoryTime());
+    }
+
+    private LocalTime factoryTime() {
+        long inclusiveMin = LocalTime.MIN.toNanoOfDay();
+        long exclusiveMax = LocalTime.MAX.toNanoOfDay() + 1;
+        long randomNanoOfDay = RANDOM.nextLong(inclusiveMin, exclusiveMax);
+        return LocalTime.ofNanoOfDay(randomNanoOfDay);
+    }
+
+    private LocalDate factoryDate() {
+        long inclusiveMin = LocalDate.MIN.toEpochDay();
+        long exclusiveMax = LocalDate.MAX.toEpochDay() + 1;
+        long randomEpochDay = RANDOM.nextLong(inclusiveMin, exclusiveMax);
+        return LocalDate.ofEpochDay(randomEpochDay);
     }
 }

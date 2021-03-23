@@ -316,4 +316,23 @@ public class AutoSourceSpecs {
             .hasMessageContaining("abstract");
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_date_with_arbitrary_value(LocalDate value1, LocalDate value2) {
+        assertThat(value1).isNotEqualTo(value2);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_time_with_arbitrary_value(LocalTime value1, LocalTime value2) {
+        assertThat(value1).isNotEqualTo(value2);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_creates_local_date_time_with_arbitrary_value(
+        LocalDateTime value1, LocalDateTime value2) {
+        assertThat(value1).isNotEqualTo(value2);
+    }
+
 }
