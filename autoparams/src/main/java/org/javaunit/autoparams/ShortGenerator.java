@@ -4,7 +4,7 @@ import java.util.Optional;
 
 final class ShortGenerator implements ObjectGenerator {
 
-    public static short factory() {
+    private static short factory() {
         return (short) RANDOM.nextInt(Short.MIN_VALUE, Short.MAX_VALUE + 1);
     }
 
