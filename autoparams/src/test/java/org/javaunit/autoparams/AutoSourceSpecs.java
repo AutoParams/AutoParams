@@ -249,6 +249,18 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
+    void sut_creates_short_value(short value) {
+        assertThat(value).isBetween(Short.MIN_VALUE, Short.MAX_VALUE);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_Short_value(Short value) {
+        assertThat(value).isInstanceOf(Short.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
     void sut_correctly_creates_local_date_object(LocalDate value) {
         assertThat(value).isNotNull();
         assertThat(value).isInstanceOf(LocalDate.class);
