@@ -359,4 +359,15 @@ public class AutoSourceSpecs {
         assertThat(value1).isNotEqualTo(value2);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_arbitrary_LocalDate_values(
+        LocalDate value1, LocalDate value2, LocalDate value3) {
+        Set<LocalDate> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        assertThat(set).hasSize(3);
+    }
+
 }
