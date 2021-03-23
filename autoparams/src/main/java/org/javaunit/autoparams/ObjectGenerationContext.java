@@ -1,5 +1,7 @@
 package org.javaunit.autoparams;
 
+import javax.annotation.Nullable;
+
 final class ObjectGenerationContext {
 
     private final ObjectGenerator generator;
@@ -9,6 +11,7 @@ final class ObjectGenerationContext {
 
     }
 
+    @Nullable
     public Object generate(ObjectQuery query) {
         GenerationResult result = generator.generateObject(query, this);
         if (result.isFailure()) {

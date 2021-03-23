@@ -1,15 +1,19 @@
 package org.javaunit.autoparams;
 
+import javax.annotation.Nullable;
+
 final class GenerationResult {
 
     private static final GenerationResult FAILURE = new GenerationResult(null);
 
+    @Nullable
     private final Object value;
 
-    private GenerationResult(Object value) {
+    private GenerationResult(@Nullable Object value) {
         this.value = value;
     }
 
+    @Nullable
     public Object get() {
         return value;
     }
