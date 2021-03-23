@@ -79,37 +79,6 @@ public class AutoArgumentsProviderSpecs {
         }
     }
 
-    public void hasShortParameters(short a0, Short a1) {
-    }
-
-    @Test
-    void sut_creates_arbitrary_short_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasShortParameters");
-
-        int count = 100;
-        HashSet<Short> actual = new HashSet<Short>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (Short) args.get()[0]).forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(count);
-    }
-
-    @Test
-    void sut_creates_arbitrary_Short_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasShortParameters");
-
-        int count = 100;
-        HashSet<Short> actual = new HashSet<Short>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (Short) args.get()[1]).forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(count);
-    }
-
     public void hasIntegerParameters(int a0, Integer a1) {
     }
 
