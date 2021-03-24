@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 final class GenerationResult {
 
-    private static final GenerationResult FAILURE = new GenerationResult(null);
+    private static final GenerationResult ABSENCE = new GenerationResult(null);
 
     @Nullable
     private final Object value;
@@ -18,20 +18,20 @@ final class GenerationResult {
         return value;
     }
 
-    public boolean isSuccess() {
-        return this != FAILURE;
+    public boolean isPresent() {
+        return !this.isAbsent();
     }
 
-    public boolean isFailure() {
-        return this == FAILURE;
+    public boolean isAbsent() {
+        return this == ABSENCE;
     }
 
-    public static GenerationResult success(Object result) {
-        return new GenerationResult(result);
+    public static GenerationResult presence(Object value) {
+        return new GenerationResult(value);
     }
 
-    public static GenerationResult failure() {
-        return FAILURE;
+    public static GenerationResult absence() {
+        return ABSENCE;
     }
 
 }
