@@ -26,11 +26,11 @@ final class CompositeObjectGenerator implements ObjectGenerator {
     public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         for (ObjectGenerator generator : generators) {
             GenerationResult result = generator.generateObject(query, context);
-            if (result.isSuccess()) {
+            if (result.isPresent()) {
                 return result;
             }
         }
 
-        return GenerationResult.failure();
+        return GenerationResult.absence();
     }
 }

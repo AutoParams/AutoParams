@@ -11,8 +11,8 @@ interface ObjectGenerator {
 
     default GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         return this.generate(query, context)
-            .map(GenerationResult::success)
-            .orElseGet(GenerationResult::failure);
+            .map(GenerationResult::presence)
+            .orElseGet(GenerationResult::absence);
     }
 
 }
