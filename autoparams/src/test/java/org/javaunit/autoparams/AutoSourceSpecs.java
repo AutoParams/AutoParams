@@ -219,44 +219,8 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_creates_byte_value(byte value) {
-        assertThat(value).isBetween(Byte.MIN_VALUE, Byte.MAX_VALUE);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_Byte_value(Byte value) {
-        assertThat(value).isInstanceOf(Byte.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_char_value(char character) {
-        assertThat(character).isBetween(Character.MIN_VALUE, Character.MAX_VALUE);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_Character_value(Character character) {
-        assertThat(character).isInstanceOf(Character.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
     void sut_creates_BigInteger_value(BigInteger bigInteger) {
         assertThat(bigInteger).isInstanceOf(BigInteger.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_short_value(short value) {
-        assertThat(value).isBetween(Short.MIN_VALUE, Short.MAX_VALUE);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_Short_value(Short value) {
-        assertThat(value).isInstanceOf(Short.class);
     }
 
     @ParameterizedTest
