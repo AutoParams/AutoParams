@@ -6,14 +6,19 @@ final class BooleanGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return type.equals(boolean.class) || type.equals(Boolean.class)
-            ? factory()
-            : Optional.empty();
+        throw new RuntimeException("Not supported");
     }
 
-    private Optional<Object> factory() {
-        return Optional.of(RANDOM.nextInt() % 2 == 0);
+    @Override
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+        Class<?> type = query.getType();
+        return type.equals(boolean.class) || type.equals(Boolean.class)
+            ? GenerationResult.presence(factory())
+            : GenerationResult.absence();
+    }
+
+    private Object factory() {
+        return RANDOM.nextInt() % 2 == 0;
     }
 
 }
