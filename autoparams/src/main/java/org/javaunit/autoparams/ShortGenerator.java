@@ -4,15 +4,20 @@ import java.util.Optional;
 
 final class ShortGenerator implements ObjectGenerator {
 
-    private static short factory() {
-        return (short) RANDOM.nextInt(Short.MIN_VALUE, Short.MAX_VALUE + 1);
+    @Override
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        throw new RuntimeException("Not supported");
     }
 
     @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return type.equals(short.class) || type.equals(Short.class)
-               ? Optional.of(factory())
-               : Optional.empty();
+            ? GenerationResult.presence(factory())
+            : GenerationResult.absence();
+    }
+
+    private static short factory() {
+        return (short) RANDOM.nextInt(Short.MIN_VALUE, Short.MAX_VALUE + 1);
     }
 }
