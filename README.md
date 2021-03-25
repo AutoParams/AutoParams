@@ -33,14 +33,14 @@ In the example above, you can see that the arbitrary test data may eliminate the
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.1.1'
+testImplementation 'io.github.javaunit:autoparams:0.1.2'
 ```
 
 ## Features
