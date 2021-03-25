@@ -6,10 +6,15 @@ final class ByteGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        throw new RuntimeException("Not supported");
+    }
+
+    @Override
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return type.equals(byte.class) || type.equals(Byte.class)
-            ? Optional.of(factory())
-            : Optional.empty();
+            ? GenerationResult.presence(factory())
+            : GenerationResult.absence();
     }
 
     private byte factory() {
