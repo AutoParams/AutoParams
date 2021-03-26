@@ -6,7 +6,7 @@ final class ShortGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new RuntimeException("Not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override
