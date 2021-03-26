@@ -6,10 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -50,58 +47,6 @@ public class AutoArgumentsProviderSpecs {
         for (Arguments arguments : actual.collect(Collectors.toList())) {
             assertThat(arguments.get()).hasSize(count);
         }
-    }
-
-    public void hasBigDecimalParameters(BigDecimal a0) {
-    }
-
-    @Test
-    void sut_creates_arbitrary_BigDecimal_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasBigDecimalParameters");
-
-        int count = 100;
-        HashSet<BigDecimal> actual = new HashSet<BigDecimal>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (BigDecimal) args.get()[0])
-                .forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(count);
-    }
-
-    public void hasStringParameters(String a0) {
-    }
-
-    @Test
-    void sut_creates_arbitrary_String_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasStringParameters");
-
-        int count = 100;
-        HashSet<String> actual = new HashSet<String>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (String) args.get()[0]).forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(count);
-    }
-
-    public void hasUuidParameters(UUID a0) {
-    }
-
-    @Test
-    void sut_creates_arbitrary_uuid_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasUuidParameters");
-
-        int count = 100;
-        HashSet<UUID> actual = new HashSet<UUID>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (UUID) args.get()[0]).forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(count);
     }
 
     public void hasComplexObjectParameter(ComplexObject a0) {
