@@ -201,20 +201,6 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_selects_constructor_with_the_fewest_parameters(HasMultipleConstructors container) {
-        assertThat(container.getValue()).isNull();
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_selects_constructor_decorated_with_ConstructorProperties(
-        DecoratedWithConstructorProperties container) {
-
-        assertThat(container.getValue()).isNotNull();
-    }
-
-    @ParameterizedTest
-    @AutoSource
     void sut_creates_builder_generate_integer_array(Builder<Integer[]> builder) {
         Integer[] value = builder.build();
         assertThat(value).hasSize(3);
