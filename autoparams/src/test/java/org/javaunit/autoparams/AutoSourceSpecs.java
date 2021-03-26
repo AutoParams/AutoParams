@@ -3,10 +3,6 @@ package org.javaunit.autoparams;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -219,33 +215,6 @@ public class AutoSourceSpecs {
 
     @ParameterizedTest
     @AutoSource
-    void sut_creates_BigInteger_value(BigInteger bigInteger) {
-        assertThat(bigInteger).isInstanceOf(BigInteger.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_date_object(LocalDate value) {
-        assertThat(value).isNotNull();
-        assertThat(value).isInstanceOf(LocalDate.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_time_object(LocalTime value) {
-        assertThat(value).isNotNull();
-        assertThat(value).isInstanceOf(LocalTime.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_date_time_object(LocalDateTime value) {
-        assertThat(value).isNotNull();
-        assertThat(value).isInstanceOf(LocalDateTime.class);
-    }
-
-    @ParameterizedTest
-    @AutoSource
     void sut_creates_builder_generate_integer_array(Builder<Integer[]> builder) {
         Integer[] value = builder.build();
         assertThat(value).hasSize(3);
@@ -302,36 +271,6 @@ public class AutoSourceSpecs {
         assertThatThrownBy(builder::build)
             .isInstanceOf(ObjectGenerationException.class)
             .hasMessageContaining("abstract");
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_date_with_arbitrary_value(LocalDate value1, LocalDate value2) {
-        assertThat(value1).isNotEqualTo(value2);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_time_with_arbitrary_value(LocalTime value1, LocalTime value2) {
-        assertThat(value1).isNotEqualTo(value2);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_correctly_creates_local_date_time_with_arbitrary_value(
-        LocalDateTime value1, LocalDateTime value2) {
-        assertThat(value1).isNotEqualTo(value2);
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    void sut_creates_arbitrary_LocalDate_values(
-        LocalDate value1, LocalDate value2, LocalDate value3) {
-        Set<LocalDate> set = new HashSet<>();
-        set.add(value1);
-        set.add(value2);
-        set.add(value3);
-        assertThat(set).hasSize(3);
     }
 
 }
