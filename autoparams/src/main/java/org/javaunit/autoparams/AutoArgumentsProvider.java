@@ -17,8 +17,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR =
         new CompositeObjectGenerator(
-            new BooleanGenerator(),
-            new ByteGenerator(),
+            new TypeMatchingGenerator(Factories::createBoolean, boolean.class, Boolean.class),
+            new TypeMatchingGenerator(Factories::createByte, byte.class, Byte.class),
             new ShortGenerator(),
             new IntegerGenerator(),
             new LongGenerator(),
