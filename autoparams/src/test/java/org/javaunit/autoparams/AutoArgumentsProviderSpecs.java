@@ -132,23 +132,6 @@ public class AutoArgumentsProviderSpecs {
         assertThat(actual).isInstanceOf(MoreComplexObject.class);
     }
 
-    public void hasEnumObjectParameter(EnumType a0) {
-    }
-
-    @Test
-    void sut_creates_arbitrary_Enum_value() throws Exception {
-        AutoArgumentsProvider sut = new AutoArgumentsProvider();
-        ExtensionContext context = getExtensionContext("hasEnumObjectParameter");
-
-        int count = 100;
-        HashSet<Enum<?>> actual = new HashSet<>();
-        for (int i = 0; i < count; i++) {
-            sut.provideArguments(context).map(args -> (Enum<?>) args.get()[0]).forEach(actual::add);
-        }
-
-        assertThat(actual).hasSize(EnumType.values().length);
-    }
-
     private ExtensionContext getExtensionContext(String methodName) {
         ExtensionContext context = mock(ExtensionContext.class);
         when(context.getTestMethod()).thenReturn(Optional.of(getMethod(methodName)));
