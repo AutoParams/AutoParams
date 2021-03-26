@@ -4,6 +4,7 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,7 +32,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
             new BigIntegerGenerator(),
             new BigDecimalGenerator(),
             new StringGenerator(),
-            new UuidGenerator(),
+            new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
             new EnumGenerator(),
             new DateAndTimeGenerator(),
             new UrlGenerator());
