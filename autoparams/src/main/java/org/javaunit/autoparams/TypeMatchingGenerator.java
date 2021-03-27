@@ -22,9 +22,9 @@ class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     private static Function<Class<?>, Boolean> buildPredicateWithTypes(Class<?>... types) {
-        return type -> {
-            for (int i = 0; i < types.length; i++) {
-                if (type.equals(types[i])) {
+        return queryType -> {
+            for (Class<?> type : types) {
+                if (queryType.equals(type)) {
                     return true;
                 }
             }
