@@ -14,10 +14,16 @@ final class UrlGenerator implements ObjectGenerator {
     };
 
     @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         return query.getType().equals(URL.class)
-            ? Optional.of(generate())
-            : Optional.empty();
+            ? GenerationResult.presence(generate())
+            : GenerationResult.absence();
+    }
+
+    @Override
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        String message = "This method is not supported. Use generateObject method instead.";
+        throw new UnsupportedOperationException(message);
     }
 
     private URL generate() {
