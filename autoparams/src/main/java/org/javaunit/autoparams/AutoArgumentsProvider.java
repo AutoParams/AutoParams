@@ -7,6 +7,7 @@ import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -39,7 +40,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
             new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
             new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
             new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
-            new DateAndTimeGenerator(),
+            new TypeMatchingGenerator(Factories::createLocalDateTime, LocalDateTime.class),
             new EnumGenerator(),
             new UrlGenerator());
 
