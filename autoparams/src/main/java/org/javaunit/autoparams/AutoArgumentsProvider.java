@@ -4,6 +4,7 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
         new CompositeObjectGenerator(
             new TypeMatchingGenerator(Factories::createIntStream, IntStream.class),
             new TypeMatchingGenerator(Factories::createLongStream, LongStream.class),
-            new DoubleStreamGenerator(),
+            new TypeMatchingGenerator(Factories::createDoubleStream, DoubleStream.class),
             new StreamGenerator());
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
