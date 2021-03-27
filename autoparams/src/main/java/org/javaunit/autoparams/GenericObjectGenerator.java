@@ -1,7 +1,5 @@
 package org.javaunit.autoparams;
 
-import java.util.Optional;
-
 abstract class GenericObjectGenerator implements ObjectGenerator {
 
     @Override
@@ -16,10 +14,5 @@ abstract class GenericObjectGenerator implements ObjectGenerator {
 
     protected abstract GenerationResult generateObject(
         GenericObjectQuery query, ObjectGenerationContext context);
-
-    @Override
-    public final Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
-    }
 
 }
