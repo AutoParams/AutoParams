@@ -5,10 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 final class EnumGenerator implements ObjectGenerator {
 
     @Override
-    public final GenerationResult generateObject(
-        ObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> superType = query.getType().getSuperclass();
         return superType != null && superType.equals(Enum.class)
             ? GenerationResult.presence(factory(query.getType()))

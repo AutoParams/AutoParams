@@ -40,10 +40,7 @@ final class MapGenerator extends GenericObjectGenerator {
     }
 
     @Override
-    protected GenerationResult generateObject(
-        GenericObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    protected GenerationResult generate(GenericObjectQuery query, ObjectGenerationContext context) {
         return isMap(query.getType())
             ? GenerationResult.presence(factory(query, context))
             : GenerationResult.absence();

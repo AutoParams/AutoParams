@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
-    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         if (isAbstractType(query.getType())) {
             return GenerationResult.absence();
         }
@@ -28,7 +28,8 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Object generate(
-        ObjectQuery sourceQuery, Constructor<?> constructor,
+        ObjectQuery sourceQuery,
+        Constructor<?> constructor,
         ObjectGenerationContext context
     ) {
         Parameter[] parameters = constructor.getParameters();

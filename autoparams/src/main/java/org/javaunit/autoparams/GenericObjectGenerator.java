@@ -3,16 +3,13 @@ package org.javaunit.autoparams;
 abstract class GenericObjectGenerator implements ObjectGenerator {
 
     @Override
-    public final GenerationResult generateObject(
-        ObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    public final GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         return query instanceof GenericObjectQuery
-            ? generateObject((GenericObjectQuery) query, context)
+            ? generate((GenericObjectQuery) query, context)
             : GenerationResult.absence();
     }
 
-    protected abstract GenerationResult generateObject(
+    protected abstract GenerationResult generate(
         GenericObjectQuery query, ObjectGenerationContext context);
 
 }

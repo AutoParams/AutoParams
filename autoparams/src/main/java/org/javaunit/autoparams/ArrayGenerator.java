@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 final class ArrayGenerator implements ObjectGenerator {
 
     @Override
-    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return type.isArray()
             ? GenerationResult.presence(factory(type, context))

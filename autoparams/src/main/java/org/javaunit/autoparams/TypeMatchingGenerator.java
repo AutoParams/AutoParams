@@ -33,10 +33,7 @@ class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     @Override
-    public final GenerationResult generateObject(
-        ObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    public final GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         return predicate.apply(query.getType()) ? presence(factory.get()) : absence();
     }
 

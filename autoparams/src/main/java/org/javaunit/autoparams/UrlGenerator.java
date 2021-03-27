@@ -13,7 +13,7 @@ final class UrlGenerator implements ObjectGenerator {
     };
 
     @Override
-    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         return query.getType().equals(URL.class)
             ? GenerationResult.presence(generate())
             : GenerationResult.absence();
