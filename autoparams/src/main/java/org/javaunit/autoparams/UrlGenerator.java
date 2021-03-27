@@ -3,6 +3,7 @@ package org.javaunit.autoparams;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 final class UrlGenerator implements ObjectGenerator {
 
@@ -20,7 +21,7 @@ final class UrlGenerator implements ObjectGenerator {
     }
 
     private URL generate() {
-        int index = RANDOM.nextInt(PROTOCOLS.length);
+        int index = ThreadLocalRandom.current().nextInt(PROTOCOLS.length);
         String urlSource = String.format("%s://auto.params", PROTOCOLS[index]);
 
         try {
@@ -28,7 +29,6 @@ final class UrlGenerator implements ObjectGenerator {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }
