@@ -21,7 +21,7 @@ final class GenericStreamGenerator extends GenericObjectGenerator {
         Class<? extends T> componentType,
         ObjectGenerationContext context
     ) {
-        ArrayList<T> list = CollectionGenerator.factory(componentType, context);
+        ArrayList<T> list = SequenceGenerator.factory(componentType, context);
         return list.stream();
     }
 
