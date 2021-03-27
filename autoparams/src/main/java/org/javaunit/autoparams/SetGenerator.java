@@ -1,7 +1,6 @@
 package org.javaunit.autoparams;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 final class SetGenerator extends GenericObjectGenerator {
@@ -24,17 +23,19 @@ final class SetGenerator extends GenericObjectGenerator {
         return instance;
     }
 
-    @Override
-    protected Optional<Object> generate(
-        GenericObjectQuery query, ObjectGenerationContext context) {
-
-        Class<?> type = query.getType();
-        return isSet(type) ? Optional.of(factory(getComponentType(query), context))
-            : Optional.empty();
-    }
-
     private boolean isSet(Class<?> type) {
         return type.equals(HashSet.class) || type.equals(Set.class);
+    }
+
+    @Override
+    protected GenerationResult generateObject(
+        GenericObjectQuery query,
+        ObjectGenerationContext context
+    ) {
+        Class<?> type = query.getType();
+        return isSet(type)
+            ? GenerationResult.presence(factory(getComponentType(query), context))
+            : GenerationResult.absence();
     }
 
 }

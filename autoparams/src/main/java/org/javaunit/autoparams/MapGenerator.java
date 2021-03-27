@@ -2,15 +2,8 @@ package org.javaunit.autoparams;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 final class MapGenerator extends GenericObjectGenerator {
-
-    @Override
-    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return isMap(type) ? Optional.of(factory(query, context)) : Optional.empty();
-    }
 
     private boolean isMap(Class<?> type) {
         return type.equals(HashMap.class) || type.equals(Map.class);
@@ -44,6 +37,16 @@ final class MapGenerator extends GenericObjectGenerator {
 
     private Class<?> getValueType(GenericObjectQuery query) {
         return (Class<?>) query.getParameterizedType().getActualTypeArguments()[1];
+    }
+
+    @Override
+    protected GenerationResult generateObject(
+        GenericObjectQuery query,
+        ObjectGenerationContext context
+    ) {
+        return isMap(query.getType())
+            ? GenerationResult.presence(factory(query, context))
+            : GenerationResult.absence();
     }
 
 }
