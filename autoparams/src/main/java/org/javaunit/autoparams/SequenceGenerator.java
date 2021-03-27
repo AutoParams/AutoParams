@@ -3,7 +3,6 @@ package org.javaunit.autoparams;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 final class SequenceGenerator extends GenericObjectGenerator {
 
@@ -30,11 +29,13 @@ final class SequenceGenerator extends GenericObjectGenerator {
     }
 
     @Override
-    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return isCollection(type)
-            ? Optional.of(factory(getComponentType(query), context))
-            : Optional.empty();
+    protected GenerationResult generateObject(
+        GenericObjectQuery query,
+        ObjectGenerationContext context
+    ) {
+        return isCollection(query.getType())
+            ? GenerationResult.presence(factory(getComponentType(query), context))
+            : GenerationResult.absence();
     }
 
 }
