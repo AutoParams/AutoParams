@@ -1,5 +1,6 @@
 package org.javaunit.autoparams;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,6 +45,10 @@ final class Factories {
     public static BigInteger createBigInteger() {
         int maxBitLength = 256;
         return new BigInteger(maxBitLength, random());
+    }
+
+    public static BigDecimal createBigDecimal() {
+        return new BigDecimal(random().nextInt());
     }
 
 }
