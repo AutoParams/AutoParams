@@ -14,10 +14,6 @@ final class DateAndTimeGenerator implements ObjectGenerator {
             return Optional.of(factoryDate());
         }
 
-        if (query.getType().equals(LocalTime.class)) {
-            return Optional.of(factoryTime());
-        }
-
         if (query.getType().equals(LocalDateTime.class)) {
             return Optional.of(factoryDateTime());
         }

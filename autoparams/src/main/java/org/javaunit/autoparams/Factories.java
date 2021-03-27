@@ -2,6 +2,7 @@ package org.javaunit.autoparams;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class Factories {
@@ -51,4 +52,10 @@ final class Factories {
         return new BigDecimal(random().nextInt());
     }
 
+    public static LocalTime createLocalTime() {
+        long inclusiveMin = LocalTime.MIN.toNanoOfDay();
+        long exclusiveMax = LocalTime.MAX.toNanoOfDay() + 1;
+        long randomNanoOfDay = random().nextLong(inclusiveMin, exclusiveMax);
+        return LocalTime.ofNanoOfDay(randomNanoOfDay);
+    }
 }

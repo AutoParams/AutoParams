@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalTime;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -35,8 +36,9 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
             new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
-            new EnumGenerator(),
+            new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
             new DateAndTimeGenerator(),
+            new EnumGenerator(),
             new UrlGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR =
