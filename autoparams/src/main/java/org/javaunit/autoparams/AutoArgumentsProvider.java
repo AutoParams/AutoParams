@@ -4,12 +4,6 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,29 +14,6 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
     AnnotationConsumer<AutoSource> {
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
-
-    private static final ObjectGenerator PRIMITIVE_VALUE_GENERATOR =
-        new CompositeObjectGenerator(
-            new TypeMatchingGenerator(Factories::createBoolean, boolean.class, Boolean.class),
-            new TypeMatchingGenerator(Factories::createByte, byte.class, Byte.class),
-            new TypeMatchingGenerator(Factories::createShort, short.class, Short.class),
-            new TypeMatchingGenerator(Factories::createInt, int.class, Integer.class),
-            new TypeMatchingGenerator(Factories::createLong, long.class, Long.class),
-            new TypeMatchingGenerator(Factories::createFloat, float.class, Float.class),
-            new TypeMatchingGenerator(Factories::createDouble, double.class, Double.class),
-            new TypeMatchingGenerator(Factories::createChar, char.class, Character.class));
-
-    private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
-        new CompositeObjectGenerator(
-            new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
-            new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
-            new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
-            new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
-            new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
-            new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
-            new TypeMatchingGenerator(Factories::createLocalDateTime, LocalDateTime.class),
-            new EnumGenerator(),
-            new UrlGenerator());
 
     private static final ObjectGenerator COLLECTION_GENERATOR =
         new CompositeObjectGenerator(
@@ -60,8 +31,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
-            PRIMITIVE_VALUE_GENERATOR,
-            SIMPLE_VALUE_OBJECT_GENERATOR,
+            new PrimitiveValueGenerator(),
+            new SimpleValueObjectGenerator(),
             COLLECTION_GENERATOR,
             STREAM_GENERATOR,
             new BuilderGenerator(),
