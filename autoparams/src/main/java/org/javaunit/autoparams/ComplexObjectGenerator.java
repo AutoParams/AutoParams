@@ -17,18 +17,26 @@ import java.util.stream.Stream;
 final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
         if (isAbstractType(query.getType())) {
-            return Optional.empty();
+            return GenerationResult.absence();
         }
 
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
-            .map(constructor -> generate(query, constructor, context));
+            .map(constructor -> generate(query, constructor, context))
+            .map(GenerationResult::presence)
+            .orElse(GenerationResult.absence());
+    }
+
+    @Override
+    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
+        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
     private Object generate(
-        ObjectQuery sourceQuery, Constructor<?> constructor, ObjectGenerationContext context) {
-
+        ObjectQuery sourceQuery, Constructor<?> constructor,
+        ObjectGenerationContext context
+    ) {
         Parameter[] parameters = constructor.getParameters();
         Stream<ObjectQuery> argumentQueries = resolveArgumentQueries(sourceQuery, parameters);
         return createInstance(constructor, argumentQueries, context);
@@ -39,8 +47,9 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Stream<ObjectQuery> resolveArgumentQueries(
-        ObjectQuery sourceQuery, Parameter[] parameters) {
-
+        ObjectQuery sourceQuery,
+        Parameter[] parameters
+    ) {
         if (sourceQuery instanceof GenericObjectQuery) {
             return resolveArgumentQueries((GenericObjectQuery) sourceQuery, parameters);
         } else {
@@ -49,8 +58,9 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Stream<ObjectQuery> resolveArgumentQueries(
-        GenericObjectQuery genericObjectQuery, Parameter[] parameters) {
-
+        GenericObjectQuery genericObjectQuery,
+        Parameter[] parameters
+    ) {
         Class<?> type = genericObjectQuery.getType();
         ParameterizedType parameterizedType = genericObjectQuery.getParameterizedType();
         Map<TypeVariable<?>, Type> genericMap = getGenericMap(type, parameterizedType);
@@ -62,8 +72,9 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(
-        Class<?> type, ParameterizedType parameterizedType) {
-
+        Class<?> type,
+        ParameterizedType parameterizedType
+    ) {
         HashMap<TypeVariable<?>, Type> map = new HashMap<>();
 
         TypeVariable<?>[] typeVariables = type.getTypeParameters();
@@ -76,8 +87,9 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private ObjectQuery resolveArgumentQuery(
-        Parameter parameter, Map<TypeVariable<?>, Type> genericMap) {
-
+        Parameter parameter,
+        Map<TypeVariable<?>, Type> genericMap
+    ) {
         if (parameter.getParameterizedType() instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) parameter.getParameterizedType();
             Type typeValue = genericMap.get(typeVariable);
@@ -96,8 +108,8 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     private Object createInstance(
         Constructor<?> constructor,
         Stream<ObjectQuery> argumentQueries,
-        ObjectGenerationContext context) {
-
+        ObjectGenerationContext context
+    ) {
         try {
             return constructor.newInstance(generateArguments(argumentQueries, context));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -107,8 +119,9 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Object[] generateArguments(
-        Stream<ObjectQuery> argumentQueries, ObjectGenerationContext context) {
-
+        Stream<ObjectQuery> argumentQueries,
+        ObjectGenerationContext context
+    ) {
         return argumentQueries.map(context::generate).toArray();
     }
 
