@@ -84,8 +84,8 @@ public class AutoSourceSpecs {
 
         Object[] array = stream.toArray();
         HashSet<UUID> set = new HashSet<UUID>();
-        for (int i = 0; i < array.length; i++) {
-            set.add((UUID) array[i]);
+        for (Object element : array) {
+            set.add((UUID) element);
         }
 
         assertThat(array).hasSize(3);
