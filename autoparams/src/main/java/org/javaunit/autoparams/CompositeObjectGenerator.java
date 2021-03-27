@@ -2,7 +2,7 @@ package org.javaunit.autoparams;
 
 import java.util.Optional;
 
-final class CompositeObjectGenerator implements ObjectGenerator {
+class CompositeObjectGenerator implements ObjectGenerator {
 
     private final ObjectGenerator[] generators;
 
