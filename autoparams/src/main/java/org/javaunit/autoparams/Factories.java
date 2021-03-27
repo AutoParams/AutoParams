@@ -1,5 +1,6 @@
 package org.javaunit.autoparams;
 
+import java.math.BigInteger;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class Factories {
@@ -38,6 +39,11 @@ final class Factories {
 
     public static char createChar() {
         return (char) random().nextInt(Character.MAX_VALUE + 1);
+    }
+
+    public static BigInteger createBigInteger() {
+        int maxBitLength = 256;
+        return new BigInteger(maxBitLength, random());
     }
 
 }
