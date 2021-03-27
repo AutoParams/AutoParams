@@ -3,6 +3,7 @@ package org.javaunit.autoparams;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -66,4 +67,9 @@ final class Factories {
         long randomNanoOfDay = random().nextLong(inclusiveMin, exclusiveMax);
         return LocalTime.ofNanoOfDay(randomNanoOfDay);
     }
+
+    public static LocalDateTime createLocalDateTime() {
+        return LocalDateTime.of(createLocalDate(), createLocalTime());
+    }
+
 }
