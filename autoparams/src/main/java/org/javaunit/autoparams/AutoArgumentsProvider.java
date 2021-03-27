@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -32,10 +33,11 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
-            new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
-            new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
+            new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
+            new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
+            new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
             new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
             new DateAndTimeGenerator(),
             new EnumGenerator(),

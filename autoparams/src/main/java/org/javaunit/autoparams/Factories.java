@@ -2,6 +2,7 @@ package org.javaunit.autoparams;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -50,6 +51,13 @@ final class Factories {
 
     public static BigDecimal createBigDecimal() {
         return new BigDecimal(random().nextInt());
+    }
+
+    public static LocalDate createLocalDate() {
+        long inclusiveMin = LocalDate.MIN.toEpochDay();
+        long exclusiveMax = LocalDate.MAX.toEpochDay() + 1;
+        long randomEpochDay = random().nextLong(inclusiveMin, exclusiveMax);
+        return LocalDate.ofEpochDay(randomEpochDay);
     }
 
     public static LocalTime createLocalTime() {
