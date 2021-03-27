@@ -2,7 +2,6 @@ package org.javaunit.autoparams;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class UrlGenerator implements ObjectGenerator {
@@ -18,11 +17,6 @@ final class UrlGenerator implements ObjectGenerator {
         return query.getType().equals(URL.class)
             ? GenerationResult.presence(generate())
             : GenerationResult.absence();
-    }
-
-    @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
     private URL generate() {

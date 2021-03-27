@@ -3,7 +3,6 @@ package org.javaunit.autoparams;
 import static org.javaunit.autoparams.GenerationResult.absence;
 import static org.javaunit.autoparams.GenerationResult.presence;
 
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -39,11 +38,6 @@ class TypeMatchingGenerator implements ObjectGenerator {
         ObjectGenerationContext context
     ) {
         return predicate.apply(query.getType()) ? presence(factory.get()) : absence();
-    }
-
-    @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
 }

@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
@@ -26,11 +25,6 @@ final class ComplexObjectGenerator implements ObjectGenerator {
             .map(constructor -> generate(query, constructor, context))
             .map(GenerationResult::presence)
             .orElse(GenerationResult.absence());
-    }
-
-    @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
     private Object generate(

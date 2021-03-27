@@ -1,14 +1,8 @@
 package org.javaunit.autoparams;
 
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class EnumGenerator implements ObjectGenerator {
-
-    @Override
-    public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
-    }
 
     @Override
     public final GenerationResult generateObject(
