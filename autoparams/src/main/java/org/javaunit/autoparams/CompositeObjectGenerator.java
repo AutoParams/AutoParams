@@ -12,14 +12,8 @@ class CompositeObjectGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        for (ObjectGenerator generator : generators) {
-            Optional<Object> argument = generator.generate(query, context);
-            if (argument.isPresent()) {
-                return argument;
-            }
-        }
-
-        return Optional.empty();
+        String message = "This method is not supported. Use generateObject method instead.";
+        throw new UnsupportedOperationException(message);
     }
 
     @Override
