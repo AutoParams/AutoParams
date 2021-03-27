@@ -18,10 +18,7 @@ final class GenericStreamGenerator extends GenericObjectGenerator {
     }
 
     @Override
-    protected GenerationResult generateObject(
-        GenericObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    protected GenerationResult generate(GenericObjectQuery query, ObjectGenerationContext context) {
         return query.getType().equals(Stream.class)
             ? GenerationResult.presence(factory(getComponentType(query), context))
             : GenerationResult.absence();

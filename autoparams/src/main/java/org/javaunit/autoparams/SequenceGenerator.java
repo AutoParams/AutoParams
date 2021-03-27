@@ -29,10 +29,7 @@ final class SequenceGenerator extends GenericObjectGenerator {
     }
 
     @Override
-    protected GenerationResult generateObject(
-        GenericObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    protected GenerationResult generate(GenericObjectQuery query, ObjectGenerationContext context) {
         return isCollection(query.getType())
             ? GenerationResult.presence(factory(getComponentType(query), context))
             : GenerationResult.absence();

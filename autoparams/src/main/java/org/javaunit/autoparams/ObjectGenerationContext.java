@@ -8,12 +8,11 @@ final class ObjectGenerationContext {
 
     public ObjectGenerationContext(ObjectGenerator generator) {
         this.generator = generator;
-
     }
 
     @Nullable
     public Object generate(ObjectQuery query) {
-        GenerationResult result = generator.generateObject(query, this);
+        GenerationResult result = generator.generate(query, this);
         if (result.isAbsent()) {
             String format = "An object cannot be generated with the given query '%s'. "
                 + "This can happen if the query represents an interface or abstract class.";

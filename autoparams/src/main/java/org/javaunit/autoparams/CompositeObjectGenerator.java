@@ -9,9 +9,9 @@ class CompositeObjectGenerator implements ObjectGenerator {
     }
 
     @Override
-    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
         for (ObjectGenerator generator : generators) {
-            GenerationResult result = generator.generateObject(query, context);
+            GenerationResult result = generator.generate(query, context);
             if (result.isPresent()) {
                 return result;
             }
@@ -19,4 +19,5 @@ class CompositeObjectGenerator implements ObjectGenerator {
 
         return GenerationResult.absence();
     }
+
 }

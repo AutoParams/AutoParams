@@ -11,8 +11,9 @@ final class SetGenerator extends GenericObjectGenerator {
 
     @SuppressWarnings("unchecked")
     public static <T> HashSet<T> factory(
-        Class<? extends T> componentType, ObjectGenerationContext context) {
-
+        Class<? extends T> componentType,
+        ObjectGenerationContext context
+    ) {
         HashSet<T> instance = new HashSet<T>();
         int size = 3;
         ObjectQuery query = new ObjectQuery(componentType);
@@ -28,10 +29,7 @@ final class SetGenerator extends GenericObjectGenerator {
     }
 
     @Override
-    protected GenerationResult generateObject(
-        GenericObjectQuery query,
-        ObjectGenerationContext context
-    ) {
+    protected GenerationResult generate(GenericObjectQuery query, ObjectGenerationContext context) {
         Class<?> type = query.getType();
         return isSet(type)
             ? GenerationResult.presence(factory(getComponentType(query), context))
