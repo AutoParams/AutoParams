@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 final class Factories {
 
@@ -75,6 +76,10 @@ final class Factories {
 
     public static IntStream createIntStream() {
         return IntStream.generate(Factories::createInt).limit(3);
+    }
+
+    public static LongStream createLongStream() {
+        return LongStream.generate(Factories::createLong).limit(3);
     }
 
 }
