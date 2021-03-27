@@ -31,7 +31,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
         new CompositeObjectGenerator(
             new BigIntegerGenerator(),
             new BigDecimalGenerator(),
-            new StringGenerator(),
+            new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
             new EnumGenerator(),
             new DateAndTimeGenerator(),
