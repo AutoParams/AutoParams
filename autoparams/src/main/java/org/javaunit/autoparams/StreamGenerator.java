@@ -1,27 +1,17 @@
 package org.javaunit.autoparams;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
-final class StreamGenerator extends GenericObjectGenerator {
+final class StreamGenerator extends CompositeObjectGenerator {
 
-    private static Class<?> getComponentType(GenericObjectQuery query) {
-        return (Class<?>) query.getParameterizedType().getActualTypeArguments()[0];
-    }
-
-    @Override
-    protected Optional<Object> generate(GenericObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return type.equals(Stream.class) ? Optional.of(factory(getComponentType(query), context))
-            : Optional.empty();
-    }
-
-    private <T> Stream<T> factory(
-        Class<? extends T> componentType, ObjectGenerationContext context) {
-
-        ArrayList<T> list = CollectionGenerator.factory(componentType, context);
-        return list.stream();
+    public StreamGenerator() {
+        super(
+            new TypeMatchingGenerator(Factories::createIntStream, IntStream.class),
+            new TypeMatchingGenerator(Factories::createLongStream, LongStream.class),
+            new TypeMatchingGenerator(Factories::createDoubleStream, DoubleStream.class),
+            new GenericStreamGenerator());
     }
 
 }
