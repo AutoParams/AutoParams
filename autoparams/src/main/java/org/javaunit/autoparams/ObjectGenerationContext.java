@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 final class ObjectGenerationContext {
 
-    private final ObjectGenerator generator;
+    private ObjectGenerator generator;
 
     public ObjectGenerationContext(ObjectGenerator generator) {
         this.generator = generator;
@@ -22,6 +22,12 @@ final class ObjectGenerationContext {
         }
 
         return result.get();
+    }
+
+    void fix(Class<?> type, Object argument) {
+        generator = new CompositeObjectGenerator(
+            new TypeMatchingGenerator(() -> argument, type),
+            generator);
     }
 
 }
