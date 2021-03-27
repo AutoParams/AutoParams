@@ -4,6 +4,7 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.math.BigInteger;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -29,7 +30,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final ObjectGenerator SIMPLE_VALUE_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
-            new BigIntegerGenerator(),
+            new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
             new BigDecimalGenerator(),
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
