@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 final class Factories {
 
@@ -70,6 +71,10 @@ final class Factories {
 
     public static LocalDateTime createLocalDateTime() {
         return LocalDateTime.of(createLocalDate(), createLocalTime());
+    }
+
+    public static IntStream createIntStream() {
+        return IntStream.generate(Factories::createInt).limit(3);
     }
 
 }
