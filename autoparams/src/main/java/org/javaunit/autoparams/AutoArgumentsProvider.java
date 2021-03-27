@@ -65,7 +65,13 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private Object createArgument(Parameter parameter) {
         ObjectQuery query = ObjectQuery.create(parameter);
-        return context.generate(query);
+        Object argument = context.generate(query);
+
+        if (parameter.isAnnotationPresent(Fixed.class)) {
+            context.fix(parameter.getType(), argument);
+        }
+
+        return argument;
     }
 
     @Override
