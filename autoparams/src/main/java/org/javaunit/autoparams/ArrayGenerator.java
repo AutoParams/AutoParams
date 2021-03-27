@@ -7,11 +7,18 @@ final class ArrayGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        Class<?> type = query.getType();
-        return type.isArray() ? factory(type, context) : Optional.empty();
+        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
-    private Optional<Object> factory(Class<?> type, ObjectGenerationContext context) {
+    @Override
+    public GenerationResult generateObject(ObjectQuery query, ObjectGenerationContext context) {
+        Class<?> type = query.getType();
+        return type.isArray()
+            ? GenerationResult.presence(factory(type, context))
+            : GenerationResult.absence();
+    }
+
+    private Object factory(Class<?> type, ObjectGenerationContext context) {
         Class<?> componentType = type.getComponentType();
         int length = 3;
         Object array = Array.newInstance(componentType, length);
@@ -20,7 +27,7 @@ final class ArrayGenerator implements ObjectGenerator {
             Array.set(array, i, context.generate(query));
         }
 
-        return Optional.of(array);
+        return array;
     }
 
 }
