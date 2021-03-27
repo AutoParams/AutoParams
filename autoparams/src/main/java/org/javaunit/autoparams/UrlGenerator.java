@@ -22,8 +22,7 @@ final class UrlGenerator implements ObjectGenerator {
 
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
-        String message = "This method is not supported. Use generateObject method instead.";
-        throw new UnsupportedOperationException(message);
+        throw new UnsupportedOperationException(MESSAGE_FOR_UNSUPPORTED_GENERATE_METHOD);
     }
 
     private URL generate() {
