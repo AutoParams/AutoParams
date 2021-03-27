@@ -15,18 +15,11 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
-    private static final ObjectGenerator COLLECTION_GENERATOR =
-        new CompositeObjectGenerator(
-            new ArrayGenerator(),
-            new CollectionGenerator(),
-            new MapGenerator(),
-            new SetGenerator());
-
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
             new PrimitiveValueGenerator(),
             new SimpleValueObjectGenerator(),
-            COLLECTION_GENERATOR,
+            new CollectionGenerator(),
             new StreamGenerator(),
             new BuilderGenerator(),
             new ComplexObjectGenerator());
