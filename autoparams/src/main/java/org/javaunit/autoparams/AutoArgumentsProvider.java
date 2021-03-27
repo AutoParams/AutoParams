@@ -4,9 +4,6 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,19 +22,12 @@ final class AutoArgumentsProvider implements ArgumentsProvider,
             new MapGenerator(),
             new SetGenerator());
 
-    private static final ObjectGenerator STREAM_GENERATOR =
-        new CompositeObjectGenerator(
-            new TypeMatchingGenerator(Factories::createIntStream, IntStream.class),
-            new TypeMatchingGenerator(Factories::createLongStream, LongStream.class),
-            new TypeMatchingGenerator(Factories::createDoubleStream, DoubleStream.class),
-            new StreamGenerator());
-
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
             new PrimitiveValueGenerator(),
             new SimpleValueObjectGenerator(),
             COLLECTION_GENERATOR,
-            STREAM_GENERATOR,
+            new StreamGenerator(),
             new BuilderGenerator(),
             new ComplexObjectGenerator());
 
