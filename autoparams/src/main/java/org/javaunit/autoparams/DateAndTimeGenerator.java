@@ -10,10 +10,6 @@ final class DateAndTimeGenerator implements ObjectGenerator {
     @Override
     public Optional<Object> generate(ObjectQuery query, ObjectGenerationContext context) {
 
-        if (query.getType().equals(LocalDate.class)) {
-            return Optional.of(factoryDate());
-        }
-
         if (query.getType().equals(LocalDateTime.class)) {
             return Optional.of(factoryDateTime());
         }
