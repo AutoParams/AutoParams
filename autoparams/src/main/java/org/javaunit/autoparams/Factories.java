@@ -75,6 +75,10 @@ final class Factories {
         return LocalDateTime.of(createLocalDate(), createLocalTime());
     }
 
+    public static Class<?> createClass() {
+        return String.class;
+    }
+
     public static IntStream createIntStream() {
         return IntStream.generate(Factories::createInt).limit(3);
     }
