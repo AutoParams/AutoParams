@@ -4,6 +4,7 @@ import static java.util.Arrays.stream;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -37,7 +38,14 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+        applyFixedValues(context);
         return context.getTestMethod().map(this::generate).orElse(EMPTY);
+    }
+
+    private void applyFixedValues(ExtensionContext context) {
+        for (Map.Entry<Class<?>, Object> entry : FixedValueAccessor.entries(context)) {
+            this.context.fix(entry.getKey(), entry.getValue());
+        }
     }
 
     private Stream<Arguments> generate(Method method) {

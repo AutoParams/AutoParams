@@ -1,5 +1,6 @@
 package org.javaunit.autoparams;
 
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,13 +40,31 @@ final class ArgumentsAssembler {
         try {
             return provider
                 .provideArguments(context)
-                .map(supplement -> supplementArguments(source, supplement));
+                .map(supplement -> {
+                    setFixedValues(context, supplement);
+                    return coalesceArguments(source, supplement);
+                });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static Arguments supplementArguments(Arguments source, Arguments supplement) {
+    private static void setFixedValues(ExtensionContext context, Arguments supplement) {
+        context.getTestMethod().map(method -> method.getParameters()).ifPresent(parameters -> {
+            Object[] arguments = supplement.get();
+            for (int i = 0; i < arguments.length; i++) {
+                setIfFixed(context, parameters[i], arguments[i]);
+            }
+        });
+    }
+
+    private static void setIfFixed(ExtensionContext context, Parameter parameter, Object argument) {
+        if (parameter.isAnnotationPresent(Fixed.class)) {
+            FixedValueAccessor.set(context, parameter.getType(), argument);
+        }
+    }
+
+    private static Arguments coalesceArguments(Arguments source, Arguments supplement) {
         ArrayList<Object> arguments = new ArrayList<Object>();
         Collections.addAll(arguments, source.get());
         Arrays.stream(supplement.get()).skip(arguments.size()).forEach(arguments::add);

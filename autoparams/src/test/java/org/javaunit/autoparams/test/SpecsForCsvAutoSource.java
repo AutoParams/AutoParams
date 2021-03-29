@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
 import org.javaunit.autoparams.CsvAutoSource;
+import org.javaunit.autoparams.Fixed;
 import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForCsvAutoSource {
@@ -35,6 +36,17 @@ class SpecsForCsvAutoSource {
         assertNotNull(value3);
         assertNotNull(value4);
         assertNotEquals(value3, value4);
+    }
+
+    @ParameterizedTest
+    @CsvAutoSource({"16, foo"})
+    void sut_reuses_values_fixed_by_specified_argument(
+        @Fixed int value1,
+        @Fixed String value2,
+        ComplexObject value3
+    ) {
+        assertEquals(16, value3.getValue1());
+        assertEquals("foo", value3.getValue2());
     }
 
 }
