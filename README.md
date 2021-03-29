@@ -201,7 +201,7 @@ void testMethod(
 
 ### Collection Types
 
-AutoParams supports a variety of collection types and streams.
+AutoParams supports a variety of collection types.
 
 #### Arrays
 
