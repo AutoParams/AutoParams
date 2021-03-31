@@ -20,11 +20,13 @@ class SpecsForFixed {
 
     @ParameterizedTest
     @AutoSource
-    void sut_fixed_only_effective_with_the_parameters_located_behind(
-        String value,
-        @Fixed ValueContainer<Integer> container
+    void sut_reuses_generated_value_for_remaining_same_type_arguments(
+        String value1,
+        @Fixed String value2,
+        String value3
     ) {
-        assertNotEquals(value, container.getValue());
+        assertNotEquals(value1, value2);
+        assertEquals(value2, value3);
     }
 
 }
