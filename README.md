@@ -33,14 +33,14 @@ In the example above, you can see that the arbitrary test data may eliminate the
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.1.2'
+testImplementation 'io.github.javaunit:autoparams:0.1.3'
 ```
 
 ## Features
@@ -285,5 +285,107 @@ void testMethod(int a, int b) {
     Calculator sut = new Calculator();
     int actual = sut.add(a, b);
     assertEquals(a + b, actual);
+}
+```
+
+### `@Fixed` annotation
+
+You can freeze the generated argument to the type with `@Fixed` annotation. `@AutoSource` reuses the argument of the parameter decorated with `@Fixed` annotation for subsequent value generation.
+
+```java
+class ValueContainer {
+
+    private final String value;
+
+    public ValueContainer(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+}
+
+@ParameterizedTest
+@AutoSource
+void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
+    assertEquals(arg1, arg2);
+    assertEquals(arg1, arg3.getValue());
+}
+```
+
+### `@ValueAutoSource` annotation
+
+`@ValueAutoSource` annotation combines the functionalities of `@ValueSource` and `@AutoSource`. It assigns the provides value to the first parameter then generates arbitrary values for other parameters.
+
+```java
+@ParameterizedTest
+@ValueAutoSource(strings = {"foo"})
+void testMethod(String arg1, String arg2) {
+    assertEquals("foo", arg1);
+    assertNotEquals(arg1, arg2);
+}
+```
+
+`@Fixed` annotation correctly works with `@ValueAutoSource`.
+
+```java
+class ValueContainer {
+
+    private final String value;
+
+    public ValueContainer(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+}
+
+@ParameterizedTest
+@ValueAutoSource(strings = {"foo"})
+void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
+    assertEquals("foo", arg2);
+    assertEquals("foo", arg3.getValue());
+}
+```
+
+### `@CsvAutoSource` annotation
+
+`@CsvAutoSource` annotation combines the functionalities of `@CsvSource` and `@AutoSource`. You can specifiy arguments in CSV for the forepart parameters. The remaining parameters will be assigned with the arbitrary values.
+
+```java
+@ParameterizedTest
+@CsvAutoSource({"16, foo"})
+void testMethod(int arg1, String arg2, UUID arg3) {
+    assertEquals(16, arg1);
+    assertNotEquals("foo", arg2);
+}
+```
+
+`@Fixed` annotation correctly works with `@CsvAutoSource`.
+
+```java
+class ValueContainer {
+
+    private final String value;
+
+    public ValueContainer(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+}
+
+@ParameterizedTest
+@CsvAutoSource({"16, foo"})
+void testMethod(int arg1, @Fixed String arg2, ValueContainer arg3) {
+    assertEquals("foo", arg3.getValue());
 }
 ```
