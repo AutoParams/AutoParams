@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -47,6 +48,18 @@ class SpecsForSimpleTypes {
         BigDecimal value1,
         BigDecimal value2,
         BigDecimal value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_arbitrary_duration_values(
+        Duration value1,
+        Duration value2,
+        Duration value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);

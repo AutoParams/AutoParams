@@ -2,6 +2,7 @@ package org.javaunit.autoparams;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,6 +56,10 @@ final class Factories {
 
     public static BigDecimal createBigDecimal() {
         return new BigDecimal(random().nextInt());
+    }
+
+    public static Duration createDuration() {
+        return Duration.ofMillis(createLong());
     }
 
     public static LocalDate createLocalDate() {
