@@ -2,11 +2,43 @@ package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import java.util.Map;
 import org.javaunit.autoparams.AutoSource;
 import org.javaunit.autoparams.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
 
-class SpecsForBuilderFix {
+class SpecsForBuilder {
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_integer_array(Builder<Integer[]> builder) {
+        Integer[] value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_integer_list(Builder<List<Integer>> builder) {
+        List<Integer> value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_array_of_complex_type(Builder<ComplexObject[]> builder) {
+        ComplexObject[] value = builder.build();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_map(
+        Builder<Map<String, ComplexObject>> builder
+    ) {
+        Map<String, ComplexObject> value = builder.build();
+        assertThat(value).isNotEmpty();
+    }
 
     @ParameterizedTest
     @AutoSource(repeat = 10)
