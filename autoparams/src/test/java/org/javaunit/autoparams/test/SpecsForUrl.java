@@ -1,12 +1,14 @@
-package org.javaunit.autoparams;
+package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
 import java.net.URL;
 import java.util.stream.IntStream;
+import org.javaunit.autoparams.AutoSource;
+import org.javaunit.autoparams.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
 
-public class UrlGenerationSpecs {
+class SpecsForUrl {
 
     @ParameterizedTest
     @AutoSource
