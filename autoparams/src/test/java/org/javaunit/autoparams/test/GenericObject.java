@@ -1,4 +1,4 @@
-package org.javaunit.autoparams;
+package org.javaunit.autoparams.test;
 
 public class GenericObject<T1, T2> {
 
