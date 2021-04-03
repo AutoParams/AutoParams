@@ -21,6 +21,62 @@ void parameterizedTest(int a, int b) {
 
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
+AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using `@Fixed` annocation.
+
+```java
+public class Product {
+
+    private final UUID id;
+    private final String name;
+    private final BigDecimal priceAmount;
+
+    public Product(UUID id, String name, BigDecimal priceAmount) {
+        this.id = id;
+        this.name = name;
+        this.priceAmount = priceAmount;
+    }
+
+    public UUID getId() { return id; }
+
+    public String getName() { return name; }
+
+    public BigDecimal getPriceAmount() { return priceAmount; }
+
+}
+
+public class Review {
+
+    private final UUId id;
+    private final Product product;
+    private final String comment;
+
+    public Review(UUID id, Product product, String comment) {
+        this.id = id;
+        this.product = product;
+        this.comment = comment;
+    }
+
+    public UUID getId() { return id; }
+
+    public Product getProduct() { return product; }
+
+    public String getComment() { return comment; }
+
+}
+```
+
+```java
+@ParameterizedTest
+@AutoSource
+void testMethod(@Fixed Product product, Review[] reviews) {
+    for (Review review : reviews) {
+        assertSame(product, review.getProduct());
+    }
+}
+```
+
+That's cool!
+
 ## Requirements
 
 - JDK 1.8 or higher
