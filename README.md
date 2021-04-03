@@ -21,7 +21,7 @@ void parameterizedTest(int a, int b) {
 
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
-AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using `@Fixed` annocation.
+AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using `@Fixed` annotation.
 
 ```java
 public class Product {
