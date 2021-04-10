@@ -20,8 +20,16 @@ final class UrlGenerator implements ObjectGenerator {
     }
 
     private URL generate() {
-        int index = ThreadLocalRandom.current().nextInt(PROTOCOLS.length);
-        String urlSource = String.format("%s://auto.params", PROTOCOLS[index]);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        int index = random.nextInt(PROTOCOLS.length);
+        String protocol = PROTOCOLS[index];
+
+        boolean hasPort = random.nextBoolean();
+
+        String urlSource = hasPort
+            ? String.format("%s://auto.params:%s", protocol, random.nextInt(0, 99999))
+            : String.format("%s://auto.params", protocol);
 
         try {
             return new URL(urlSource);
