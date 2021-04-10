@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.javaunit.autoparams.generator.UnwrapFailedException;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -64,14 +65,22 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private Object createArgument(Parameter parameter) {
-        ObjectQuery query = ObjectQuery.create(parameter);
-        Object argument = context.generate(query);
+        try {
+            return org.javaunit.autoparams.generator.ObjectGenerator.DEFAULT
+                .generate(
+                    org.javaunit.autoparams.generator.ObjectQuery.fromParameter(parameter),
+                    new org.javaunit.autoparams.generator.ObjectGenerationContext())
+                .unwrapOrElseThrow();
+        } catch (UnwrapFailedException exception) {
+            ObjectQuery query = ObjectQuery.create(parameter);
+            Object argument = context.generate(query);
 
-        if (parameter.isAnnotationPresent(Fixed.class)) {
-            context.fix(parameter.getType(), argument);
+            if (parameter.isAnnotationPresent(Fixed.class)) {
+                context.fix(parameter.getType(), argument);
+            }
+
+            return argument;
         }
-
-        return argument;
     }
 
     @Override
