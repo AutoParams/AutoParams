@@ -4,7 +4,8 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
 
     public DefaultObjectGenerator() {
         super(
-            new PrimitiveValueGenerator()
+            new PrimitiveValueGenerator(),
+            new EnumGenerator()
         );
     }
 
