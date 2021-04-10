@@ -1,6 +1,8 @@
 package org.javaunit.autoparams;
 
 import javax.annotation.Nullable;
+import org.javaunit.autoparams.generator.ObjectContainer;
+import org.javaunit.autoparams.generator.UnwrapFailedException;
 
 final class GenerationResult {
 
@@ -32,6 +34,14 @@ final class GenerationResult {
 
     public static GenerationResult absence() {
         return ABSENCE;
+    }
+
+    public static GenerationResult fromContainer(ObjectContainer container) {
+        try {
+            return presence(container.unwrapOrElseThrow());
+        } catch (UnwrapFailedException exception) {
+            return absence();
+        }
     }
 
 }

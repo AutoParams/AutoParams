@@ -16,8 +16,21 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
     private static final Stream<Arguments> EMPTY = stream(new Arguments[0]);
 
+    private static class GeneratorAdapter implements ObjectGenerator {
+
+        @Override
+        public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
+            return GenerationResult.fromContainer(
+                org.javaunit.autoparams.generator.ObjectGenerator.DEFAULT
+                    .generate(
+                        () -> query.getType(),
+                        new org.javaunit.autoparams.generator.ObjectGenerationContext()));
+        }
+    }
+
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
+            new GeneratorAdapter(),
             new PrimitiveValueGenerator(),
             new SimpleValueObjectGenerator(),
             new CollectionGenerator(),
