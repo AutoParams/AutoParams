@@ -1,4 +1,4 @@
-package org.javaunit.autoparams;
+package org.javaunit.autoparams.generator;
 
 import java.util.EnumSet;
 import java.util.Map;
