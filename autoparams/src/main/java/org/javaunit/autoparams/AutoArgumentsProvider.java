@@ -31,7 +31,6 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     public static final CompositeObjectGenerator DEFAULT_OBJECT_GENERATOR =
         new CompositeObjectGenerator(
             new GeneratorAdapter(),
-            new PrimitiveValueGenerator(),
             new SimpleValueObjectGenerator(),
             new CollectionGenerator(),
             new StreamGenerator(),
