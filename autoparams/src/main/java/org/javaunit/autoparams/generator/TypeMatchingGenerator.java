@@ -1,14 +1,10 @@
-package org.javaunit.autoparams;
+package org.javaunit.autoparams.generator;
 
-import static org.javaunit.autoparams.GenerationResult.absence;
-import static org.javaunit.autoparams.GenerationResult.presence;
-
+import java.lang.reflect.Type;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Deprecated
-@SuppressWarnings("DeprecatedIsStillUsed")
-class TypeMatchingGenerator implements ObjectGenerator {
+final class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Class<?>, Boolean> predicate;
     private final Supplier<Object> factory;
@@ -35,8 +31,15 @@ class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     @Override
-    public final GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
-        return predicate.apply(query.getType()) ? presence(factory.get()) : absence();
-    }
+    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+        Type type = query.getType();
 
+        if (!(type instanceof Class<?>)) {
+            return ObjectContainer.EMPTY;
+        }
+
+        return predicate.apply((Class<?>) type)
+            ? new ObjectContainer(factory.get())
+            : ObjectContainer.EMPTY;
+    }
 }
