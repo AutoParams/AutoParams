@@ -1,11 +1,5 @@
 package org.javaunit.autoparams;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -15,63 +9,28 @@ import java.util.stream.LongStream;
 @SuppressWarnings("DeprecatedIsStillUsed")
 final class Factories {
 
-    private static ThreadLocalRandom random() {
-        return ThreadLocalRandom.current();
-    }
-
-    public static int createInt() {
-        return random().nextInt();
-    }
-
-    public static long createLong() {
-        return random().nextLong();
-    }
-
-    public static double createDouble() {
-        return random().nextDouble();
-    }
-
-    public static BigInteger createBigInteger() {
-        int maxBitLength = 256;
-        return new BigInteger(maxBitLength, random());
-    }
-
-    public static BigDecimal createBigDecimal() {
-        return new BigDecimal(random().nextInt());
-    }
-
-    public static Duration createDuration() {
-        return Duration.ofMillis(createLong());
-    }
-
-    public static LocalDate createLocalDate() {
-        long inclusiveMin = LocalDate.MIN.toEpochDay();
-        long exclusiveMax = LocalDate.MAX.toEpochDay() + 1;
-        long randomEpochDay = random().nextLong(inclusiveMin, exclusiveMax);
-        return LocalDate.ofEpochDay(randomEpochDay);
-    }
-
-    public static LocalTime createLocalTime() {
-        long inclusiveMin = LocalTime.MIN.toNanoOfDay();
-        long exclusiveMax = LocalTime.MAX.toNanoOfDay() + 1;
-        long randomNanoOfDay = random().nextLong(inclusiveMin, exclusiveMax);
-        return LocalTime.ofNanoOfDay(randomNanoOfDay);
-    }
-
-    public static LocalDateTime createLocalDateTime() {
-        return LocalDateTime.of(createLocalDate(), createLocalTime());
-    }
-
-    public static Class<?> createClass() {
-        return String.class;
-    }
-
     public static IntStream createIntStream() {
         return IntStream.generate(Factories::createInt).limit(3);
     }
 
     public static LongStream createLongStream() {
         return LongStream.generate(Factories::createLong).limit(3);
+    }
+
+    private static ThreadLocalRandom random() {
+        return ThreadLocalRandom.current();
+    }
+
+    private static int createInt() {
+        return random().nextInt();
+    }
+
+    private static long createLong() {
+        return random().nextLong();
+    }
+
+    private static double createDouble() {
+        return random().nextDouble();
     }
 
     public static DoubleStream createDoubleStream() {
