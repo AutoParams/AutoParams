@@ -7,9 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 final class Factories {
 
@@ -45,4 +42,38 @@ final class Factories {
         return (char) random().nextInt(Character.MAX_VALUE + 1);
     }
 
+    public static BigInteger createBigInteger() {
+        int maxBitLength = 256;
+        return new BigInteger(maxBitLength, random());
+    }
+
+    public static BigDecimal createBigDecimal() {
+        return new BigDecimal(random().nextInt());
+    }
+
+    public static Duration createDuration() {
+        return Duration.ofMillis(createLong());
+    }
+
+    public static LocalDate createLocalDate() {
+        long inclusiveMin = LocalDate.MIN.toEpochDay();
+        long exclusiveMax = LocalDate.MAX.toEpochDay() + 1;
+        long randomEpochDay = random().nextLong(inclusiveMin, exclusiveMax);
+        return LocalDate.ofEpochDay(randomEpochDay);
+    }
+
+    public static LocalTime createLocalTime() {
+        long inclusiveMin = LocalTime.MIN.toNanoOfDay();
+        long exclusiveMax = LocalTime.MAX.toNanoOfDay() + 1;
+        long randomNanoOfDay = random().nextLong(inclusiveMin, exclusiveMax);
+        return LocalTime.ofNanoOfDay(randomNanoOfDay);
+    }
+
+    public static LocalDateTime createLocalDateTime() {
+        return LocalDateTime.of(createLocalDate(), createLocalTime());
+    }
+
+    public static Class<?> createClass() {
+        return String.class;
+    }
 }

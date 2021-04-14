@@ -7,9 +7,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.validation.constraints.Min;
 import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
-import org.javaunit.autoparams.generator.UnwrapFailedException;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -29,7 +29,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
             return GenerationResult.fromContainer(
                 generator
                     .generate(
-                        () -> query.getType(),
+                        query::getType,
                         new org.javaunit.autoparams.generator.ObjectGenerationContext()));
         }
     }
@@ -92,22 +92,22 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private Object createArgument(Parameter parameter) {
-        try {
+        if (parameter.isAnnotationPresent(Min.class)) {
             return adapter.generator
                 .generate(
                     org.javaunit.autoparams.generator.ObjectQuery.fromParameter(parameter),
                     new org.javaunit.autoparams.generator.ObjectGenerationContext())
                 .unwrapOrElseThrow();
-        } catch (UnwrapFailedException exception) {
-            ObjectQuery query = ObjectQuery.create(parameter);
-            Object argument = context.generate(query);
-
-            if (parameter.isAnnotationPresent(Fixed.class)) {
-                context.fix(parameter.getType(), argument);
-            }
-
-            return argument;
         }
+
+        ObjectQuery query = ObjectQuery.create(parameter);
+        Object argument = context.generate(query);
+
+        if (parameter.isAnnotationPresent(Fixed.class)) {
+            context.fix(parameter.getType(), argument);
+        }
+
+        return argument;
     }
 
     @Override
