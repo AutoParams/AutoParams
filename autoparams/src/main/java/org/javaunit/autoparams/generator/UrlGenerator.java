@@ -1,4 +1,4 @@
-package org.javaunit.autoparams;
+package org.javaunit.autoparams.generator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,10 +13,10 @@ final class UrlGenerator implements ObjectGenerator {
     };
 
     @Override
-    public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         return query.getType().equals(URL.class)
-            ? GenerationResult.presence(generate())
-            : GenerationResult.absence();
+            ? new ObjectContainer(generate())
+            : ObjectContainer.EMPTY;
     }
 
     private URL generate() {
@@ -37,5 +37,4 @@ final class UrlGenerator implements ObjectGenerator {
             throw new RuntimeException(e);
         }
     }
-
 }
