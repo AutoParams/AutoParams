@@ -26,11 +26,14 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
         @Override
         public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
+            org.javaunit.autoparams.generator.ObjectGenerationContext generationContext =
+                new org.javaunit.autoparams.generator.ObjectGenerationContext(generator);
+
             return GenerationResult.fromContainer(
                 generator
                     .generate(
                         query::getType,
-                        new org.javaunit.autoparams.generator.ObjectGenerationContext()));
+                        generationContext));
         }
     }
 
@@ -92,10 +95,13 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
     private Object createArgument(Parameter parameter) {
         if (parameter.isAnnotationPresent(Min.class)) {
+            org.javaunit.autoparams.generator.ObjectGenerationContext generationContext =
+                new org.javaunit.autoparams.generator.ObjectGenerationContext(adapter.generator);
+
             return adapter.generator
                 .generate(
                     org.javaunit.autoparams.generator.ObjectQuery.fromParameter(parameter),
-                    new org.javaunit.autoparams.generator.ObjectGenerationContext())
+                    generationContext)
                 .unwrapOrElseThrow();
         }
 
