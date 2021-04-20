@@ -416,9 +416,10 @@ void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
 ```java
 @ParameterizedTest
 @CsvAutoSource({"16, foo"})
-void testMethod(int arg1, String arg2, UUID arg3) {
+void testMethod(int arg1, String arg2, String arg3) {
     assertEquals(16, arg1);
-    assertNotEquals("foo", arg2);
+    assertEquals("foo", arg2);
+    assertNotEquals(arg2, arg3);
 }
 ```
 
