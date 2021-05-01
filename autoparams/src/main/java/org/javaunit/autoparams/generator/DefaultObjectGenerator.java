@@ -6,7 +6,8 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
         super(
             new ObjectGeneratorGenerator(),
             new PrimitiveValueGenerator(),
-            new SimpleValueObjectGenerator()
+            new SimpleValueObjectGenerator(),
+            new ComplexObjectGenerator()
         );
     }
 

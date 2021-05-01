@@ -4,10 +4,16 @@ import javax.annotation.Nullable;
 
 final class ObjectGenerationContext {
 
-    private ObjectGenerator generator;
+    public interface FixHook {
+        void fix(Class<?> type, Object argument);
+    }
 
-    public ObjectGenerationContext(ObjectGenerator generator) {
+    private ObjectGenerator generator;
+    private FixHook fixHook;
+
+    public ObjectGenerationContext(ObjectGenerator generator, FixHook fixHook) {
         this.generator = generator;
+        this.fixHook = fixHook;
     }
 
     @Nullable
@@ -27,6 +33,7 @@ final class ObjectGenerationContext {
         generator = new CompositeObjectGenerator(
             new TypeMatchingGenerator(() -> argument, type),
             generator);
+        fixHook.fix(type, argument);
     }
 
 }

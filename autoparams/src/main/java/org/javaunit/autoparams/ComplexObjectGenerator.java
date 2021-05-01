@@ -17,18 +17,18 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
     public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
-        if (isAbstractType(query.getType())) {
+        if (query instanceof GenericObjectQuery == false || isAbstractType(query.getType())) {
             return GenerationResult.absence();
         }
 
         return ComplexObjectConstructorResolver.resolveConstructor(query.getType())
-            .map(constructor -> generate(query, constructor, context))
+            .map(constructor -> generate((GenericObjectQuery) query, constructor, context))
             .map(GenerationResult::presence)
             .orElse(GenerationResult.absence());
     }
 
     private Object generate(
-        ObjectQuery sourceQuery,
+        GenericObjectQuery sourceQuery,
         Constructor<?> constructor,
         ObjectGenerationContext context
     ) {
@@ -42,17 +42,6 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     }
 
     private Stream<ObjectQuery> resolveArgumentQueries(
-        ObjectQuery sourceQuery,
-        Parameter[] parameters
-    ) {
-        if (sourceQuery instanceof GenericObjectQuery) {
-            return resolveArgumentQueries((GenericObjectQuery) sourceQuery, parameters);
-        } else {
-            return resolveArgumentQueries(parameters);
-        }
-    }
-
-    private Stream<ObjectQuery> resolveArgumentQueries(
         GenericObjectQuery genericObjectQuery,
         Parameter[] parameters
     ) {
@@ -60,10 +49,6 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         ParameterizedType parameterizedType = genericObjectQuery.getParameterizedType();
         Map<TypeVariable<?>, Type> genericMap = getGenericMap(type, parameterizedType);
         return stream(parameters).map(parameter -> resolveArgumentQuery(parameter, genericMap));
-    }
-
-    private Stream<ObjectQuery> resolveArgumentQueries(Parameter[] parameters) {
-        return stream(parameters).map(ObjectQuery::create);
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(

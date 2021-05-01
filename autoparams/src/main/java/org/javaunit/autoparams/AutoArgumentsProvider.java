@@ -45,7 +45,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
             new StreamGenerator(),
             new BuilderGenerator(),
             new ComplexObjectGenerator());
-    private final ObjectGenerationContext context = new ObjectGenerationContext(generator);
+    private ObjectGenerationContext context = new ObjectGenerationContext(generator, this::fix);
     private int repeat = 1;
 
     @Override
@@ -110,9 +110,21 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
         if (parameter.isAnnotationPresent(Fixed.class)) {
             context.fix(parameter.getType(), argument);
+            fix(parameter.getType(), argument);
         }
 
         return argument;
+    }
+
+    private void fix(Class<?> type, Object value) {
+        org.javaunit.autoparams.generator.ObjectGenerator generator = adapter.generator;
+        adapter.generator = (query, context) -> {
+            if (query.getType() == type) {
+                return new org.javaunit.autoparams.generator.ObjectContainer(value);
+            }
+
+            return generator.generate(query, context);
+        };
     }
 
     @Override
