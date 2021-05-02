@@ -1,8 +1,10 @@
 package org.javaunit.autoparams.generator;
 
+import org.javaunit.autoparams.customization.Customizer;
+
 public final class ObjectGenerationContext {
 
-    private final ObjectGenerator generator;
+    private ObjectGenerator generator;
 
     public ObjectGenerationContext(ObjectGenerator generator) {
         this.generator = generator;
@@ -10,6 +12,10 @@ public final class ObjectGenerationContext {
 
     ObjectGenerator getGenerator() {
         return generator;
+    }
+
+    public void customizeGenerator(Customizer customizer) {
+        generator = customizer.customize(generator);
     }
 
 }
