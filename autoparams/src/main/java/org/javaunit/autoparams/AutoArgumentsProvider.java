@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.stream.Stream;
-import javax.validation.constraints.Min;
 import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -32,7 +31,9 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
             return GenerationResult.fromContainer(
                 generator
                     .generate(
-                        query::getType,
+                        () -> query instanceof GenericObjectQuery
+                            ? ((GenericObjectQuery) query).getParameterizedType()
+                            : query.getType(),
                         generationContext));
         }
     }
@@ -94,19 +95,20 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private Object createArgument(Parameter parameter) {
-        if (parameter.isAnnotationPresent(Min.class)) {
+        Object argument = null;
+        try {
             org.javaunit.autoparams.generator.ObjectGenerationContext generationContext =
                 new org.javaunit.autoparams.generator.ObjectGenerationContext(adapter.generator);
 
-            return adapter.generator
+            argument = adapter.generator
                 .generate(
                     org.javaunit.autoparams.generator.ObjectQuery.fromParameter(parameter),
                     generationContext)
                 .unwrapOrElseThrow();
+        } catch (Exception exception) {
+            ObjectQuery query = ObjectQuery.create(parameter);
+            argument = context.generate(query);
         }
-
-        ObjectQuery query = ObjectQuery.create(parameter);
-        Object argument = context.generate(query);
 
         if (parameter.isAnnotationPresent(Fixed.class)) {
             context.fix(parameter.getType(), argument);
