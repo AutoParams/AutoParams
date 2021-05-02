@@ -6,7 +6,8 @@ final class CollectionGenerator extends CompositeObjectGenerator {
         super(
             new ArrayGenerator(),
             new SequenceGenerator(),
-            new MapGenerator());
+            new MapGenerator(),
+            new SetGenerator());
     }
 
 }

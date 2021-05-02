@@ -42,7 +42,6 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     private final CompositeObjectGenerator generator =
         new CompositeObjectGenerator(
             adapter,
-            new CollectionGenerator(),
             new StreamGenerator(),
             new BuilderGenerator(),
             new ComplexObjectGenerator());
