@@ -10,7 +10,8 @@ final class StreamGenerator extends CompositeObjectGenerator {
         super(
             new TypeMatchingGenerator(Factories::createIntStream, IntStream.class),
             new TypeMatchingGenerator(Factories::createLongStream, LongStream.class),
-            new TypeMatchingGenerator(Factories::createDoubleStream, DoubleStream.class)
+            new TypeMatchingGenerator(Factories::createDoubleStream, DoubleStream.class),
+            new GenericStreamGenerator()
         );
     }
 

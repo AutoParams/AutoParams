@@ -28,8 +28,10 @@ final class SequenceGenerator implements ObjectGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ArrayList<T> factory(
-        Class<? extends T> elementType, ObjectGenerationContext context) {
+    static <T> ArrayList<T> factory(
+        Class<? extends T> elementType,
+        ObjectGenerationContext context
+    ) {
         ArrayList<T> instance = new ArrayList<T>();
         ObjectQuery query = () -> elementType;
         for (int i = 0; i < SIZE; i++) {
