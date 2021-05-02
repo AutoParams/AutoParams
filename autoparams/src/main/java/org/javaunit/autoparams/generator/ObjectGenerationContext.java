@@ -14,6 +14,10 @@ public final class ObjectGenerationContext {
         return generator;
     }
 
+    public Object generate(ObjectQuery query) {
+        return generator.generate(query, this).unwrapOrElseThrow();
+    }
+
     public void customizeGenerator(Customizer customizer) {
         generator = customizer.customize(generator);
     }
