@@ -10,5 +10,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 @Retention(RetentionPolicy.RUNTIME)
 @ArgumentsSource(CsvAutoArgumentsProvider.class)
 public @interface CsvAutoSource {
+
     String[] value();
+
 }

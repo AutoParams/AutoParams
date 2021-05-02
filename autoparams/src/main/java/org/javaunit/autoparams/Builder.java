@@ -1,7 +1,6 @@
 package org.javaunit.autoparams;
 
 import java.lang.reflect.Type;
-import org.javaunit.autoparams.generator.ObjectContainer;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectGenerator;
 
@@ -20,10 +19,7 @@ public final class Builder<T> {
     }
 
     public <U> Builder<T> fix(Class<U> type, U value) {
-        context.customizeGenerator(generator -> (query, context) -> query.getType() == type
-            ? new ObjectContainer(value)
-            : generator.generate(query, context));
-
+        context.customizeGenerator(new FixCustomization(type, value));
         return this;
     }
 

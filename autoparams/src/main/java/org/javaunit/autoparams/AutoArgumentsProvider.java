@@ -1,14 +1,17 @@
 package org.javaunit.autoparams;
 
-import static java.util.Arrays.stream;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
+import org.javaunit.autoparams.generator.CompositeObjectGenerator;
+import org.javaunit.autoparams.generator.ObjectGenerationContext;
+import org.javaunit.autoparams.generator.ObjectGenerator;
+import org.javaunit.autoparams.generator.ObjectQuery;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -16,33 +19,17 @@ import org.junit.jupiter.params.support.AnnotationConsumer;
 
 final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
 
-    private static class GeneratorAdapter implements ObjectGenerator {
-        public org.javaunit.autoparams.generator.ObjectGenerator generator;
+    private final ObjectGenerationContext context;
+    private int repeat;
 
-        public GeneratorAdapter() {
-            generator = new org.javaunit.autoparams.generator.CompositeObjectGenerator(
-                org.javaunit.autoparams.generator.ObjectGenerator.DEFAULT,
-                new BuilderGenerator());
-        }
-
-        @Override
-        public GenerationResult generate(ObjectQuery query, ObjectGenerationContext context) {
-            org.javaunit.autoparams.generator.ObjectGenerationContext generationContext =
-                new org.javaunit.autoparams.generator.ObjectGenerationContext(generator);
-
-            return GenerationResult.fromContainer(
-                generator
-                    .generate(
-                        () -> query instanceof GenericObjectQuery
-                            ? ((GenericObjectQuery) query).getParameterizedType()
-                            : query.getType(),
-                        generationContext));
-        }
+    private AutoArgumentsProvider(ObjectGenerator generator) {
+        context = new ObjectGenerationContext(generator);
+        repeat = 1;
     }
 
-    private final GeneratorAdapter adapter = new GeneratorAdapter();
-    private ObjectGenerationContext context = new ObjectGenerationContext(adapter, this::fix);
-    private int repeat = 1;
+    public AutoArgumentsProvider() {
+        this(new CompositeObjectGenerator(ObjectGenerator.DEFAULT, new BuilderGenerator()));
+    }
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
@@ -55,23 +42,36 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     private void customizeGenerator(Method method) {
         Customization customization = method.getAnnotation(Customization.class);
         if (customization != null) {
-            Class<? extends Customizer>[] types = customization.value();
-            for (Class<? extends Customizer> type : types) {
-                try {
-                    Customizer customizer = type.getDeclaredConstructor().newInstance();
-                    adapter.generator = customizer.customize(adapter.generator);
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                    return;
-                }
-            }
+            customizeGenerator(customization);
+        }
+    }
+
+    private void customizeGenerator(Customization customization) {
+        for (Class<? extends Customizer> customizerType : customization.value()) {
+            customizeGenerator(customizerType);
+        }
+    }
+
+    private void customizeGenerator(Class<? extends Customizer> customizerType) {
+        try {
+            context.customizeGenerator(customizerType.getDeclaredConstructor().newInstance());
+        } catch (Exception exception) {
+            return;
         }
     }
 
     private void applyFixedValues(ExtensionContext context) {
-        for (Map.Entry<Class<?>, Object> entry : FixedValueAccessor.entries(context)) {
-            this.context.fix(entry.getKey(), entry.getValue());
+        applyFixedValues(FixedValueAccessor.entries(context));
+    }
+
+    private void applyFixedValues(Iterable<Entry<Class<?>, Object>> fixedValues) {
+        for (Map.Entry<Class<?>, Object> entry : fixedValues) {
+            fix(entry.getKey(), entry.getValue());
         }
+    }
+
+    private void fix(Class<?> type, Object value) {
+        context.customizeGenerator(new FixCustomization(type, value));
     }
 
     private Stream<Arguments> generate(Method method) {
@@ -80,48 +80,23 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
             streamSource[i] = createArguments(method);
         }
 
-        return stream(streamSource);
+        return Arrays.stream(streamSource);
     }
 
     private Arguments createArguments(Method method) {
         Parameter[] parameters = method.getParameters();
-        Object[] arguments = stream(parameters).map(this::createArgument).toArray();
+        Object[] arguments = Arrays.stream(parameters).map(this::createArgument).toArray();
         return Arguments.of(arguments);
     }
 
     private Object createArgument(Parameter parameter) {
-        Object argument = null;
-        try {
-            org.javaunit.autoparams.generator.ObjectGenerationContext generationContext =
-                new org.javaunit.autoparams.generator.ObjectGenerationContext(adapter.generator);
-
-            argument = adapter.generator
-                .generate(
-                    org.javaunit.autoparams.generator.ObjectQuery.fromParameter(parameter),
-                    generationContext)
-                .unwrapOrElseThrow();
-        } catch (Exception exception) {
-            ObjectQuery query = ObjectQuery.create(parameter);
-            argument = context.generate(query);
-        }
+        Object argument = context.generate(ObjectQuery.fromParameter(parameter));
 
         if (parameter.isAnnotationPresent(Fixed.class)) {
-            context.fix(parameter.getType(), argument);
             fix(parameter.getType(), argument);
         }
 
         return argument;
-    }
-
-    private void fix(Class<?> type, Object value) {
-        org.javaunit.autoparams.generator.ObjectGenerator generator = adapter.generator;
-        adapter.generator = (query, context) -> {
-            if (query.getType() == type) {
-                return new org.javaunit.autoparams.generator.ObjectContainer(value);
-            }
-
-            return generator.generate(query, context);
-        };
     }
 
     @Override
