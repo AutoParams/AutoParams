@@ -15,7 +15,18 @@ public final class ObjectGenerationContext {
     }
 
     public Object generate(ObjectQuery query) {
-        return generator.generate(query, this).unwrapOrElseThrow();
+        try {
+            return generator.generate(query, this).unwrapOrElseThrow();
+        } catch (UnwrapFailedException exception) {
+            throw composeGenerationFailedException(query, exception);
+        }
+    }
+
+    private RuntimeException composeGenerationFailedException(ObjectQuery query, Throwable cause) {
+        String messageFormat = "Object cannot be created with the given query '%s'."
+            + " This can happen if the query represents an interface or abstract class.";
+        String message = String.format(messageFormat, query);
+        return new RuntimeException(message, cause);
     }
 
     public void customizeGenerator(Customizer customizer) {

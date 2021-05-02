@@ -1,42 +1,35 @@
 package org.javaunit.autoparams;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import org.javaunit.autoparams.generator.ObjectContainer;
+import org.javaunit.autoparams.generator.ObjectGenerationContext;
+import org.javaunit.autoparams.generator.ObjectGenerator;
 
 public final class Builder<T> {
 
-    private final GenericObjectQuery builderQuery;
-    private final ObjectGenerationContext context;
+    private Type type;
+    private ObjectGenerationContext context;
 
-    Builder(GenericObjectQuery builderQuery, ObjectGenerationContext context) {
-        this.builderQuery = builderQuery;
+    private Builder(Type type, ObjectGenerationContext context) {
+        this.type = type;
         this.context = context;
     }
 
+    static <T> Builder<T> create(Type type, ObjectGenerator generator) {
+        return new Builder<T>(type, new ObjectGenerationContext(generator));
+    }
+
     public <U> Builder<T> fix(Class<U> type, U value) {
-        this.context.fix(type, value);
+        context.customizeGenerator(generator -> (query, context) -> query.getType() == type
+            ? new ObjectContainer(value)
+            : generator.generate(query, context));
+
         return this;
     }
 
-    public T build() {
-        return generate(this.builderQuery);
-    }
-
     @SuppressWarnings("unchecked")
-    private T generate(GenericObjectQuery builderQuery) {
-        ObjectQuery query = this.createGenerateObjectQuery(builderQuery);
-        return (T) this.context.generate(query);
-    }
-
-    private ObjectQuery createGenerateObjectQuery(GenericObjectQuery builderQuery) {
-        Type generateType = builderQuery.getParameterizedType().getActualTypeArguments()[0];
-        if (generateType instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) generateType;
-            return new GenericObjectQuery(
-                (Class<?>) parameterizedType.getRawType(), parameterizedType);
-        } else {
-            return new ObjectQuery((Class<?>) generateType);
-        }
+    public T build() {
+        return (T) context.generate(() -> type);
     }
 
 }

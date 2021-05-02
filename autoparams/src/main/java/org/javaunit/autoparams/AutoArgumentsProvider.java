@@ -20,7 +20,9 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
         public org.javaunit.autoparams.generator.ObjectGenerator generator;
 
         public GeneratorAdapter() {
-            generator = org.javaunit.autoparams.generator.ObjectGenerator.DEFAULT;
+            generator = new org.javaunit.autoparams.generator.CompositeObjectGenerator(
+                org.javaunit.autoparams.generator.ObjectGenerator.DEFAULT,
+                new BuilderGenerator());
         }
 
         @Override
@@ -39,11 +41,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private final GeneratorAdapter adapter = new GeneratorAdapter();
-    private final CompositeObjectGenerator generator =
-        new CompositeObjectGenerator(
-            adapter,
-            new BuilderGenerator());
-    private ObjectGenerationContext context = new ObjectGenerationContext(generator, this::fix);
+    private ObjectGenerationContext context = new ObjectGenerationContext(adapter, this::fix);
     private int repeat = 1;
 
     @Override

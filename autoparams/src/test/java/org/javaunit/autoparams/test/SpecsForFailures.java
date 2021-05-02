@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.AbstractList;
 import org.javaunit.autoparams.AutoSource;
 import org.javaunit.autoparams.Builder;
-import org.javaunit.autoparams.ObjectGenerationException;
 import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForFailures {
@@ -16,7 +15,7 @@ class SpecsForFailures {
         Builder<Cloneable> builder
     ) {
         assertThatThrownBy(builder::build)
-            .isInstanceOf(ObjectGenerationException.class)
+            .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("interface");
     }
 
@@ -26,7 +25,7 @@ class SpecsForFailures {
         Builder<AbstractList<Object>> builder
     ) {
         assertThatThrownBy(builder::build)
-            .isInstanceOf(ObjectGenerationException.class)
+            .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("abstract");
     }
 
@@ -36,7 +35,7 @@ class SpecsForFailures {
         Builder<AbstractWithPublicConstructor> builder
     ) {
         assertThatThrownBy(builder::build)
-            .isInstanceOf(ObjectGenerationException.class)
+            .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("abstract");
     }
 
