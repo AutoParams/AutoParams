@@ -14,4 +14,10 @@ public class SpecsForMin {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_double(@Min(100) double value) {
+        assertThat(value).isGreaterThanOrEqualTo(100);
+    }
+
 }
