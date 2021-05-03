@@ -89,14 +89,14 @@ That's cool!
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.1.3</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.1.3'
+testImplementation 'io.github.javaunit:autoparams:0.2.0'
 ```
 
 ## Features
@@ -444,5 +444,78 @@ class ValueContainer {
 @CsvAutoSource({"16, foo"})
 void testMethod(int arg1, @Fixed String arg2, ValueContainer arg3) {
     assertEquals("foo", arg3.getValue());
+}
+```
+
+### `@Customization` annotation
+
+`@Customization` annotation is a powerful feature. You can use this annotation to apply your business rules to test data generation. Use `Customizer` interface to code your business rules, then decorate the test method with `@Customization` annotation.
+
+You have `Product` entity that represents the product you want to sell to your customers.
+
+```java
+public class Product {
+
+    private final UUID id;
+    private final String name;
+    private final BigDecimal listPriceAmount;
+    private final BigDecimal sellingPriceAmount;
+
+    public Product(UUID id, String name, BigDecimal listPriceAmount, BigDecimal sellingPriceAmount) {
+        this.id = id;
+        this.name = name;
+        this.listPriceAmount = listPriceAmount;
+        this.sellingPriceAmount = sellingPriceAmount;
+    }
+
+    public UUID getId() { return id; }
+
+    public String getName() { return name; }
+
+    public BigDecimal getListPriceAmount() { return listPriceAmount; }
+
+    public BigDecimal getSellingPriceAmount() { return sellingPriceAmount; }
+
+}
+```
+
+You have following business rules for `Product` entity.
+
+- `listPriceAmount` is greater than or equal to `100`
+- `listPriceAmount` is less than or equal to `1000`
+- Offer a 10% discount
+
+Code these rules with `Customizer` interface.
+
+```java
+public class ProductCustomization implements Customizer {
+
+    public ObjectGenerator customize(ObjectGenerator generator) {
+        return (query, context) -> query.getType().equals(Product.class)
+            ? new ObjectContainer(factory(context))
+            : generator.generate(query, context);
+    }
+
+    private Product factory(ObjectGenerationContext context) {
+        UUID id = (UUID) context.generate(() -> UUID.class);
+        String name = (String) context.generate(() -> String.class);
+
+        BigDecimal listPriceAmount = new BigDecimal(ThreadLocalRandom.current().nextInt(100, 1000 + 1));
+        BigDecimal sellingPriceAmount = listPriceAmount.multiply(new BigDecimal(0.9));
+
+        return new Product(id, name, listPriceAmount, sellingPriceAmount);
+    }
+
+}
+```
+
+Now decorate your test method with `ProductCustomization` and the generated `Product` object will satisfy your business rules.
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(ProductCustomization.class)
+void testMethod(Product product) {
+    assertTrue(product.getSellingPriceAmount().compareTo(product.getListPriceAmount()) < 0);
 }
 ```
