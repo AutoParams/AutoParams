@@ -20,4 +20,10 @@ public class SpecsForMin {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_long(@Min(100) long value) {
+        assertThat(value).isGreaterThanOrEqualTo(100);
+    }
+
 }
