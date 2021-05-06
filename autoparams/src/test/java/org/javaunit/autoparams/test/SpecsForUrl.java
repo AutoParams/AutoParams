@@ -43,7 +43,7 @@ class SpecsForUrl {
             .filter(it -> it.getPort() >= 0)
             .count();
 
-        assertThat(actual / (double) 100).isEqualTo(0.5, offset(0.2));
+        assertThat(actual / (double) 100).isEqualTo(0.5, offset(0.25));
     }
 
 }
