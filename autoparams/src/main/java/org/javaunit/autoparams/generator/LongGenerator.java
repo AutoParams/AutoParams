@@ -23,7 +23,7 @@ final class LongGenerator implements ObjectGenerator {
             ArgumentQuery argumentQuery = (ArgumentQuery) query;
             Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
             if (annotation != null) {
-                return Math.max(Long.MIN_VALUE, annotation.value());
+                return annotation.value();
             }
         }
 
