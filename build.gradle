@@ -84,11 +84,11 @@ subprojects {
 
         publications {
             maven(MavenPublication) {
-                artifactId 'autoparams'
+                artifactId artifactId
                 from components.java
                 pom {
-                    name = "AutoParams"
-                    description = "Arbitrary test data generator for parameterized tests in Java."
+                    name = artifactName
+                    description = artifactDescription
                     url = "https://github.com/JavaUnit/AutoParams"
                     licenses {
                         license {
