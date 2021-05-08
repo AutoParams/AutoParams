@@ -16,7 +16,6 @@ allprojects {
     }
 
     group = 'io.github.javaunit'
-    version = '0.2.0'
 }
 
 subprojects {
@@ -24,6 +23,8 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply plugin: 'checkstyle'
     apply plugin: 'com.github.spotbugs'
+
+    version = artifactVersion
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
