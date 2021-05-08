@@ -23,6 +23,8 @@ subprojects {
     apply plugin: 'org.ec4j.editorconfig'
     apply plugin: 'checkstyle'
     apply plugin: 'com.github.spotbugs'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     version = artifactVersion
 

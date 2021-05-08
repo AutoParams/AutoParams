@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api 'io.github.javaunit:autoparams:0.2.0'
+    api 'org.mockito:mockito-core:2.25.0'
+    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+test {
+    dependsOn('editorconfigCheck', 'checkstyleMain', 'checkstyleTest')
+
+    useJUnitPlatform()
+}
