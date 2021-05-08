@@ -102,6 +102,11 @@ subprojects {
                             name = "Gyuwon Yi"
                             email = "gyuwon@live.com"
                         }
+                        developer {
+                            id = "mhyeon.lee"
+                            name = "Myeonghyeon Lee"
+                            email = "mhyeon.lee@navercorp.com"
+                        }
                     }
                     scm {
                         connection = "https://github.com/JavaUnit/AutoParams.git"
