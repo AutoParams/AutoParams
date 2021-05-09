@@ -32,4 +32,11 @@ class SpecsForMockitoCustomizer {
         assertNotNull(value);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    @Customization(MockitoCustomizer.class)
+    void sut_supports_generic_interface(GenericInterface<Integer> value) {
+        assertNotNull(value);
+    }
+
 }
