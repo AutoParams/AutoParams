@@ -89,14 +89,14 @@ That's cool!
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.2.0'
+testImplementation 'io.github.javaunit:autoparams:0.2.2'
 ```
 
 ## Features
@@ -327,8 +327,6 @@ void testMethod(IntStream intStream, LongStream longStream, DoubleStream doubleS
 }
 ```
 
-####
-
 ### Repeat
 
 Unit tests can be repeated with arbitrary test data. Set `repeat` property of `@AutoSource` annotation as many times as you want to repeat.
@@ -447,6 +445,24 @@ void testMethod(int arg1, @Fixed String arg2, ValueContainer arg3) {
 }
 ```
 
+### Setting the range of values
+
+You can specify the range of arbitrary values using `@Min` and `@Max` annotations.
+
+```java
+@ParameterizedTest
+@AutoSource
+void testMethod(@Min(1) @Max(10) int value) {
+    assertTrue(value >= 1);
+    assertTrue(value <= 10);
+}
+```
+
+#### Supported types
+
+- `int`
+- `Integer`
+
 ### `@Customization` annotation
 
 `@Customization` annotation is a powerful feature. You can use this annotation to apply your business rules to test data generation. Use `Customizer` interface to code your business rules, then decorate the test method with `@Customization` annotation.
@@ -517,5 +533,28 @@ Now decorate your test method with `ProductCustomization` and the generated `Pro
 @Customization(ProductCustomization.class)
 void testMethod(Product product) {
     assertTrue(product.getSellingPriceAmount().compareTo(product.getListPriceAmount()) < 0);
+}
+```
+
+`CompositeCustomizer` may help you to combine each business rules easily.
+
+```java
+public class DomainCustomization extends CompositeCustomzer {
+    public DomainCustomization() {
+        super(
+            new EmailCustomization(),
+            new UserCustomization(),
+            new SupplierCustomization(),
+            new ProductCustomization()
+        )
+    }
+}
+```
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(DomainCustomization.class)
+void testMethod(Email email, User user, Supplier supplier, Product product) {
 }
 ```
