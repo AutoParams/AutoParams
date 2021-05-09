@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -19,6 +20,12 @@ public class SpecsForMax {
     @AutoSource(repeat = 100)
     void sut_accepts_max_constraint_with_big_value_for_int(@Min(0) @Max(0x80000000L) int value) {
         assertThat(value).isGreaterThanOrEqualTo(0);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_includes_maximum_value(@Min(1) @Max(1) int value) {
+        assertEquals(1, value);
     }
 
 }
