@@ -73,6 +73,19 @@ subprojects {
 
     tasks.getByPath("spotbugsMain").finalizedBy("printSpotbugsMain")
 
+    jar {
+        manifest {
+            attributes(
+                    'Implementation-Title': artifactName,
+                    'Implementation-Version': artifactVersion,
+                    'Implementation-Vendor': group,
+                    'Specification-Title': artifactName,
+                    'Specification-Version': artifactVersion,
+                    'Specification-Vendor': group
+            )
+        }
+    }
+
     publishing {
         repositories {
             maven {
