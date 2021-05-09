@@ -546,7 +546,7 @@ public class DomainCustomization extends CompositeCustomzer {
             new UserCustomization(),
             new SupplierCustomization(),
             new ProductCustomization()
-        )
+        );
     }
 }
 ```
