@@ -7,7 +7,7 @@ AutoParams is an arbitrary test data generator for parameterized tests in Java i
 
 Sometimes setting all the test data manually is very annoying. Sometimes some test data is required but not that important for a particular test. AutoParams automatically generates test arguments for your parameterized test method so you can focus more on your domain and your requirements.
 
-AutoParams is very easy to use. Just decorate your parameterized test method with `@AutoSource` annotation just like using `@ValueSource` annotation or `@CsvSource` annotation. That's all. Then AutoParams wiil generate arbitrary arguments for the parameters of the test method automatically.
+AutoParams is very easy to use. Just decorate your parameterized test method with the `@AutoSource` annotation just like using the `@ValueSource` annotation or the `@CsvSource` annotation. That's all. Then AutoParams wiil generate arbitrary arguments for the parameters of the test method automatically.
 
 ```java
 @ParameterizedTest
@@ -21,7 +21,7 @@ void parameterizedTest(int a, int b) {
 
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
-AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using `@Fixed` annotation.
+AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using the `@Fixed` annotation.
 
 ```java
 public class Product {
@@ -174,7 +174,7 @@ void testMethod(ComplexObject object) {
 
 When AutoParams creates objects of complex types it follows the following rules.
 
-1. The constructor decorated with `@ConstructorProperties` annotation is preferentially selected.
+1. The constructor decorated with the `@ConstructorProperties` annotation is preferentially selected.
 2. AutoParams selects the constructor with the fewest parameters.
 
 ```java
@@ -272,7 +272,7 @@ void testMethod(int[] array1, String[] array2) {
 
 #### List Types
 
-`List<E>` interface and `ArrayList<E>` class supported. Generated list objects contain few elements.
+The `List<E>` interface and the `ArrayList<E>` class supported. Generated list objects contain few elements.
 
 ```java
 @ParameterizedTest
@@ -283,7 +283,7 @@ void testMethod(List<String> list, ArrayList<UUID> arrayList) {
 
 #### Set Types
 
-`Set<E>` interface and `HashSet<E>` class supported. Generated set objects contain few elements.
+The `Set<E>` interface and the `HashSet<E>` class supported. Generated set objects contain few elements.
 
 ```java
 @ParameterizedTest
@@ -294,7 +294,7 @@ void testMethod(Set<String> set, HashSet<UUID> hashSet) {
 
 #### Map Interface
 
-`Map<K, V>` interface and `HashMap<K, V>` class supported. Generated map objects contain few pairs.
+The `Map<K, V>` interface and the `HashMap<K, V>` class supported. Generated map objects contain few pairs.
 
 ```java
 @ParameterizedTest
@@ -307,7 +307,7 @@ void testMethod(Map<String, ComplexObject> map, HashMap<UUID, ComplexObject> has
 
 #### Generic Stream Interface
 
-AutoParams supports the generic `Stream<T>` interface. Generated stream objects provide few elements.
+AutoParams supports the generic the `Stream<T>` interface. Generated stream objects provide few elements.
 
 ```java
 @ParameterizedTest
@@ -329,7 +329,7 @@ void testMethod(IntStream intStream, LongStream longStream, DoubleStream doubleS
 
 ### Repeat
 
-Unit tests can be repeated with arbitrary test data. Set `repeat` property of `@AutoSource` annotation as many times as you want to repeat.
+Unit tests can be repeated with arbitrary test data. Set the `repeat` property of the `@AutoSource` annotation as many times as you want to repeat.
 
 ```java
 @ParameterizedTest
@@ -344,7 +344,7 @@ void testMethod(int a, int b) {
 
 ### `@Fixed` annotation
 
-You can freeze the generated argument to the type with `@Fixed` annotation. `@AutoSource` reuses the argument of the parameter decorated with `@Fixed` annotation for subsequent value generation.
+You can freeze the generated argument to the type with the `@Fixed` annotation. `@AutoSource` reuses the argument of the parameter decorated with the `@Fixed` annotation for subsequent value generation.
 
 ```java
 class ValueContainer {
@@ -371,7 +371,7 @@ void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
 
 ### `@ValueAutoSource` annotation
 
-`@ValueAutoSource` annotation combines the functionalities of `@ValueSource` and `@AutoSource`. It assigns the provides value to the first parameter then generates arbitrary values for other parameters.
+The `@ValueAutoSource` annotation combines the functionalities of `@ValueSource` and `@AutoSource`. It assigns the provides value to the first parameter then generates arbitrary values for other parameters.
 
 ```java
 @ParameterizedTest
@@ -382,7 +382,7 @@ void testMethod(String arg1, String arg2) {
 }
 ```
 
-`@Fixed` annotation correctly works with `@ValueAutoSource`.
+The `@Fixed` annotation correctly works with `@ValueAutoSource`.
 
 ```java
 class ValueContainer {
@@ -409,7 +409,7 @@ void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
 
 ### `@CsvAutoSource` annotation
 
-`@CsvAutoSource` annotation combines the functionalities of `@CsvSource` and `@AutoSource`. You can specifiy arguments in CSV for the forepart parameters. The remaining parameters will be assigned with the arbitrary values.
+The `@CsvAutoSource` annotation combines the functionalities of `@CsvSource` and `@AutoSource`. You can specifiy arguments in CSV for the forepart parameters. The remaining parameters will be assigned with the arbitrary values.
 
 ```java
 @ParameterizedTest
@@ -421,7 +421,7 @@ void testMethod(int arg1, String arg2, String arg3) {
 }
 ```
 
-`@Fixed` annotation correctly works with `@CsvAutoSource`.
+The `@Fixed` annotation correctly works with `@CsvAutoSource`.
 
 ```java
 class ValueContainer {
@@ -447,7 +447,7 @@ void testMethod(int arg1, @Fixed String arg2, ValueContainer arg3) {
 
 ### Setting the range of values
 
-You can specify the range of arbitrary values using `@Min` and `@Max` annotations.
+You can specify the range of arbitrary values using the `@Min` annotation and the `@Max` annotations.
 
 ```java
 @ParameterizedTest
@@ -465,9 +465,9 @@ void testMethod(@Min(1) @Max(10) int value) {
 
 ### `@Customization` annotation
 
-`@Customization` annotation is a powerful feature. You can use this annotation to apply your business rules to test data generation. Use `Customizer` interface to code your business rules, then decorate the test method with `@Customization` annotation.
+The `@Customization` annotation is a powerful feature. You can use this annotation to apply your business rules to test data generation. Use the `Customizer` interface to code your business rules, then decorate the test method with the `@Customization` annotation.
 
-You have `Product` entity that represents the product you want to sell to your customers.
+You have the `Product` entity that represents the product you want to sell to your customers.
 
 ```java
 public class Product {
@@ -495,13 +495,13 @@ public class Product {
 }
 ```
 
-You have following business rules for `Product` entity.
+You have following business rules for the `Product` entity.
 
 - `listPriceAmount` is greater than or equal to `100`
 - `listPriceAmount` is less than or equal to `1000`
 - Offer a 10% discount
 
-Code these rules with `Customizer` interface.
+Code these rules with the `Customizer` interface.
 
 ```java
 public class ProductCustomization implements Customizer {
@@ -556,5 +556,74 @@ public class DomainCustomization extends CompositeCustomzer {
 @AutoSource
 @Customization(DomainCustomization.class)
 void testMethod(Email email, User user, Supplier supplier, Product product) {
+}
+```
+
+## `autoparams-mockito`
+
+`autoparams-mockito` helps `@AutoSource` generate arguments of interfaces and abstract classes using Mockito.
+
+### Install
+
+#### Maven
+
+```xml
+<dependency>
+  <groupId>io.github.javaunit</groupId>
+  <artifactId>autoparams-mockito</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+#### Gradle
+
+```groovy
+testImplementation 'io.github.javaunit:autoparams-mockito:0.0.1'
+```
+
+### How to generate test doubles using Mockito
+
+There is an interface that abstracts some service.
+
+```java
+public interface Dependency {
+
+    String getName();
+
+}
+```
+
+And you have a system that depends on the `Dependency` interface.
+
+```java
+public class SystemUnderTest {
+
+    private final Dependency dependency;
+
+    public SystemUnderTest(Dependency dependency) {
+        this.dependency = dependency;
+    }
+
+    public String getMessage() {
+        return "Hello " + dependency.getName();
+    }
+
+}
+```
+
+If you decorates your test method with `org.javaunit.autoparams.mockito.MockitoCustomizer`, then `@AutoSource` will generate values for parameters of interfaces and abstract classes using Mockito.
+
+In the following example, the argument `stub` is generated using Mockito by `MockitoCustomizer` and the parameter `stub` is decorated with the `@Fixed` annotation so it is injected to the object `sut`.
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(MockitoCustomizer.class)
+void testUsingMockito(@Fixed Dependency stub, SystemUnderTest sut) {
+
+    when(stub.getName()).thenReturn("World");
+
+    assertEquals("Hello World", sut.getMessage());
+
 }
 ```
