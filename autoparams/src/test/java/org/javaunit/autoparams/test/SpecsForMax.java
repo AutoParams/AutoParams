@@ -28,4 +28,9 @@ public class SpecsForMax {
         assertEquals(1, value);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_max_constraint_for_double(@Max(100) double value) {
+        assertThat(value).isLessThanOrEqualTo(100);
+    }
 }
