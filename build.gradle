@@ -76,12 +76,12 @@ subprojects {
     jar {
         manifest {
             attributes(
-                    'Implementation-Title': artifactName,
-                    'Implementation-Version': artifactVersion,
-                    'Implementation-Vendor': group,
                     'Specification-Title': artifactName,
                     'Specification-Version': artifactVersion,
-                    'Specification-Vendor': group
+                    'Specification-Vendor': 'io.github.javaunit',
+                    'Implementation-Title': artifactName,
+                    'Implementation-Version': artifactVersion,
+                    'Implementation-Vendor': 'io.github.javaunit'
             )
         }
     }
