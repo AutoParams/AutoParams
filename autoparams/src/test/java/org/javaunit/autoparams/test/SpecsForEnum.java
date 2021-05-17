@@ -53,7 +53,7 @@ class SpecsForEnum {
         set.add(value18);
         set.add(value19);
         set.add(value20);
-        assertThat(set).contains(EnumType.values());
+        assertThat(EnumType.values()).containsAll(set);
     }
 
 }
