@@ -26,4 +26,16 @@ public class SpecsForMin {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_int_when_over_upper_bound(@Min(Long.MAX_VALUE) int value) {
+        assertThat(value).isEqualTo(Integer.MAX_VALUE);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_int_when_over_lower_bound(@Min(Long.MIN_VALUE) int value) {
+        assertThat(value).isGreaterThanOrEqualTo(Integer.MIN_VALUE);
+    }
+
 }
