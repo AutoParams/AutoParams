@@ -13,6 +13,9 @@ final class IntegerGenerator implements ObjectGenerator {
         if (type == int.class || type == Integer.class) {
             int origin = getOrigin(query);
             int bound = getBound(query);
+            if (origin == bound) {
+                return new ObjectContainer(origin);
+            }
             int value = ThreadLocalRandom.current().nextInt(origin, bound);
             return new ObjectContainer(value);
         }
@@ -25,7 +28,8 @@ final class IntegerGenerator implements ObjectGenerator {
             ArgumentQuery argumentQuery = (ArgumentQuery) query;
             Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
             if (annotation != null) {
-                return (int) Math.max(Integer.MIN_VALUE, annotation.value());
+                long value = Math.min(Integer.MAX_VALUE, annotation.value());
+                return (int) Math.max(Integer.MIN_VALUE, value);
             }
         }
 
@@ -37,7 +41,11 @@ final class IntegerGenerator implements ObjectGenerator {
             ArgumentQuery argumentQuery = (ArgumentQuery) query;
             Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
             if (annotation != null) {
-                return (int) Math.min(Integer.MAX_VALUE, annotation.value() + 1);
+                long value = Math.max(Integer.MIN_VALUE, annotation.value());
+                if (value < Long.MAX_VALUE) {
+                    value = value + 1;
+                }
+                return (int) Math.min(Integer.MAX_VALUE, value);
             }
         }
 
