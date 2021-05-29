@@ -627,3 +627,55 @@ void testUsingMockito(@Fixed Dependency stub, SystemUnderTest sut) {
 
 }
 ```
+
+## `autoparams-lombok`
+
+`autoparams-lombok` helps `@AutoSource` generate arguments of types using annotations in [Project Lombok](https://projectlombok.org/).
+
+### Install
+
+#### Maven
+
+```xml
+<dependency>
+  <groupId>io.github.javaunit</groupId>
+  <artifactId>autoparams-lombok</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+#### Gradle
+
+```groovy
+testImplementation 'io.github.javaunit:autoparams-lombok:0.0.1'
+```
+
+### `BuilderCustomizer`
+
+You can generate arbitrary objects of types decorated with `@Builder` annotation. Decorates your test method with `org.javaunit.autoparams.lombok.BuilderCustomizer`.
+
+```java
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
+public class User {
+
+    private Long id;
+    private String name;
+    private String email;
+
+}
+```
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(BuilderCustomizer.class)
+void testMethod(User user) {
+    assertThat(arg.getId()).isNotNull();
+    assertThat(arg.getName()).isNotNull();
+    assertThat(arg.getEmail()).isNotNull();
+}
+```
