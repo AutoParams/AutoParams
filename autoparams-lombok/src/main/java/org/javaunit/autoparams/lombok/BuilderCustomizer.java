@@ -12,7 +12,19 @@ import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectGenerator;
 import org.javaunit.autoparams.generator.ObjectQuery;
 
-public final class BuilderCustomizer implements Customizer {
+public class BuilderCustomizer implements Customizer {
+
+    private final String builderMethodName;
+    private final String buildMethodName;
+
+    public BuilderCustomizer() {
+        this("builder", "build");
+    }
+
+    protected BuilderCustomizer(String builderMethodName, String buildMethodName) {
+        this.builderMethodName = builderMethodName;
+        this.buildMethodName = buildMethodName;
+    }
 
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
@@ -21,22 +33,22 @@ public final class BuilderCustomizer implements Customizer {
             .orElseGet(() -> generator.generate(query, context));
     }
 
-    private static Optional<Object> getBuilder(Type type) {
+    private Optional<Object> getBuilder(Type type) {
         return type instanceof Class<?>
             ? getBuilder((Class<?>) type)
             : Optional.empty();
     }
 
-    private static Optional<Object> getBuilder(Class<?> type) {
+    private Optional<Object> getBuilder(Class<?> type) {
         return Arrays
             .stream(type.getDeclaredMethods())
-            .filter(method -> method.getName().equals("builder"))
+            .filter(method -> method.getName().equals(builderMethodName))
             .filter(method -> Modifier.isStatic(method.getModifiers()))
             .map(method -> invoke(null, method))
             .findFirst();
     }
 
-    private static ObjectContainer factory(Object builder, ObjectGenerationContext context) {
+    private ObjectContainer factory(Object builder, ObjectGenerationContext context) {
         setProperties(builder, context);
         return buildObject(builder);
     }
@@ -58,9 +70,9 @@ public final class BuilderCustomizer implements Customizer {
         invoke(builder, setter, argument);
     }
 
-    private static ObjectContainer buildObject(Object builder) {
+    private ObjectContainer buildObject(Object builder) {
         try {
-            Method build = builder.getClass().getMethod("build");
+            Method build = builder.getClass().getMethod(buildMethodName);
             return new ObjectContainer(invoke(builder, build));
         } catch (NoSuchMethodException | SecurityException exception) {
             throw new RuntimeException(exception);
