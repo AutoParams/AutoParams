@@ -640,14 +640,14 @@ void testUsingMockito(@Fixed Dependency stub, SystemUnderTest sut) {
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-lombok:0.0.1'
+testImplementation 'io.github.javaunit:autoparams-lombok:0.0.2'
 ```
 
 ### `BuilderCustomizer`
@@ -673,6 +673,44 @@ public class User {
 @ParameterizedTest
 @AutoSource
 @Customization(BuilderCustomizer.class)
+void testMethod(User user) {
+    assertThat(arg.getId()).isNotNull();
+    assertThat(arg.getName()).isNotNull();
+    assertThat(arg.getEmail()).isNotNull();
+}
+```
+
+If you configured `builderMethodName` and `buildMetodName` you should write the customizer that inherits `BuilderCustomizer` class.
+
+```java
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder(builderMethodName = "getBuilder", buildMethodName = "createUser")
+@Getter
+public class User {
+
+    private Long id;
+    private String name;
+    private String email;
+
+}
+```
+
+```java
+public class UserBuilderCustomizer extends BuilderCustomizer {
+
+    public UserBuilderCustomizer() {
+        super("getBuilder", "createUser");
+    }
+
+}
+```
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(UserBuilderCustomizer.class)
 void testMethod(User user) {
     assertThat(arg.getId()).isNotNull();
     assertThat(arg.getName()).isNotNull();
