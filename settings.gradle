@@ -2,3 +2,4 @@ rootProject.name = 'JavaUnit-AutoParams'
 
 include 'autoparams'
 include 'autoparams-mockito'
+include 'autoparams-lombok'
