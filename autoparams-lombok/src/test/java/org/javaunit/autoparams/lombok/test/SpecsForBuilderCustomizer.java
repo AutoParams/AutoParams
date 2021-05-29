@@ -16,4 +16,13 @@ public class SpecsForBuilderCustomizer {
         assertThat(arg.getId()).isNotNull();
         assertThat(arg.getName()).isNotNull();
     }
+
+    @ParameterizedTest
+    @AutoSource
+    @Customization(ConfiguredBuilderCustomizer.class)
+    void sut_creates_instance_using_configured_builder(HasConfiguredBuilder arg) {
+        assertThat(arg.getId()).isNotNull();
+        assertThat(arg.getName()).isNotNull();
+    }
+
 }
