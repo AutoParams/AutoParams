@@ -4,8 +4,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Stream;
 import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
@@ -25,10 +23,13 @@ final class ArgumentsGenerator {
     }
 
     public Stream<? extends Arguments> generateArguments(ExtensionContext context) {
-        Method method = context.getRequiredTestMethod();
-        customizeGenerator(method);
-        applyFixedValues(context);
-        return generate(method);
+        customizeGenerator(context);
+        return generate(context.getRequiredTestMethod());
+    }
+
+    private void customizeGenerator(ExtensionContext context) {
+        customizeGenerator(context.getRequiredTestMethod());
+        Customizers.getCustomizers(context).forEach(this.context::customizeGenerator);
     }
 
     private void customizeGenerator(AnnotatedElement annotated) {
@@ -52,20 +53,6 @@ final class ArgumentsGenerator {
         }
     }
 
-    private void applyFixedValues(ExtensionContext context) {
-        applyFixedValues(FixedValueAccessor.entries(context));
-    }
-
-    private void applyFixedValues(Iterable<Entry<Class<?>, Object>> fixedValues) {
-        for (Map.Entry<Class<?>, Object> entry : fixedValues) {
-            fix(entry.getKey(), entry.getValue());
-        }
-    }
-
-    private void fix(Class<?> type, Object value) {
-        context.customizeGenerator(new FixCustomization(type, value));
-    }
-
     private Stream<Arguments> generate(Method method) {
         Arguments[] streamSource = new Arguments[repeat];
         for (int i = 0; i < streamSource.length; i++) {
@@ -87,7 +74,7 @@ final class ArgumentsGenerator {
         Object argument = context.generate(ObjectQuery.fromParameter(parameter));
 
         if (parameter.isAnnotationPresent(Fixed.class)) {
-            fix(parameter.getType(), argument);
+            context.customizeGenerator(new FixCustomization(parameter.getType(), argument));
         }
 
         return argument;
