@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.converter.DefaultArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 
@@ -60,7 +61,9 @@ final class ArgumentsAssembler {
 
     private static void setIfFixed(ExtensionContext context, Parameter parameter, Object argument) {
         if (parameter.isAnnotationPresent(Fixed.class)) {
-            FixedValueAccessor.set(context, parameter.getType(), argument);
+            Class<?> type = parameter.getType();
+            Object converted = DefaultArgumentConverter.INSTANCE.convert(argument, type);
+            Customizers.addCustomizer(context, new FixCustomization(type, converted));
         }
     }
 
