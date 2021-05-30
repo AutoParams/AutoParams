@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.customization.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.javaunit.autoparams.AutoSource;
@@ -43,6 +44,16 @@ class SpecsForCustomization {
     @Customization({IntCustomization.class, StringCustomization.class})
     void sut_applies_multiple_customizers(int arg1, String arg2) {
         assertEquals(1024, arg1);
+        assertEquals("hello world", arg2);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_works_for_parameters(
+        String arg1,
+        @Customization(StringCustomization.class) String arg2
+    ) {
+        assertNotEquals("hello world", arg1);
         assertEquals("hello world", arg2);
     }
 

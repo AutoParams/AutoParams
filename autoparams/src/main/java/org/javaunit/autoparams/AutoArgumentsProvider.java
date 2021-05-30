@@ -1,5 +1,6 @@
 package org.javaunit.autoparams;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
@@ -39,8 +40,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
         return generate(method);
     }
 
-    private void customizeGenerator(Method method) {
-        Customization customization = method.getAnnotation(Customization.class);
+    private void customizeGenerator(AnnotatedElement annotated) {
+        Customization customization = annotated.getAnnotation(Customization.class);
         if (customization != null) {
             customizeGenerator(customization);
         }
@@ -90,6 +91,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private Object createArgument(Parameter parameter) {
+        customizeGenerator(parameter);
+
         Object argument = context.generate(ObjectQuery.fromParameter(parameter));
 
         if (parameter.isAnnotationPresent(Fixed.class)) {
