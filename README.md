@@ -600,14 +600,14 @@ void testMethod(User user) {
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-mockito:0.0.1'
+testImplementation 'io.github.javaunit:autoparams-mockito:0.0.2'
 ```
 
 ### How to generate test doubles using Mockito
