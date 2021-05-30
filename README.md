@@ -559,6 +559,35 @@ void testMethod(Email email, User user, Supplier supplier, Product product) {
 }
 ```
 
+If your object has settable properties, such as if you follow the JavaBeans spec, `SettablePropertyWriter` will help.
+
+```java
+public class User {
+
+    private Long id;
+    private String name;
+
+    public Long getId() { return id; }
+    public void setId(Long value) { id = value; }
+
+    public String getName() { return name; }
+    public void setName(String value) { name = value; }
+
+}
+```
+
+```java
+@ParameterizedTest
+@AutoSource
+@Customization(SettablePropertyWriter.class)
+void testMethod(User user) {
+    assertNotNull(user.getId());
+    assertNotNull(user.getName());
+}
+```
+
+`@Customization` annotation can be applied to parameters of test methods. After `Customization` has been applied to a parameter, it also affects the following parameters.
+
 ## `autoparams-mockito`
 
 `autoparams-mockito` helps `@AutoSource` generate arguments of interfaces and abstract classes using Mockito.
