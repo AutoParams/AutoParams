@@ -13,6 +13,9 @@ final class LongGenerator implements ObjectGenerator {
         if (type == long.class || type == Long.class) {
             long origin = getOrigin(query);
             long bound = getBound(query);
+            if (origin == bound) {
+                return new ObjectContainer(origin);
+            }
             long value = ThreadLocalRandom.current().nextLong(origin, bound);
             return new ObjectContainer(value);
         }
