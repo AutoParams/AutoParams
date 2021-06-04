@@ -64,19 +64,14 @@ final class ArgumentsGenerator {
 
     private Arguments createArguments(Method method) {
         Parameter[] parameters = method.getParameters();
-        Object[] arguments = Arrays.stream(parameters).map(this::createArgument).toArray();
-        return Arguments.of(arguments);
+        Stream<Object> arguments = Arrays.stream(parameters).map(this::createThenProcessArgument);
+        return Arguments.of(arguments.toArray());
     }
 
-    private Object createArgument(Parameter parameter) {
+    private Object createThenProcessArgument(Parameter parameter) {
         customizeGenerator(parameter);
-
         Object argument = context.generate(ObjectQuery.fromParameter(parameter));
-
-        if (parameter.isAnnotationPresent(Fixed.class)) {
-            context.customizeGenerator(new FixCustomization(parameter.getType(), argument));
-        }
-
+        Customizers.processArgument(parameter, argument).forEach(context::customizeGenerator);
         return argument;
     }
 

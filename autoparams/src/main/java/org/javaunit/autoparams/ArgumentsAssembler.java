@@ -42,29 +42,36 @@ final class ArgumentsAssembler {
             return provider
                 .provideArguments(context)
                 .map(supplement -> {
-                    setFixedValues(context, supplement);
+                    processArguments(context, supplement);
                     return coalesceArguments(source, supplement);
                 });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
     }
 
-    private static void setFixedValues(ExtensionContext context, Arguments supplement) {
+    private static void processArguments(ExtensionContext context, Arguments supplement) {
         context.getTestMethod().map(method -> method.getParameters()).ifPresent(parameters -> {
             Object[] arguments = supplement.get();
             for (int i = 0; i < arguments.length; i++) {
-                setIfFixed(context, parameters[i], arguments[i]);
+                Parameter parameter = parameters[i];
+                processArgument(context, parameter, convertArgument(parameter, arguments[i]));
             }
         });
     }
 
-    private static void setIfFixed(ExtensionContext context, Parameter parameter, Object argument) {
-        if (parameter.isAnnotationPresent(Fixed.class)) {
-            Class<?> type = parameter.getType();
-            Object converted = DefaultArgumentConverter.INSTANCE.convert(argument, type);
-            Customizers.addCustomizer(context, new FixCustomization(type, converted));
-        }
+    private static Object convertArgument(Parameter parameter, Object argument) {
+        return DefaultArgumentConverter.INSTANCE.convert(argument, parameter.getType());
+    }
+
+    private static void processArgument(
+        ExtensionContext context,
+        Parameter parameter,
+        Object argument
+    ) {
+        Customizers
+            .processArgument(parameter, argument)
+            .forEach(customizer -> Customizers.addCustomizer(context, customizer));
     }
 
     private static Arguments coalesceArguments(Arguments source, Arguments supplement) {
