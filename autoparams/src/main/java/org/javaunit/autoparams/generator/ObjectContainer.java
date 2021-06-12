@@ -1,5 +1,6 @@
 package org.javaunit.autoparams.generator;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class ObjectContainer {
@@ -22,6 +23,10 @@ public final class ObjectContainer {
         } else {
             return value;
         }
+    }
+
+    public ObjectContainer process(Function<Object, Object> processor) {
+        return this == EMPTY ? this : new ObjectContainer(processor.apply(value));
     }
 
 }
