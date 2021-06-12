@@ -4,6 +4,7 @@ import java.lang.reflect.Parameter;
 import org.javaunit.autoparams.customization.ArgumentProcessor;
 import org.javaunit.autoparams.customization.Customizer;
 
+@Deprecated
 final class FixedArgumentProcessor implements ArgumentProcessor {
 
     @Override

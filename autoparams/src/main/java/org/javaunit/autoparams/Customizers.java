@@ -1,13 +1,16 @@
 package org.javaunit.autoparams;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+import org.javaunit.autoparams.customization.AnnotationVisitor;
 import org.javaunit.autoparams.customization.ArgumentProcessing;
+import org.javaunit.autoparams.customization.ArgumentProcessor;
 import org.javaunit.autoparams.customization.Customizer;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -35,16 +38,19 @@ final class Customizers {
     static Stream<Customizer> processArgument(Parameter parameter, Object argument) {
         return Arrays
             .stream(parameter.getAnnotations())
-            .map(Annotation::annotationType)
-            .flatMap(type -> Arrays.stream(type.getAnnotationsByType(ArgumentProcessing.class)))
-            .map(ArgumentProcessing::value)
-            .map(Customizers::createInstance)
+            .flatMap(annotation -> Arrays
+                .stream(annotation.annotationType().getAnnotationsByType(ArgumentProcessing.class))
+                .map(ArgumentProcessing::value)
+                .map(Customizers::createProcessor)
+                .map(processor -> visitAnnotation(processor, annotation)))
             .map(processor -> processor.process(parameter, argument));
     }
 
-    private static <T> T createInstance(Class<? extends T> type) {
+    private static <T extends ArgumentProcessor> T createProcessor(Class<? extends T> type) {
         try {
-            return type.getDeclaredConstructor().newInstance();
+            Constructor<? extends T> constructor = type.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (InstantiationException
             | IllegalAccessException
             | IllegalArgumentException
@@ -53,6 +59,18 @@ final class Customizers {
             | SecurityException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Annotation> ArgumentProcessor visitAnnotation(
+        ArgumentProcessor processor,
+        T annotation
+    ) {
+        if (processor instanceof AnnotationVisitor<?>) {
+            ((AnnotationVisitor<T>) processor).visit(annotation);
+        }
+
+        return processor;
     }
 
 }

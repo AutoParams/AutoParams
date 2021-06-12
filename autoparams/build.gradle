@@ -9,6 +9,7 @@ dependencies {
     api 'com.google.code.findbugs:jsr305:3.0.2'
     testImplementation 'org.assertj:assertj-core:3.8.0'
     testImplementation 'org.mockito:mockito-core:2.+'
+    testImplementation 'io.github.javaunit:autoparams-mockito:0.0.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
 
@@ -19,6 +20,5 @@ java {
 
 test {
     dependsOn('editorconfigCheck', 'checkstyleMain', 'checkstyleTest')
-
     useJUnitPlatform()
 }
