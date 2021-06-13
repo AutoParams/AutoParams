@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +19,8 @@ final class MapGenerator implements ObjectGenerator {
     private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
         return isMap((Class<?>) type.getRawType())
             ? new ObjectContainer(factory(
-                (Class<?>) type.getActualTypeArguments()[0],
-                (Class<?>) type.getActualTypeArguments()[1],
+                type.getActualTypeArguments()[0],
+                type.getActualTypeArguments()[1],
                 context))
             : ObjectContainer.EMPTY;
     }
@@ -30,8 +31,8 @@ final class MapGenerator implements ObjectGenerator {
 
     @SuppressWarnings("unchecked")
     private <K, V> HashMap<K, V> factory(
-        Class<? extends K> keyType,
-        Class<? extends V> valueType,
+        Type keyType,
+        Type valueType,
         ObjectGenerationContext context
     ) {
         HashMap<K, V> instance = new HashMap<K, V>();

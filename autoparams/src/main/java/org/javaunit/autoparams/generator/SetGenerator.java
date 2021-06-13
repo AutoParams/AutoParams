@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ final class SetGenerator implements ObjectGenerator {
 
     private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
         return isSet((Class<?>) type.getRawType())
-            ? new ObjectContainer(factory((Class<?>) type.getActualTypeArguments()[0], context))
+            ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
             : ObjectContainer.EMPTY;
     }
 
@@ -27,7 +28,7 @@ final class SetGenerator implements ObjectGenerator {
 
     @SuppressWarnings("unchecked")
     public static <T> HashSet<T> factory(
-        Class<? extends T> elementType,
+        Type elementType,
         ObjectGenerationContext context
     ) {
         HashSet<T> instance = new HashSet<T>();
