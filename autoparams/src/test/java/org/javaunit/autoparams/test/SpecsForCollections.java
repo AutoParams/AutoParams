@@ -35,6 +35,12 @@ class SpecsForCollections {
 
     @ParameterizedTest
     @AutoSource
+    void sut_creates_array_list_of_generic_type(ArrayList<GenericObject<String, UUID>> arrayList) {
+        assertThat(arrayList).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
     void sut_creates_list(List<ComplexObject> list) {
         assertThat(list).isNotNull();
     }
@@ -67,6 +73,18 @@ class SpecsForCollections {
 
     @ParameterizedTest
     @AutoSource
+    void sut_creates_hash_map_of_generic_key(HashMap<GenericObject<String, UUID>, String> map) {
+        assertThat(map).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_hash_map_of_generic_value(HashMap<Integer, GenericObject<String, UUID>> map) {
+        assertThat(map).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
     void sut_creates_map(Map<Integer, String> map) {
         assertThat(map).isNotNull();
     }
@@ -74,6 +92,12 @@ class SpecsForCollections {
     @ParameterizedTest
     @AutoSource
     void sut_creates_hash_set(HashSet<String> set) {
+        assertThat(set).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_hash_set_of_generic_type(HashSet<GenericObject<String, UUID>> set) {
         assertThat(set).isNotNull();
     }
 

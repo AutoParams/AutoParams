@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +19,7 @@ final class SequenceGenerator implements ObjectGenerator {
 
     private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
         return isCollection((Class<?>) type.getRawType())
-            ? new ObjectContainer(factory((Class<?>) type.getActualTypeArguments()[0], context))
+            ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
             : ObjectContainer.EMPTY;
     }
 
@@ -29,7 +30,7 @@ final class SequenceGenerator implements ObjectGenerator {
 
     @SuppressWarnings("unchecked")
     static <T> ArrayList<T> factory(
-        Class<? extends T> elementType,
+        Type elementType,
         ObjectGenerationContext context
     ) {
         ArrayList<T> instance = new ArrayList<T>();
