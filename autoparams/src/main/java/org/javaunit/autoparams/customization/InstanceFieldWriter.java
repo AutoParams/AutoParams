@@ -1,10 +1,11 @@
 package org.javaunit.autoparams.customization;
 
+import static java.util.Arrays.stream;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.function.Predicate;
 import org.javaunit.autoparams.generator.ObjectContainer;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
@@ -64,8 +65,7 @@ public final class InstanceFieldWriter implements Customizer {
         ObjectGenerationContext context,
         RuntimeTypeResolver typeResolver
     ) {
-        Arrays
-            .stream(getRawType(genericType).getDeclaredFields())
+        stream(getRawType(genericType).getDeclaredFields())
             .filter(InstanceFieldWriter::isNonStatic)
             .filter(predicate)
             .forEach(field -> writeField(target, field, context, typeResolver));
@@ -91,10 +91,17 @@ public final class InstanceFieldWriter implements Customizer {
         }
     }
 
+    public InstanceFieldWriter including(String... fieldNames) {
+        return new InstanceFieldWriter(
+            targetType,
+            predicate.and(field -> stream(fieldNames).anyMatch(x -> field.getName().equals(x))));
+    }
+
     public InstanceFieldWriter excluding(String... fieldNames) {
         return new InstanceFieldWriter(
             targetType,
-            field -> Arrays.stream(fieldNames).anyMatch(x -> field.getName().equals(x)) == false);
+            predicate.and(field ->
+                stream(fieldNames).allMatch(x -> field.getName().equals(x) == false)));
     }
 
 }
