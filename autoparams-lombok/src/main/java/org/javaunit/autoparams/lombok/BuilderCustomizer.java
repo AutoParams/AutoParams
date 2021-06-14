@@ -65,7 +65,7 @@ public class BuilderCustomizer implements Customizer {
         Method setter,
         ObjectGenerationContext context
     ) {
-        ObjectQuery query = () -> setter.getParameterTypes()[0];
+        ObjectQuery query = () -> setter.getGenericParameterTypes()[0];
         Object argument = context.generate(query);
         invoke(builder, setter, argument);
     }
