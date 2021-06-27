@@ -3,12 +3,18 @@ package org.javaunit.autoparams.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import org.javaunit.autoparams.AutoSource;
+import org.javaunit.autoparams.generator.ObjectGenerationContext;
+import org.javaunit.autoparams.generator.ObjectQuery;
 import org.junit.jupiter.params.ParameterizedTest;
 
-public class SpecsForMax {
+class SpecsForMax {
 
     @ParameterizedTest
     @AutoSource(repeat = 100)
@@ -51,4 +57,26 @@ public class SpecsForMax {
     void sut_accepts_max_constraint_for_int_when_over_upper_bound(@Max(Long.MAX_VALUE) int value) {
         assertThat(value).isLessThanOrEqualTo(Integer.MAX_VALUE);
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_includes_max_value(ObjectGenerationContext context) throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeInt", int.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        // Act
+        List<Integer> values = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            values.add((Integer) context.generate(query));
+        }
+
+        // Assert
+        assertThat(values).contains(Integer.MAX_VALUE);
+    }
+
+    void consumeInt(@Min(0x7ffffff0) @Max(Integer.MAX_VALUE) int arg) {
+    }
+
 }

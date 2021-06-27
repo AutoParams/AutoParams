@@ -1,5 +1,8 @@
 package org.javaunit.autoparams.generator;
 
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+
 import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
@@ -10,46 +13,44 @@ final class IntegerGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         Type type = query.getType();
-        if (type == int.class || type == Integer.class) {
-            int origin = getOrigin(query);
-            int bound = getBound(query);
-            if (origin == bound) {
-                return new ObjectContainer(origin);
-            }
-            int value = ThreadLocalRandom.current().nextInt(origin, bound);
-            return new ObjectContainer(value);
-        }
-
-        return ObjectContainer.EMPTY;
+        return type == int.class || type == Integer.class
+            ? new ObjectContainer(factory(getMin(query), getMax(query)))
+            : ObjectContainer.EMPTY;
     }
 
-    private int getOrigin(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
-            Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
-            if (annotation != null) {
-                long value = Math.min(Integer.MAX_VALUE, annotation.value());
-                return (int) Math.max(Integer.MIN_VALUE, value);
-            }
-        }
-
-        return Integer.MIN_VALUE;
+    private int getMin(ObjectQuery query) {
+        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : MIN_VALUE;
     }
 
-    private int getBound(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
-            Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
-            if (annotation != null) {
-                long value = Math.max(Integer.MIN_VALUE, annotation.value());
-                if (value < Long.MAX_VALUE) {
-                    value = value + 1;
-                }
-                return (int) Math.min(Integer.MAX_VALUE, value);
-            }
+    private int getMin(ArgumentQuery query) {
+        Min annotation = query.getParameter().getAnnotation(Min.class);
+        return annotation == null
+            ? MIN_VALUE
+            : (int) Math.min(Math.max(annotation.value(), MIN_VALUE), MAX_VALUE);
+    }
+
+    private int getMax(ObjectQuery query) {
+        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : MAX_VALUE;
+    }
+
+    private int getMax(ArgumentQuery query) {
+        Max annotation = query.getParameter().getAnnotation(Max.class);
+        return annotation == null
+            ? MAX_VALUE
+            : (int) Math.max(Math.min(annotation.value(), MAX_VALUE), MIN_VALUE);
+    }
+
+    private int factory(int min, int max) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        if (min == MIN_VALUE && max == MAX_VALUE) {
+            return random.nextInt();
         }
 
-        return Integer.MAX_VALUE;
+        int offset = max == MAX_VALUE ? -1 : 0;
+        int origin = min + offset;
+        int bound = max + 1 + offset;
+        return random.nextInt(origin, bound) - offset;
     }
 
 }
