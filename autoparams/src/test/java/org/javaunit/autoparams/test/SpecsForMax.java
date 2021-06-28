@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Method;
@@ -77,6 +78,68 @@ class SpecsForMax {
     }
 
     void consumeInt(@Min(0x7ffffff0) @Max(Integer.MAX_VALUE) int arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_max_constraint_for_short(@Max(100) short value) {
+        assertThat(value).isLessThanOrEqualTo((short) 100);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_throws_when_max_constraint_for_short_over_upper_bound(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+
+        Method method = getClass().getDeclaredMethod("consumeOverUpperBoundShort", short.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        assertThatThrownBy(() -> context.generate(query))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("value is out of range for short");
+    }
+
+    void consumeOverUpperBoundShort(@Max(Short.MAX_VALUE + 1) short arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_throws_when_max_constraint_for_short_over_lower_bound(
+        ObjectGenerationContext context) throws NoSuchMethodException {
+
+        Method method = getClass().getDeclaredMethod("consumeOverLowerBoundShort", short.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        assertThatThrownBy(() -> context.generate(query))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("value is out of range for short");
+    }
+
+    void consumeOverLowerBoundShort(@Max(Short.MIN_VALUE - 1) short arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_includes_max_value_for_short(
+        ObjectGenerationContext context) throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeShort", short.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        // Act
+        List<Short> values = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            values.add((short) context.generate(query));
+        }
+
+        // Assert
+        assertThat(values).contains(Short.MAX_VALUE);
+    }
+
+    void consumeShort(@Min(Short.MAX_VALUE - 1) @Max(Short.MAX_VALUE) short arg) {
     }
 
     @ParameterizedTest
