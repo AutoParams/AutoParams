@@ -1,12 +1,12 @@
 package org.javaunit.autoparams.generator;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.lang.reflect.Type;
-import java.util.concurrent.ThreadLocalRandom;
-
 import static java.lang.Short.MAX_VALUE;
 import static java.lang.Short.MIN_VALUE;
+
+import java.lang.reflect.Type;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 final class ShortGenerator implements ObjectGenerator {
 
