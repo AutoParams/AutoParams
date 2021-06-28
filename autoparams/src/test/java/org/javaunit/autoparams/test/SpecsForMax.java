@@ -88,19 +88,22 @@ class SpecsForMax {
 
     @ParameterizedTest
     @AutoSource(repeat = 100)
-    void sut_accepts_max_constraint_for_short_when_over_lower_bound(@Max(Long.MIN_VALUE) short value) {
+    void sut_accepts_max_constraint_for_short_when_over_lower_bound(
+        @Max(Long.MIN_VALUE) short value) {
         assertThat(value).isEqualTo(Short.MIN_VALUE);
     }
 
     @ParameterizedTest
     @AutoSource(repeat = 100)
-    void sut_accepts_max_constraint_for_short_when_over_upper_bound(@Max(Long.MAX_VALUE) short value) {
+    void sut_accepts_max_constraint_for_short_when_over_upper_bound(
+        @Max(Long.MAX_VALUE) short value) {
         assertThat(value).isLessThanOrEqualTo(Short.MAX_VALUE);
     }
 
     @ParameterizedTest
     @AutoSource
-    void sut_includes_max_value_for_short(ObjectGenerationContext context) throws NoSuchMethodException {
+    void sut_includes_max_value_for_short(
+        ObjectGenerationContext context) throws NoSuchMethodException {
         // Arrange
         Method method = getClass().getDeclaredMethod("consumeShort", short.class);
         Parameter parameter = method.getParameters()[0];

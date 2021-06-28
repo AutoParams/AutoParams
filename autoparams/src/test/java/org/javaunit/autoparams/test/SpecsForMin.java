@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.validation.constraints.Min;
-
 import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -54,13 +53,15 @@ public class SpecsForMin {
 
     @ParameterizedTest
     @AutoSource(repeat = 100)
-    void sut_accepts_min_constraint_for_short_when_over_upper_bound(@Min(Long.MAX_VALUE) short value) {
+    void sut_accepts_min_constraint_for_short_when_over_upper_bound(
+        @Min(Long.MAX_VALUE) short value) {
         assertThat(value).isEqualTo(Short.MAX_VALUE);
     }
 
     @ParameterizedTest
     @AutoSource(repeat = 100)
-    void sut_accepts_min_constraint_for_short_when_over_lower_bound(@Min(Long.MIN_VALUE) short value) {
+    void sut_accepts_min_constraint_for_short_when_over_lower_bound(
+        @Min(Long.MIN_VALUE) short value) {
         assertThat(value).isGreaterThanOrEqualTo(Short.MIN_VALUE);
     }
 
