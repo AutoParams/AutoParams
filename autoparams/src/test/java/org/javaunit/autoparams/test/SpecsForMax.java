@@ -79,4 +79,26 @@ class SpecsForMax {
     void consumeInt(@Min(0x7ffffff0) @Max(Integer.MAX_VALUE) int arg) {
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_includes_max_value_long(ObjectGenerationContext context) throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeLong", long.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        // Act
+        List<Long> values = new ArrayList<>();
+        for (long i = 0; i < 100; i++) {
+            values.add((Long) context.generate(query));
+        }
+
+        // Assert
+        assertThat(values).contains(Long.MAX_VALUE);
+    }
+
+    void consumeLong(@Min(0x7ffffffffffffff0L) @Max(Long.MAX_VALUE) long arg) {
+
+    }
+
 }

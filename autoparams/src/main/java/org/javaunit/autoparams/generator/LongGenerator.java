@@ -10,41 +10,44 @@ final class LongGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         Type type = query.getType();
-        if (type == long.class || type == Long.class) {
-            long origin = getOrigin(query);
-            long bound = getBound(query);
-            if (origin == bound) {
-                return new ObjectContainer(origin);
-            }
-            long value = ThreadLocalRandom.current().nextLong(origin, bound);
-            return new ObjectContainer(value);
-        }
-
-        return ObjectContainer.EMPTY;
+        return type == long.class || type == Long.class
+            ? new ObjectContainer(factory(getMin(query), getMax(query)))
+            : ObjectContainer.EMPTY;
     }
 
-    private long getBound(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
-            Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
-            if (annotation != null) {
-                return annotation.value();
-            }
-        }
-
-        return Long.MAX_VALUE;
+    private long getMin(ObjectQuery query) {
+        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : Long.MIN_VALUE;
     }
 
-    private long getOrigin(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
-            Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
-            if (annotation != null) {
-                return annotation.value();
-            }
+    private long getMin(ArgumentQuery query) {
+        Min annotation = query.getParameter().getAnnotation(Min.class);
+        return annotation == null
+            ? Long.MIN_VALUE
+            : annotation.value();
+    }
+
+    private long getMax(ObjectQuery query) {
+        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : Long.MAX_VALUE;
+    }
+
+    private long getMax(ArgumentQuery query) {
+        Max annotation = query.getParameter().getAnnotation(Max.class);
+        return annotation == null
+            ? Long.MAX_VALUE
+            : annotation.value();
+    }
+
+    private long factory(long min, long max) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        if (min == Long.MIN_VALUE && max == Long.MAX_VALUE) {
+            return random.nextLong();
         }
 
-        return Long.MIN_VALUE;
+        long offset = max == Long.MAX_VALUE ? -1 : 0;
+        long origin = min + offset;
+        long bound = max + 1 + offset;
+        return random.nextLong(origin, bound) - offset;
     }
 
 }
