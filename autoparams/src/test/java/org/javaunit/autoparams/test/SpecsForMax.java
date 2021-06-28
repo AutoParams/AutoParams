@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
 import org.javaunit.autoparams.AutoSource;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectQuery;
