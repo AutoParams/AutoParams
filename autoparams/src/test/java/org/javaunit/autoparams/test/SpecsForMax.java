@@ -3,6 +3,7 @@ package org.javaunit.autoparams.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 
 import java.lang.reflect.Method;
@@ -46,6 +47,12 @@ class SpecsForMax {
     @AutoSource(repeat = 100)
     void sut_accepts_max_constraint_for_long(@Max(100) long value) {
         assertThat(value).isLessThanOrEqualTo(100);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_max_constraint_for_byte(@Max(100) byte value) {
+        assertThat(value).isLessThanOrEqualTo((byte) 100);
     }
 
     @ParameterizedTest
@@ -165,4 +172,67 @@ class SpecsForMax {
 
     }
 
+    @ParameterizedTest
+    @AutoSource()
+    void sut_throws_when_over_upper_bound_of_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeOverUpperBoundByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void consumeOverUpperBoundByte(@Max(Byte.MAX_VALUE + 1) byte arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource()
+    void sut_throws_when_over_lower_bound_of_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeOverLowerBoundByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void consumeOverLowerBoundByte(@Max(Byte.MIN_VALUE - 1) byte arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource()
+    void sut_throws_when_max_lower_than_min_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeMaxLowerThanMinByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void consumeMaxLowerThanMinByte(@Min(1) @Max(-1) byte arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_includes_max_value_for_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        // Act
+        List<Byte> values = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            values.add((Byte) context.generate(query));
+        }
+
+        // Assert
+        assertThat(values).contains(Byte.MAX_VALUE);
+    }
+
+    void consumeByte(@Min(126) @Max(Byte.MAX_VALUE) byte arg) {
+    }
 }

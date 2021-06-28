@@ -3,6 +3,7 @@ package org.javaunit.autoparams.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 
 import java.lang.reflect.Method;
@@ -91,4 +92,37 @@ public class SpecsForMin {
     void valueLessThanLowerBound(@Min(Short.MIN_VALUE - 1) short arg) {
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_byte(@Min(100) byte value) {
+        assertThat(value).isGreaterThanOrEqualTo((byte) 100);
+    }
+
+    @ParameterizedTest
+    @AutoSource()
+    void sut_throws_when_over_upper_bound_of_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeOverUpperBoundByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void consumeOverUpperBoundByte(@Min(Byte.MAX_VALUE + 1) byte arg) {
+    }
+
+    @ParameterizedTest
+    @AutoSource()
+    void sut_throws_when_over_lower_bound_of_byte(ObjectGenerationContext context)
+        throws NoSuchMethodException {
+        // Arrange
+        Method method = getClass().getDeclaredMethod("consumeOverLowerBoundByte", byte.class);
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void consumeOverLowerBoundByte(@Min(Byte.MIN_VALUE - 1) byte arg) {
+    }
 }
