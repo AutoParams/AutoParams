@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.UUID;
 
 final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
@@ -18,6 +19,7 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
             new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class),
             new TypeMatchingGenerator(Factories::createDuration, Duration.class),
+            new TypeMatchingGenerator(Factories::createPeriod, Period.class),
             new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
             new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
             new TypeMatchingGenerator(Factories::createLocalDateTime, LocalDateTime.class),

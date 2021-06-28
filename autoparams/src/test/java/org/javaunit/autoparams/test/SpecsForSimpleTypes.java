@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.UUID;
 import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -119,4 +121,27 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_arbitrary_period_values(
+        Period value1,
+        Period value2,
+        Period value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_supports_normalizing_period_values(
+        Period value1,
+        Period value2,
+        Period value3
+    ) {
+        assertDoesNotThrow(value1::normalized);
+        assertDoesNotThrow(value2::normalized);
+        assertDoesNotThrow(value3::normalized);
+    }
 }
