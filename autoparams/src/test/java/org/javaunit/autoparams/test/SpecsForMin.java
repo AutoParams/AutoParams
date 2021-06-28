@@ -45,4 +45,24 @@ public class SpecsForMin {
         assertEquals(Long.MAX_VALUE, value);
     }
 
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_short(@Min(100) short value) {
+        assertThat(value).isGreaterThanOrEqualTo((short) 100);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_short_when_over_upper_bound(
+        @Min(Long.MAX_VALUE) short value) {
+        assertThat(value).isEqualTo(Short.MAX_VALUE);
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 100)
+    void sut_accepts_min_constraint_for_short_when_over_lower_bound(
+        @Min(Long.MIN_VALUE) short value) {
+        assertThat(value).isGreaterThanOrEqualTo(Short.MIN_VALUE);
+    }
+
 }
