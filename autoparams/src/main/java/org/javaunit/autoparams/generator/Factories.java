@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -92,4 +93,8 @@ final class Factories {
         return DoubleStream.generate(Factories::createDouble).limit(3);
     }
 
+    public static Period createPeriod() {
+        return Period.of(random().nextInt(-9999, 9999), random().nextInt(),
+            random().nextInt(-99, 99));
+    }
 }
