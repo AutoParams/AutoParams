@@ -33,8 +33,13 @@ public final class MockitoCustomizer implements Customizer {
     }
 
     private boolean isAbstract(Class<?> type) {
-        return type.isInterface()
-            || (type.isPrimitive() == false && Modifier.isAbstract(type.getModifiers()));
+        return type.isInterface() || isAbstractClass(type);
+    }
+
+    private boolean isAbstractClass(Class<?> type) {
+        return type.isPrimitive() == false
+            && type.isArray() == false
+            && Modifier.isAbstract(type.getModifiers());
     }
 
 }
