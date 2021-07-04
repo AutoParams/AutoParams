@@ -45,4 +45,10 @@ class SpecsForMockitoCustomizer {
     void sut_ignores_parameters_of_primitive_types(int arg1, double arg2) {
     }
 
+    @ParameterizedTest
+    @AutoSource
+    @Customization(MockitoCustomizer.class)
+    void sut_ignores_array(int[] arg1) {
+    }
+
 }
