@@ -1,5 +1,6 @@
 package org.javaunit.autoparams.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigDecimal;
@@ -13,6 +14,22 @@ import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForSimpleTypes {
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_creates_arbitrary_string_values_for_object_parameter(
+        Object value1,
+        Object value2,
+        Object value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
+
+        assertThat(value1).isInstanceOf(String.class);
+        assertThat(value2).isInstanceOf(String.class);
+        assertThat(value3).isInstanceOf(String.class);
+    }
 
     @ParameterizedTest
     @AutoSource

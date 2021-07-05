@@ -12,6 +12,7 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
 
     public SimpleValueObjectGenerator() {
         super(
+            new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), Object.class),
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
