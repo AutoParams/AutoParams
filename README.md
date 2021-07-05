@@ -89,14 +89,14 @@ That's cool!
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.8</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.2.2'
+testImplementation 'io.github.javaunit:autoparams:0.2.8'
 ```
 
 ## Features
@@ -600,14 +600,14 @@ void testMethod(User user) {
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-mockito:0.0.2'
+testImplementation 'io.github.javaunit:autoparams-mockito:0.0.3'
 ```
 
 ### How to generate test doubles using Mockito
@@ -669,14 +669,14 @@ void testUsingMockito(@Fixed Dependency stub, SystemUnderTest sut) {
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-lombok:0.0.2'
+testImplementation 'io.github.javaunit:autoparams-lombok:0.0.3'
 ```
 
 ### `BuilderCustomizer`
