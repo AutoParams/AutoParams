@@ -2,6 +2,8 @@ package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,8 +26,12 @@ final class SequenceGenerator implements ObjectGenerator {
     }
 
     private static boolean isCollection(Class<?> type) {
-        return type.equals(ArrayList.class) || type.equals(List.class)
-            || type.equals(Collection.class) || type.equals(Iterable.class);
+        return type.equals(ArrayList.class)
+            || type.equals(List.class)
+            || type.equals(AbstractList.class)
+            || type.equals(Collection.class)
+            || type.equals(AbstractCollection.class)
+            || type.equals(Iterable.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -33,7 +39,7 @@ final class SequenceGenerator implements ObjectGenerator {
         Type elementType,
         ObjectGenerationContext context
     ) {
-        ArrayList<T> instance = new ArrayList<T>();
+        ArrayList<T> instance = new ArrayList<>();
         ObjectQuery query = () -> elementType;
         for (int i = 0; i < SIZE; i++) {
             instance.add((T) context.getGenerator().generate(query, context).unwrapOrElseThrow());

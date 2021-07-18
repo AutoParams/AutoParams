@@ -2,6 +2,7 @@ package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,9 @@ final class SetGenerator implements ObjectGenerator {
     }
 
     private boolean isSet(Class<?> type) {
-        return type.equals(HashSet.class) || type.equals(Set.class);
+        return type.equals(HashSet.class)
+            || type.equals(Set.class)
+            || type.equals(AbstractSet.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -31,7 +34,7 @@ final class SetGenerator implements ObjectGenerator {
         Type elementType,
         ObjectGenerationContext context
     ) {
-        HashSet<T> instance = new HashSet<T>();
+        HashSet<T> instance = new HashSet<>();
         ObjectQuery query = () -> elementType;
         for (int i = 0; i < SIZE; i++) {
             instance.add((T) context.getGenerator().generate(query, context).unwrapOrElseThrow());

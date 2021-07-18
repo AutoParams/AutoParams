@@ -2,6 +2,7 @@ package org.javaunit.autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,9 @@ final class MapGenerator implements ObjectGenerator {
     }
 
     private boolean isMap(Class<?> type) {
-        return type.equals(HashMap.class) || type.equals(Map.class);
+        return type.equals(HashMap.class)
+            || type.equals(Map.class)
+            || type.equals(AbstractMap.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +38,7 @@ final class MapGenerator implements ObjectGenerator {
         Type valueType,
         ObjectGenerationContext context
     ) {
-        HashMap<K, V> instance = new HashMap<K, V>();
+        HashMap<K, V> instance = new HashMap<>();
 
         ObjectQuery keyQuery = () -> keyType;
         ObjectQuery valueQuery = () -> valueType;

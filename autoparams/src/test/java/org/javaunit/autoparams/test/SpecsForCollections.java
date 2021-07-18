@@ -2,6 +2,10 @@ package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,101 +19,121 @@ import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForCollections {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_array_list(ArrayList<ComplexObject> arrayList) {
         assertThat(arrayList).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_fills_array_list(ArrayList<UUID> arrayList) {
-        HashSet<UUID> set = new HashSet<UUID>();
-        for (UUID x : arrayList) {
-            set.add(x);
-        }
-
+        HashSet<UUID> set = new HashSet<>(arrayList);
         assertThat(arrayList).hasSize(3);
         assertThat(set).hasSize(arrayList.size());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_array_list_of_generic_type(ArrayList<GenericObject<String, UUID>> arrayList) {
         assertThat(arrayList).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_list(List<ComplexObject> list) {
         assertThat(list).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    void sut_creates_abstract_list(AbstractList<ComplexObject> list) {
+        assertThat(list).isNotNull();
+    }
+
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_collection(Collection<ComplexObject> collection) {
         assertThat(collection).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    void sut_creates_abstract_collection(AbstractCollection<ComplexObject> collection) {
+        assertThat(collection).isNotNull();
+    }
+
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_iterable(Iterable<ComplexObject> iterable) {
         assertThat(iterable).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_hash_map(HashMap<Integer, String> map) {
         assertThat(map).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_correctly_fills_hash_map(HashMap<Integer, String> map) {
         assertThat(map).hasSize(3);
-        HashSet<String> set = new HashSet<String>(map.values());
+        HashSet<String> set = new HashSet<>(map.values());
         assertThat(set).hasSize(map.keySet().size());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_hash_map_of_generic_key(HashMap<GenericObject<String, UUID>, String> map) {
         assertThat(map).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_hash_map_of_generic_value(HashMap<Integer, GenericObject<String, UUID>> map) {
         assertThat(map).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_map(Map<Integer, String> map) {
         assertThat(map).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    void sut_creates_abstract_map(AbstractMap<Integer, String> map) {
+        assertThat(map).isNotNull();
+    }
+
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_hash_set(HashSet<String> set) {
         assertThat(set).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_hash_set_of_generic_type(HashSet<GenericObject<String, UUID>> set) {
         assertThat(set).isNotNull();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_correctly_fills_hash_set(HashSet<String> set) {
         assertThat(set).hasSize(3);
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
     void sut_creates_set(Set<String> set) {
+        assertThat(set).isNotNull();
+    }
+
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    void sut_creates_abstract_set(AbstractSet<String> set) {
         assertThat(set).isNotNull();
     }
 
