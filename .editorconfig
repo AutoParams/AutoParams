@@ -1,26 +1,16 @@
-# top-most EditorConfig file
 root = true
 
 [*]
-# [encoding-utf8]
 charset = utf-8
-
-# [newline-eof]
 insert_final_newline = true
 
 [*.bat]
 end_of_line = crlf
 
 [*.java]
-# [indentation-space]
+max_line_length = 100
+ij_visual_guides = 80
 indent_style = space
-
-# [4-spaces-tab]
 indent_size = 4
 tab_width = 4
-
-# [no-trailing-spaces]
 trim_trailing_whitespace = true
-
-# [line-length-100]
-max_line_length = 100
