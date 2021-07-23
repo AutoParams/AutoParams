@@ -14,3 +14,4 @@ indent_style = space
 indent_size = 4
 tab_width = 4
 trim_trailing_whitespace = true
+ij_java_imports_layout = $*,|,java.**,javax.**,*

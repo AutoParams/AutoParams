@@ -23,7 +23,9 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(Factories::createLocalDateTime, LocalDateTime.class),
             new TypeMatchingGenerator(Factories::createClass, Class.class),
             new EnumGenerator(),
-            new UrlGenerator()
+            new UrlGenerator(),
+            new ClockGenerator(),
+            new OffsetDateTimeGenerator()
         );
     }
 
