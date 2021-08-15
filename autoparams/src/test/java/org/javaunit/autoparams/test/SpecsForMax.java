@@ -3,6 +3,7 @@ package org.javaunit.autoparams.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -86,38 +87,38 @@ class SpecsForMax {
         assertThat(value).isLessThanOrEqualTo((short) 100);
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
-    void sut_throws_when_max_constraint_for_short_over_upper_bound(ObjectGenerationContext context)
+    void sut_throws_when_max_constraint_is_greater_than_upper_bound(ObjectGenerationContext context)
         throws NoSuchMethodException {
 
-        Method method = getClass().getDeclaredMethod("consumeOverUpperBoundShort", short.class);
+        Method method = getClass().getDeclaredMethod("valueGreaterThanUpperBound", short.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
 
         assertThatThrownBy(() -> context.generate(query))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("value is out of range for short");
+            .hasMessageContaining("greater than the upper bound");
     }
 
-    void consumeOverUpperBoundShort(@Max(Short.MAX_VALUE + 1) short arg) {
+    void valueGreaterThanUpperBound(@Max(Short.MAX_VALUE + 1) short arg) {
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = DISPLAY_NAME_PLACEHOLDER)
     @AutoSource
-    void sut_throws_when_max_constraint_for_short_over_lower_bound(
+    void sut_throws_when_max_constraint_is_less_than_lower_bound(
         ObjectGenerationContext context) throws NoSuchMethodException {
 
-        Method method = getClass().getDeclaredMethod("consumeOverLowerBoundShort", short.class);
+        Method method = getClass().getDeclaredMethod("valueLessThanLowerBound", short.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
 
         assertThatThrownBy(() -> context.generate(query))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("value is out of range for short");
+            .hasMessageContaining("less than the lower bound");
     }
 
-    void consumeOverLowerBoundShort(@Max(Short.MIN_VALUE - 1) short arg) {
+    void valueLessThanLowerBound(@Max(Short.MIN_VALUE - 1) short arg) {
     }
 
     @ParameterizedTest

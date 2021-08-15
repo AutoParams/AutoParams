@@ -24,10 +24,7 @@ final class ShortGenerator implements ObjectGenerator {
 
     private short getMin(ArgumentQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
-        if (annotation == null) {
-            return MIN_VALUE;
-        }
-        return convertToShort(annotation.value());
+        return annotation == null ? MIN_VALUE : convertToShort(annotation.value());
     }
 
     private short getMax(ObjectQuery query) {
@@ -36,17 +33,25 @@ final class ShortGenerator implements ObjectGenerator {
 
     private short getMax(ArgumentQuery query) {
         Max annotation = query.getParameter().getAnnotation(Max.class);
-        if (annotation == null) {
-            return MAX_VALUE;
-        }
-        return convertToShort(annotation.value());
+        return annotation == null ? MAX_VALUE : convertToShort(annotation.value());
     }
 
     private short convertToShort(long value) {
-        if (value < MIN_VALUE || value > MAX_VALUE) {
-            throw new IllegalArgumentException("value is out of range for short");
-        }
+        assertThatValueIsGreaterThatOrEqualToMinValue(value);
+        assertThatValueIsLessThanOrEqualToMaxValue(value);
         return (short) value;
+    }
+
+    private void assertThatValueIsGreaterThatOrEqualToMinValue(long value) {
+        if (value < MIN_VALUE) {
+            throw new IllegalArgumentException("the value is less than the lower bound.");
+        }
+    }
+
+    private void assertThatValueIsLessThanOrEqualToMaxValue(long value) {
+        if (value > MAX_VALUE) {
+            throw new IllegalArgumentException("The value is greater than the upper bound.");
+        }
     }
 
     private short factory(int min, int max) {
