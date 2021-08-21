@@ -56,6 +56,11 @@ final class CsvAutoArgumentsProvider implements
             public String[] nullValues() {
                 return new String[] {};
             }
+
+            @Override
+            public int maxCharsPerColumn() {
+                return 4096;
+            }
         };
     }
 
