@@ -85,8 +85,8 @@ final class Factories {
 
     public static Period createPeriod(ObjectGenerationContext context) {
         final Period period = Period.between(
-            (LocalDate) context.generate(() -> LocalDate.class),
-            (LocalDate) context.generate(() -> LocalDate.class));
+            context.generate(LocalDate.class),
+            context.generate(LocalDate.class));
         return period.isNegative() ? period.negated() : period;
     }
 }

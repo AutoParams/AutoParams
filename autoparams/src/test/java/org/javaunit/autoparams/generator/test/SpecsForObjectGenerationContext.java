@@ -15,7 +15,7 @@ class SpecsForObjectGenerationContext {
         ObjectGenerationContext sut = new ObjectGenerationContext(
             (query, context) -> new ObjectContainer(value));
 
-        Object actual = sut.generate(() -> int.class);
+        Object actual = sut.generate(int.class);
 
         assertThat(actual).isEqualTo(value);
     }
@@ -28,7 +28,7 @@ class SpecsForObjectGenerationContext {
 
         sut.customizeGenerator(generator -> (query, context) -> new ObjectContainer(value2));
 
-        Object actual = sut.generate(() -> int.class);
+        Object actual = sut.generate(int.class);
         assertThat(actual).isEqualTo(value2);
     }
 

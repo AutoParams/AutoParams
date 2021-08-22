@@ -17,7 +17,7 @@ final class OffsetDateTimeGenerator implements ObjectGenerator {
     private OffsetDateTime factory(ObjectGenerationContext context) {
         int bound = (int) TimeUnit.DAYS.toSeconds(7);
         int seconds = ThreadLocalRandom.current().nextInt(bound);
-        Clock clock = (Clock) context.generate(() -> Clock.class);
+        Clock clock = context.generate(Clock.class);
         return OffsetDateTime.now(clock).minusSeconds(seconds);
     }
 

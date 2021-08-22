@@ -26,7 +26,7 @@ final class ArrayGenerator implements ObjectGenerator {
     }
 
     private Object generateElement(Class<?> elementType, ObjectGenerationContext context) {
-        return context.generate(() -> elementType);
+        return context.generate(elementType);
     }
 
 }

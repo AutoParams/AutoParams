@@ -22,6 +22,11 @@ public final class ObjectGenerationContext {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T generate(Class<T> type) {
+        return (T) generate(() -> type);
+    }
+
     private RuntimeException composeGenerationFailedException(ObjectQuery query, Throwable cause) {
         String messageFormat = "Object cannot be created with the given query '%s'."
             + " This can happen if the query represents an interface or abstract class.";
