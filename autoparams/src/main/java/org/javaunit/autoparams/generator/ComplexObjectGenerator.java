@@ -137,10 +137,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         Stream<ObjectQuery> argumentQueries,
         ObjectGenerationContext context
     ) {
-        return argumentQueries
-            .map(query -> context.getGenerator().generate(query, context))
-            .map(ObjectContainer::unwrapOrElseThrow)
-            .toArray();
+        return argumentQueries.map(context::generate).toArray();
     }
 
 }

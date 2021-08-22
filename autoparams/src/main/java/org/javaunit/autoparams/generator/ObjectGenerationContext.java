@@ -10,13 +10,11 @@ public final class ObjectGenerationContext {
         this.generator = generator;
     }
 
-    ObjectGenerator getGenerator() {
-        return generator;
-    }
-
     public Object generate(ObjectQuery query) {
         try {
-            return generator.generate(query, this).unwrapOrElseThrow();
+            return query.getType().equals(ObjectGenerator.class)
+                ? generator
+                : generator.generate(query, this).unwrapOrElseThrow();
         } catch (UnwrapFailedException exception) {
             throw composeGenerationFailedException(query, exception);
         }
