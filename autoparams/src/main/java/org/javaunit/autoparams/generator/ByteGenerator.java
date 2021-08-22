@@ -9,8 +9,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 final class ByteGenerator implements ObjectGenerator {
-    static final String BAD_MIN_BOUND = "Min must be >= Byte.MIN_VALUE and <= Byte.MAX_VALUE";
-    static final String BAD_MAX_BOUND = "Max must be >= Byte.MIN_VALUE and <= Byte.MAX_VALUE";
 
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
@@ -25,13 +23,15 @@ final class ByteGenerator implements ObjectGenerator {
     }
 
     private byte getMin(ArgumentQuery query) {
-        Min annotation = query.getParameter().getAnnotation(Min.class);
-        if (annotation == null) {
+        Min min = query.getParameter().getAnnotation(Min.class);
+        if (min == null) {
             return MIN_VALUE;
-        } else if (annotation.value() < MIN_VALUE || annotation.value() > MAX_VALUE) {
-            throw new IllegalArgumentException(BAD_MIN_BOUND);
+        } else if (min.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The min constraint underflowed.");
+        } else if (min.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The min constraint overflowed.");
         } else {
-            return (byte) annotation.value();
+            return (byte) min.value();
         }
     }
 
@@ -40,13 +40,15 @@ final class ByteGenerator implements ObjectGenerator {
     }
 
     private byte getMax(ArgumentQuery query) {
-        Max annotation = query.getParameter().getAnnotation(Max.class);
-        if (annotation == null) {
+        Max max = query.getParameter().getAnnotation(Max.class);
+        if (max == null) {
             return MAX_VALUE;
-        } else if (annotation.value() < MIN_VALUE || annotation.value() > MAX_VALUE) {
-            throw new IllegalArgumentException(BAD_MAX_BOUND);
+        } else if (max.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The max constraint underflowed.");
+        } else if (max.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The max constraint overflowed.");
         } else {
-            return (byte) annotation.value();
+            return (byte) max.value();
         }
     }
 

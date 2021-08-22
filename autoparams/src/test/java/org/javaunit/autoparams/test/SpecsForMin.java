@@ -100,27 +100,33 @@ public class SpecsForMin {
 
     @ParameterizedTest
     @AutoSource()
-    void sut_throws_when_over_upper_bound_of_byte(ObjectGenerationContext context)
-        throws NoSuchMethodException {
-        Method method = getClass().getDeclaredMethod("consumeOverUpperBoundByte", byte.class);
+    void sut_throws_when_min_constraint_of_byte_argument_is_greater_than_upper_bound(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Method method = getClass().getDeclaredMethod(
+            "byteMinConstraintGreaterThanUpperBound",
+            byte.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void consumeOverUpperBoundByte(@Min(Byte.MAX_VALUE + 1) byte arg) {
+    void byteMinConstraintGreaterThanUpperBound(@Min(Byte.MAX_VALUE + 1) byte arg) {
     }
 
     @ParameterizedTest
     @AutoSource()
-    void sut_throws_when_over_lower_bound_of_byte(ObjectGenerationContext context)
-        throws NoSuchMethodException {
-        Method method = getClass().getDeclaredMethod("consumeOverLowerBoundByte", byte.class);
+    void sut_throws_when_min_constraint_of_byte_argument_is_less_than_lower_bound(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Method method = getClass().getDeclaredMethod(
+            "byteMinConstraintLessThanLowerBound",
+            byte.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void consumeOverLowerBoundByte(@Min(Byte.MIN_VALUE - 1) byte arg) {
+    void byteMinConstraintLessThanLowerBound(@Min(Byte.MIN_VALUE - 1) byte arg) {
     }
 }
