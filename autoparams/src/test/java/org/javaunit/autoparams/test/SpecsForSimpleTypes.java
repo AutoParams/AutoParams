@@ -1,7 +1,6 @@
 package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigDecimal;
@@ -135,13 +134,7 @@ class SpecsForSimpleTypes {
 
     @ParameterizedTest
     @AutoSource
-    void sut_supports_normalizing_period_values(
-        Period value1,
-        Period value2,
-        Period value3
-    ) {
-        assertDoesNotThrow(value1::normalized);
-        assertDoesNotThrow(value2::normalized);
-        assertDoesNotThrow(value3::normalized);
+    void sut_creates_normalized_period_value(Period value) {
+        assertThat(value).isEqualTo(value.normalized());
     }
 }

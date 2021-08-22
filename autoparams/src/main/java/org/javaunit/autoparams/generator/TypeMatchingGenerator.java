@@ -9,14 +9,24 @@ import java.util.function.Supplier;
 final class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Type, Boolean> predicate;
-    private final Supplier<Object> factory;
+    private final Function<ObjectGenerationContext, Object> factory;
 
-    public TypeMatchingGenerator(Function<Type, Boolean> predicate, Supplier<Object> factory) {
+    public TypeMatchingGenerator(
+        Function<Type, Boolean> predicate,
+        Function<ObjectGenerationContext, Object> factory
+    ) {
         this.predicate = predicate;
         this.factory = factory;
     }
 
     public TypeMatchingGenerator(Supplier<Object> factory, Class<?>... candidates) {
+        this(buildPredicateWithTypes(candidates), context -> factory.get());
+    }
+
+    public TypeMatchingGenerator(
+        Function<ObjectGenerationContext, Object> factory,
+        Class<?>... candidates
+    ) {
         this(buildPredicateWithTypes(candidates), factory);
     }
 
@@ -38,7 +48,7 @@ final class TypeMatchingGenerator implements ObjectGenerator {
         Type type = query.getType();
 
         return predicate.apply(type)
-            ? new ObjectContainer(factory.get())
+            ? new ObjectContainer(factory.apply(context))
             : ObjectContainer.EMPTY;
     }
 }

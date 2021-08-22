@@ -85,8 +85,9 @@ final class Factories {
         return DoubleStream.generate(Factories::createDouble).limit(3);
     }
 
-    public static Period createPeriod() {
-        return Period.of(random().nextInt(-9999, 9999), random().nextInt(),
-            random().nextInt(-99, 99));
+    public static Period createPeriod(ObjectGenerationContext context) {
+        final LocalDate start = (LocalDate) context.generate(() -> LocalDate.class);
+        final LocalDate end = (LocalDate) context.generate(() -> LocalDate.class);
+        return Period.between(start, end);
     }
 }
