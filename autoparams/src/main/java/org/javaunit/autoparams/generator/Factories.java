@@ -52,10 +52,8 @@ final class Factories {
     }
 
     public static LocalDate createLocalDate() {
-        long inclusiveMin = LocalDate.MIN.toEpochDay();
-        long exclusiveMax = LocalDate.MAX.toEpochDay() + 1;
-        long randomEpochDay = random().nextLong(inclusiveMin, exclusiveMax);
-        return LocalDate.ofEpochDay(randomEpochDay);
+        final LocalDate today = LocalDate.now();
+        return today.plusDays(random().nextInt(-28, 29));
     }
 
     public static LocalTime createLocalTime() {
@@ -86,8 +84,9 @@ final class Factories {
     }
 
     public static Period createPeriod(ObjectGenerationContext context) {
-        final LocalDate start = (LocalDate) context.generate(() -> LocalDate.class);
-        final LocalDate end = (LocalDate) context.generate(() -> LocalDate.class);
-        return Period.between(start, end);
+        final Period period = Period.between(
+            (LocalDate) context.generate(() -> LocalDate.class),
+            (LocalDate) context.generate(() -> LocalDate.class));
+        return period.isNegative() ? period.negated() : period;
     }
 }

@@ -12,11 +12,11 @@ final class BuilderGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
+            ? generate((ParameterizedType) query.getType())
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
+    private ObjectContainer generate(ParameterizedType type) {
         return type.getRawType().equals(Builder.class)
             ? new ObjectContainer(factory(type.getActualTypeArguments()[0]))
             : ObjectContainer.EMPTY;

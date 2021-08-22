@@ -1,6 +1,7 @@
 package org.javaunit.autoparams.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.UUID;
 import org.javaunit.autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -89,11 +91,17 @@ class SpecsForSimpleTypes {
     void sut_creates_arbitrary_local_date_values(
         LocalDate value1,
         LocalDate value2,
-        LocalDate value3
+        LocalDate value3,
+        LocalDate value4,
+        LocalDate value5
     ) {
-        assertNotEquals(value1, value2);
-        assertNotEquals(value2, value3);
-        assertNotEquals(value3, value1);
+        final HashSet<LocalDate> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
     }
 
     @ParameterizedTest
@@ -136,5 +144,11 @@ class SpecsForSimpleTypes {
     @AutoSource
     void sut_creates_normalized_period_value(Period value) {
         assertThat(value).isEqualTo(value.normalized());
+    }
+
+    @ParameterizedTest
+    @AutoSource(repeat = 10)
+    void sut_creates_positive_period_value(Period value) {
+        assertFalse(value.isNegative());
     }
 }
