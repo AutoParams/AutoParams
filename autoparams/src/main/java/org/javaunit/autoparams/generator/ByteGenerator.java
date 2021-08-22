@@ -4,13 +4,11 @@ import static java.lang.Byte.MAX_VALUE;
 import static java.lang.Byte.MIN_VALUE;
 
 import java.lang.reflect.Type;
-import java.time.Period;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 final class ByteGenerator implements ObjectGenerator {
-    static final String BAD_RANGE = "Max must be greater than Min";
     static final String BAD_MIN_BOUND = "Min must be >= Byte.MIN_VALUE and <= Byte.MAX_VALUE";
     static final String BAD_MAX_BOUND = "Max must be >= Byte.MIN_VALUE and <= Byte.MAX_VALUE";
 
@@ -54,10 +52,6 @@ final class ByteGenerator implements ObjectGenerator {
 
     private byte factory(byte min, byte max) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        if (min >= max) {
-            throw new IllegalArgumentException(BAD_RANGE);
-        }
 
         if (min == MIN_VALUE && max == MAX_VALUE) {
             return (byte) random.nextInt(MIN_VALUE, MAX_VALUE);

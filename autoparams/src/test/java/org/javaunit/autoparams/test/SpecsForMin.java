@@ -102,7 +102,6 @@ public class SpecsForMin {
     @AutoSource()
     void sut_throws_when_over_upper_bound_of_byte(ObjectGenerationContext context)
         throws NoSuchMethodException {
-        // Arrange
         Method method = getClass().getDeclaredMethod("consumeOverUpperBoundByte", byte.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
@@ -116,7 +115,6 @@ public class SpecsForMin {
     @AutoSource()
     void sut_throws_when_over_lower_bound_of_byte(ObjectGenerationContext context)
         throws NoSuchMethodException {
-        // Arrange
         Method method = getClass().getDeclaredMethod("consumeOverLowerBoundByte", byte.class);
         Parameter parameter = method.getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
