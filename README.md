@@ -21,7 +21,7 @@ void parameterizedTest(int a, int b) {
 
 In the example above, you can see that the arbitrary test data may eliminate the need for triangulation from tests.
 
-AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using the `@Fixed` annotation.
+AutoParams makes it simpler to write test setup code. For example, if you need to create a few review entities for the same product, you can easily do it using the `@Fix` annotation.
 
 ```java
 public class Product {
@@ -68,7 +68,7 @@ public class Review {
 ```java
 @ParameterizedTest
 @AutoSource
-void testMethod(@Fixed Product product, Review[] reviews) {
+void testMethod(@Fix Product product, Review[] reviews) {
     for (Review review : reviews) {
         assertSame(product, review.getProduct());
     }
@@ -342,9 +342,9 @@ void testMethod(int a, int b) {
 }
 ```
 
-### `@Fixed` annotation
+### `@Fix` annotation
 
-You can freeze the generated argument to the type with the `@Fixed` annotation. `@AutoSource` reuses the argument of the parameter decorated with the `@Fixed` annotation for subsequent value generation.
+You can freeze the generated argument to the type with the `@Fix` annotation. `@AutoSource` reuses the argument of the parameter decorated with the `@Fix` annotation for subsequent value generation.
 
 ```java
 class ValueContainer {
@@ -363,7 +363,7 @@ class ValueContainer {
 
 @ParameterizedTest
 @AutoSource
-void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
+void testMethod(@Fix String arg1, String arg2, ValueContainer arg3) {
     assertEquals(arg1, arg2);
     assertEquals(arg1, arg3.getValue());
 }
@@ -382,7 +382,7 @@ void testMethod(String arg1, String arg2) {
 }
 ```
 
-The `@Fixed` annotation correctly works with `@ValueAutoSource`.
+The `@Fix` annotation correctly works with `@ValueAutoSource`.
 
 ```java
 class ValueContainer {
@@ -401,7 +401,7 @@ class ValueContainer {
 
 @ParameterizedTest
 @ValueAutoSource(strings = {"foo"})
-void testMethod(@Fixed String arg1, String arg2, ValueContainer arg3) {
+void testMethod(@Fix String arg1, String arg2, ValueContainer arg3) {
     assertEquals("foo", arg2);
     assertEquals("foo", arg3.getValue());
 }
@@ -421,7 +421,7 @@ void testMethod(int arg1, String arg2, String arg3) {
 }
 ```
 
-The `@Fixed` annotation correctly works with `@CsvAutoSource`.
+The `@Fix` annotation correctly works with `@CsvAutoSource`.
 
 ```java
 class ValueContainer {
@@ -440,7 +440,7 @@ class ValueContainer {
 
 @ParameterizedTest
 @CsvAutoSource({"16, foo"})
-void testMethod(int arg1, @Fixed String arg2, ValueContainer arg3) {
+void testMethod(int arg1, @Fix String arg2, ValueContainer arg3) {
     assertEquals("foo", arg3.getValue());
 }
 ```
@@ -600,14 +600,14 @@ void testMethod(User user) {
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-mockito:0.0.3'
+testImplementation 'io.github.javaunit:autoparams-mockito:0.0.4'
 ```
 
 ### How to generate test doubles using Mockito
@@ -642,13 +642,13 @@ public class SystemUnderTest {
 
 If you decorates your test method with `org.javaunit.autoparams.mockito.MockitoCustomizer`, then `@AutoSource` will generate values for parameters of interfaces and abstract classes using Mockito.
 
-In the following example, the argument `stub` is generated using Mockito by `MockitoCustomizer` and the parameter `stub` is decorated with the `@Fixed` annotation so it is injected to the object `sut`.
+In the following example, the argument `stub` is generated using Mockito by `MockitoCustomizer` and the parameter `stub` is decorated with the `@Fix` annotation so it is injected to the object `sut`.
 
 ```java
 @ParameterizedTest
 @AutoSource
 @Customization(MockitoCustomizer.class)
-void testUsingMockito(@Fixed Dependency stub, SystemUnderTest sut) {
+void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
 
     when(stub.getName()).thenReturn("World");
 
