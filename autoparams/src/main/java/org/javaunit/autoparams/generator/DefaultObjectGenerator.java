@@ -9,7 +9,10 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
             new SimpleValueObjectGenerator(),
             new CollectionGenerator(),
             new StreamGenerator(),
-            new ComplexObjectGenerator()
+            new RecursiveObjectGuard(
+                new ComplexObjectGenerator(),
+                3
+            )
         );
     }
 
