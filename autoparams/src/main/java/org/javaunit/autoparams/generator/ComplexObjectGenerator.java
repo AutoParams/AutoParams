@@ -11,39 +11,20 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 import java.util.stream.Stream;
 import org.javaunit.autoparams.Builder;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
-    private static final long MAX_RECURSION_COUNT = 3;
-    private final Stack<Type> objectGenerationStack = new Stack<>();
 
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        if (!checkNumberOfRecursiveExecutions(query)) {
-            return new ObjectContainer(null);
+        if (query.getType() instanceof Class<?>) {
+            return generateNonGeneric((Class<?>) query.getType(), context);
+        } else if (query.getType() instanceof ParameterizedType) {
+            return generateGeneric((ParameterizedType) query.getType(), context);
+        } else {
+            return ObjectContainer.EMPTY;
         }
-
-        try {
-            objectGenerationStack.push(query.getType());
-            if (query.getType() instanceof Class<?>) {
-                return generateNonGeneric((Class<?>) query.getType(), context);
-            } else if (query.getType() instanceof ParameterizedType) {
-                return generateGeneric((ParameterizedType) query.getType(), context);
-            } else {
-                return ObjectContainer.EMPTY;
-            }
-        } finally {
-            objectGenerationStack.pop();
-        }
-    }
-
-    private boolean checkNumberOfRecursiveExecutions(ObjectQuery query) {
-        long currentRecursionCount = objectGenerationStack.stream()
-            .filter(x -> x.equals(query.getType()))
-            .count();
-        return currentRecursionCount < MAX_RECURSION_COUNT;
     }
 
     private ObjectContainer generateNonGeneric(Class<?> type, ObjectGenerationContext context) {
