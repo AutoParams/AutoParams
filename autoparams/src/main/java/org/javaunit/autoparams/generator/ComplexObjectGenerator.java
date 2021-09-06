@@ -67,15 +67,14 @@ final class ComplexObjectGenerator implements ObjectGenerator {
                 t -> Arrays
                     .stream(t.getConstructors())
                     .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
-                    .sorted(Comparator.comparing(c -> c.getParameterCount()))
-                    .findFirst(),
+                    .min(Comparator.comparing(Constructor::getParameterCount)),
                 t -> Arrays
                     .stream(t.getConstructors())
-                    .sorted(Comparator.comparing(c -> c.getParameterCount()))
-                    .findFirst()
+                    .min(Comparator.comparing(Constructor::getParameterCount))
             )
             .resolve(type)
-            .get();
+            .orElseThrow(() -> new RuntimeException(
+                "Class '" + type.getName() + "' has no public constructor."));
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(

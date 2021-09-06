@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class CompositeObjectGenerator implements ObjectGenerator {
 
-    private ObjectGenerator[] generators;
+    private final ObjectGenerator[] generators;
 
     public CompositeObjectGenerator(ObjectGenerator... generators) {
         this.generators = generators;
