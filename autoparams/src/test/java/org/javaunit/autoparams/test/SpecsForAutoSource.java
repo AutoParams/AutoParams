@@ -1,5 +1,6 @@
 package org.javaunit.autoparams.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,6 +13,7 @@ import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
 import org.javaunit.autoparams.generator.ObjectContainer;
 import org.javaunit.autoparams.generator.ObjectGenerator;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForAutoSource {
@@ -37,6 +39,14 @@ class SpecsForAutoSource {
     void extended_data_source_applies_customization(String actual) {
         assertNotNull(actual);
         assertEquals("Customized string value", actual);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_provides_extension_context(ExtensionContext context) {
+        assertThat(context).isNotNull();
+        assertThat(context.getRequiredTestMethod().getName())
+            .isEqualTo("sut_provides_extension_context");
     }
 
 }

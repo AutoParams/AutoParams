@@ -25,11 +25,12 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return createArgumentsGenerator().generateArguments(context);
+        final ArgumentsGenerator generator = createArgumentsGenerator(context);
+        return generator.generateArguments(context);
     }
 
-    private ArgumentsGenerator createArgumentsGenerator() {
-        return new ArgumentsGenerator(new ObjectGenerationContext(generator), repeat);
+    private ArgumentsGenerator createArgumentsGenerator(ExtensionContext context) {
+        return new ArgumentsGenerator(new ObjectGenerationContext(context, generator), repeat);
     }
 
     @Override
