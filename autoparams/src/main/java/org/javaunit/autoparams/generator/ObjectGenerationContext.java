@@ -15,6 +15,10 @@ public final class ObjectGenerationContext {
         this.generator = generator;
     }
 
+    public ExtensionContext getExtensionContext() {
+        return extensionContext;
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T generate(Class<T> type) {
         return (T) generate(() -> type);

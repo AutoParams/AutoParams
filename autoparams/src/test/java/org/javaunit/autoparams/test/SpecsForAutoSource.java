@@ -49,4 +49,21 @@ class SpecsForAutoSource {
             .isEqualTo("sut_provides_extension_context");
     }
 
+    public static class RecursiveObject {
+        private final RecursiveObject value;
+
+        public RecursiveObject(RecursiveObject value) {
+            this.value = value;
+        }
+
+        public RecursiveObject getValue() {
+            return value;
+        }
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_prevents_stack_overflow_for_recursive_structure(RecursiveObject value) {
+    }
+
 }
