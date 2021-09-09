@@ -11,9 +11,11 @@ public final class RecursionGuard implements Customizer {
     public static final int DEFAULT_RECURSION_DEPTH = 1;
 
     private static final ExtensionContext.Namespace NAMESPACE;
+    private static final Object CONTEXT_KEY;
 
     static {
         NAMESPACE = ExtensionContext.Namespace.create(RecursionGuard.class);
+        CONTEXT_KEY = RecursionGuard.class;
     }
 
     private final int recursionDepth;
@@ -40,15 +42,14 @@ public final class RecursionGuard implements Customizer {
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
         return (query, context) -> {
-            final ExtensionContext.Store store = context.getExtensionContext().getStore(NAMESPACE);
-
             final Object scope = new Object();
 
-            final RecursionContext recursionContext = store
-                .getOrComputeIfAbsent(
-                    RecursionContext.class,
-                    x -> new RecursionContext(scope),
-                    RecursionContext.class);
+            final ExtensionContext.Store store = context.getExtensionContext().getStore(NAMESPACE);
+
+            final RecursionContext recursionContext = store.getOrComputeIfAbsent(
+                CONTEXT_KEY,
+                x -> new RecursionContext(scope),
+                RecursionContext.class);
 
             try {
                 if (recursionContext.guard.equals(this) == false) {
@@ -60,8 +61,8 @@ public final class RecursionGuard implements Customizer {
 
                 monitor.push(type);
                 try {
-                    final long count = monitor.stream().filter(x -> x.equals(type)).count();
-                    return count > recursionDepth
+                    final long depth = monitor.stream().filter(x -> x.equals(type)).count();
+                    return depth > recursionDepth
                         ? new ObjectContainer(null)
                         : generator.generate(query, context);
                 } finally {
@@ -69,7 +70,7 @@ public final class RecursionGuard implements Customizer {
                 }
             } finally {
                 if (recursionContext.scope.equals(scope)) {
-                    store.remove(RecursionContext.class);
+                    store.remove(CONTEXT_KEY);
                 }
             }
         };
