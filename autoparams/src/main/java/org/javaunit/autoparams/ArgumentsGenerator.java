@@ -1,5 +1,7 @@
 package org.javaunit.autoparams;
 
+import static java.util.Arrays.stream;
+
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -9,8 +11,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import org.javaunit.autoparams.customization.Customization;
@@ -18,10 +18,16 @@ import org.javaunit.autoparams.customization.Customizer;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectQuery;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 
 final class ArgumentsGenerator {
+
+    private static final List<AnnotatedElement> PLATFORM_ELEMENTS = Arrays.asList(
+        API.class,
+        Documented.class,
+        Retention.class,
+        Target.class
+    );
 
     private final ObjectGenerationContext context;
     private final int repeat;
@@ -42,8 +48,7 @@ final class ArgumentsGenerator {
     }
 
     private void customizeGenerator(AnnotatedElement annotated) {
-        Optional<Customization> customization = findAnnotation(annotated);
-        customization.ifPresent(this::customizeGenerator);
+        getCustomizations(annotated).forEach(this::customizeGenerator);
     }
 
     private void customizeGenerator(Customization customization) {
@@ -56,26 +61,20 @@ final class ArgumentsGenerator {
         try {
             context.customizeGenerator(customizerType.getDeclaredConstructor().newInstance());
         } catch (Exception exception) {
-            return;
+            throw new RuntimeException(exception);
         }
     }
 
-    private static Optional<Customization> findAnnotation(AnnotatedElement annotated) {
-        return getDescendantAnnotations(annotated.getAnnotations())
-            .filter(Customization.class::isInstance)
-            .map(Customization.class::cast)
-            .findFirst();
+    private static Stream<Customization> getCustomizations(AnnotatedElement annotated) {
+        return PLATFORM_ELEMENTS.contains(annotated)
+            ? Stream.empty()
+            : stream(annotated.getAnnotations()).flatMap(ArgumentsGenerator::getCustomizations);
     }
 
-    private static Stream<Annotation> getDescendantAnnotations(Annotation[] annotations) {
-        List<Annotation> annotationsToSearch = ListOfBuiltInAnnotationsToSkipSearch
-            .removeAnnotationsToSkipSearch(annotations);
-        return Stream.concat(
-            annotationsToSearch.stream(),
-            annotationsToSearch.stream()
-                .map(a -> a.annotationType().getAnnotations())
-                .flatMap(ArgumentsGenerator::getDescendantAnnotations)
-        );
+    private static Stream<Customization> getCustomizations(Annotation annotation) {
+        return annotation instanceof Customization
+            ? Stream.of((Customization) annotation)
+            : getCustomizations(annotation.annotationType());
     }
 
     private Stream<Arguments> generate(Method method) {
@@ -84,12 +83,12 @@ final class ArgumentsGenerator {
             streamSource[i] = createArguments(method);
         }
 
-        return Arrays.stream(streamSource);
+        return stream(streamSource);
     }
 
     private Arguments createArguments(Method method) {
         Parameter[] parameters = method.getParameters();
-        Stream<Object> arguments = Arrays.stream(parameters).map(this::createThenProcessArgument);
+        Stream<Object> arguments = stream(parameters).map(this::createThenProcessArgument);
         return Arguments.of(arguments.toArray());
     }
 
@@ -98,27 +97,6 @@ final class ArgumentsGenerator {
         Object argument = context.generate(ObjectQuery.fromParameter(parameter));
         Customizers.processArgument(parameter, argument).forEach(context::customizeGenerator);
         return argument;
-    }
-
-    private static class ListOfBuiltInAnnotationsToSkipSearch {
-        private static final Class<?>[] annotationList = {
-            Target.class,
-            API.class,
-            Retention.class,
-            Documented.class,
-            ParameterizedTest.class,
-        };
-
-        public static List<Annotation> removeAnnotationsToSkipSearch(Annotation[] annotations) {
-            return Arrays.stream(annotations)
-                .filter(ListOfBuiltInAnnotationsToSkipSearch::doesNotContain)
-                .collect(Collectors.toList());
-        }
-
-        private static boolean doesNotContain(Annotation annotation) {
-            return Arrays.stream(annotationList)
-                .noneMatch(annotation.annotationType()::equals);
-        }
     }
 
 }

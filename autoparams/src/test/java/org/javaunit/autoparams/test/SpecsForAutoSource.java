@@ -29,13 +29,13 @@ class SpecsForAutoSource {
 
     @Target({ElementType.METHOD})
     @Retention(RetentionPolicy.RUNTIME)
-    @Customization(DomainCustomizer.class)
     @AutoSource
-    public @interface DomainAutoSource {
+    @Customization(DomainCustomizer.class)
+    public @interface AutoDomainSource {
     }
 
     @ParameterizedTest
-    @DomainAutoSource
+    @AutoDomainSource
     void extended_data_source_applies_customization(String actual) {
         assertNotNull(actual);
         assertEquals("Customized string value", actual);
