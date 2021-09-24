@@ -1,5 +1,8 @@
 package org.javaunit.autoparams;
 
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+
+import java.lang.reflect.Method;
 import java.util.stream.Stream;
 import org.javaunit.autoparams.generator.CompositeObjectGenerator;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
@@ -30,9 +33,16 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     private ArgumentsGenerator createArgumentsGenerator(ExtensionContext context) {
+        final int repeat = getRepeat(context);
         return new ArgumentsGenerator(new ObjectGenerationContext(context, generator), repeat);
     }
 
+    private int getRepeat(ExtensionContext context) {
+        final Method method = context.getRequiredTestMethod();
+        return findAnnotation(method, Repeat.class).map(Repeat::value).orElse(repeat);
+    }
+
+    @SuppressWarnings("deprecation")
     @Override
     public void accept(AutoSource annotation) {
         repeat = annotation.repeat();

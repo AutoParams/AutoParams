@@ -11,6 +11,12 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 @ArgumentsSource(AutoArgumentsProvider.class)
 public @interface AutoSource {
 
+    /**
+     * This property will be removed. Use @Repeat annotation instead.
+     *
+     * @return Number of times to run the test repeatedly
+     */
+    @Deprecated
     int repeat() default 1;
 
 }
