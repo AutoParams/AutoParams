@@ -8,8 +8,10 @@ import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDE
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import org.javaunit.autoparams.AutoSource;
+import org.javaunit.autoparams.Repeat;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectQuery;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,43 +19,50 @@ import org.junit.jupiter.params.ParameterizedTest;
 public class SpecsForMin {
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_int(@Min(100) int value) {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
-    void sut_accepts_min_constraint_for_double(@Min(100) double value) {
+    @AutoSource
+    @Repeat(10)
+    void sut_accepts_min_constraint_for_double(@Min(100) @Max(Short.MAX_VALUE) double value) {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_long(@Min(100) long value) {
         assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_int_when_over_upper_bound(@Min(Long.MAX_VALUE) int value) {
         assertThat(value).isEqualTo(Integer.MAX_VALUE);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_int_when_over_lower_bound(@Min(Long.MIN_VALUE) int value) {
         assertThat(value).isGreaterThanOrEqualTo(Integer.MIN_VALUE);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_with_max_value_for_long(@Min(Long.MAX_VALUE) long value) {
         assertEquals(Long.MAX_VALUE, value);
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_short(@Min(100) short value) {
         assertThat(value).isGreaterThanOrEqualTo((short) 100);
     }
@@ -93,7 +102,8 @@ public class SpecsForMin {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 100)
+    @AutoSource
+    @Repeat(10)
     void sut_accepts_min_constraint_for_byte(@Min(100) byte value) {
         assertThat(value).isGreaterThanOrEqualTo((byte) 100);
     }

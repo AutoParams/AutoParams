@@ -25,11 +25,11 @@ final class DoubleGenerator implements ObjectGenerator {
             ArgumentQuery argumentQuery = (ArgumentQuery) query;
             Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
             if (annotation != null) {
-                return Math.max(Double.MIN_VALUE, annotation.value());
+                return annotation.value();
             }
         }
 
-        return Double.MIN_VALUE;
+        return 0.0;
     }
 
     private double getBound(ObjectQuery query) {
@@ -37,10 +37,10 @@ final class DoubleGenerator implements ObjectGenerator {
             ArgumentQuery argumentQuery = (ArgumentQuery) query;
             Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
             if (annotation != null) {
-                return (double) annotation.value();
+                return annotation.value();
             }
         }
 
-        return Double.MAX_VALUE;
+        return 1.0;
     }
 }
