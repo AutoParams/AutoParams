@@ -21,7 +21,7 @@ final class ValueAutoArgumentsProvider implements
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return ArgumentsAssembler.assembleArguments(context, valueProvider, autoProvider);
     }
 
