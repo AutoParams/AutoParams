@@ -27,7 +27,9 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
             new EnumGenerator(),
             new UrlGenerator(),
             new ClockGenerator(),
-            new OffsetDateTimeGenerator()
+            new OffsetDateTimeGenerator(),
+            new ZonedDateTimeGenerator(),
+            new ZoneIdGenerator()
         );
     }
 
