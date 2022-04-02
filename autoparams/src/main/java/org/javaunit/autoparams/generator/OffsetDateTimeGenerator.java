@@ -1,9 +1,8 @@
 package org.javaunit.autoparams.generator;
 
-import java.time.Clock;
+import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import java.time.ZoneId;
 
 final class OffsetDateTimeGenerator implements ObjectGenerator {
 
@@ -15,10 +14,10 @@ final class OffsetDateTimeGenerator implements ObjectGenerator {
     }
 
     private OffsetDateTime factory(ObjectGenerationContext context) {
-        int bound = (int) TimeUnit.DAYS.toSeconds(7);
-        int seconds = ThreadLocalRandom.current().nextInt(bound);
-        Clock clock = context.generate(Clock.class);
-        return OffsetDateTime.now(clock).minusSeconds(seconds);
+        ZoneId zoneId = context.generate(ZoneId.class);
+        Instant instant = context.generate(Instant.class);
+
+        return OffsetDateTime.ofInstant(instant, zoneId);
     }
 
 }
