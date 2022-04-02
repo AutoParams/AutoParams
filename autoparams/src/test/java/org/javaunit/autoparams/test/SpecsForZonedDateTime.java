@@ -4,13 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.javaunit.autoparams.AutoSource;
 import org.javaunit.autoparams.customization.Fix;
 import org.junit.jupiter.params.ParameterizedTest;
 
-public class SpecsForZonedDateTime {
+class SpecsForZonedDateTime {
 
     @ParameterizedTest
     @AutoSource
@@ -34,5 +35,13 @@ public class SpecsForZonedDateTime {
         @Fix ZoneId fixedZoneId, ZonedDateTime zonedDateTime
     ) {
         assertEquals(fixedZoneId, zonedDateTime.getZone());
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_fixes_value_by_ZoneId_and_Instant(
+        @Fix ZoneId zoneId, @Fix Instant instant, ZonedDateTime zonedDateTime
+    ) {
+        assertEquals(instant.atZone(zoneId), zonedDateTime);
     }
 }
