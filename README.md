@@ -7,7 +7,7 @@ AutoParams is an arbitrary test data generator for parameterized tests in Java i
 
 Sometimes setting all the test data manually is very annoying. Sometimes some test data is required but not that important for a particular test. AutoParams automatically generates test arguments for your parameterized test method so you can focus more on your domain and your requirements.
 
-AutoParams is very easy to use. Just decorate your parameterized test method with the `@AutoSource` annotation just like using the `@ValueSource` annotation or the `@CsvSource` annotation. That's all. Then AutoParams wiil generate arbitrary arguments for the parameters of the test method automatically.
+AutoParams is very easy to use. Just decorate your parameterized test method with the `@AutoSource` annotation just like using the `@ValueSource` annotation or the `@CsvSource` annotation. That's all. Then AutoParams will generate arbitrary arguments for the parameters of the test method automatically.
 
 ```java
 @ParameterizedTest
