@@ -12,7 +12,6 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import org.apiguardian.api.API;
 import org.javaunit.autoparams.customization.Customization;
 import org.javaunit.autoparams.customization.Customizer;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
@@ -23,7 +22,6 @@ import org.junit.jupiter.params.provider.Arguments;
 final class ArgumentsGenerator {
 
     private static final List<AnnotatedElement> PLATFORM_ELEMENTS = Arrays.asList(
-        API.class,
         Documented.class,
         Retention.class,
         Target.class

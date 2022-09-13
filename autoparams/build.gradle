@@ -3,14 +3,14 @@ plugins {
 }
 
 dependencies {
-    api 'org.junit.jupiter:junit-jupiter-api:5.7.2'
-    api 'org.junit.jupiter:junit-jupiter-params:5.7.2'
+    api 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    api 'org.junit.jupiter:junit-jupiter-params:5.9.0'
     api 'javax.validation:validation-api:2.0.1.Final'
     api 'com.google.code.findbugs:jsr305:3.0.2'
     testImplementation 'org.assertj:assertj-core:3.8.0'
     testImplementation 'org.mockito:mockito-core:2.+'
     testImplementation 'io.github.javaunit:autoparams-mockito:0.0.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
 
 java {

@@ -38,6 +38,21 @@ final class CsvAutoArgumentsProvider implements
             }
 
             @Override
+            public String textBlock() {
+                return "";
+            }
+
+            @Override
+            public boolean useHeadersInDisplayName() {
+                return false;
+            }
+
+            @Override
+            public char quoteCharacter() {
+                return '\'';
+            }
+
+            @Override
             public char delimiter() {
                 return '\0';
             }
@@ -60,6 +75,11 @@ final class CsvAutoArgumentsProvider implements
             @Override
             public int maxCharsPerColumn() {
                 return 4096;
+            }
+
+            @Override
+            public boolean ignoreLeadingAndTrailingWhitespace() {
+                return true;
             }
         };
     }
