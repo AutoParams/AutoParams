@@ -19,10 +19,10 @@ final class ByteGenerator implements ObjectGenerator {
     }
 
     private byte getMin(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private byte getMin(ArgumentQuery query) {
+    private byte getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
             return MIN_VALUE;
@@ -36,10 +36,10 @@ final class ByteGenerator implements ObjectGenerator {
     }
 
     private byte getMax(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private byte getMax(ArgumentQuery query) {
+    private byte getMax(ParameterQuery query) {
         Max max = query.getParameter().getAnnotation(Max.class);
         if (max == null) {
             return MAX_VALUE;

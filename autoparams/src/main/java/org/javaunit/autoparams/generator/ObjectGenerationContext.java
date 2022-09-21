@@ -21,7 +21,7 @@ public final class ObjectGenerationContext {
 
     @SuppressWarnings("unchecked")
     public <T> T generate(Class<T> type) {
-        return (T) generate(() -> type);
+        return (T) generate(ObjectQuery.fromType(type));
     }
 
     public Object generate(ObjectQuery query) {

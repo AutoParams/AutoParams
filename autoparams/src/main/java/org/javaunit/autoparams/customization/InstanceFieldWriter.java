@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import org.javaunit.autoparams.generator.ObjectContainer;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
 import org.javaunit.autoparams.generator.ObjectGenerator;
+import org.javaunit.autoparams.generator.ObjectQuery;
 
 public final class InstanceFieldWriter implements Customizer {
 
@@ -83,7 +84,7 @@ public final class InstanceFieldWriter implements Customizer {
     ) {
         field.setAccessible(true);
         Type type = typeResolver.resolve(field.getGenericType());
-        Object argument = context.generate(() -> type);
+        Object argument = context.generate(ObjectQuery.fromType(type));
         try {
             field.set(target, argument);
         } catch (IllegalArgumentException | IllegalAccessException exception) {

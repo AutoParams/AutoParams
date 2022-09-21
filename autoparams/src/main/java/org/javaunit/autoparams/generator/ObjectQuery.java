@@ -8,7 +8,10 @@ public interface ObjectQuery {
     Type getType();
 
     static ObjectQuery fromParameter(Parameter parameter) {
-        return new ArgumentQuery(parameter);
+        return new ParameterQuery(parameter);
     }
 
+    static ObjectQuery fromType(Type type) {
+        return new TypeQuery(type);
+    }
 }

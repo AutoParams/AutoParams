@@ -99,7 +99,7 @@ public final class SettablePropertyWriter implements Customizer {
         Type parameterType = method.getGenericParameterTypes()[0];
         return parameterType instanceof TypeVariable
             && genericMap.containsKey((TypeVariable<?>) parameterType)
-            ? () -> genericMap.get((TypeVariable<?>) parameterType)
-            : () -> method.getParameterTypes()[0];
+            ? ObjectQuery.fromType(genericMap.get((TypeVariable<?>) parameterType))
+            : ObjectQuery.fromType(method.getParameterTypes()[0]);
     }
 }

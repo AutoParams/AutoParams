@@ -97,8 +97,15 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         Map<TypeVariable<?>, Type> genericMap
     ) {
         return parameter.getParameterizedType() instanceof TypeVariable
-            ? () -> genericMap.get((TypeVariable<?>) parameter.getParameterizedType())
+            ? resolveParameterizedTypeQuery(parameter.getParameterizedType(), genericMap)
             : ObjectQuery.fromParameter(parameter);
+    }
+
+    private ObjectQuery resolveParameterizedTypeQuery(
+        Type parameterizedType,
+        Map<TypeVariable<?>, Type> genericMap
+    ) {
+        return ObjectQuery.fromType(genericMap.get((TypeVariable<?>) parameterizedType));
     }
 
     private Object createInstance(

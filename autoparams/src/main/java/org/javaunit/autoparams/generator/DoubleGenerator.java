@@ -21,8 +21,8 @@ final class DoubleGenerator implements ObjectGenerator {
     }
 
     private double getOrigin(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
+        if (query instanceof ParameterQuery) {
+            ParameterQuery argumentQuery = (ParameterQuery) query;
             Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
             if (annotation != null) {
                 return annotation.value();
@@ -33,8 +33,8 @@ final class DoubleGenerator implements ObjectGenerator {
     }
 
     private double getBound(ObjectQuery query) {
-        if (query instanceof ArgumentQuery) {
-            ArgumentQuery argumentQuery = (ArgumentQuery) query;
+        if (query instanceof ParameterQuery) {
+            ParameterQuery argumentQuery = (ParameterQuery) query;
             Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
             if (annotation != null) {
                 return annotation.value();

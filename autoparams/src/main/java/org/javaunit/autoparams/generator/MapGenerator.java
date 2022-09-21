@@ -40,8 +40,8 @@ final class MapGenerator implements ObjectGenerator {
     ) {
         HashMap<K, V> instance = new HashMap<>();
 
-        ObjectQuery keyQuery = () -> keyType;
-        ObjectQuery valueQuery = () -> valueType;
+        ObjectQuery keyQuery = ObjectQuery.fromType(keyType);
+        ObjectQuery valueQuery = ObjectQuery.fromType(valueType);
 
         for (int i = 0; i < SIZE; i++) {
             instance.put(

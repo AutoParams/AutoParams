@@ -19,10 +19,10 @@ final class IntegerGenerator implements ObjectGenerator {
     }
 
     private int getMin(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private int getMin(ArgumentQuery query) {
+    private int getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
         return annotation == null
             ? MIN_VALUE
@@ -30,10 +30,10 @@ final class IntegerGenerator implements ObjectGenerator {
     }
 
     private int getMax(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private int getMax(ArgumentQuery query) {
+    private int getMax(ParameterQuery query) {
         Max annotation = query.getParameter().getAnnotation(Max.class);
         return annotation == null
             ? MAX_VALUE

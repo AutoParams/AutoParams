@@ -16,10 +16,10 @@ final class LongGenerator implements ObjectGenerator {
     }
 
     private long getMin(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : Long.MIN_VALUE;
+        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : Long.MIN_VALUE;
     }
 
-    private long getMin(ArgumentQuery query) {
+    private long getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
         return annotation == null
             ? Long.MIN_VALUE
@@ -27,10 +27,10 @@ final class LongGenerator implements ObjectGenerator {
     }
 
     private long getMax(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : Long.MAX_VALUE;
+        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : Long.MAX_VALUE;
     }
 
-    private long getMax(ArgumentQuery query) {
+    private long getMax(ParameterQuery query) {
         Max annotation = query.getParameter().getAnnotation(Max.class);
         return annotation == null
             ? Long.MAX_VALUE

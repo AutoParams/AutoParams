@@ -19,19 +19,19 @@ final class ShortGenerator implements ObjectGenerator {
     }
 
     private short getMin(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMin((ArgumentQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private short getMin(ArgumentQuery query) {
+    private short getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
         return annotation == null ? MIN_VALUE : convertToShort(annotation.value());
     }
 
     private short getMax(ObjectQuery query) {
-        return query instanceof ArgumentQuery ? getMax((ArgumentQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private short getMax(ArgumentQuery query) {
+    private short getMax(ParameterQuery query) {
         Max annotation = query.getParameter().getAnnotation(Max.class);
         return annotation == null ? MAX_VALUE : convertToShort(annotation.value());
     }

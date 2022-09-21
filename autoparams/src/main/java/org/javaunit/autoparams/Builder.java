@@ -2,6 +2,7 @@ package org.javaunit.autoparams;
 
 import java.lang.reflect.Type;
 import org.javaunit.autoparams.generator.ObjectGenerationContext;
+import org.javaunit.autoparams.generator.ObjectQuery;
 
 public final class Builder<T> {
 
@@ -24,7 +25,7 @@ public final class Builder<T> {
 
     @SuppressWarnings("unchecked")
     public T build() {
-        return (T) context.generate(() -> type);
+        return (T) context.generate(ObjectQuery.fromType(type));
     }
 
 }

@@ -41,4 +41,13 @@ class SpecsForFailures {
             .hasMessageContaining("abstract");
     }
 
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    void sut_throws_with_message_containing_type_information(
+        Builder<Cloneable> builder
+    ) {
+        assertThatThrownBy(builder::build)
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("java.lang.Cloneable");
+    }
 }

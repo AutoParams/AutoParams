@@ -35,7 +35,7 @@ final class SetGenerator implements ObjectGenerator {
         ObjectGenerationContext context
     ) {
         HashSet<T> instance = new HashSet<>();
-        ObjectQuery query = () -> elementType;
+        ObjectQuery query = ObjectQuery.fromType(elementType);
         for (int i = 0; i < SIZE; i++) {
             instance.add((T) context.generate(query));
         }
