@@ -89,14 +89,14 @@ That's cool!
 <dependency>
   <groupId>io.github.javaunit</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.2.8</version>
+  <version>0.3.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.2.8'
+testImplementation 'io.github.javaunit:autoparams:0.3.3'
 ```
 
 ## Features
