@@ -1,6 +1,6 @@
 package org.javaunit.autoparams.generator;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -13,8 +13,8 @@ public class ZonedDateTimeGenerator implements ObjectGenerator {
     }
 
     private ZonedDateTime factory(ObjectGenerationContext context) {
-        LocalDateTime localDateTime = context.generate(LocalDateTime.class);
+        Instant instant = context.generate(Instant.class);
         ZoneId zoneId = context.generate(ZoneId.class);
-        return localDateTime.atZone(zoneId);
+        return instant.atZone(zoneId);
     }
 }

@@ -29,7 +29,8 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
             new ClockGenerator(),
             new OffsetDateTimeGenerator(),
             new ZonedDateTimeGenerator(),
-            new ZoneIdGenerator()
+            new ZoneIdGenerator(),
+            new InstantGenerator()
         );
     }
 
