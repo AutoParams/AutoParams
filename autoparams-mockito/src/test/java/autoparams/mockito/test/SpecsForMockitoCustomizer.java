@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import autoparams.AutoSource;
+import autoparams.customization.Customization;
 import autoparams.mockito.MockitoCustomizer;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
@@ -17,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntSupplier;
-import org.javaunit.autoparams.AutoSource;
-import org.javaunit.autoparams.customization.Customization;
 import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForMockitoCustomizer {

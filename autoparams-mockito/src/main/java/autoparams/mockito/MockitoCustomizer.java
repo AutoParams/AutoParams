@@ -2,11 +2,11 @@ package autoparams.mockito;
 
 import static org.mockito.Mockito.mock;
 
+import autoparams.customization.Customizer;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import org.javaunit.autoparams.customization.Customizer;
-import org.javaunit.autoparams.generator.ObjectContainer;
-import org.javaunit.autoparams.generator.ObjectGenerator;
 
 public final class MockitoCustomizer implements Customizer {
 

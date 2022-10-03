@@ -1,7 +1,7 @@
 package autoparams.test
 
+import autoparams.AutoSource
 import org.assertj.core.api.Assertions.assertThat
-import org.javaunit.autoparams.AutoSource
 import org.junit.jupiter.params.ParameterizedTest
 
 internal class SpecsForKotlinCollections {
