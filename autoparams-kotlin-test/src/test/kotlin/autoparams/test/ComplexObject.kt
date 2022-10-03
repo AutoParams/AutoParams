@@ -1,4 +1,4 @@
-package org.javaunit.autoparams.test
+package autoparams.test
 
 import java.util.*
 

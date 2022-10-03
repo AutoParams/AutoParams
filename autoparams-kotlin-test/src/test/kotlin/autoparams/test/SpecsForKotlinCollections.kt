@@ -1,4 +1,4 @@
-package org.javaunit.autoparams.test
+package autoparams.test
 
 import org.assertj.core.api.Assertions.assertThat
 import org.javaunit.autoparams.AutoSource
