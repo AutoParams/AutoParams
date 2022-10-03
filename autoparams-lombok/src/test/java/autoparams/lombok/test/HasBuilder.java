@@ -1,12 +1,14 @@
-package org.javaunit.autoparams.lombok.test;
+package autoparams.lombok.test;
 
+import java.util.List;
 import lombok.Builder;
 
-@Builder(builderMethodName = "getBuilder", buildMethodName = "create")
-public class HasConfiguredBuilder {
+@Builder
+public class HasBuilder {
 
     private Long id;
     private String name;
+    private List<String> tags;
 
     public Long getId() {
         return id;
@@ -14,6 +16,10 @@ public class HasConfiguredBuilder {
 
     public String getName() {
         return name;
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 
 }

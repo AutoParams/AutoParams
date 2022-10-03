@@ -1,4 +1,4 @@
-package org.javaunit.autoparams.lombok;
+package autoparams.lombok;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

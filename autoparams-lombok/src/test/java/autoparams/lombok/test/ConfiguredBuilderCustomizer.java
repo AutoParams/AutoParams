@@ -1,6 +1,6 @@
-package org.javaunit.autoparams.lombok.test;
+package autoparams.lombok.test;
 
-import org.javaunit.autoparams.lombok.BuilderCustomizer;
+import autoparams.lombok.BuilderCustomizer;
 
 public class ConfiguredBuilderCustomizer extends BuilderCustomizer {
     public ConfiguredBuilderCustomizer() {
