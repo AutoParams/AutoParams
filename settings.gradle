@@ -1,4 +1,4 @@
-rootProject.name = 'JavaUnit-AutoParams'
+rootProject.name = 'AutoParams'
 
 include 'autoparams'
 include 'autoparams-mockito'
