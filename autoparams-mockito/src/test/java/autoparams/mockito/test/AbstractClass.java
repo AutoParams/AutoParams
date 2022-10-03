@@ -1,4 +1,4 @@
-package org.javaunit.autoparams.mockito.test;
+package autoparams.mockito.test;
 
 public abstract class AbstractClass {
 

@@ -1,4 +1,4 @@
-package org.javaunit.autoparams.mockito;
+package autoparams.mockito;
 
 import static org.mockito.Mockito.mock;
 
