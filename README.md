@@ -1,7 +1,7 @@
 # AutoParams
 
-[![CI](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/ci.yml)
-[![Publish](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml/badge.svg)](https://github.com/JavaUnit/AutoParams/actions/workflows/publish.yml)
+[![CI](https://github.com/AutoParams/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/AutoParams/AutoParams/actions/workflows/ci.yml)
+[![Publish](https://github.com/AutoParams/AutoParams/actions/workflows/publish.yml/badge.svg)](https://github.com/AutoParams/AutoParams/actions/workflows/publish.yml)
 
 AutoParams is an arbitrary test data generator for parameterized tests in Java inspired by AutoFixture.
 
@@ -87,16 +87,16 @@ That's cool!
 
 ```xml
 <dependency>
-  <groupId>io.github.javaunit</groupId>
+  <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>0.3.3</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams:0.3.3'
+testImplementation 'io.github.autoparams:autoparams:1.0.0'
 ```
 
 ## Features
@@ -598,16 +598,16 @@ void testMethod(User user) {
 
 ```xml
 <dependency>
-  <groupId>io.github.javaunit</groupId>
+  <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>0.0.4</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-mockito:0.0.4'
+testImplementation 'io.github.autoparams:autoparams-mockito:1.0.0'
 ```
 
 ### How to generate test doubles using Mockito
@@ -640,7 +640,7 @@ public class SystemUnderTest {
 }
 ```
 
-If you decorates your test method with `org.javaunit.autoparams.mockito.MockitoCustomizer`, then `@AutoSource` will generate values for parameters of interfaces and abstract classes using Mockito.
+If you decorates your test method with `autoparams.mockito.MockitoCustomizer`, then `@AutoSource` will generate values for parameters of interfaces and abstract classes using Mockito.
 
 In the following example, the argument `stub` is generated using Mockito by `MockitoCustomizer` and the parameter `stub` is decorated with the `@Fix` annotation so it is injected to the object `sut`.
 
@@ -667,7 +667,7 @@ void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
 
 ```xml
 <dependency>
-  <groupId>io.github.javaunit</groupId>
+  <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
   <version>0.0.3</version>
 </dependency>
@@ -676,12 +676,12 @@ void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.javaunit:autoparams-lombok:0.0.3'
+testImplementation 'io.github.autoparams:autoparams-lombok:1.0.0'
 ```
 
 ### `BuilderCustomizer`
 
-You can generate arbitrary objects of types decorated with `@Builder` annotation. Decorates your test method with `org.javaunit.autoparams.lombok.BuilderCustomizer`.
+You can generate arbitrary objects of types decorated with `@Builder` annotation. Decorates your test method with `autoparams.lombok.BuilderCustomizer`.
 
 ```java
 import lombok.Builder;
