@@ -15,7 +15,7 @@ allprojects {
         jcenter()
     }
 
-    group = 'io.github.javaunit'
+    group = 'io.github.autoparams'
 }
 
 subprojects {
@@ -78,10 +78,10 @@ subprojects {
             attributes(
                     'Specification-Title': artifactName,
                     'Specification-Version': artifactVersion,
-                    'Specification-Vendor': 'io.github.javaunit',
+                    'Specification-Vendor': 'io.github.autoparams',
                     'Implementation-Title': artifactName,
                     'Implementation-Version': artifactVersion,
-                    'Implementation-Vendor': 'io.github.javaunit'
+                    'Implementation-Vendor': 'io.github.autoparams'
             )
         }
     }
@@ -105,11 +105,11 @@ subprojects {
                 pom {
                     name = artifactName
                     description = artifactDescription
-                    url = "https://github.com/JavaUnit/AutoParams"
+                    url = "https://github.com/AutoParams/AutoParams"
                     licenses {
                         license {
                             name = "MIT License"
-                            url = "https://github.com/JavaUnit/AutoParams/blob/main/LICENSE"
+                            url = "https://github.com/AutoParams/AutoParams/blob/main/LICENSE"
                         }
                     }
                     developers {
@@ -125,9 +125,9 @@ subprojects {
                         }
                     }
                     scm {
-                        connection = "https://github.com/JavaUnit/AutoParams.git"
-                        developerConnection = "https://github.com/JavaUnit/AutoParams.git"
-                        url = "https://github.com/JavaUnit/AutoParams"
+                        connection = "https://github.com/AutoParams/AutoParams.git"
+                        developerConnection = "https://github.com/AutoParams/AutoParams.git"
+                        url = "https://github.com/AutoParams/AutoParams"
                     }
                 }
             }
