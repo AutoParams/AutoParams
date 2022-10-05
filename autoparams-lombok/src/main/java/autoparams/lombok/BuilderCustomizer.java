@@ -1,16 +1,16 @@
 package autoparams.lombok;
 
+import autoparams.customization.Customizer;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerationContext;
+import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectQuery;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Optional;
-import org.javaunit.autoparams.customization.Customizer;
-import org.javaunit.autoparams.generator.ObjectContainer;
-import org.javaunit.autoparams.generator.ObjectGenerationContext;
-import org.javaunit.autoparams.generator.ObjectGenerator;
-import org.javaunit.autoparams.generator.ObjectQuery;
 
 public class BuilderCustomizer implements Customizer {
 
