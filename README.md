@@ -89,14 +89,14 @@ That's cool!
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:1.0.0'
+testImplementation 'io.github.autoparams:autoparams:1.1.0'
 ```
 
 ## Features
@@ -333,7 +333,8 @@ Unit tests can be repeated with arbitrary test data. Set the `repeat` property o
 
 ```java
 @ParameterizedTest
-@AutoSource(repeat = 10)
+@AutoSource
+@Repeat(10)
 void testMethod(int a, int b) {
     // This test method is performed ten times.
     Calculator sut = new Calculator();
@@ -442,6 +443,56 @@ class ValueContainer {
 @CsvAutoSource({"16, foo"})
 void testMethod(int arg1, @Fix String arg2, ValueContainer arg3) {
     assertEquals("foo", arg3.getValue());
+}
+```
+
+### `@MethodAutoSource` annotation
+
+The `@MethodAutoSource` annotation combines the functionalities of `@MethodSource` and `@AutoSource`. You can specifiy names of factory method for the forepart parameters. The remaining parameters will be assigned with the arbitrary values.
+
+```java
+@ParameterizedTest
+@MethodAutoSource("factoryMethod")
+void testMethod(int arg1, String arg2, String arg3) {
+    assertEquals(16, arg1);
+    assertEquals("foo", arg2);
+    assertNotEquals(arg2, arg3);
+}
+
+static Stream<Arguments> factoryMethod() {
+    return Stream.of(
+        Arguments.arguments(16, "foo")
+    );
+}
+```
+
+The `@Fix` annotation correctly works with `@MethodAutoSource`.
+
+```java
+class ValueContainer {
+
+    private final String value;
+
+    public ValueContainer(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+}
+
+@ParameterizedTest
+@MethodAutoSource("factoryMethod")
+void testMethod(int arg1, @Fix String arg2, ValueContainer arg3) {
+    assertEquals("foo", arg3.getValue());
+}
+
+static Stream<Arguments> factoryMethod() {
+    return Stream.of(
+        Arguments.arguments(16, "foo")
+    );
 }
 ```
 
@@ -600,14 +651,14 @@ void testMethod(User user) {
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:1.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:1.1.0'
 ```
 
 ### How to generate test doubles using Mockito
@@ -669,14 +720,14 @@ void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>0.0.3</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:1.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:1.1.0'
 ```
 
 ### `BuilderCustomizer`
