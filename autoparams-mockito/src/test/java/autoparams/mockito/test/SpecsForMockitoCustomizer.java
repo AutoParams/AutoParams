@@ -3,6 +3,7 @@ package autoparams.mockito.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
@@ -124,6 +125,14 @@ class SpecsForMockitoCustomizer {
     @Customization(MockitoCustomizer.class)
     void sut_ignores_abstract_map(AbstractMap<String, Integer> arg) {
         assertThat(arg).isInstanceOf(HashMap.class);
+    }
+
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
+    @AutoSource
+    @Customization(MockitoCustomizer.class)
+    void sut_creates_value_of_spy_mode(IntContainer arg) {
+        when(arg.getValue()).thenReturn(100);
+        assertThat(arg.square()).isEqualTo(10000);
     }
 
 }

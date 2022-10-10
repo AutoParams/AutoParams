@@ -1,6 +1,6 @@
 package autoparams.mockito;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
@@ -23,7 +23,7 @@ public final class MockitoCustomizer implements Customizer {
     }
 
     private ObjectContainer generate(Class<?> type) {
-        return new ObjectContainer(mock(type));
+        return new ObjectContainer(spy(type));
     }
 
     private ObjectContainer generate(ParameterizedType parameterizedType) {
