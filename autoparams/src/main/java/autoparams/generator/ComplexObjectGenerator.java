@@ -12,7 +12,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
+import kotlin.jvm.JvmClassMappingKt;
+import kotlin.reflect.KClass;
+import kotlin.reflect.KFunction;
+import kotlin.reflect.full.KClasses;
+import kotlin.reflect.jvm.ReflectJvmMapping;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
 
@@ -64,6 +70,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     private Constructor<?> resolveConstructor(Class<?> type) {
         return ConstructorResolver
             .compose(
+                t -> Optional.ofNullable(tryGetKotlinPrimaryConstructor(t)),
                 t -> Arrays
                     .stream(t.getConstructors())
                     .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
@@ -75,6 +82,22 @@ final class ComplexObjectGenerator implements ObjectGenerator {
             .resolve(type)
             .orElseThrow(() -> new RuntimeException(
                 "Class '" + type.getName() + "' has no public constructor."));
+    }
+
+    private <T> Constructor<T> tryGetKotlinPrimaryConstructor(Class<T> clazz) {
+        try {
+            final KClass<T> kotlinClass = JvmClassMappingKt.getKotlinClass(clazz);
+            final KFunction<T> primaryConstructor =
+                KClasses.getPrimaryConstructor(kotlinClass);
+            if (primaryConstructor == null) {
+                return null;
+            }
+
+            return ReflectJvmMapping.getJavaConstructor(primaryConstructor);
+        } catch (Throwable e) {
+            return null;
+        }
+
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(
