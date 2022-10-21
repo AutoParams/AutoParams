@@ -7,6 +7,8 @@ dependencies {
     api 'org.junit.jupiter:junit-jupiter-params:5.9.0'
     api 'javax.validation:validation-api:2.0.1.Final'
     api 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.20'
+
     testImplementation 'org.assertj:assertj-core:3.8.0'
     testImplementation 'org.mockito:mockito-core:2.+'
     testImplementation(project(":autoparams-mockito"))
