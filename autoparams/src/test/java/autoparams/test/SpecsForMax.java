@@ -244,4 +244,11 @@ class SpecsForMax {
 
     void consumeByte(@Min(126) @Max(Byte.MAX_VALUE) byte arg) {
     }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(100)
+    void sut_accepts_max_constraint_for_float(@Max(100) float value) {
+        assertThat(value).isLessThanOrEqualTo(100);
+    }
 }

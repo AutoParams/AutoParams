@@ -139,4 +139,35 @@ public class SpecsForMin {
 
     void byteMinConstraintLessThanLowerBound(@Min(Byte.MIN_VALUE - 1) byte arg) {
     }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(100)
+    void sut_accepts_min_constraint_for_float(@Min(100) @Max(Short.MAX_VALUE) float value) {
+        assertThat(value).isGreaterThanOrEqualTo(100);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_does_not_accept_min_constraint_without_max_constraint_for_float(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Method method = getClass().getDeclaredMethod(
+            "hasFloatParameterWithOnlyMinAnnotation",
+            float.class
+        );
+        Parameter parameter = method.getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+
+        assertThatThrownBy(() -> context.generate(query))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage(
+                "The parameter annotated with @Min is missing the required"
+                + " @Max annotation. Please annotate the parameter with"
+                + " both @Min and @Max annotations to specify"
+                + " the minimum and maximum allowed values.");
+    }
+
+    void hasFloatParameterWithOnlyMinAnnotation(@Min(100) float arg) {
+    }
 }

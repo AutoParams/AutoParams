@@ -4,13 +4,13 @@ final class PrimitiveValueGenerator extends CompositeObjectGenerator {
 
     public PrimitiveValueGenerator() {
         super(
-            new IntegerGenerator(),
-            new DoubleGenerator(),
-            new LongGenerator(),
             new TypeMatchingGenerator(Factories::createBoolean, boolean.class, Boolean.class),
+            new IntegerGenerator(),
+            new LongGenerator(),
             new ByteGenerator(),
             new ShortGenerator(),
-            new TypeMatchingGenerator(Factories::createFloat, float.class, Float.class),
+            new FloatGenerator(),
+            new DoubleGenerator(),
             new TypeMatchingGenerator(Factories::createChar, char.class, Character.class));
     }
 
