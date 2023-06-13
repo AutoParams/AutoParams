@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
@@ -23,9 +24,18 @@ final class DoubleGenerator implements ObjectGenerator {
     private double getOrigin(ObjectQuery query) {
         if (query instanceof ParameterQuery) {
             ParameterQuery argumentQuery = (ParameterQuery) query;
-            Min annotation = argumentQuery.getParameter().getAnnotation(Min.class);
-            if (annotation != null) {
-                return annotation.value();
+            Parameter parameter = argumentQuery.getParameter();
+            Min min = parameter.getAnnotation(Min.class);
+            if (min != null) {
+                Max max = parameter.getAnnotation(Max.class);
+                if (max == null) {
+                    throw new RuntimeException(
+                        "The parameter annotated with @Min is missing the"
+                            + " required @Max annotation. Please annotate the"
+                            + " parameter with both @Min and @Max annotations to"
+                            + " specify the minimum and maximum allowed values.");
+                }
+                return min.value();
             }
         }
 
