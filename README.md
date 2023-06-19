@@ -513,6 +513,10 @@ void testMethod(@Min(1) @Max(10) int value) {
 
 - `int`
 - `Integer`
+- `float`
+- `Float`
+- `double`
+- `Double`
 
 ### `@Customization` annotation
 
