@@ -4,7 +4,8 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Optional;
 
-interface ConstructorResolver {
+@FunctionalInterface
+public interface ConstructorResolver {
 
     Optional<Constructor<?>> resolve(Class<?> type);
 
