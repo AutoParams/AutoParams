@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import autoparams.AutoSource;
+import autoparams.Repeat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
@@ -147,7 +148,8 @@ class SpecsForSimpleTypes {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 10)
+    @AutoSource
+    @Repeat(10)
     void sut_creates_positive_period_value(Period value) {
         assertFalse(value.isNegative());
     }

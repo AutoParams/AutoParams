@@ -10,16 +10,13 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.support.AnnotationConsumer;
 
-final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<AutoSource> {
+final class AutoArgumentsProvider implements ArgumentsProvider {
 
     private final ObjectGenerator generator;
-    private int repeat;
 
     private AutoArgumentsProvider(ObjectGenerator generator) {
         this.generator = generator;
-        repeat = 1;
     }
 
     public AutoArgumentsProvider() {
@@ -39,13 +36,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider, AnnotationConsum
 
     private int getRepeat(ExtensionContext context) {
         final Method method = context.getRequiredTestMethod();
-        return findAnnotation(method, Repeat.class).map(Repeat::value).orElse(repeat);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void accept(AutoSource annotation) {
-        repeat = annotation.repeat();
+        return findAnnotation(method, Repeat.class).map(Repeat::value).orElse(1);
     }
 
 }

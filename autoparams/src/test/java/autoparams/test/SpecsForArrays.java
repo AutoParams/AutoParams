@@ -3,6 +3,7 @@ package autoparams.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import autoparams.AutoSource;
+import autoparams.Repeat;
 import java.util.Collections;
 import java.util.HashSet;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +46,8 @@ class SpecsForArrays {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 10)
+    @AutoSource
+    @Repeat(10)
     void sut_fills_array_of_enum_type_with_arbitrary_objects(EnumType[] array) {
         HashSet<EnumType> set = new HashSet<>();
         Collections.addAll(set, array);

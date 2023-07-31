@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import autoparams.AutoSource;
 import autoparams.Builder;
+import autoparams.Repeat;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,7 +42,8 @@ class SpecsForBuilder {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 10)
+    @AutoSource
+    @Repeat(10)
     void sut_correctly_fixes_int_value(
         int fixedInt, Builder<ComplexObject> builder) {
 
@@ -50,7 +52,8 @@ class SpecsForBuilder {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 10)
+    @AutoSource
+    @Repeat(10)
     void sut_correctly_fixes_elements_of_array(
         int fixedInt, Builder<int[]> builder) {
 
@@ -61,7 +64,8 @@ class SpecsForBuilder {
     }
 
     @ParameterizedTest
-    @AutoSource(repeat = 10)
+    @AutoSource
+    @Repeat(10)
     void sut_separately_fixes_primitive_value_and_boxed_value(
         int fixedInt, Builder<Integer> builder) {
 
