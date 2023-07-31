@@ -7,25 +7,15 @@ import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 
 final class ArgumentsGenerator {
-
-    private static final List<AnnotatedElement> PLATFORM_ELEMENTS = Arrays.asList(
-        Documented.class,
-        Retention.class,
-        Target.class
-    );
 
     private final ObjectGenerationContext context;
     private final int repeat;
@@ -64,15 +54,29 @@ final class ArgumentsGenerator {
     }
 
     private static Stream<Customization> getCustomizations(AnnotatedElement annotated) {
-        return PLATFORM_ELEMENTS.contains(annotated)
-            ? Stream.empty()
-            : stream(annotated.getAnnotations()).flatMap(ArgumentsGenerator::getCustomizations);
+        return getCustomizations(new ArrayList<>(), annotated);
     }
 
-    private static Stream<Customization> getCustomizations(Annotation annotation) {
+    private static Stream<Customization> getCustomizations(
+        ArrayList<AnnotatedElement> visited,
+        AnnotatedElement annotated
+    ) {
+        if (visited.contains(annotated)) {
+            return Stream.empty();
+        }
+
+        Annotation[] annotations = annotated.getAnnotations();
+        visited.add(annotated);
+        return stream(annotations).flatMap(annotation -> getCustomizations(visited, annotation));
+    }
+
+    private static Stream<Customization> getCustomizations(
+        ArrayList<AnnotatedElement> visited,
+        Annotation annotation
+    ) {
         return annotation instanceof Customization
             ? Stream.of((Customization) annotation)
-            : getCustomizations(annotation.annotationType());
+            : getCustomizations(visited, annotation.annotationType());
     }
 
     private Stream<Arguments> generate(Method method) {
