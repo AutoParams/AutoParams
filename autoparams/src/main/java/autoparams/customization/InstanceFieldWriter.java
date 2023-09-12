@@ -1,7 +1,5 @@
 package autoparams.customization;
 
-import static java.util.Arrays.stream;
-
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
@@ -11,6 +9,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
+
+import static java.util.Arrays.stream;
 
 public final class InstanceFieldWriter implements Customizer {
 

@@ -1,12 +1,12 @@
 package autoparams.mockito;
 
-import static org.mockito.Mockito.spy;
-
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import static org.mockito.Mockito.spy;
 
 public final class MockitoCustomizer implements Customizer {
 

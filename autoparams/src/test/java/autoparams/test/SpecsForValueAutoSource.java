@@ -1,13 +1,13 @@
 package autoparams.test;
 
+import autoparams.ValueAutoSource;
+import java.util.UUID;
+import org.junit.jupiter.params.ParameterizedTest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import autoparams.ValueAutoSource;
-import java.util.UUID;
-import org.junit.jupiter.params.ParameterizedTest;
 
 class SpecsForValueAutoSource {
 

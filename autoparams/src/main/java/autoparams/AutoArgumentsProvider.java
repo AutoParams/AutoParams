@@ -1,7 +1,5 @@
 package autoparams;
 
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
-
 import autoparams.generator.CompositeObjectGenerator;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
@@ -10,6 +8,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
+
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 
 final class AutoArgumentsProvider implements ArgumentsProvider {
 

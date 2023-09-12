@@ -1,13 +1,13 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.offset;
-
 import autoparams.AutoSource;
 import autoparams.Builder;
 import java.net.URL;
 import java.util.stream.IntStream;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.offset;
 
 class SpecsForUrl {
 

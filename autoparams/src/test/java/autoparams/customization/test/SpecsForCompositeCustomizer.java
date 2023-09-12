@@ -1,8 +1,5 @@
 package autoparams.customization.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
 import autoparams.AutoSource;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customizer;
@@ -12,6 +9,9 @@ import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class SpecsForCompositeCustomizer {
 

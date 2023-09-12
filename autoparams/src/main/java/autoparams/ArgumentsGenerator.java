@@ -1,7 +1,5 @@
 package autoparams;
 
-import static java.util.Arrays.stream;
-
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerationContext;
@@ -18,6 +16,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
+
+import static java.util.Arrays.stream;
 
 final class ArgumentsGenerator {
 

@@ -2,9 +2,9 @@ package autoparams.customization.test;
 
 public class Versioned {
 
-    private long version;
+    private Long version;
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
 

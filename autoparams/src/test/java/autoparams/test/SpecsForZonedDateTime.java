@@ -1,14 +1,14 @@
 package autoparams.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import autoparams.AutoSource;
 import autoparams.customization.Fix;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class SpecsForZonedDateTime {
 

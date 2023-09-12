@@ -1,13 +1,13 @@
 package autoparams.customization.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.SettablePropertyWriter;
 import java.util.UUID;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SpecsForSettablePropertyWriter {
 

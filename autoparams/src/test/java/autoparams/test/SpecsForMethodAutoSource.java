@@ -1,8 +1,5 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import autoparams.MethodAutoSource;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +7,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class SpecsForMethodAutoSource {
 

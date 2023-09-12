@@ -1,12 +1,12 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import autoparams.Repeat;
 import java.util.Collections;
 import java.util.HashSet;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForArrays {
 

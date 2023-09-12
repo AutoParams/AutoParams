@@ -1,10 +1,10 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import java.util.HashSet;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForEnum {
 
@@ -32,7 +32,7 @@ class SpecsForEnum {
         EnumType value19,
         EnumType value20
     ) {
-        HashSet<EnumType> set = new HashSet<EnumType>();
+        HashSet<EnumType> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);

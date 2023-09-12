@@ -1,10 +1,10 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import java.util.UUID;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForGenerics {
 

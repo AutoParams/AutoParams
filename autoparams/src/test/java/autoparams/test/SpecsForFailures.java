@@ -1,10 +1,10 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import autoparams.AutoSource;
 import autoparams.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SpecsForFailures {
 

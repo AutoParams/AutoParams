@@ -1,11 +1,11 @@
 package autoparams.customization.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import autoparams.customization.RecursionGuard;
 import autoparams.generator.ObjectGenerationContext;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForRecursionGuard {
 

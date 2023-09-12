@@ -1,7 +1,5 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import java.util.HashSet;
 import java.util.UUID;
@@ -10,6 +8,8 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForStreams {
 
@@ -40,7 +40,7 @@ class SpecsForStreams {
         assertThat(stream).isNotNull();
 
         Object[] array = stream.toArray();
-        HashSet<UUID> set = new HashSet<UUID>();
+        HashSet<UUID> set = new HashSet<>();
         for (Object element : array) {
             set.add((UUID) element);
         }

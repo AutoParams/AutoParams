@@ -1,11 +1,11 @@
 package autoparams.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import autoparams.AutoSource;
 import java.util.HashSet;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SpecsForPrimitiveTypes {
 

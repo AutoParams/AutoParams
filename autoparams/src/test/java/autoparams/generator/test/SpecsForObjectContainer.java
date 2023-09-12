@@ -1,13 +1,5 @@
 package autoparams.generator.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.generator.ObjectContainer;
@@ -16,6 +8,14 @@ import autoparams.mockito.MockitoCustomizer;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class SpecsForObjectContainer {
 
@@ -54,7 +54,7 @@ class SpecsForObjectContainer {
     @Test
     void unwrapOrElseThrow_throws_UnwrapFailedException_if_sut_is_empty() {
         ObjectContainer sut = ObjectContainer.EMPTY;
-        Throwable actual = catchThrowable(() -> sut.unwrapOrElseThrow());
+        Throwable actual = catchThrowable(sut::unwrapOrElseThrow);
         assertThat(actual).isInstanceOf(UnwrapFailedException.class);
     }
 

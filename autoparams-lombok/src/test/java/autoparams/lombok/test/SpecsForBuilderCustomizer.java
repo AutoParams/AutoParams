@@ -1,11 +1,11 @@
 package autoparams.lombok.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.lombok.BuilderCustomizer;
 import org.junit.jupiter.params.ParameterizedTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForBuilderCustomizer {
 

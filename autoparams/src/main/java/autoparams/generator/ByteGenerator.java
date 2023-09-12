@@ -1,12 +1,12 @@
 package autoparams.generator;
 
-import static java.lang.Byte.MAX_VALUE;
-import static java.lang.Byte.MIN_VALUE;
-
 import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import static java.lang.Byte.MAX_VALUE;
+import static java.lang.Byte.MIN_VALUE;
 
 final class ByteGenerator implements ObjectGenerator {
 

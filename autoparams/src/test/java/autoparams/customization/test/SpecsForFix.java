@@ -1,14 +1,15 @@
 package autoparams.customization.test;
 
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.Fix;
 import autoparams.mockito.MockitoCustomizer;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+@SuppressWarnings("DefaultAnnotationParam")
 class SpecsForFix {
 
     @ParameterizedTest
