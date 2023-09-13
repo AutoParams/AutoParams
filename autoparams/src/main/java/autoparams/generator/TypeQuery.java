@@ -2,7 +2,7 @@ package autoparams.generator;
 
 import java.lang.reflect.Type;
 
-final class TypeQuery implements ObjectQuery {
+public final class TypeQuery implements ObjectQuery {
 
     private final Type type;
 
