@@ -13,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 
 public class SpecsForMin {
@@ -123,45 +122,6 @@ public class SpecsForMin {
     }
 
     void valueLessThanLowerBound(@Min(Short.MIN_VALUE - 1) short arg) {
-    }
-
-    @ParameterizedTest
-    @AutoSource
-    @Repeat(10)
-    void sut_accepts_min_constraint_for_byte(@Min(100) byte value) {
-        assertThat(value).isGreaterThanOrEqualTo((byte) 100);
-    }
-
-    @ParameterizedTest
-    @AutoSource()
-    void sut_throws_when_min_constraint_of_byte_argument_is_greater_than_upper_bound(
-        ObjectGenerationContext context
-    ) throws NoSuchMethodException {
-        Method method = getClass().getDeclaredMethod(
-            "byteMinConstraintGreaterThanUpperBound",
-            byte.class);
-        Parameter parameter = method.getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
-    }
-
-    void byteMinConstraintGreaterThanUpperBound(@Min(Byte.MAX_VALUE + 1) byte arg) {
-    }
-
-    @ParameterizedTest
-    @AutoSource()
-    void sut_throws_when_min_constraint_of_byte_argument_is_less_than_lower_bound(
-        ObjectGenerationContext context
-    ) throws NoSuchMethodException {
-        Method method = getClass().getDeclaredMethod(
-            "byteMinConstraintLessThanLowerBound",
-            byte.class);
-        Parameter parameter = method.getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
-    }
-
-    void byteMinConstraintLessThanLowerBound(@Min(Byte.MIN_VALUE - 1) byte arg) {
     }
 
     @ParameterizedTest

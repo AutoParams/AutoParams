@@ -25,7 +25,7 @@ final class IntegerGenerator implements ObjectGenerator {
     private int getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
         return annotation == null
-            ? MIN_VALUE
+            ? 1
             : (int) Math.min(Math.max(annotation.value(), MIN_VALUE), MAX_VALUE);
     }
 

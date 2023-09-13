@@ -21,9 +21,7 @@ final class LongGenerator implements ObjectGenerator {
 
     private long getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
-        return annotation == null
-            ? Long.MIN_VALUE
-            : annotation.value();
+        return annotation == null ? 1 : annotation.value();
     }
 
     private long getMax(ObjectQuery query) {

@@ -25,7 +25,7 @@ final class ByteGenerator implements ObjectGenerator {
     private byte getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
-            return MIN_VALUE;
+            return 1;
         } else if (min.value() < MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
         } else if (min.value() > MAX_VALUE) {

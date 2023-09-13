@@ -24,7 +24,7 @@ final class ShortGenerator implements ObjectGenerator {
 
     private short getMin(ParameterQuery query) {
         Min annotation = query.getParameter().getAnnotation(Min.class);
-        return annotation == null ? MIN_VALUE : convertToShort(annotation.value());
+        return annotation == null ? 1 : convertToShort(annotation.value());
     }
 
     private short getMax(ObjectQuery query) {
