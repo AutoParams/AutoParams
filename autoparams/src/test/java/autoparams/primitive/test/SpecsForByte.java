@@ -88,6 +88,13 @@ public class SpecsForByte {
     }
 
     @AutoParameterizedTest
+    void sut_generates_non_positive_value_if_max_constraint_is_non_positive(
+        @Max(0) byte arg
+    ) {
+        assertThat(arg).isNotPositive();
+    }
+
+    @AutoParameterizedTest
     void sut_throws_if_max_constraint_is_excessively_large(
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
@@ -150,16 +157,16 @@ public class SpecsForByte {
     }
 
     @AutoParameterizedTest
-    void sut_throws_if_max_constraint_is_smaller_than_min_constraint(
+    void sut_throws_if_max_constraint_is_less_than_min_constraint(
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("maxConstraintIsSmallerThanMinConstraint", byte.class)
+            .getDeclaredMethod("maxConstraintLessThanMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void maxConstraintIsSmallerThanMinConstraint(@Min(1) @Max(0) byte arg) {
+    void maxConstraintLessThanMinConstraint(@Min(1) @Max(0) byte arg) {
     }
 }

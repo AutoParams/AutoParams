@@ -23,10 +23,17 @@ final class IntegerGenerator implements ObjectGenerator {
     }
 
     private int getMin(ParameterQuery query) {
-        Min annotation = query.getParameter().getAnnotation(Min.class);
-        return annotation == null
-            ? 1
-            : (int) Math.min(Math.max(annotation.value(), MIN_VALUE), MAX_VALUE);
+        Min min = query.getParameter().getAnnotation(Min.class);
+        if (min == null) {
+            Max max = query.getParameter().getAnnotation(Max.class);
+            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
+        } else if (min.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The max constraint underflowed.");
+        } else if (min.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The max constraint overflowed.");
+        } else {
+            return (int) min.value();
+        }
     }
 
     private int getMax(ObjectQuery query) {
@@ -34,10 +41,16 @@ final class IntegerGenerator implements ObjectGenerator {
     }
 
     private int getMax(ParameterQuery query) {
-        Max annotation = query.getParameter().getAnnotation(Max.class);
-        return annotation == null
-            ? MAX_VALUE
-            : (int) Math.max(Math.min(annotation.value(), MAX_VALUE), MIN_VALUE);
+        Max max = query.getParameter().getAnnotation(Max.class);
+        if (max == null) {
+            return MAX_VALUE;
+        } else if (max.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The max constraint underflowed.");
+        } else if (max.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The max constraint overflowed.");
+        } else {
+            return (int) max.value();
+        }
     }
 
     private int factory(int min, int max) {
@@ -52,5 +65,4 @@ final class IntegerGenerator implements ObjectGenerator {
         int bound = max + 1 + offset;
         return random.nextInt(origin, bound) - offset;
     }
-
 }

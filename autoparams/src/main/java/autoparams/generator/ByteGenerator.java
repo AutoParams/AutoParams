@@ -25,7 +25,8 @@ final class ByteGenerator implements ObjectGenerator {
     private byte getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
-            return 1;
+            Max max = query.getParameter().getAnnotation(Max.class);
+            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
         } else if (min.value() < MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
         } else if (min.value() > MAX_VALUE) {
@@ -53,15 +54,6 @@ final class ByteGenerator implements ObjectGenerator {
     }
 
     private byte factory(byte min, byte max) {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        if (min == MIN_VALUE && max == MAX_VALUE) {
-            return (byte) random.nextInt(MIN_VALUE, MAX_VALUE);
-        }
-
-        int offset = max == MAX_VALUE ? -1 : 0;
-        int origin = min + offset;
-        int bound = max + 1 + offset;
-        return (byte) (random.nextInt(origin, bound) - offset);
+        return (byte) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
 }

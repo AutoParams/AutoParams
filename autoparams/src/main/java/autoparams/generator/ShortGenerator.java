@@ -23,8 +23,17 @@ final class ShortGenerator implements ObjectGenerator {
     }
 
     private short getMin(ParameterQuery query) {
-        Min annotation = query.getParameter().getAnnotation(Min.class);
-        return annotation == null ? 1 : convertToShort(annotation.value());
+        Min min = query.getParameter().getAnnotation(Min.class);
+        if (min == null) {
+            Max max = query.getParameter().getAnnotation(Max.class);
+            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
+        } else if (min.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The min constraint underflowed.");
+        } else if (min.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The min constraint overflowed.");
+        } else {
+            return (short) min.value();
+        }
     }
 
     private short getMax(ObjectQuery query) {
@@ -32,31 +41,19 @@ final class ShortGenerator implements ObjectGenerator {
     }
 
     private short getMax(ParameterQuery query) {
-        Max annotation = query.getParameter().getAnnotation(Max.class);
-        return annotation == null ? MAX_VALUE : convertToShort(annotation.value());
-    }
-
-    private short convertToShort(long value) {
-        assertThatValueIsGreaterThatOrEqualToMinValue(value);
-        assertThatValueIsLessThanOrEqualToMaxValue(value);
-        return (short) value;
-    }
-
-    private void assertThatValueIsGreaterThatOrEqualToMinValue(long value) {
-        if (value < MIN_VALUE) {
-            throw new IllegalArgumentException("the value is less than the lower bound.");
+        Max max = query.getParameter().getAnnotation(Max.class);
+        if (max == null) {
+            return MAX_VALUE;
+        } else if (max.value() < MIN_VALUE) {
+            throw new IllegalArgumentException("The max constraint underflowed.");
+        } else if (max.value() > MAX_VALUE) {
+            throw new IllegalArgumentException("The max constraint overflowed.");
+        } else {
+            return (short) max.value();
         }
     }
 
-    private void assertThatValueIsLessThanOrEqualToMaxValue(long value) {
-        if (value > MAX_VALUE) {
-            throw new IllegalArgumentException("The value is greater than the upper bound.");
-        }
+    private short factory(short min, short max) {
+        return (short) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
-
-    private short factory(int min, int max) {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        return (short) random.nextInt(min, (max + 1));
-    }
-
 }

@@ -2,9 +2,15 @@ package autoparams.primitive.test;
 
 import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
+import autoparams.generator.ObjectGenerationContext;
+import autoparams.generator.ObjectQuery;
+import java.lang.reflect.Parameter;
 import java.util.HashSet;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SpecsForShort {
 
@@ -46,5 +52,100 @@ public class SpecsForShort {
     @Repeat(10)
     void sut_creates_positive_short_value(short arg) {
         assertThat(arg).isPositive();
+    }
+
+    @AutoParameterizedTest
+    void sut_accepts_max_constraint_for_short(@Max(100) short value) {
+        assertThat(value).isLessThanOrEqualTo((short) 100);
+    }
+
+    @AutoParameterizedTest
+    void sut_includes_max_value_for_short(
+        @Min(Short.MAX_VALUE) @Max(Short.MAX_VALUE) short arg
+    ) {
+        assertThat(arg).isEqualTo(Short.MAX_VALUE);
+    }
+
+    @AutoParameterizedTest
+    void sut_generates_non_positive_value_if_max_constraint_is_non_positive(
+        @Max(0) short arg
+    ) {
+        assertThat(arg).isNotPositive();
+    }
+
+    @AutoParameterizedTest
+    void sut_throws_if_max_constraint_is_excessively_large(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Parameter parameter = getClass()
+            .getDeclaredMethod("excessivelyLargeMaxConstraint", short.class)
+            .getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void excessivelyLargeMaxConstraint(@Max(Short.MAX_VALUE + 1) short arg) {
+    }
+
+    @AutoParameterizedTest
+    void sut_throws_if_max_constraint_is_excessively_small(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Parameter parameter = getClass()
+            .getDeclaredMethod("excessivelySmallMaxConstraint", short.class)
+            .getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void excessivelySmallMaxConstraint(@Max(Short.MIN_VALUE - 1) short arg) {
+    }
+
+    @AutoParameterizedTest
+    @Repeat(10)
+    void sut_accepts_min_constraint_for_short(@Min(100) short value) {
+        assertThat(value).isGreaterThanOrEqualTo((short) 100);
+    }
+
+    @AutoParameterizedTest
+    void sut_throws_if_min_constraint_is_excessively_large(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Parameter parameter = getClass()
+            .getDeclaredMethod("excessivelyLargeMinConstraint", short.class)
+            .getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void excessivelyLargeMinConstraint(@Min(Short.MAX_VALUE + 1) short arg) {
+    }
+
+    @AutoParameterizedTest
+    void sut_throws_if_min_constraint_is_excessively_small(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Parameter parameter = getClass()
+            .getDeclaredMethod("excessivelySmallMinConstraint", short.class)
+            .getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void excessivelySmallMinConstraint(@Min(Short.MIN_VALUE - 1) short arg) {
+    }
+
+    @AutoParameterizedTest
+    void sut_throws_if_max_constraint_is_less_than_min_constraint(
+        ObjectGenerationContext context
+    ) throws NoSuchMethodException {
+        Parameter parameter = getClass()
+            .getDeclaredMethod("maxConstraintLessThanMinConstraint", short.class)
+            .getParameters()[0];
+        ObjectQuery query = ObjectQuery.fromParameter(parameter);
+        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+    }
+
+    void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) short arg) {
     }
 }
