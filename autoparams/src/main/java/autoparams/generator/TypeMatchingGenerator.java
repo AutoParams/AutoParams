@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-final class TypeMatchingGenerator implements ObjectGenerator {
+public final class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Type, Boolean> predicate;
     private final Function<ObjectGenerationContext, Object> factory;
@@ -19,7 +19,10 @@ final class TypeMatchingGenerator implements ObjectGenerator {
         this.factory = factory;
     }
 
-    public TypeMatchingGenerator(Supplier<Object> factory, Class<?>... candidates) {
+    public TypeMatchingGenerator(
+        Supplier<Object> factory,
+        Class<?>... candidates
+    ) {
         this(buildPredicateWithTypes(candidates), context -> factory.get());
     }
 
