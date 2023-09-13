@@ -3,7 +3,7 @@ package autoparams.generator;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
-final class ParameterQuery implements ObjectQuery {
+public final class ParameterQuery implements ObjectQuery {
 
     private final Parameter parameter;
 
