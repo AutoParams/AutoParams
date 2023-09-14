@@ -22,35 +22,32 @@ final class DoubleGenerator implements ObjectGenerator {
     }
 
     private double getOrigin(ObjectQuery query) {
-        if (query instanceof ParameterQuery) {
-            ParameterQuery argumentQuery = (ParameterQuery) query;
-            Parameter parameter = argumentQuery.getParameter();
-            Min min = parameter.getAnnotation(Min.class);
-            if (min != null) {
-                Max max = parameter.getAnnotation(Max.class);
-                if (max == null) {
-                    throw new RuntimeException(
-                        "The parameter annotated with @Min is missing the"
-                            + " required @Max annotation. Please annotate the"
-                            + " parameter with both @Min and @Max annotations to"
-                            + " specify the minimum and maximum allowed values.");
-                }
-                return min.value();
-            }
-        }
+        return query instanceof ParameterQuery ? getOrigin((ParameterQuery) query) : 0.0;
+    }
 
-        return 0.0;
+    private static double getOrigin(ParameterQuery query) {
+        Parameter parameter = query.getParameter();
+        Min min = parameter.getAnnotation(Min.class);
+        if (min == null) {
+            Max max = parameter.getAnnotation(Max.class);
+            return max == null || max.value() > 0 ? 0.0 : Long.MIN_VALUE;
+        } else {
+            return min.value();
+        }
     }
 
     private double getBound(ObjectQuery query) {
-        if (query instanceof ParameterQuery) {
-            ParameterQuery argumentQuery = (ParameterQuery) query;
-            Max annotation = argumentQuery.getParameter().getAnnotation(Max.class);
-            if (annotation != null) {
-                return annotation.value();
-            }
-        }
+        return query instanceof ParameterQuery ? getBound((ParameterQuery) query) : 1.0;
+    }
 
-        return 1.0;
+    private static double getBound(ParameterQuery query) {
+        Parameter parameter = query.getParameter();
+        Max max = parameter.getAnnotation(Max.class);
+        if (max == null) {
+            Min min = parameter.getAnnotation(Min.class);
+            return min == null || min.value() < 0 ? 1.0 : Long.MAX_VALUE;
+        } else {
+            return max.value();
+        }
     }
 }
