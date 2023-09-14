@@ -46,6 +46,20 @@ public final class TypeMatchingGenerator implements ObjectGenerator {
         return type.getRawType().equals(candidate);
     }
 
+    public static <T> TypeMatchingGenerator create(
+        Class<?> type,
+        Supplier<T> factory
+    ) {
+        return new TypeMatchingGenerator(factory::get, type);
+    }
+
+    public static <T> TypeMatchingGenerator create(
+        Class<?> type,
+        Function<ObjectGenerationContext, T> factory
+    ) {
+        return new TypeMatchingGenerator(factory::apply, type);
+    }
+
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         Type type = query.getType();
