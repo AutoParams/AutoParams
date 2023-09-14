@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,21 +7,25 @@ import javax.validation.constraints.Min;
 import static java.lang.Short.MAX_VALUE;
 import static java.lang.Short.MIN_VALUE;
 
-final class ShortGenerator implements ObjectGenerator {
+final class ShortGenerator extends TypeMatchingGenerator {
 
-    @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        Type type = query.getType();
-        return type == short.class || type == Short.class
-            ? new ObjectContainer(factory(getMin(query), getMax(query)))
-            : ObjectContainer.EMPTY;
+    ShortGenerator() {
+        super((query, context) -> factory(query), short.class, Short.class);
     }
 
-    private short getMin(ObjectQuery query) {
+    private static short factory(ObjectQuery query) {
+        return factory(getMin(query), getMax(query));
+    }
+
+    private static short factory(short min, short max) {
+        return (short) ThreadLocalRandom.current().nextInt(min, (max + 1));
+    }
+
+    private static short getMin(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private short getMin(ParameterQuery query) {
+    private static short getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
             Max max = query.getParameter().getAnnotation(Max.class);
@@ -36,11 +39,11 @@ final class ShortGenerator implements ObjectGenerator {
         }
     }
 
-    private short getMax(ObjectQuery query) {
+    private static short getMax(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private short getMax(ParameterQuery query) {
+    private static short getMax(ParameterQuery query) {
         Max max = query.getParameter().getAnnotation(Max.class);
         if (max == null) {
             return MAX_VALUE;
@@ -51,9 +54,5 @@ final class ShortGenerator implements ObjectGenerator {
         } else {
             return (short) max.value();
         }
-    }
-
-    private short factory(short min, short max) {
-        return (short) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
 }
