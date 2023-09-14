@@ -1,7 +1,6 @@
 package autoparams.generator;
 
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
