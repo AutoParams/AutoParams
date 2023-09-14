@@ -17,5 +17,4 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new ComplexObjectGenerator()))
         );
     }
-
 }
