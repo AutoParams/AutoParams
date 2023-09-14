@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,21 +7,34 @@ import javax.validation.constraints.Min;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
-final class IntegerGenerator implements ObjectGenerator {
+final class IntegerGenerator extends TypeMatchingGenerator {
 
-    @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        Type type = query.getType();
-        return type == int.class || type == Integer.class
-            ? new ObjectContainer(factory(getMin(query), getMax(query)))
-            : ObjectContainer.EMPTY;
+    IntegerGenerator() {
+        super((query, context) -> factory(query), int.class, Integer.class);
     }
 
-    private int getMin(ObjectQuery query) {
+    private static int factory(ObjectQuery query) {
+        return factory(getMin(query), getMax(query));
+    }
+
+    private static int factory(int min, int max) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        if (min == MIN_VALUE && max == MAX_VALUE) {
+            return random.nextInt();
+        }
+
+        int offset = max == MAX_VALUE ? -1 : 0;
+        int origin = min + offset;
+        int bound = max + 1 + offset;
+        return random.nextInt(origin, bound) - offset;
+    }
+
+    private static int getMin(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private int getMin(ParameterQuery query) {
+    private static int getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
             Max max = query.getParameter().getAnnotation(Max.class);
@@ -36,11 +48,11 @@ final class IntegerGenerator implements ObjectGenerator {
         }
     }
 
-    private int getMax(ObjectQuery query) {
+    private static int getMax(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private int getMax(ParameterQuery query) {
+    private static int getMax(ParameterQuery query) {
         Max max = query.getParameter().getAnnotation(Max.class);
         if (max == null) {
             return MAX_VALUE;
@@ -51,18 +63,5 @@ final class IntegerGenerator implements ObjectGenerator {
         } else {
             return (int) max.value();
         }
-    }
-
-    private int factory(int min, int max) {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        if (min == MIN_VALUE && max == MAX_VALUE) {
-            return random.nextInt();
-        }
-
-        int offset = max == MAX_VALUE ? -1 : 0;
-        int origin = min + offset;
-        int bound = max + 1 + offset;
-        return random.nextInt(origin, bound) - offset;
     }
 }
