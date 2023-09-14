@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,21 +7,25 @@ import javax.validation.constraints.Min;
 import static java.lang.Byte.MAX_VALUE;
 import static java.lang.Byte.MIN_VALUE;
 
-final class ByteGenerator implements ObjectGenerator {
+final class ByteGenerator extends TypeMatchingGenerator {
 
-    @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        Type type = query.getType();
-        return type == byte.class || type == Byte.class
-            ? new ObjectContainer(factory(getMin(query), getMax(query)))
-            : ObjectContainer.EMPTY;
+    ByteGenerator() {
+        super((query, context) -> factory(query), byte.class, Byte.class);
     }
 
-    private byte getMin(ObjectQuery query) {
+    private static byte factory(ObjectQuery query) {
+        return factory(getMin(query), getMax(query));
+    }
+
+    private static byte factory(byte min, byte max) {
+        return (byte) ThreadLocalRandom.current().nextInt(min, (max + 1));
+    }
+
+    private static byte getMin(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
     }
 
-    private byte getMin(ParameterQuery query) {
+    private static byte getMin(ParameterQuery query) {
         Min min = query.getParameter().getAnnotation(Min.class);
         if (min == null) {
             Max max = query.getParameter().getAnnotation(Max.class);
@@ -36,11 +39,11 @@ final class ByteGenerator implements ObjectGenerator {
         }
     }
 
-    private byte getMax(ObjectQuery query) {
+    private static byte getMax(ObjectQuery query) {
         return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
     }
 
-    private byte getMax(ParameterQuery query) {
+    private static byte getMax(ParameterQuery query) {
         Max max = query.getParameter().getAnnotation(Max.class);
         if (max == null) {
             return MAX_VALUE;
@@ -51,9 +54,5 @@ final class ByteGenerator implements ObjectGenerator {
         } else {
             return (byte) max.value();
         }
-    }
-
-    private byte factory(byte min, byte max) {
-        return (byte) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
 }
