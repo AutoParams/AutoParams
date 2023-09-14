@@ -6,22 +6,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-final class DoubleGenerator implements ObjectGenerator {
+final class DoubleGenerator extends TypeMatchingGenerator {
 
-    @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        Type type = query.getType();
-        if (type == double.class || type == Double.class) {
-            double origin = getOrigin(query);
-            double bound = getBound(query);
-            double value = ThreadLocalRandom.current().nextDouble(origin, bound);
-            return new ObjectContainer(value);
-        }
-
-        return ObjectContainer.EMPTY;
+    DoubleGenerator() {
+        super((query, context) -> factory(query), double.class, Double.class);
     }
 
-    private double getOrigin(ObjectQuery query) {
+    private static double factory(ObjectQuery query) {
+        double origin = getOrigin(query);
+        double bound = getBound(query);
+        return ThreadLocalRandom.current().nextDouble(origin, bound);
+    }
+
+    private static double getOrigin(ObjectQuery query) {
         return query instanceof ParameterQuery ? getOrigin((ParameterQuery) query) : 0.0;
     }
 
@@ -36,7 +33,7 @@ final class DoubleGenerator implements ObjectGenerator {
         }
     }
 
-    private double getBound(ObjectQuery query) {
+    private static double getBound(ObjectQuery query) {
         return query instanceof ParameterQuery ? getBound((ParameterQuery) query) : 1.0;
     }
 
