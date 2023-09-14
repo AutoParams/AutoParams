@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,40 +7,17 @@ import javax.validation.constraints.Min;
 import static java.lang.Long.MAX_VALUE;
 import static java.lang.Long.MIN_VALUE;
 
-final class LongGenerator implements ObjectGenerator {
+final class LongGenerator extends TypeMatchingGenerator {
 
-    @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
-        Type type = query.getType();
-        return type == long.class || type == Long.class
-            ? new ObjectContainer(factory(getMin(query), getMax(query)))
-            : ObjectContainer.EMPTY;
+    LongGenerator() {
+        super((query, context) -> factory(query), long.class, Long.class);
     }
 
-    private long getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+    private static long factory(ObjectQuery query) {
+        return factory(getMin(query), getMax(query));
     }
 
-    private long getMin(ParameterQuery query) {
-        Min min = query.getParameter().getAnnotation(Min.class);
-        if (min == null) {
-            Max max = query.getParameter().getAnnotation(Max.class);
-            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
-        } else {
-            return min.value();
-        }
-    }
-
-    private long getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
-    }
-
-    private long getMax(ParameterQuery query) {
-        Max max = query.getParameter().getAnnotation(Max.class);
-        return max == null ? MAX_VALUE : max.value();
-    }
-
-    private long factory(long min, long max) {
+    private static long factory(long min, long max) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         if (min == MIN_VALUE && max == MAX_VALUE) {
@@ -52,5 +28,28 @@ final class LongGenerator implements ObjectGenerator {
         long origin = min + offset;
         long bound = max + 1 + offset;
         return random.nextLong(origin, bound) - offset;
+    }
+
+    private static long getMin(ObjectQuery query) {
+        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+    }
+
+    private static long getMin(ParameterQuery query) {
+        Min min = query.getParameter().getAnnotation(Min.class);
+        if (min == null) {
+            Max max = query.getParameter().getAnnotation(Max.class);
+            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
+        } else {
+            return min.value();
+        }
+    }
+
+    private static long getMax(ObjectQuery query) {
+        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
+    }
+
+    private static long getMax(ParameterQuery query) {
+        Max max = query.getParameter().getAnnotation(Max.class);
+        return max == null ? MAX_VALUE : max.value();
     }
 }

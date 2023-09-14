@@ -12,10 +12,10 @@ final class PrimitiveValueGenerator extends CompositeObjectGenerator {
                 Factories::createChar,
                 char.class,
                 Character.class),
-            new IntegerGenerator(),
-            new LongGenerator(),
             new ByteGenerator(),
             new ShortGenerator(),
+            new IntegerGenerator(),
+            new LongGenerator(),
             new FloatGenerator(),
             new DoubleGenerator());
     }
