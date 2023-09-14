@@ -5,8 +5,10 @@ import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.TypeMatchingGenerator;
 import autoparams.generator.UnwrapFailedException;
+import java.lang.reflect.Method;
 
 import static autoparams.generator.TypeMatchingGenerator.create;
+import static java.lang.reflect.Modifier.FINAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,5 +95,19 @@ public class SpecsForTypeMatchingGenerator {
             .isEqualTo(value);
         assertThatThrownBy(() -> actual.generate(int.class, context).unwrapOrElseThrow())
             .isInstanceOf(UnwrapFailedException.class);
+    }
+
+    @AutoParameterizedTest
+    void sut_is_inheritable() {
+        assertThat(TypeMatchingGenerator.class).isNotFinal();
+    }
+
+    @AutoParameterizedTest
+    void generate_method_is_final() throws NoSuchMethodException {
+        Method mut = TypeMatchingGenerator.class.getDeclaredMethod(
+            "generate",
+            ObjectQuery.class,
+            ObjectGenerationContext.class);
+        assertThat(mut.getModifiers() & FINAL).isNotZero();
     }
 }

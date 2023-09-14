@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class TypeMatchingGenerator implements ObjectGenerator {
+public class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Type, Boolean> predicate;
     private final BiFunction<ObjectQuery, ObjectGenerationContext, Object> factory;
@@ -76,7 +76,7 @@ public final class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public final ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         Type type = query.getType();
 
         return predicate.apply(type)
