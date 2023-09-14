@@ -126,5 +126,4 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     ) {
         return argumentQueries.map(context::generate).toArray();
     }
-
 }

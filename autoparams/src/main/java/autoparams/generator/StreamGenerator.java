@@ -14,5 +14,4 @@ final class StreamGenerator extends CompositeObjectGenerator {
             new GenericStreamGenerator()
         );
     }
-
 }

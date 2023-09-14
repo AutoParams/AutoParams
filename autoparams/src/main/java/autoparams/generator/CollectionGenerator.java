@@ -9,5 +9,4 @@ final class CollectionGenerator extends CompositeObjectGenerator {
             new MapGenerator(),
             new SetGenerator());
     }
-
 }

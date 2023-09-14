@@ -24,5 +24,4 @@ final class OptionalGenerator implements ObjectGenerator {
     ) {
         return Optional.of(context.generate(elementType));
     }
-
 }
