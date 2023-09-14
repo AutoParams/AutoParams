@@ -77,4 +77,21 @@ public class SpecsForTypeMatchingGenerator {
         assertThatThrownBy(() -> actual.generate(int.class, context).unwrapOrElseThrow())
             .isInstanceOf(UnwrapFailedException.class);
     }
+
+    void create_correctly_creates_generator_with_bi_function_factory(
+        String value,
+        ObjectGenerationContext context
+    ) {
+        ObjectQuery query = ObjectQuery.fromType(String.class);
+
+        TypeMatchingGenerator actual = create(
+            String.class,
+            (x, y) -> x == query && y == context ? value : null);
+
+        assertThat(actual).isNotNull();
+        assertThat(actual.generate(String.class, context).unwrapOrElseThrow())
+            .isEqualTo(value);
+        assertThatThrownBy(() -> actual.generate(int.class, context).unwrapOrElseThrow())
+            .isInstanceOf(UnwrapFailedException.class);
+    }
 }

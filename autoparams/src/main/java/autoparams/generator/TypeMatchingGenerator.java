@@ -68,6 +68,13 @@ public final class TypeMatchingGenerator implements ObjectGenerator {
         return new TypeMatchingGenerator(factory::apply, type);
     }
 
+    public static <T> TypeMatchingGenerator create(
+        Class<?> type,
+        BiFunction<ObjectQuery, ObjectGenerationContext, T> factory
+    ) {
+        return new TypeMatchingGenerator(factory::apply, type);
+    }
+
     @Override
     public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
         Type type = query.getType();
