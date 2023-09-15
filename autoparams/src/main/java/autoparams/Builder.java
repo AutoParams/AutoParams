@@ -1,5 +1,6 @@
 package autoparams;
 
+import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Type;
@@ -19,7 +20,9 @@ public final class Builder<T> {
     }
 
     public <U> Builder<T> fix(Class<U> type, U value) {
-        context.customizeGenerator(new FixCustomization(type, value));
+        context.customizeGenerator(generator -> (query, context) -> query.getType() == type
+            ? new ObjectContainer(value)
+            : generator.generate(query, context));
         return this;
     }
 
@@ -27,5 +30,4 @@ public final class Builder<T> {
     public T build() {
         return (T) context.generate(ObjectQuery.fromType(type));
     }
-
 }

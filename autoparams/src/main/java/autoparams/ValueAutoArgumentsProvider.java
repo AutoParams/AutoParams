@@ -89,5 +89,4 @@ final class ValueAutoArgumentsProvider implements
     public void accept(ValueAutoSource annotation) {
         ((AnnotationConsumer<ValueSource>) valueProvider).accept(createDelegate(annotation));
     }
-
 }

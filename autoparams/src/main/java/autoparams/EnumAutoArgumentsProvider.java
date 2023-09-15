@@ -52,5 +52,4 @@ class EnumAutoArgumentsProvider implements ArgumentsProvider, AnnotationConsumer
             }
         };
     }
-
 }

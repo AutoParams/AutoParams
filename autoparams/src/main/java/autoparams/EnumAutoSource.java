@@ -17,5 +17,4 @@ public @interface EnumAutoSource {
     String[] names() default {};
 
     EnumSource.Mode mode() default EnumSource.Mode.INCLUDE;
-
 }

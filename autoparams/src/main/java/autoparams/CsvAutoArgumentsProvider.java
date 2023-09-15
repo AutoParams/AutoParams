@@ -89,5 +89,4 @@ final class CsvAutoArgumentsProvider implements
     public void accept(CsvAutoSource annotation) {
         ((AnnotationConsumer<CsvSource>) csvProvider).accept(createDelegate(annotation));
     }
-
 }
