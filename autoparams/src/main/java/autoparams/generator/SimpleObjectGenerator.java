@@ -16,9 +16,9 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.UUID;
 
-final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
+final class SimpleObjectGenerator extends CompositeObjectGenerator {
 
-    public SimpleValueObjectGenerator() {
+    public SimpleObjectGenerator() {
         super(
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), Object.class),
             new TypeMatchingGenerator(() -> UUID.randomUUID().toString(), String.class),
