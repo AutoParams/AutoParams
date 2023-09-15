@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.time.chrono.ChronoPeriod;
 import java.time.temporal.TemporalAmount;
 import java.util.HashSet;
 import java.util.UUID;
@@ -156,6 +157,17 @@ class SpecsForSimpleTypes {
     @AutoParameterizedTest
     void sut_creates_normalized_period_value(Period value) {
         assertThat(value).isEqualTo(value.normalized());
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_chrono_period_values(
+        ChronoPeriod value1,
+        ChronoPeriod value2,
+        ChronoPeriod value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
     }
 
     @AutoParameterizedTest
