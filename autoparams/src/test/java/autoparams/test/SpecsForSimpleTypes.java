@@ -1,7 +1,6 @@
 package autoparams.test;
 
 import autoparams.AutoParameterizedTest;
-import autoparams.AutoSource;
 import autoparams.Repeat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,9 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.time.temporal.TemporalAmount;
 import java.util.HashSet;
 import java.util.UUID;
-import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -87,6 +86,17 @@ class SpecsForSimpleTypes {
         Duration value1,
         Duration value2,
         Duration value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_temporal_amount_values(
+        TemporalAmount value1,
+        TemporalAmount value2,
+        TemporalAmount value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);

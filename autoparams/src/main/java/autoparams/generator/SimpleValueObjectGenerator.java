@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.UUID;
 
 final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
@@ -24,7 +25,10 @@ final class SimpleValueObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
             new TypeMatchingGenerator(Factories::createBigDecimal, BigDecimal.class, Number.class),
             new TypeMatchingGenerator(Factories::createClock, Clock.class),
-            new TypeMatchingGenerator(Factories::createDuration, Duration.class),
+            new TypeMatchingGenerator(
+                Factories::createDuration,
+                Duration.class,
+                TemporalAmount.class),
             new TypeMatchingGenerator(Factories::createPeriod, Period.class),
             new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
             new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
