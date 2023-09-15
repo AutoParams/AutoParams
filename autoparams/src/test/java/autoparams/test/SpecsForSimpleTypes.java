@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.chrono.ChronoPeriod;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.HashSet;
 import java.util.UUID;
@@ -174,5 +175,16 @@ class SpecsForSimpleTypes {
     @Repeat(10)
     void sut_creates_positive_period_value(Period value) {
         assertFalse(value.isNegative());
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_temporal_values(
+        Temporal value1,
+        Temporal value2,
+        Temporal value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
     }
 }

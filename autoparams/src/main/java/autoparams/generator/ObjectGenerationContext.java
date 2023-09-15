@@ -61,5 +61,4 @@ public final class ObjectGenerationContext {
 
         generator = customizer.customize(generator);
     }
-
 }
