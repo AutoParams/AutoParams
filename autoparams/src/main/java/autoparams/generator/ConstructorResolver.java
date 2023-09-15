@@ -15,5 +15,4 @@ public interface ConstructorResolver {
             Optional.empty(),
             Arrays.stream(resolvers));
     }
-
 }

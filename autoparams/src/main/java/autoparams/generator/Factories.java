@@ -46,6 +46,10 @@ final class Factories {
         return new BigDecimal(random().nextInt());
     }
 
+    public static Clock createClock() {
+        return Clock.systemDefaultZone();
+    }
+
     public static Duration createDuration() {
         return Duration.ofMillis(createLong());
     }

@@ -1,5 +1,6 @@
 package autoparams.test;
 
+import autoparams.AutoParameterizedTest;
 import autoparams.AutoSource;
 import autoparams.Repeat;
 import java.math.BigDecimal;
@@ -19,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SpecsForSimpleTypes {
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_string_values_for_object_parameter(
         Object value1,
         Object value2,
@@ -35,24 +35,21 @@ class SpecsForSimpleTypes {
         assertThat(value3).isInstanceOf(String.class);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_string_values(String value1, String value2, String value3) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_uuid_values(UUID value1, UUID value2, UUID value3) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_big_integer_values(
         BigInteger value1,
         BigInteger value2,
@@ -63,8 +60,7 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_big_decimal_values(
         BigDecimal value1,
         BigDecimal value2,
@@ -75,8 +71,18 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_number_values(
+        Number value1,
+        Number value2,
+        Number value3
+    ) {
+        assertNotEquals(value1, value2);
+        assertNotEquals(value2, value3);
+        assertNotEquals(value3, value1);
+    }
+
+    @AutoParameterizedTest
     void sut_creates_arbitrary_duration_values(
         Duration value1,
         Duration value2,
@@ -87,8 +93,7 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_local_date_values(
         LocalDate value1,
         LocalDate value2,
@@ -105,8 +110,7 @@ class SpecsForSimpleTypes {
         assertThat(set.size()).isGreaterThan(1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_local_time_values(
         LocalTime value1,
         LocalTime value2,
@@ -117,8 +121,7 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_local_date_time_values(
         LocalDateTime value1,
         LocalDateTime value2,
@@ -129,8 +132,7 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_arbitrary_period_values(
         Period value1,
         Period value2,
@@ -141,14 +143,12 @@ class SpecsForSimpleTypes {
         assertNotEquals(value3, value1);
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     void sut_creates_normalized_period_value(Period value) {
         assertThat(value).isEqualTo(value.normalized());
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @AutoParameterizedTest
     @Repeat(10)
     void sut_creates_positive_period_value(Period value) {
         assertFalse(value.isNegative());
