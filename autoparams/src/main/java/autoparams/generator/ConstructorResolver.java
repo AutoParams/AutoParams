@@ -20,6 +20,14 @@ public interface ConstructorResolver {
             .min(Comparator.comparing(Constructor::getParameterCount))
     );
 
+    ConstructorResolver AGGRESSIVE_STRATEGY = compose(
+        type -> stream(type.getConstructors())
+            .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
+            .max(Comparator.comparing(Constructor::getParameterCount)),
+        type -> stream(type.getConstructors())
+            .max(Comparator.comparing(Constructor::getParameterCount))
+    );
+
     default Constructor<?> resolveOrElseThrow(Class<?> type) {
         return resolve(type).orElseThrow(()
             -> new RuntimeException("No constructor found for " + type));

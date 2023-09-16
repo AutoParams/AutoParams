@@ -28,5 +28,4 @@ public final class ObjectContainer {
     public ObjectContainer process(Function<Object, Object> processor) {
         return this == EMPTY ? this : new ObjectContainer(processor.apply(value));
     }
-
 }
