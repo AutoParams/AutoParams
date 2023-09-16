@@ -55,21 +55,21 @@ public class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     public static <T> TypeMatchingGenerator create(
-        Class<?> type,
+        Class<T> type,
         Supplier<T> factory
     ) {
         return new TypeMatchingGenerator(factory::get, type);
     }
 
     public static <T> TypeMatchingGenerator create(
-        Class<?> type,
+        Class<T> type,
         Function<ObjectGenerationContext, T> factory
     ) {
         return new TypeMatchingGenerator(factory::apply, type);
     }
 
     public static <T> TypeMatchingGenerator create(
-        Class<?> type,
+        Class<T> type,
         BiFunction<ObjectQuery, ObjectGenerationContext, T> factory
     ) {
         return new TypeMatchingGenerator(factory::apply, type);
