@@ -4,15 +4,15 @@ import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
 import java.util.Map;
+
+import static java.beans.Introspector.getBeanInfo;
 
 public final class SettablePropertyWriter implements Customizer {
 
@@ -37,7 +37,7 @@ public final class SettablePropertyWriter implements Customizer {
         ObjectGenerationContext context
     ) {
         try {
-            PropertyDescriptor[] descriptors = Introspector.getBeanInfo(type)
+            PropertyDescriptor[] descriptors = getBeanInfo(type)
                 .getPropertyDescriptors();
             for (PropertyDescriptor descriptor : descriptors) {
                 Method method = descriptor.getWriteMethod();
@@ -59,11 +59,10 @@ public final class SettablePropertyWriter implements Customizer {
         ObjectGenerationContext context
     ) {
         try {
+            Map<TypeVariable<?>, Type> genericMap = RuntimeTypeResolver.buildMap(parameterizedType);
             Class<?> type = (Class<?>) parameterizedType.getRawType();
-            Map<TypeVariable<?>, Type> genericMap = getGenericMap(type, parameterizedType);
+            PropertyDescriptor[] descriptors = getBeanInfo(type).getPropertyDescriptors();
 
-            PropertyDescriptor[] descriptors = Introspector.getBeanInfo(type)
-                .getPropertyDescriptors();
             for (PropertyDescriptor descriptor : descriptors) {
                 Method method = descriptor.getWriteMethod();
                 if (method != null) {
@@ -75,21 +74,6 @@ public final class SettablePropertyWriter implements Customizer {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    private static Map<TypeVariable<?>, Type> getGenericMap(
-        Class<?> type,
-        ParameterizedType parameterizedType
-    ) {
-        HashMap<TypeVariable<?>, Type> map = new HashMap<>();
-
-        TypeVariable<?>[] typeVariables = type.getTypeParameters();
-        Type[] typeValues = parameterizedType.getActualTypeArguments();
-        for (int i = 0; i < typeVariables.length; i++) {
-            map.put(typeVariables[i], typeValues[i]);
-        }
-
-        return map;
     }
 
     private static ObjectQuery resolveArgumentQuery(

@@ -9,7 +9,7 @@ import java.util.Map;
 
 final class RuntimeTypeResolver {
 
-    private Map<TypeVariable<?>, Type> map;
+    private final Map<TypeVariable<?>, Type> map;
 
     private RuntimeTypeResolver(Map<TypeVariable<?>, Type> map) {
         this.map = map;
@@ -36,7 +36,7 @@ final class RuntimeTypeResolver {
     }
 
     public Type resolve(Type type) {
-        if (map.containsKey(type)) {
+        if (type instanceof TypeVariable<?> && map.containsKey(type)) {
             return map.get(type);
         } else if (type instanceof ParameterizedType) {
             return resolve((ParameterizedType) type);
@@ -68,8 +68,6 @@ final class RuntimeTypeResolver {
             public Type getOwnerType() {
                 return resolve(parameterizedType.getOwnerType());
             }
-
         };
     }
-
 }
