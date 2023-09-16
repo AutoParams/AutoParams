@@ -1,7 +1,6 @@
 package autoparams.generator;
 
 import autoparams.Builder;
-import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -9,7 +8,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -32,10 +30,14 @@ final class ComplexObjectGenerator implements ObjectGenerator {
             return ObjectContainer.EMPTY;
         }
 
-        Constructor<?> constructor = resolveConstructor(type);
+        Constructor<?> constructor = context
+            .generate(ConstructorResolver.class)
+            .resolveOrElseThrow(type);
+
         Stream<ObjectQuery> argumentQueries = Arrays
             .stream(constructor.getParameters())
             .map(ObjectQuery::fromParameter);
+
         return new ObjectContainer(createInstance(constructor, argumentQueries, context));
     }
 
@@ -49,32 +51,21 @@ final class ComplexObjectGenerator implements ObjectGenerator {
             return ObjectContainer.EMPTY;
         }
 
+        Constructor<?> constructor = context
+            .generate(ConstructorResolver.class)
+            .resolveOrElseThrow(type);
+
         Map<TypeVariable<?>, Type> genericMap = getGenericMap(type, parameterizedType);
-        Constructor<?> constructor = resolveConstructor(type);
+
         Stream<ObjectQuery> argumentQueries = Arrays
             .stream(constructor.getParameters())
             .map(parameter -> resolveArgumentQuery(parameter, genericMap));
+
         return new ObjectContainer(createInstance(constructor, argumentQueries, context));
     }
 
     private boolean isAbstract(Class<?> type) {
         return type.isInterface() || Modifier.isAbstract(type.getModifiers());
-    }
-
-    private Constructor<?> resolveConstructor(Class<?> type) {
-        return ConstructorResolver
-            .compose(
-                t -> Arrays
-                    .stream(t.getConstructors())
-                    .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
-                    .min(Comparator.comparing(Constructor::getParameterCount)),
-                t -> Arrays
-                    .stream(t.getConstructors())
-                    .min(Comparator.comparing(Constructor::getParameterCount))
-            )
-            .resolve(type)
-            .orElseThrow(() -> new RuntimeException(
-                "Class '" + type.getName() + "' has no public constructor."));
     }
 
     private Map<TypeVariable<?>, Type> getGenericMap(

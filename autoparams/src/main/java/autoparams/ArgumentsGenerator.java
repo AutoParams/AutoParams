@@ -96,5 +96,4 @@ final class ArgumentsGenerator {
         Customizers.processArgument(parameter, argument).forEach(context::customizeGenerator);
         return argument;
     }
-
 }

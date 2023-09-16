@@ -104,5 +104,4 @@ public final class InstanceFieldWriter implements Customizer {
             predicate.and(field ->
                 stream(fieldNames).allMatch(x -> field.getName().equals(x) == false)));
     }
-
 }

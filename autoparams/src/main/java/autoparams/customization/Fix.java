@@ -13,5 +13,4 @@ public @interface Fix {
     boolean byExactType() default true;
 
     boolean byImplementedInterfaces() default false;
-
 }

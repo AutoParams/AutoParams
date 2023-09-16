@@ -30,5 +30,4 @@ public @interface ValueAutoSource {
     String[] strings() default {};
 
     Class<?>[] classes() default {};
-
 }

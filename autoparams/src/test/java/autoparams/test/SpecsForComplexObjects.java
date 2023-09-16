@@ -50,9 +50,6 @@ class SpecsForComplexObjects {
                 RuntimeException.class,
                 () -> context.generate(OnlyPrivateConstructor.class)
             )
-        )
-            .hasMessageContaining("no public constructor")
-            .hasMessageContaining(OnlyPrivateConstructor.class.getSimpleName());
+        ).hasMessageContaining(OnlyPrivateConstructor.class.getSimpleName());
     }
-
 }

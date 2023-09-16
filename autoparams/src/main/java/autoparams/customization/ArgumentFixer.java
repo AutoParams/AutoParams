@@ -15,7 +15,7 @@ final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
 
     @Override
     public Customizer process(Parameter parameter, Object argument) {
-        List<Function<Type, Boolean>> predicates = new ArrayList<Function<Type, Boolean>>();
+        List<Function<Type, Boolean>> predicates = new ArrayList<>();
 
         if (byExactType) {
             predicates.add(type -> type.equals(parameter.getType()));
@@ -37,5 +37,4 @@ final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
         byExactType = annotation.byExactType();
         byImplementedInterfaces = annotation.byImplementedInterfaces();
     }
-
 }

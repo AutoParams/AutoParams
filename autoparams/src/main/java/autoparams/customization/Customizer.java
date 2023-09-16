@@ -6,5 +6,4 @@ import autoparams.generator.ObjectGenerator;
 public interface Customizer {
 
     ObjectGenerator customize(ObjectGenerator generator);
-
 }

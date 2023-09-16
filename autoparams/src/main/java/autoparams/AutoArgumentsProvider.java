@@ -38,5 +38,4 @@ final class AutoArgumentsProvider implements ArgumentsProvider {
         final Method method = context.getRequiredTestMethod();
         return findAnnotation(method, Repeat.class).map(Repeat::value).orElse(1);
     }
-
 }

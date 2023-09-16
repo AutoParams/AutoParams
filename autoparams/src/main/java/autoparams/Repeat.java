@@ -10,5 +10,4 @@ import java.lang.annotation.Target;
 public @interface Repeat {
 
     int value() default 3;
-
 }

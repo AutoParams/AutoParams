@@ -18,5 +18,4 @@ public class CompositeObjectGenerator implements ObjectGenerator {
             Arrays.stream(generators)
         );
     }
-
 }
