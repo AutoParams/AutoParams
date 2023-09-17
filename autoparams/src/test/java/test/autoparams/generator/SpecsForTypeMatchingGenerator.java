@@ -1,4 +1,4 @@
-package autoparams.generator.test;
+package test.autoparams.generator;
 
 import autoparams.AutoParameterizedTest;
 import autoparams.generator.ObjectGenerationContext;
