@@ -25,5 +25,4 @@ public class ComplexObject {
     public UUID getValue3() {
         return value3;
     }
-
 }

@@ -12,7 +12,7 @@ public interface ConstructorResolver {
 
     Optional<Constructor<?>> resolve(Class<?> type);
 
-    ConstructorResolver DEFENSIVE_STRATEGY = compose(
+    ConstructorResolver DEFENSIVE_STRATEGY = new CompositeConstructorResolver(
         type -> stream(type.getConstructors())
             .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
             .min(Comparator.comparing(Constructor::getParameterCount)),
@@ -20,7 +20,7 @@ public interface ConstructorResolver {
             .min(Comparator.comparing(Constructor::getParameterCount))
     );
 
-    ConstructorResolver AGGRESSIVE_STRATEGY = compose(
+    ConstructorResolver AGGRESSIVE_STRATEGY = new CompositeConstructorResolver(
         type -> stream(type.getConstructors())
             .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
             .max(Comparator.comparing(Constructor::getParameterCount)),
@@ -33,6 +33,7 @@ public interface ConstructorResolver {
             -> new RuntimeException("No constructor found for " + type));
     }
 
+    @Deprecated
     static ConstructorResolver compose(ConstructorResolver... resolvers) {
         return type -> Folder.foldl(
             (resolved, resolver) -> resolved.isPresent() ? resolved : resolver.resolve(type),

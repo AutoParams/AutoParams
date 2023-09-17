@@ -31,5 +31,4 @@ public class MoreComplexObject {
     public ComplexObject getValue4() {
         return value4;
     }
-
 }

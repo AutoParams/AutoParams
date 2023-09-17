@@ -1,5 +1,6 @@
 package autoparams.customization;
 
+import autoparams.generator.CompositeConstructorResolver;
 import autoparams.generator.ConstructorResolver;
 import autoparams.generator.ObjectContainer;
 import java.util.Objects;
@@ -32,11 +33,11 @@ public class AggressiveConstructorResolutionCustomizerFactory implements
         return generator -> (query, context) ->
             query.getType().equals(ConstructorResolver.class)
                 ? new ObjectContainer(
-                ConstructorResolver.compose(
-                    boundStrategy,
-                    (ConstructorResolver) generator
-                        .generate(query, context)
-                        .unwrapOrElseThrow()))
+                    new CompositeConstructorResolver(
+                        boundStrategy,
+                        (ConstructorResolver) generator
+                            .generate(query, context)
+                            .unwrapOrElseThrow()))
                 : generator.generate(query, context);
     }
 }
