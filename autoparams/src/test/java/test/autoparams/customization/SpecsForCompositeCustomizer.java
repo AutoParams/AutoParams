@@ -1,4 +1,4 @@
-package autoparams.customization.test;
+package test.autoparams.customization;
 
 import autoparams.AutoSource;
 import autoparams.customization.CompositeCustomizer;

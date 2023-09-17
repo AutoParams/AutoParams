@@ -1,4 +1,4 @@
-package autoparams.customization.test;
+package test.autoparams.customization;
 
 public class HasSetter {
     private String prop;

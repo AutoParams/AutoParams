@@ -1,6 +1,5 @@
 package test.autoparams.primitive;
 
-import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
@@ -8,6 +7,7 @@ import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,6 +1,5 @@
 package test.autoparams;
 
-import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
 import java.math.BigDecimal;
 import java.math.BigInteger;

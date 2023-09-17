@@ -1,9 +1,9 @@
 package test.autoparams.generator;
 
-import autoparams.AutoParameterizedTest;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
+import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

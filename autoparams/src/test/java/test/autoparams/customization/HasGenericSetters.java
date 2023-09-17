@@ -1,4 +1,4 @@
-package autoparams.customization.test;
+package test.autoparams.customization;
 
 public class HasGenericSetters<T1, T2> {
     private int value1;

@@ -1,7 +1,7 @@
-package autoparams.customization.test;
+package test.autoparams.customization;
 
-import autoparams.AutoParameterizedTest;
 import autoparams.customization.ResolveConstructorAggressively;
+import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
