@@ -1,12 +1,12 @@
 plugins {
-    id 'java-library'
+    id "java-library"
 }
 
 dependencies {
-    api 'io.github.autoparams:autoparams:[1.0.0, 2.0.0)'
-    api 'org.mockito:mockito-core:2.25.0'
-    testImplementation 'org.assertj:assertj-core:3.8.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    api "io.github.autoparams:autoparams:[2.0.0, 3.0.0)"
+    api "org.mockito:mockito-core:2.25.0"
+    testImplementation "org.assertj:assertj-core:3.8.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
 }
 
 java {
@@ -15,7 +15,6 @@ java {
 }
 
 test {
-    dependsOn('editorconfigCheck', 'checkstyleMain', 'checkstyleTest')
-
+    dependsOn("editorconfigCheck", "checkstyleMain", "checkstyleTest")
     useJUnitPlatform()
 }

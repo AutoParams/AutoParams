@@ -1,12 +1,12 @@
 import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
-    id 'java'
-    id 'maven-publish'
-    id 'signing'
-    id 'org.ec4j.editorconfig' version '0.0.3'
-    id 'checkstyle'
-    id 'com.github.spotbugs' version '4.7.0'
+    id "java"
+    id "maven-publish"
+    id "signing"
+    id "org.ec4j.editorconfig" version "0.0.3"
+    id "checkstyle"
+    id "com.github.spotbugs" version "4.7.0"
 }
 
 allprojects {
@@ -15,16 +15,16 @@ allprojects {
         jcenter()
     }
 
-    group = 'io.github.autoparams'
+    group = "io.github.autoparams"
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'org.ec4j.editorconfig'
-    apply plugin: 'checkstyle'
-    apply plugin: 'com.github.spotbugs'
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
+    apply plugin: "java"
+    apply plugin: "org.ec4j.editorconfig"
+    apply plugin: "checkstyle"
+    apply plugin: "com.github.spotbugs"
+    apply plugin: "maven-publish"
+    apply plugin: "signing"
 
     version = artifactVersion
 
@@ -76,12 +76,12 @@ subprojects {
     jar {
         manifest {
             attributes(
-                    'Specification-Title': artifactName,
-                    'Specification-Version': artifactVersion,
-                    'Specification-Vendor': 'io.github.autoparams',
-                    'Implementation-Title': artifactName,
-                    'Implementation-Version': artifactVersion,
-                    'Implementation-Vendor': 'io.github.autoparams'
+                "Specification-Title": artifactName,
+                "Specification-Version": artifactVersion,
+                "Specification-Vendor": "io.github.autoparams",
+                "Implementation-Title": artifactName,
+                "Implementation-Version": artifactVersion,
+                "Implementation-Vendor": "io.github.autoparams"
             )
         }
     }
