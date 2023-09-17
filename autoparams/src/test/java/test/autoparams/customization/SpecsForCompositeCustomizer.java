@@ -57,5 +57,4 @@ class SpecsForCompositeCustomizer {
 
         assertSame(gen3, actual);
     }
-
 }

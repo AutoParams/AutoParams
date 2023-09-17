@@ -63,5 +63,4 @@ class SpecsForFix {
         assertNotSame(value1, value2);
         assertNotSame(value1, value3);
     }
-
 }

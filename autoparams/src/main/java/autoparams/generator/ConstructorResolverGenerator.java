@@ -4,8 +4,12 @@ class ConstructorResolverGenerator extends TypeMatchingGenerator {
 
     public ConstructorResolverGenerator() {
         super(
-            () -> ConstructorResolver.DEFENSIVE_STRATEGY,
+            ConstructorResolverGenerator::factory,
             ConstructorResolver.class
         );
+    }
+
+    private static ConstructorResolver factory(ObjectGenerationContext context) {
+        return new DefensiveConstructorResolver(context.generate(ConstructorExtractor.class));
     }
 }
