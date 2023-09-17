@@ -1,4 +1,4 @@
-package autoparams.test;
+package test.autoparams;
 
 import java.beans.ConstructorProperties;
 
@@ -18,5 +18,4 @@ public class DecoratedWithConstructorProperties {
     public String getValue() {
         return value;
     }
-
 }

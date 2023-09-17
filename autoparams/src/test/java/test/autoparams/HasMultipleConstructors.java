@@ -1,4 +1,4 @@
-package autoparams.test;
+package test.autoparams;
 
 public class HasMultipleConstructors {
 

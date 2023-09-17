@@ -1,4 +1,4 @@
-package autoparams.test;
+package test.autoparams;
 
 import autoparams.EnumAutoSource;
 import java.lang.annotation.ElementType;

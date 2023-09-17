@@ -1,4 +1,4 @@
-package autoparams.test;
+package test.autoparams;
 
 import autoparams.AutoSource;
 import autoparams.Builder;
