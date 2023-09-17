@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
 
 @FunctionalInterface
 public interface ConstructorResolver {
@@ -26,9 +25,6 @@ public interface ConstructorResolver {
 
     @Deprecated
     static ConstructorResolver compose(ConstructorResolver... resolvers) {
-        return type -> Folder.foldl(
-            (resolved, resolver) -> resolved.isPresent() ? resolved : resolver.resolve(type),
-            Optional.empty(),
-            stream(resolvers));
+        return new CompositeConstructorResolver(resolvers);
     }
 }
