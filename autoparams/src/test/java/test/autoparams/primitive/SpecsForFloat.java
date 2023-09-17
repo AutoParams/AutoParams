@@ -1,4 +1,4 @@
-package autoparams.primitive.test;
+package test.autoparams.primitive;
 
 import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SpecsForDouble {
+public class SpecsForFloat {
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_double_values(
-        double value1,
-        double value2,
-        double value3
+    void sut_creates_arbitrary_float_values(
+        float value1,
+        float value2,
+        float value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
@@ -26,10 +26,10 @@ public class SpecsForDouble {
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_Double_values(
-        Double value1,
-        Double value2,
-        Double value3
+    void sut_creates_arbitrary_Float_values(
+        Float value1,
+        Float value2,
+        Float value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
@@ -39,29 +39,28 @@ public class SpecsForDouble {
     @AutoParameterizedTest
     @Repeat(10)
     void sut_creates_value_between_zero_and_one(
-        double value
+        float value
     ) {
-        assertThat(value).isBetween(0.0, 1.0);
+        assertThat(value).isBetween(0.0f, 1.0f);
     }
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_accepts_max_constraint_for_double(@Max(100) double value) {
-        assertThat(value).isLessThanOrEqualTo(100.0);
+    void sut_accepts_max_constraint_for_float(@Max(100) float value) {
+        assertThat(value).isLessThanOrEqualTo(100.0f);
     }
 
     @AutoParameterizedTest
     @Repeat(10)
     void sut_generates_non_positive_value_if_max_constraint_is_non_positive(
-        @Max(0) double arg
+        @Max(0) float arg
     ) {
         assertThat(arg).isNotPositive();
     }
 
     @AutoParameterizedTest
-    @Repeat(10)
-    void sut_accepts_min_constraint_for_double(@Min(100) double value) {
-        assertThat(value).isGreaterThanOrEqualTo(100.0);
+    void sut_accepts_min_constraint_for_float(@Min(100) float value) {
+        assertThat(value).isGreaterThanOrEqualTo(100.0f);
     }
 
     @AutoParameterizedTest
@@ -69,12 +68,12 @@ public class SpecsForDouble {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("maxConstraintLessThanMinConstraint", double.class)
+            .getDeclaredMethod("maxConstraintLessThanMinConstraint", float.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void maxConstraintLessThanMinConstraint(@Min(100) @Max(0) double arg) {
+    void maxConstraintLessThanMinConstraint(@Min(0) @Max(-1) float arg) {
     }
 }

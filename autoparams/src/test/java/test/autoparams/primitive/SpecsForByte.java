@@ -1,4 +1,4 @@
-package autoparams.primitive.test;
+package test.autoparams.primitive;
 
 import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
@@ -12,63 +12,84 @@ import javax.validation.constraints.Min;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SpecsForShort {
+public class SpecsForByte {
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_short_values(
-        short value1,
-        short value2,
-        short value3,
-        short value4,
-        short value5
+    void sut_creates_arbitrary_byte_values(
+        byte value1,
+        byte value2,
+        byte value3,
+        byte value4,
+        byte value5,
+        byte value6,
+        byte value7,
+        byte value8,
+        byte value9,
+        byte value10
     ) {
-        HashSet<Short> set = new HashSet<>();
+        HashSet<Byte> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);
         set.add(value4);
         set.add(value5);
+        set.add(value6);
+        set.add(value7);
+        set.add(value8);
+        set.add(value9);
+        set.add(value10);
         assertThat(set.size()).isGreaterThan(3);
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_Short_values(
-        Short value1,
-        Short value2,
-        Short value3,
-        Short value4,
-        Short value5
+    void sut_creates_arbitrary_Byte_values(
+        Byte value1,
+        Byte value2,
+        Byte value3,
+        Byte value4,
+        Byte value5,
+        Byte value6,
+        Byte value7,
+        Byte value8,
+        Byte value9,
+        Byte value10
     ) {
-        HashSet<Short> set = new HashSet<>();
+        HashSet<Byte> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);
         set.add(value4);
         set.add(value5);
+        set.add(value6);
+        set.add(value7);
+        set.add(value8);
+        set.add(value9);
+        set.add(value10);
         assertThat(set.size()).isGreaterThan(3);
     }
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_positive_short_value(short arg) {
+    void sut_creates_positive_byte_value(byte arg) {
         assertThat(arg).isPositive();
     }
 
     @AutoParameterizedTest
-    void sut_accepts_max_constraint_for_short(@Max(100) short value) {
-        assertThat(value).isLessThanOrEqualTo((short) 100);
+    @Repeat(10)
+    void sut_accepts_max_constraint_for_byte(@Max(100) byte value) {
+        assertThat(value).isLessThanOrEqualTo((byte) 100);
     }
 
     @AutoParameterizedTest
-    void sut_includes_max_value_for_short(
-        @Min(Short.MAX_VALUE) @Max(Short.MAX_VALUE) short arg
+    void sut_includes_max_value_for_byte(
+        @Min(Byte.MAX_VALUE) @Max(Byte.MAX_VALUE) byte arg
     ) {
-        assertThat(arg).isEqualTo(Short.MAX_VALUE);
+        assertThat(arg).isEqualTo(Byte.MAX_VALUE);
     }
 
     @AutoParameterizedTest
     void sut_generates_non_positive_value_if_max_constraint_is_non_positive(
-        @Max(0) short arg
+        @Max(0) byte arg
     ) {
         assertThat(arg).isNotPositive();
     }
@@ -78,13 +99,13 @@ public class SpecsForShort {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("excessivelyLargeMaxConstraint", short.class)
+            .getDeclaredMethod("excessivelyLargeMaxConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void excessivelyLargeMaxConstraint(@Max(Short.MAX_VALUE + 1) short arg) {
+    void excessivelyLargeMaxConstraint(@Max(Byte.MAX_VALUE + 1) byte arg) {
     }
 
     @AutoParameterizedTest
@@ -92,19 +113,19 @@ public class SpecsForShort {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("excessivelySmallMaxConstraint", short.class)
+            .getDeclaredMethod("excessivelySmallMaxConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void excessivelySmallMaxConstraint(@Max(Short.MIN_VALUE - 1) short arg) {
+    void excessivelySmallMaxConstraint(@Max(Byte.MIN_VALUE - 1) byte arg) {
     }
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_accepts_min_constraint_for_short(@Min(100) short value) {
-        assertThat(value).isGreaterThanOrEqualTo((short) 100);
+    void sut_accepts_min_constraint_for_byte(@Min(100) byte value) {
+        assertThat(value).isGreaterThanOrEqualTo((byte) 100);
     }
 
     @AutoParameterizedTest
@@ -112,13 +133,13 @@ public class SpecsForShort {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("excessivelyLargeMinConstraint", short.class)
+            .getDeclaredMethod("excessivelyLargeMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void excessivelyLargeMinConstraint(@Min(Short.MAX_VALUE + 1) short arg) {
+    void excessivelyLargeMinConstraint(@Min(Byte.MAX_VALUE + 1) byte arg) {
     }
 
     @AutoParameterizedTest
@@ -126,13 +147,13 @@ public class SpecsForShort {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("excessivelySmallMinConstraint", short.class)
+            .getDeclaredMethod("excessivelySmallMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void excessivelySmallMinConstraint(@Min(Short.MIN_VALUE - 1) short arg) {
+    void excessivelySmallMinConstraint(@Min(Byte.MIN_VALUE - 1) byte arg) {
     }
 
     @AutoParameterizedTest
@@ -140,12 +161,12 @@ public class SpecsForShort {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("maxConstraintLessThanMinConstraint", short.class)
+            .getDeclaredMethod("maxConstraintLessThanMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) short arg) {
+    void maxConstraintLessThanMinConstraint(@Min(1) @Max(0) byte arg) {
     }
 }

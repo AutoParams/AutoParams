@@ -1,4 +1,4 @@
-package autoparams.primitive.test;
+package test.autoparams.primitive;
 
 import autoparams.AutoParameterizedTest;
 import java.util.HashSet;

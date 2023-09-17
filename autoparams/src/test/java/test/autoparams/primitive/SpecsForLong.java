@@ -1,4 +1,4 @@
-package autoparams.primitive.test;
+package test.autoparams.primitive;
 
 import autoparams.AutoParameterizedTest;
 import autoparams.Repeat;
@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SpecsForFloat {
+public class SpecsForLong {
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_float_values(
-        float value1,
-        float value2,
-        float value3
+    void sut_creates_arbitrary_long_values(
+        long value1,
+        long value2,
+        long value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
@@ -26,10 +26,10 @@ public class SpecsForFloat {
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_Float_values(
-        Float value1,
-        Float value2,
-        Float value3
+    void sut_creates_arbitrary_Long_values(
+        Long value1,
+        Long value2,
+        Long value3
     ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
@@ -38,29 +38,34 @@ public class SpecsForFloat {
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_value_between_zero_and_one(
-        float value
+    void sut_creates_positive_long_value(long arg) {
+        assertThat(arg).isPositive();
+    }
+
+    @AutoParameterizedTest
+    @Repeat(10)
+    void sut_accepts_max_constraint_for_long(@Max(100) long value) {
+        assertThat(value).isLessThanOrEqualTo(100);
+    }
+
+    @AutoParameterizedTest
+    void sut_includes_max_value_for_long(
+        @Min(Long.MAX_VALUE) @Max(Long.MAX_VALUE) long arg
     ) {
-        assertThat(value).isBetween(0.0f, 1.0f);
+        assertThat(arg).isEqualTo(Long.MAX_VALUE);
     }
 
     @AutoParameterizedTest
-    @Repeat(10)
-    void sut_accepts_max_constraint_for_float(@Max(100) float value) {
-        assertThat(value).isLessThanOrEqualTo(100.0f);
-    }
-
-    @AutoParameterizedTest
-    @Repeat(10)
     void sut_generates_non_positive_value_if_max_constraint_is_non_positive(
-        @Max(0) float arg
+        @Max(0) long arg
     ) {
-        assertThat(arg).isNotPositive();
+        assertThat(arg).isLessThanOrEqualTo(0);
     }
 
     @AutoParameterizedTest
-    void sut_accepts_min_constraint_for_float(@Min(100) float value) {
-        assertThat(value).isGreaterThanOrEqualTo(100.0f);
+    @Repeat(10)
+    void sut_accepts_min_constraint_for_long(@Min(100) long value) {
+        assertThat(value).isGreaterThanOrEqualTo(100);
     }
 
     @AutoParameterizedTest
@@ -68,12 +73,12 @@ public class SpecsForFloat {
         ObjectGenerationContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
-            .getDeclaredMethod("maxConstraintLessThanMinConstraint", float.class)
+            .getDeclaredMethod("maxConstraintLessThanMinConstraint", long.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
         assertThrows(IllegalArgumentException.class, () -> context.generate(query));
     }
 
-    void maxConstraintLessThanMinConstraint(@Min(0) @Max(-1) float arg) {
+    void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) long arg) {
     }
 }
