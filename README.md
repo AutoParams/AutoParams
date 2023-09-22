@@ -692,7 +692,7 @@ autoparams-mockito is an extension of the AutoParams library that facilitates th
 
 #### Maven
 
-To add the autoparams-mockito dependency using Maven, use the following:
+For Maven, you can add the following dependency to your pom.xml:
 
 ```xml
 <dependency>
@@ -859,3 +859,52 @@ void testMethod(User user) {
 ```
 
 This allows you to keep the benefits of using `@Builder` annotation while gaining the automatic generation capabilities provided by AutoParams.
+
+## autoparams-kotlin
+
+autoparams-kotlin is an extension designed to simplify and enhance the experience when working with Kotlin. 
+
+### Install
+
+#### Maven
+
+For Maven, you can add the following dependency to your pom.xml:
+
+```xml
+<dependency>
+  <groupId>io.github.autoparams</groupId>
+  <artifactId>autoparams-kotlin</artifactId>
+  <version>3.0.1</version>
+</dependency>
+```
+
+#### Gradle
+
+For Gradle, use:
+
+```groovy
+testImplementation 'io.github.autoparams:autoparams-kotlin:3.0.1'
+```
+
+### `@AutoKotlinSource` Annotation
+
+Consider the example of a Point data class in Kotlin:
+
+```kotlin
+data class Point(val x: Int = 0, val y: Int = 0)
+```
+
+In typical test scenarios, you might want to ensure the parameters passed to your test methods aren't just default or predictable values. The autoparams-kotlin extension can assist in such cases.
+
+Below is a demonstration using the `@AutoKotlinSource` annotation provided by autoparams-kotlin. This annotation automatically generates random parameters for your test methods:
+
+```kotlin
+@ParameterizedTest
+@AutoKotlinSource
+fun testMethod(point: Point) {
+    assertThat(point.x).isNotEqualTo(0)
+    assertThat(point.y).isNotEqualTo(0)
+}
+```
+
+In this example, the `testMethod` doesn't receive a hardcoded `Point` object. Instead, thanks to the `@AutoKotlinSource` annotation, a randomized `Point` object is passed in, making the test more robust by ensuring it isn't biased by predetermined values.
