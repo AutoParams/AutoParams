@@ -11,6 +11,7 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -23,8 +24,8 @@ final class Customizers {
         getStore(context).add(customizer);
     }
 
-    static Stream<Customizer> getCustomizers(ExtensionContext context) {
-        return getStore(context).stream();
+    static void visitCustomizers(ExtensionContext context, Consumer<Customizer> visitor) {
+        getStore(context).forEach(visitor);
     }
 
     @SuppressWarnings("unchecked")

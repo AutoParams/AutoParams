@@ -65,5 +65,4 @@ class SpecsForAutoSource {
     @AutoSource
     void sut_prevents_stack_overflow_for_recursive_structure(RecursiveObject value) {
     }
-
 }

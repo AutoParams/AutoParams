@@ -8,28 +8,19 @@ import autoparams.customization.CustomizerSource;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Stream.concat;
 
 final class ArgumentsGenerator {
-
-    private static final List<AnnotatedElement> PLATFORM_ELEMENTS = Arrays.asList(
-        Documented.class,
-        Retention.class,
-        Target.class
-    );
 
     private final ObjectGenerationContext context;
     private final int repeat;
@@ -45,46 +36,57 @@ final class ArgumentsGenerator {
     }
 
     private void customizeGenerator(ExtensionContext context) {
-        customizeGenerator(context.getRequiredTestMethod());
-        Customizers.getCustomizers(context).forEach(this.context::customizeGenerator);
+        Consumer<Customizer> visitor = this.context::customizeGenerator;
+        visitCustomizers(context.getRequiredTestMethod(), visitor);
+        Customizers.visitCustomizers(context, visitor);
     }
 
-    private void customizeGenerator(AnnotatedElement annotated) {
-        getCustomizers(annotated).forEach(context::customizeGenerator);
+    private static void visitCustomizers(
+        AnnotatedElement annotated,
+        Consumer<Customizer> visitor
+    ) {
+        visitCustomizers(annotated, visitor, new HashSet<>());
     }
 
-    private Stream<Customizer> getCustomizers(AnnotatedElement annotated) {
-        return PLATFORM_ELEMENTS.contains(annotated)
-            ? Stream.empty()
-            : stream(annotated.getAnnotations()).flatMap(this::getCustomizers);
-    }
-
-    private Stream<Customizer> getCustomizers(Annotation annotation) {
-        return annotation instanceof Customization
-            ? getCustomizers((Customization) annotation)
-            : concat(
-                createCustomizer(annotation),
-                getCustomizers(annotation.annotationType())
-            );
-    }
-
-    private Stream<Customizer> getCustomizers(Customization customization) {
-        return stream(customization.value()).map(this::createInstance);
-    }
-
-    private Stream<Customizer> createCustomizer(Annotation annotation) {
-        Class<? extends Annotation> annotationType = annotation.annotationType();
-        if (annotationType.isAnnotationPresent(CustomizerSource.class)) {
-            CustomizerSource source = annotationType.getAnnotation(CustomizerSource.class);
-            Class<? extends CustomizerFactory> factoryType = source.value();
-            return Stream.of(createCustomizer(factoryType, annotation));
-        } else {
-            return Stream.empty();
+    private static void visitCustomizers(
+        AnnotatedElement annotated,
+        Consumer<Customizer> visitor,
+        Set<Class<? extends Annotation>> onProcessing
+    ) {
+        for (Annotation annotation : annotated.getAnnotations()) {
+            visitCustomizers(annotation, visitor, onProcessing);
         }
     }
 
+    private static void visitCustomizers(
+        Annotation annotation,
+        Consumer<Customizer> visitor,
+        Set<Class<? extends Annotation>> onProcessing
+    ) {
+        Class<? extends Annotation> annotationType = annotation.annotationType();
+
+        if (onProcessing.add(annotationType)) {
+            if (annotation instanceof Customization) {
+                Customization customization = (Customization) annotation;
+                getCustomizers(customization).forEach(visitor);
+            }
+
+            if (annotationType.isAnnotationPresent(CustomizerSource.class)) {
+                CustomizerSource source = annotationType.getAnnotation(CustomizerSource.class);
+                Class<? extends CustomizerFactory> factoryType = source.value();
+                visitor.accept(createCustomizer(factoryType, annotation));
+            }
+
+            visitCustomizers(annotationType, visitor, onProcessing);
+        }
+    }
+
+    private static Stream<Customizer> getCustomizers(Customization customization) {
+        return stream(customization.value()).map(ArgumentsGenerator::createInstance);
+    }
+
     @SuppressWarnings("unchecked")
-    private Customizer createCustomizer(
+    private static Customizer createCustomizer(
         Class<? extends CustomizerFactory> factoryType,
         Annotation annotation
     ) {
@@ -95,7 +97,7 @@ final class ArgumentsGenerator {
         return factory.createCustomizer();
     }
 
-    private <T> T createInstance(Class<? extends T> type) {
+    private static <T> T createInstance(Class<? extends T> type) {
         try {
             return type.getDeclaredConstructor().newInstance();
         } catch (Exception exception) {
@@ -119,9 +121,10 @@ final class ArgumentsGenerator {
     }
 
     private Object createThenProcessArgument(Parameter parameter) {
-        customizeGenerator(parameter);
+        Consumer<Customizer> visitor = context::customizeGenerator;
+        visitCustomizers(parameter, visitor);
         Object argument = context.generate(ObjectQuery.fromParameter(parameter));
-        Customizers.processArgument(parameter, argument).forEach(context::customizeGenerator);
+        Customizers.processArgument(parameter, argument).forEach(visitor);
         return argument;
     }
 }
