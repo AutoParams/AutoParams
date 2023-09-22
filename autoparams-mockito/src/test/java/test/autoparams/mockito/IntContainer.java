@@ -1,4 +1,4 @@
-package autoparams.mockito.test;
+package test.autoparams.mockito;
 
 public interface IntContainer {
 

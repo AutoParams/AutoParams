@@ -30,5 +30,4 @@ public final class MockitoCustomizer implements Customizer {
         Type type = parameterizedType.getRawType();
         return type instanceof Class<?> ? generate((Class<?>) type) : ObjectContainer.EMPTY;
     }
-
 }

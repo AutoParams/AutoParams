@@ -1,4 +1,4 @@
-package autoparams.mockito.test;
+package test.autoparams.mockito;
 
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
@@ -134,5 +134,4 @@ class SpecsForMockitoCustomizer {
         when(arg.getValue()).thenReturn(100);
         assertThat(arg.square()).isEqualTo(10000);
     }
-
 }
