@@ -1,4 +1,4 @@
-package autoparams.lombok.test;
+package test.autoparams.lombok;
 
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
@@ -24,5 +24,4 @@ public class SpecsForBuilderCustomizer {
         assertThat(arg.getId()).isNotNull();
         assertThat(arg.getName()).isNotNull();
     }
-
 }

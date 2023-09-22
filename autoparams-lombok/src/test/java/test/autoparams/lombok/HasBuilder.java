@@ -1,4 +1,4 @@
-package autoparams.lombok.test;
+package test.autoparams.lombok;
 
 import java.util.List;
 import lombok.Builder;
@@ -21,5 +21,4 @@ public class HasBuilder {
     public List<String> getTags() {
         return tags;
     }
-
 }

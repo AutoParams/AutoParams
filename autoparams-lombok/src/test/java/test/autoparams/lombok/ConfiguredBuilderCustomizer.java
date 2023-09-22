@@ -1,4 +1,4 @@
-package autoparams.lombok.test;
+package test.autoparams.lombok;
 
 import autoparams.lombok.BuilderCustomizer;
 

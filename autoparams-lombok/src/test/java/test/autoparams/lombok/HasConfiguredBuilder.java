@@ -1,4 +1,4 @@
-package autoparams.lombok.test;
+package test.autoparams.lombok;
 
 import lombok.Builder;
 
@@ -15,5 +15,4 @@ public class HasConfiguredBuilder {
     public String getName() {
         return name;
     }
-
 }
