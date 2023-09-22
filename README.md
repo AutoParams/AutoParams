@@ -698,7 +698,7 @@ To add the autoparams-mockito dependency using Maven, use the following:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
 </dependency>
 ```
 
@@ -707,7 +707,7 @@ To add the autoparams-mockito dependency using Maven, use the following:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:3.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:3.0.1'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -773,7 +773,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
 </dependency>
 ```
 
@@ -782,7 +782,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:3.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:3.0.1'
 ```
 
 ### `BuilderCustomizer`
