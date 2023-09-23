@@ -4,7 +4,6 @@ plugins {
     id "java"
     id "maven-publish"
     id "signing"
-    id "org.ec4j.editorconfig" version "0.0.3"
     id "checkstyle"
     id "com.github.spotbugs" version "4.7.0"
 }
@@ -20,7 +19,6 @@ allprojects {
 
 subprojects {
     apply plugin: "java"
-    apply plugin: "org.ec4j.editorconfig"
     apply plugin: "checkstyle"
     apply plugin: "com.github.spotbugs"
     apply plugin: "maven-publish"
@@ -30,12 +28,6 @@ subprojects {
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-
-    editorconfig {
-        excludes = ["build"]
-    }
-
-    check.dependsOn editorconfigCheck
 
     checkstyle {
         configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
