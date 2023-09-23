@@ -1,4 +1,4 @@
-package autoparams.test
+package test.autoparams
 
 import autoparams.AutoSource
 import org.assertj.core.api.Assertions.assertThat
@@ -17,5 +17,4 @@ internal class SpecsForKotlinCollections {
     internal fun sut_creates_list(list: List<ComplexObject>) {
         assertThat(list).isNotNull
     }
-
 }
