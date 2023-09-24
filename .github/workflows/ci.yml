@@ -22,12 +22,11 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: ${{ matrix.jdk }}
-    - name: "Update gradlew"
+    - name: "Install Gradle"
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 8.3
-        arguments: wrapper --gradle-version 8.3 --distribution-type bin
-    - uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: 8.3
-        arguments: build --info
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build --info
