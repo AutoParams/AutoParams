@@ -8,10 +8,11 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
 
 class SpecsForObjectGenerationContextExtensions {
+
     @ParameterizedTest
     @AutoKotlinSource
-    fun `generate returns generated value correctly`(
-        extensionContext: ExtensionContext?,
+    fun `generate correctly returns value of reified type`(
+        extensionContext: ExtensionContext,
         value: Int,
     ) {
         val sut = ObjectGenerationContext(
@@ -20,6 +21,7 @@ class SpecsForObjectGenerationContextExtensions {
         )
 
         val actual: Int = sut.generate()
+
         assertThat(actual).isEqualTo(value)
     }
 }
