@@ -19,6 +19,6 @@ java {
 }
 
 test {
-    dependsOn("editorconfigCheck", "checkstyleMain", "checkstyleTest")
+    dependsOn("checkstyleMain", "checkstyleTest", "jar")
     useJUnitPlatform()
 }
