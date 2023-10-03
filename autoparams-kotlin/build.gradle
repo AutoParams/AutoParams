@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.*
 
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.4.32"
+    id "org.jetbrains.kotlin.jvm" version "1.5.32"
 }
 
 dependencies {
