@@ -1,7 +1,8 @@
-rootProject.name = 'AutoParams'
+rootProject.name = "AutoParams"
 
-include 'autoparams'
-include 'autoparams-mockito'
-include 'autoparams-lombok'
-include 'autoparams-kotlin'
-include 'autoparams-test-kotlin'
+include "autoparams"
+include "autoparams-mockito"
+include "autoparams-lombok"
+include "autoparams-kotlin"
+include "autoparams-test-java17"
+include "autoparams-test-kotlin"
