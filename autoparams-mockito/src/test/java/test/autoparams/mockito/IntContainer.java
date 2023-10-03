@@ -1,10 +1,10 @@
 package test.autoparams.mockito;
 
-public interface IntContainer {
+public abstract class IntContainer {
 
-    int getValue();
+    public abstract int getValue();
 
-    default long square() {
+    public long square() {
         long value = getValue();
         return value * value;
     }
