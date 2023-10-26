@@ -1,12 +1,14 @@
 package test.autoparams.customization;
 
 import autoparams.customization.ResolveConstructorAggressively;
+import lombok.Getter;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForResolveConstructorAggressively {
 
+    @Getter
     public static class StringContainer1 {
 
         private final String value;
@@ -19,11 +21,9 @@ public class SpecsForResolveConstructorAggressively {
             this(null);
         }
 
-        public String getValue() {
-            return value;
-        }
     }
 
+    @Getter
     public static class StringContainer2 {
 
         private final String value;
@@ -36,9 +36,6 @@ public class SpecsForResolveConstructorAggressively {
             this(null);
         }
 
-        public String getValue() {
-            return value;
-        }
     }
 
     @AutoParameterizedTest
