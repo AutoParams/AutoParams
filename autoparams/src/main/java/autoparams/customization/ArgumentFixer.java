@@ -22,8 +22,8 @@ final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
         }
 
         if (byImplementedInterfaces) {
-            Class<?>[] interfaces = parameter.getType().getInterfaces();
-            predicates.add(type -> Arrays.stream(interfaces).anyMatch(type::equals));
+            Type[] interfaces = parameter.getType().getInterfaces();
+            predicates.add(type -> Arrays.asList(interfaces).contains(type));
         }
 
         return generator -> (query, context) ->
