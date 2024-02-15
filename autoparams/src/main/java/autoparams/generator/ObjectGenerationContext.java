@@ -4,6 +4,8 @@ import autoparams.customization.Customizer;
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+// TODO: Replace with ResolutionContext
+@Deprecated
 public class ObjectGenerationContext {
 
     private final ExtensionContext extensionContext;
