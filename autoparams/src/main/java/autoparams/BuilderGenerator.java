@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 final class BuilderGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
+            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
             : ObjectContainer.EMPTY;
     }
 
@@ -32,5 +32,4 @@ final class BuilderGenerator implements ObjectGenerator {
             )
         );
     }
-
 }

@@ -2,8 +2,11 @@ package test.autoparams.customization;
 
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
+import autoparams.customization.Customizer;
 import autoparams.customization.Fix;
-import autoparams.mockito.MockitoCustomizer;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
+import java.lang.reflect.Type;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -40,9 +43,29 @@ class SpecsForFix {
         assertSame(service, client.getServiceB());
     }
 
+    public static class ServiceCustomizer implements Customizer {
+
+        @Override
+        public ObjectGenerator customize(ObjectGenerator generator) {
+            return (query, context) -> generator
+                .generate(query, context)
+                .yieldIfEmpty(() -> generate(query.getType()));
+        }
+
+        private ObjectContainer generate(Type type) {
+            if (type.equals(ServiceA.class)) {
+                return new ObjectContainer(new ServiceImplementor());
+            } else if (type.equals(ServiceB.class)) {
+                return new ObjectContainer(new ServiceImplementor());
+            } else {
+                return ObjectContainer.EMPTY;
+            }
+        }
+    }
+
     @ParameterizedTest
     @AutoSource
-    @Customization(MockitoCustomizer.class)
+    @Customization(ServiceCustomizer.class)
     void sut_does_not_fix_by_implemented_interfaces(
         @Fix(byImplementedInterfaces = false) ServiceImplementor value1,
         ServiceA value2,
@@ -54,7 +77,7 @@ class SpecsForFix {
 
     @ParameterizedTest
     @AutoSource
-    @Customization(MockitoCustomizer.class)
+    @Customization(ServiceCustomizer.class)
     void default_value_of_byImplementedInterfaces_is_false(
         @Fix ServiceImplementor value1,
         ServiceA value2,

@@ -1,5 +1,6 @@
 package test.autoparams.generator;
 
+import autoparams.ResolutionContext;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.TypeMatchingGenerator;
@@ -17,7 +18,7 @@ public class SpecsForTypeMatchingGenerator {
     @AutoParameterizedTest
     void create_correctly_creates_generator_with_supplier_factory(
         String value,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         TypeMatchingGenerator actual = create(String.class, () -> value);
 
@@ -31,7 +32,7 @@ public class SpecsForTypeMatchingGenerator {
     @AutoParameterizedTest
     void create_correctly_creates_generator_with_function_factory(
         String value,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         TypeMatchingGenerator actual = create(
             String.class,
@@ -47,7 +48,7 @@ public class SpecsForTypeMatchingGenerator {
     @AutoParameterizedTest
     void constructor_with_predicate_and_bi_function_factory_correctly_creates_generator(
         String value,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         ObjectQuery query = ObjectQuery.fromType(String.class);
 
@@ -65,7 +66,7 @@ public class SpecsForTypeMatchingGenerator {
     @AutoParameterizedTest
     void constructor_with_bi_function_factory_and_candidate_types_correctly_creates_generator(
         String value,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         ObjectQuery query = ObjectQuery.fromType(String.class);
 
@@ -82,7 +83,7 @@ public class SpecsForTypeMatchingGenerator {
 
     void create_correctly_creates_generator_with_bi_function_factory(
         String value,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         ObjectQuery query = ObjectQuery.fromType(String.class);
 
@@ -107,7 +108,7 @@ public class SpecsForTypeMatchingGenerator {
         Method mut = TypeMatchingGenerator.class.getDeclaredMethod(
             "generate",
             ObjectQuery.class,
-            ObjectGenerationContext.class);
+            ResolutionContext.class);
         assertThat(mut.getModifiers() & FINAL).isNotZero();
     }
 }

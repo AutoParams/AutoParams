@@ -1,10 +1,10 @@
 package test.autoparams.generator;
 
 import autoparams.AutoSource;
-import autoparams.customization.Customization;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.UnwrapFailedException;
-import autoparams.mockito.MockitoCustomizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,9 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 class SpecsForObjectContainer {
 
@@ -58,30 +55,41 @@ class SpecsForObjectContainer {
         assertThat(actual).isInstanceOf(UnwrapFailedException.class);
     }
 
+    public static class ProcessorSpy implements Function<Object, Object> {
+
+        private final List<Object> records = new ArrayList<>();
+
+        @Override
+        public Object apply(Object value) {
+            records.add(value);
+            return value;
+        }
+
+        public List<Object> getRecords() {
+            return records;
+        }
+    }
+
     @ParameterizedTest
     @AutoSource
-    @Customization(MockitoCustomizer.class)
-    void process_correctly_invokes_processor(String value, Function<Object, Object> processor) {
+    void process_correctly_invokes_processor(String value, ProcessorSpy spy) {
         ObjectContainer sut = new ObjectContainer(value);
-        sut.process(processor);
-        verify(processor, times(1)).apply(value);
+        sut.process(spy);
+        assertThat(spy.getRecords()).containsExactly(value);
     }
 
     @ParameterizedTest
     @AutoSource
-    @Customization(MockitoCustomizer.class)
-    void process_does_not_invoke_processor_if_sut_is_empty(Function<Object, Object> processor) {
+    void process_does_not_invoke_processor_if_sut_is_empty(ProcessorSpy spy) {
         ObjectContainer sut = ObjectContainer.EMPTY;
-        sut.process(processor);
-        verify(processor, never()).apply(null);
+        sut.process(spy);
+        assertThat(spy.getRecords()).isEmpty();
     }
 
-    @ParameterizedTest
-    @AutoSource
-    @Customization(MockitoCustomizer.class)
-    void process_returns_self_if_sut_is_empty(Function<Object, Object> processor) {
+    @Test
+    void process_returns_self_if_sut_is_empty() {
         ObjectContainer sut = ObjectContainer.EMPTY;
-        ObjectContainer actual = sut.process(processor);
+        ObjectContainer actual = sut.process(x -> x);
         assertSame(sut, actual);
     }
 
@@ -91,5 +99,4 @@ class SpecsForObjectContainer {
         Object actual = sut.process(x -> x.toString() + " world").unwrapOrElseThrow();
         assertEquals("hello world", actual);
     }
-
 }

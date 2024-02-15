@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,7 +14,7 @@ final class UrlGenerator implements ObjectGenerator {
     };
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType().equals(URL.class)
             ? new ObjectContainer(generate())
             : ObjectContainer.EMPTY;

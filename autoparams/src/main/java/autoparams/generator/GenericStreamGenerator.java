@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -7,9 +8,9 @@ import java.util.stream.Stream;
 final class GenericStreamGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
+            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
             : ObjectContainer.EMPTY;
     }
 
@@ -26,5 +27,4 @@ final class GenericStreamGenerator implements ObjectGenerator {
         ArrayList<T> list = SequenceGenerator.factory(elementType, context);
         return list.stream();
     }
-
 }

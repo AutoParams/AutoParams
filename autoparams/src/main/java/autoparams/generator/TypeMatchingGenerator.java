@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -76,7 +77,7 @@ public class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     @Override
-    public final ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public final ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         Type type = query.getType();
 
         return predicate.apply(type)

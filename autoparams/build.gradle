@@ -9,7 +9,6 @@ dependencies {
     api "com.google.code.findbugs:jsr305:3.0.2"
     testImplementation "org.assertj:assertj-core:3.8.0"
     testImplementation "org.mockito:mockito-core:2.+"
-    testImplementation(project(":autoparams-mockito"))
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.0"
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'

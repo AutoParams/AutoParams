@@ -1,10 +1,10 @@
 package test.autoparams.customization;
 
 import autoparams.AutoSource;
+import autoparams.ResolutionContext;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class SpecsForCompositeCustomizer {
 
     public static final class EmptyGenerator implements ObjectGenerator {
-        public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+        public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
             return ObjectContainer.EMPTY;
         }
     }

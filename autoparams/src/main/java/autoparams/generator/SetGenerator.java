@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.AbstractSet;
@@ -11,9 +12,9 @@ final class SetGenerator implements ObjectGenerator {
     private static final int SIZE = 3;
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
+            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
             : ObjectContainer.EMPTY;
     }
 

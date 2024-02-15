@@ -1,14 +1,15 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 
 final class OptionalGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
+            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
             : ObjectContainer.EMPTY;
     }
 

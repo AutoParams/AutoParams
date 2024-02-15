@@ -1,6 +1,7 @@
 package autoparams.generator;
 
 import autoparams.Builder;
+import autoparams.ResolutionContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         if (query.getType() instanceof Class<?>) {
             return generateNonGeneric((Class<?>) query.getType(), context);
         } else if (query.getType() instanceof ParameterizedType) {

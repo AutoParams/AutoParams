@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.util.Arrays;
 
 public class CompositeObjectGenerator implements ObjectGenerator {
@@ -11,7 +12,7 @@ public class CompositeObjectGenerator implements ObjectGenerator {
     }
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return Folder.foldl(
             (result, generator) -> result.yieldIfEmpty(() -> generator.generate(query, context)),
             ObjectContainer.EMPTY,

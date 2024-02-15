@@ -1,13 +1,14 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.Array;
 
 final class ArrayGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof Class<?>
-            ? generate((Class<?>) query.getType(), context)
+            ? generate((Class<?>) query.getType(), (ObjectGenerationContext) context)
             : ObjectContainer.EMPTY;
     }
 
@@ -28,5 +29,4 @@ final class ArrayGenerator implements ObjectGenerator {
     private Object generateElement(Class<?> elementType, ObjectGenerationContext context) {
         return context.generate(elementType);
     }
-
 }

@@ -1,12 +1,13 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 
 final class EnumGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ObjectGenerationContext context) {
+    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         Type type = query.getType();
         return type instanceof Class && Enum.class.isAssignableFrom((Class<?>) type)
             ? new ObjectContainer(factory(query))
