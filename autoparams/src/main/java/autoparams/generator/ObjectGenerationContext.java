@@ -4,7 +4,7 @@ import autoparams.customization.Customizer;
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public final class ObjectGenerationContext {
+public class ObjectGenerationContext {
 
     private final ExtensionContext extensionContext;
     private ObjectGenerator generator;
