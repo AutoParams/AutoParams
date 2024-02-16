@@ -5,7 +5,6 @@ import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -22,10 +21,10 @@ import static java.util.Arrays.stream;
 
 final class ArgumentsGenerator {
 
-    private final ObjectGenerationContext context;
+    private final ResolutionContext context;
     private final int repeat;
 
-    public ArgumentsGenerator(ObjectGenerationContext context, int repeat) {
+    public ArgumentsGenerator(ResolutionContext context, int repeat) {
         this.context = context;
         this.repeat = repeat;
     }

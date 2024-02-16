@@ -1,7 +1,6 @@
 package autoparams;
 
 import autoparams.generator.CompositeObjectGenerator;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
@@ -31,7 +30,7 @@ final class AutoArgumentsProvider implements ArgumentsProvider {
 
     private ArgumentsGenerator createArgumentsGenerator(ExtensionContext context) {
         final int repeat = getRepeat(context);
-        return new ArgumentsGenerator(new ObjectGenerationContext(context, generator), repeat);
+        return new ArgumentsGenerator(new ResolutionContext(context, generator), repeat);
     }
 
     private int getRepeat(ExtensionContext context) {
