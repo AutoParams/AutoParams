@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.util.Comparator;
@@ -16,7 +17,7 @@ class ConstructorResolverGenerator extends TypeMatchingGenerator {
         );
     }
 
-    private static ConstructorResolver factory(ObjectGenerationContext context) {
+    private static ConstructorResolver factory(ResolutionContext context) {
         ConstructorExtractor extractor = context.generate(ConstructorExtractor.class);
         return createDefensiveResolver(extractor);
     }

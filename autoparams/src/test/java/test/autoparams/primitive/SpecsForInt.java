@@ -1,7 +1,7 @@
 package test.autoparams.primitive;
 
 import autoparams.Repeat;
-import autoparams.generator.ObjectGenerationContext;
+import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Parameter;
 import javax.validation.constraints.Max;
@@ -64,7 +64,7 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     void sut_throws_if_max_constraint_is_excessively_large(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelyLargeMaxConstraint", int.class)
@@ -78,7 +78,7 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     void sut_throws_if_max_constraint_is_excessively_small(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelySmallMaxConstraint", int.class)
@@ -98,7 +98,7 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     void sut_throws_if_min_constraint_is_excessively_large(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelyLargeMinConstraint", int.class)
@@ -112,7 +112,7 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     void sut_throws_if_min_constraint_is_excessively_small(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelySmallMinConstraint", int.class)
@@ -126,7 +126,7 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     void sut_throws_if_max_constraint_is_less_than_min_constraint(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", int.class)

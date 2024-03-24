@@ -1,10 +1,10 @@
 package autoparams.customization;
 
+import autoparams.ResolutionContext;
 import autoparams.generator.CompositeConstructorResolver;
 import autoparams.generator.ConstructorExtractor;
 import autoparams.generator.ConstructorResolver;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.util.Comparator;
@@ -37,7 +37,7 @@ public class AggressiveConstructorResolutionCustomizerFactory implements
                 : generator.generate(query, context);
     }
 
-    private ConstructorResolver createAggressiveResolver(ObjectGenerationContext context) {
+    private ConstructorResolver createAggressiveResolver(ResolutionContext context) {
         return createAggressiveResolver(context.generate(ConstructorExtractor.class));
     }
 

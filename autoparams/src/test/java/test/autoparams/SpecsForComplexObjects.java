@@ -1,7 +1,7 @@
 package test.autoparams;
 
 import autoparams.AutoSource;
-import autoparams.generator.ObjectGenerationContext;
+import autoparams.ResolutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +44,7 @@ class SpecsForComplexObjects {
 
     @ParameterizedTest
     @AutoSource
-    void sut_fails_for_type_with_no_public_constructor(ObjectGenerationContext context) {
+    void sut_fails_for_type_with_no_public_constructor(ResolutionContext context) {
         assertThat(
             assertThrows(
                 RuntimeException.class,

@@ -14,11 +14,11 @@ final class SetGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
+            ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
+    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
         return isSet((Class<?>) type.getRawType())
             ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
             : ObjectContainer.EMPTY;
@@ -33,7 +33,7 @@ final class SetGenerator implements ObjectGenerator {
     @SuppressWarnings("unchecked")
     public static <T> HashSet<T> factory(
         Type elementType,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         HashSet<T> instance = new HashSet<>();
         ObjectQuery query = ObjectQuery.fromType(elementType);
@@ -43,5 +43,4 @@ final class SetGenerator implements ObjectGenerator {
 
         return instance;
     }
-
 }

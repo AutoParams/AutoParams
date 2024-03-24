@@ -1,7 +1,6 @@
 package test.autoparams.generator;
 
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.TypeMatchingGenerator;
 import autoparams.generator.UnwrapFailedException;

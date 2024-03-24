@@ -25,7 +25,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         }
     }
 
-    private ObjectContainer generateNonGeneric(Class<?> type, ObjectGenerationContext context) {
+    private ObjectContainer generateNonGeneric(Class<?> type, ResolutionContext context) {
         if (isAbstract(type)) {
             return ObjectContainer.EMPTY;
         }
@@ -43,7 +43,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
     private ObjectContainer generateGeneric(
         ParameterizedType parameterizedType,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         Class<?> type = (Class<?>) parameterizedType.getRawType();
 
@@ -102,7 +102,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     private Object createInstance(
         Constructor<?> constructor,
         Stream<ObjectQuery> argumentQueries,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         try {
             return constructor.newInstance(generateArguments(argumentQueries, context));
@@ -113,7 +113,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
     private Object[] generateArguments(
         Stream<ObjectQuery> argumentQueries,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         return argumentQueries.map(context::generate).toArray();
     }

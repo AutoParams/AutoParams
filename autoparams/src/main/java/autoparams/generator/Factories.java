@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Clock;
@@ -82,21 +83,21 @@ final class Factories {
         return DoubleStream.generate(() -> random().nextDouble()).limit(3);
     }
 
-    public static Period createPeriod(ObjectGenerationContext context) {
+    public static Period createPeriod(ResolutionContext context) {
         final Period period = Period.between(
             context.generate(LocalDate.class),
             context.generate(LocalDate.class));
         return period.isNegative() ? period.negated() : period;
     }
 
-    public static OffsetDateTime createOffsetDateTime(ObjectGenerationContext context) {
+    public static OffsetDateTime createOffsetDateTime(ResolutionContext context) {
         int bound = (int) TimeUnit.DAYS.toSeconds(7);
         int seconds = random().nextInt(bound);
         Clock clock = context.generate(Clock.class);
         return OffsetDateTime.now(clock).minusSeconds(seconds);
     }
 
-    public static ZonedDateTime createZonedDateTime(ObjectGenerationContext context) {
+    public static ZonedDateTime createZonedDateTime(ResolutionContext context) {
         LocalDateTime localDateTime = context.generate(LocalDateTime.class);
         ZoneId zoneId = context.generate(ZoneId.class);
         return localDateTime.atZone(zoneId);

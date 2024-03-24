@@ -1,8 +1,8 @@
 package test.autoparams.customization;
 
 import autoparams.AutoSource;
+import autoparams.ResolutionContext;
 import autoparams.customization.RecursionGuard;
-import autoparams.generator.ObjectGenerationContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +41,7 @@ class SpecsForRecursionGuard {
 
     @ParameterizedTest
     @AutoSource
-    void sut_guards_recursion_with_1_depth(ObjectGenerationContext context) {
+    void sut_guards_recursion_with_1_depth(ResolutionContext context) {
         final int recursionDepth = 1;
         context.customizeGenerator(new RecursionGuard(recursionDepth));
 
@@ -54,7 +54,7 @@ class SpecsForRecursionGuard {
 
     @ParameterizedTest
     @AutoSource
-    void sut_guards_recursion_with_2_depth(ObjectGenerationContext context) {
+    void sut_guards_recursion_with_2_depth(ResolutionContext context) {
         final int recursionDepth = 2;
         context.customizeGenerator(new RecursionGuard(recursionDepth));
 
@@ -64,5 +64,4 @@ class SpecsForRecursionGuard {
         assertThat(actual.getFollowings()[1].getFollower()).isNotNull();
         assertThat(actual.getFollowings()[2].getFollower()).isNotNull();
     }
-
 }

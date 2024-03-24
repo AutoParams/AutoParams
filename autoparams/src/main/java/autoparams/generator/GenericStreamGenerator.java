@@ -10,11 +10,11 @@ final class GenericStreamGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
+            ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
+    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
         return type.getRawType().equals(Stream.class)
             ? new ObjectContainer(factory((Class<?>) type.getActualTypeArguments()[0], context))
             : ObjectContainer.EMPTY;
@@ -22,7 +22,7 @@ final class GenericStreamGenerator implements ObjectGenerator {
 
     private <T> Stream<T> factory(
         Class<? extends T> elementType,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         ArrayList<T> list = SequenceGenerator.factory(elementType, context);
         return list.stream();

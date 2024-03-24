@@ -14,11 +14,11 @@ final class MapGenerator implements ObjectGenerator {
     @Override
     public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), (ObjectGenerationContext) context)
+            ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ObjectGenerationContext context) {
+    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
         return isMap((Class<?>) type.getRawType())
             ? new ObjectContainer(factory(
                 type.getActualTypeArguments()[0],
@@ -37,7 +37,7 @@ final class MapGenerator implements ObjectGenerator {
     private <K, V> HashMap<K, V> factory(
         Type keyType,
         Type valueType,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         HashMap<K, V> instance = new HashMap<>();
 

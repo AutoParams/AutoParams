@@ -1,10 +1,10 @@
 package test.autoparams.customization;
 
 import autoparams.AutoSource;
+import autoparams.ResolutionContext;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
 import autoparams.customization.InstanceFieldWriter;
-import autoparams.generator.ObjectGenerationContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,7 +82,7 @@ class SpecsForInstanceFieldWriter {
 
     @ParameterizedTest
     @AutoSource
-    void including_accumulates_conditions(ObjectGenerationContext context) {
+    void including_accumulates_conditions(ResolutionContext context) {
         // Arrange
         InstanceFieldWriter sut = new InstanceFieldWriter(Operator.class)
             .excluding("activeWorks")
@@ -100,7 +100,7 @@ class SpecsForInstanceFieldWriter {
 
     @ParameterizedTest
     @AutoSource
-    void excluding_accumulates_conditions(ObjectGenerationContext context) {
+    void excluding_accumulates_conditions(ResolutionContext context) {
         // Arrange
         InstanceFieldWriter sut = new InstanceFieldWriter(Operator.class)
             .including("teamName", "activeWorks")
@@ -115,5 +115,4 @@ class SpecsForInstanceFieldWriter {
         assertNull(actual.getPhoneNumber());
         assertEquals(0, actual.getActiveWorks());
     }
-
 }

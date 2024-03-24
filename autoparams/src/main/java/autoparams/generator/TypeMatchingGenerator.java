@@ -11,11 +11,11 @@ import java.util.function.Supplier;
 public class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Type, Boolean> predicate;
-    private final BiFunction<ObjectQuery, ObjectGenerationContext, Object> factory;
+    private final BiFunction<ObjectQuery, ResolutionContext, Object> factory;
 
     public TypeMatchingGenerator(
         Function<Type, Boolean> predicate,
-        BiFunction<ObjectQuery, ObjectGenerationContext, Object> factory
+        BiFunction<ObjectQuery, ResolutionContext, Object> factory
     ) {
         this.predicate = predicate;
         this.factory = factory;
@@ -29,14 +29,14 @@ public class TypeMatchingGenerator implements ObjectGenerator {
     }
 
     public TypeMatchingGenerator(
-        Function<ObjectGenerationContext, Object> factory,
+        Function<ResolutionContext, Object> factory,
         Class<?>... candidates
     ) {
         this(buildPredicateWithTypes(candidates), (query, context) -> factory.apply(context));
     }
 
     public TypeMatchingGenerator(
-        BiFunction<ObjectQuery, ObjectGenerationContext, Object> factory,
+        BiFunction<ObjectQuery, ResolutionContext, Object> factory,
         Class<?>... candidates
     ) {
         this(buildPredicateWithTypes(candidates), factory);
@@ -64,14 +64,14 @@ public class TypeMatchingGenerator implements ObjectGenerator {
 
     public static <T> TypeMatchingGenerator create(
         Class<T> type,
-        Function<ObjectGenerationContext, T> factory
+        Function<ResolutionContext, T> factory
     ) {
         return new TypeMatchingGenerator(factory::apply, type);
     }
 
     public static <T> TypeMatchingGenerator create(
         Class<T> type,
-        BiFunction<ObjectQuery, ObjectGenerationContext, T> factory
+        BiFunction<ObjectQuery, ResolutionContext, T> factory
     ) {
         return new TypeMatchingGenerator(factory::apply, type);
     }

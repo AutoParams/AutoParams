@@ -14,7 +14,8 @@ public class ObjectGenerationContext {
     private ObjectGenerator generator;
 
     public ObjectGenerationContext(
-        ExtensionContext extensionContext, ObjectGenerator generator) {
+        ExtensionContext extensionContext, ObjectGenerator generator
+    ) {
         this.extensionContext = extensionContext;
         this.generator = generator;
     }

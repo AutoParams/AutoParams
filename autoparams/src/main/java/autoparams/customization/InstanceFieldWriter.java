@@ -1,7 +1,7 @@
 package autoparams.customization;
 
+import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Field;
@@ -43,7 +43,7 @@ public final class InstanceFieldWriter implements Customizer {
             : (Class<?>) type;
     }
 
-    private Object process(Object target, Type underlyingType, ObjectGenerationContext context) {
+    private Object process(Object target, Type underlyingType, ResolutionContext context) {
         writeAllFields(target, underlyingType, context);
         return target;
     }
@@ -51,7 +51,7 @@ public final class InstanceFieldWriter implements Customizer {
     private void writeAllFields(
         Object target,
         Type underlyingType,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         writeFields(target, underlyingType, context, RuntimeTypeResolver.create(underlyingType));
         Type superType = getRawType(underlyingType).getGenericSuperclass();
@@ -63,7 +63,7 @@ public final class InstanceFieldWriter implements Customizer {
     private void writeFields(
         Object target,
         Type genericType,
-        ObjectGenerationContext context,
+        ResolutionContext context,
         RuntimeTypeResolver typeResolver
     ) {
         stream(getRawType(genericType).getDeclaredFields())
@@ -79,7 +79,7 @@ public final class InstanceFieldWriter implements Customizer {
     private void writeField(
         Object target,
         Field field,
-        ObjectGenerationContext context,
+        ResolutionContext context,
         RuntimeTypeResolver typeResolver
     ) {
         field.setAccessible(true);
