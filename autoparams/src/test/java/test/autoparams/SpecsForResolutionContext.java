@@ -1,22 +1,22 @@
-package test.autoparams.generator;
+package test.autoparams;
 
 import autoparams.AutoSource;
+import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Deprecated
-class SpecsForObjectGenerationContext {
+class SpecsForResolutionContext {
 
     @SuppressWarnings("ConstantConditions")
     @ParameterizedTest
     @AutoSource
-    void generate_has_guard_clause(ObjectGenerationContext sut) {
+    void generate_has_guard_clause(ResolutionContext sut) {
         ObjectQuery query = null;
         assertThatThrownBy(() -> sut.generate(query))
             .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -24,10 +24,14 @@ class SpecsForObjectGenerationContext {
 
     @ParameterizedTest
     @AutoSource
-    void generate_correctly_returns_generated_value(ExtensionContext extensionContext, int value) {
-        ObjectGenerationContext sut = new ObjectGenerationContext(
+    void generate_correctly_returns_generated_value(
+        ExtensionContext extensionContext,
+        int value
+    ) {
+        ResolutionContext sut = new ResolutionContext(
             extensionContext,
-            (query, context) -> new ObjectContainer(value));
+            (query, context) -> new ObjectContainer(value),
+            ObjectProcessor.DEFAULT);
 
         Object actual = sut.generate(int.class);
 
@@ -37,7 +41,7 @@ class SpecsForObjectGenerationContext {
     @SuppressWarnings("ConstantConditions")
     @ParameterizedTest
     @AutoSource
-    void customizeGenerator_has_guard_clause(ObjectGenerationContext sut) {
+    void customizeGenerator_has_guard_clause(ResolutionContext sut) {
         assertThatThrownBy(() -> sut.customizeGenerator(null))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
@@ -49,11 +53,13 @@ class SpecsForObjectGenerationContext {
         int value1,
         int value2
     ) {
-        ObjectGenerationContext sut = new ObjectGenerationContext(
+        ResolutionContext sut = new ResolutionContext(
             extensionContext,
-            (query, context) -> new ObjectContainer(value1));
+            (query, context) -> new ObjectContainer(value1),
+            ObjectProcessor.DEFAULT);
 
-        sut.customizeGenerator(generator -> (query, context) -> new ObjectContainer(value2));
+        sut.customizeGenerator(
+            generator -> (query, context) -> new ObjectContainer(value2));
 
         Object actual = sut.generate(int.class);
         assertThat(actual).isEqualTo(value2);
