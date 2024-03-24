@@ -26,7 +26,7 @@ final class BuilderGenerator implements ObjectGenerator {
     private Builder<?> factory(Type targetType, ObjectGenerationContext context) {
         return Builder.create(
             targetType,
-            new ObjectGenerationContext(
+            new ResolutionContext(
                 context.generate(ExtensionContext.class),
                 ObjectGenerator.DEFAULT
             )
