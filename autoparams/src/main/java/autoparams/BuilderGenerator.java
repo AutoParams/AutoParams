@@ -4,6 +4,7 @@ import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
+import autoparams.processor.ObjectProcessor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -28,7 +29,8 @@ final class BuilderGenerator implements ObjectGenerator {
             targetType,
             new ResolutionContext(
                 context.generate(ExtensionContext.class),
-                ObjectGenerator.DEFAULT
+                ObjectGenerator.DEFAULT,
+                ObjectProcessor.DEFAULT
             )
         );
     }

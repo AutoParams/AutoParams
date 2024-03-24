@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Deprecated
 class SpecsForObjectGenerationContext {
 
     @SuppressWarnings("ConstantConditions")
@@ -57,5 +58,4 @@ class SpecsForObjectGenerationContext {
         Object actual = sut.generate(int.class);
         assertThat(actual).isEqualTo(value2);
     }
-
 }

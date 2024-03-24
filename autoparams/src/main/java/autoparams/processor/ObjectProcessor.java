@@ -7,4 +7,6 @@ import autoparams.generator.ObjectQuery;
 public interface ObjectProcessor {
 
     void process(ObjectQuery query, Object value, ResolutionContext context);
+
+    ObjectProcessor DEFAULT = (query, value, context) -> { };
 }

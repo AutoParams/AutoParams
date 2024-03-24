@@ -13,16 +13,22 @@ public final class ResolutionContext extends ObjectGenerationContext {
 
     public ResolutionContext(
         ExtensionContext extensionContext,
-        ObjectGenerator generator
+        ObjectGenerator generator,
+        ObjectProcessor processor
     ) {
         super(extensionContext, generator);
-
-        processor = (query, value, context) -> { };
+        this.processor = processor;
     }
 
     @Override
     public Object generate(ObjectQuery query) {
-        Object value = super.generate(query);
+        if (query == null) {
+            throw new IllegalArgumentException("The argument 'query' is null.");
+        }
+
+        Object value = ObjectProcessor.class.equals(query.getType())
+            ? ObjectProcessor.DEFAULT
+            : super.generate(query);
         processor.process(query, value, this);
         return value;
     }

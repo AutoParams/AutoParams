@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
+import autoparams.processor.ObjectProcessor;
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -53,7 +54,10 @@ public class ObjectGenerationContext {
     }
 
     private ResolutionContext toResolutionContext() {
-        return new ResolutionContext(extensionContext, generator);
+        return new ResolutionContext(
+            extensionContext,
+            generator,
+            ObjectProcessor.DEFAULT);
     }
 
     private RuntimeException composeGenerationFailedException(ObjectQuery query, Throwable cause) {
