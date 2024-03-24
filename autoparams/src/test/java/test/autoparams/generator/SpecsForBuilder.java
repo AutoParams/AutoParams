@@ -1,11 +1,12 @@
-package test.autoparams;
+package test.autoparams.generator;
 
 import autoparams.AutoSource;
-import autoparams.Builder;
 import autoparams.Repeat;
+import autoparams.generator.Builder;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.params.ParameterizedTest;
+import test.autoparams.ComplexObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

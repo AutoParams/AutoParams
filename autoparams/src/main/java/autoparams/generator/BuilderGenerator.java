@@ -1,9 +1,6 @@
-package autoparams;
+package autoparams.generator;
 
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
-import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
+import autoparams.ResolutionContext;
 import autoparams.processor.ObjectProcessor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

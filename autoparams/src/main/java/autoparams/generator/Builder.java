@@ -1,8 +1,5 @@
-package autoparams;
+package autoparams.generator;
 
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Type;
 
 public final class Builder<T> {

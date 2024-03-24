@@ -1,7 +1,7 @@
 package test.autoparams;
 
 import autoparams.AutoSource;
-import autoparams.Builder;
+import autoparams.generator.Builder;
 import java.net.URL;
 import java.util.stream.IntStream;
 import org.junit.jupiter.params.ParameterizedTest;

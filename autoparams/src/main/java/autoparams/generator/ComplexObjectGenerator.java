@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import autoparams.Builder;
 import autoparams.ResolutionContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;

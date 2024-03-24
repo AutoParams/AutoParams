@@ -1,6 +1,5 @@
 package autoparams;
 
-import autoparams.generator.CompositeObjectGenerator;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.ObjectProcessor;
 import java.lang.reflect.Method;
@@ -13,24 +12,8 @@ import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 
 final class AutoArgumentsProvider implements ArgumentsProvider {
 
-    private final ObjectGenerator generator;
-    private final ObjectProcessor processor;
-
-    private AutoArgumentsProvider(
-        ObjectGenerator generator,
-        ObjectProcessor processor
-    ) {
-        this.generator = generator;
-        this.processor = processor;
-    }
-
-    public AutoArgumentsProvider() {
-        this(
-            new CompositeObjectGenerator(
-                ObjectGenerator.DEFAULT,
-                new BuilderGenerator()),
-            ObjectProcessor.DEFAULT);
-    }
+    private final ObjectGenerator generator = ObjectGenerator.DEFAULT;
+    private final ObjectProcessor processor = ObjectProcessor.DEFAULT;
 
     @Override
     public Stream<? extends Arguments> provideArguments(
