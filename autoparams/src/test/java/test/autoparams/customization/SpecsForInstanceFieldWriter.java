@@ -88,7 +88,7 @@ class SpecsForInstanceFieldWriter {
             .excluding("activeWorks")
             .including("teamName", "activeWorks");
 
-        context.customizeGenerator(sut);
+        context.applyCustomizer(sut);
 
         // Act
         Operator actual = context.generate(Operator.class);
@@ -106,7 +106,7 @@ class SpecsForInstanceFieldWriter {
             .including("teamName", "activeWorks")
             .excluding("activeWorks");
 
-        context.customizeGenerator(sut);
+        context.applyCustomizer(sut);
 
         // Act
         Operator actual = context.generate(Operator.class);

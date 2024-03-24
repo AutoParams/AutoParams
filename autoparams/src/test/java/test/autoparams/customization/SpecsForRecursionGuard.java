@@ -43,7 +43,7 @@ class SpecsForRecursionGuard {
     @AutoSource
     void sut_guards_recursion_with_1_depth(ResolutionContext context) {
         final int recursionDepth = 1;
-        context.customizeGenerator(new RecursionGuard(recursionDepth));
+        context.applyCustomizer(new RecursionGuard(recursionDepth));
 
         final User actual = context.generate(User.class);
 
@@ -56,7 +56,7 @@ class SpecsForRecursionGuard {
     @AutoSource
     void sut_guards_recursion_with_2_depth(ResolutionContext context) {
         final int recursionDepth = 2;
-        context.customizeGenerator(new RecursionGuard(recursionDepth));
+        context.applyCustomizer(new RecursionGuard(recursionDepth));
 
         final User actual = context.generate(User.class);
 

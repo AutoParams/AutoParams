@@ -42,7 +42,7 @@ class SpecsForResolutionContext {
     @ParameterizedTest
     @AutoSource
     void customizeGenerator_has_guard_clause(ResolutionContext sut) {
-        assertThatThrownBy(() -> sut.customizeGenerator(null))
+        assertThatThrownBy(() -> sut.applyCustomizer(null))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -58,7 +58,7 @@ class SpecsForResolutionContext {
             (query, context) -> new ObjectContainer(value1),
             ObjectProcessor.DEFAULT);
 
-        sut.customizeGenerator(
+        sut.applyCustomizer(
             generator -> (query, context) -> new ObjectContainer(value2));
 
         Object actual = sut.generate(int.class);

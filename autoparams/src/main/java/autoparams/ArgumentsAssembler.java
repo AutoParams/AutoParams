@@ -1,5 +1,6 @@
 package autoparams;
 
+import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ final class ArgumentsAssembler {
     }
 
     private static void processArguments(ExtensionContext context, Arguments supplement) {
-        context.getTestMethod().map(method -> method.getParameters()).ifPresent(parameters -> {
+        context.getTestMethod().map(Executable::getParameters).ifPresent(parameters -> {
             Object[] arguments = supplement.get();
             for (int i = 0; i < arguments.length; i++) {
                 Parameter parameter = parameters[i];
@@ -75,10 +76,9 @@ final class ArgumentsAssembler {
     }
 
     private static Arguments coalesceArguments(Arguments source, Arguments supplement) {
-        ArrayList<Object> arguments = new ArrayList<Object>();
+        ArrayList<Object> arguments = new ArrayList<>();
         Collections.addAll(arguments, source.get());
         Arrays.stream(supplement.get()).skip(arguments.size()).forEach(arguments::add);
         return Arguments.of(arguments.toArray());
     }
-
 }

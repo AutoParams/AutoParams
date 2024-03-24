@@ -60,15 +60,17 @@ public final class ResolutionContext {
         }
     }
 
-    private RuntimeException composeGenerationFailedException(ObjectQuery query, Throwable cause) {
+    private RuntimeException composeGenerationFailedException(
+        ObjectQuery query,
+        Throwable cause
+    ) {
         String messageFormat = "Object cannot be created with the given query '%s'."
             + " This can happen if the query represents an interface or abstract class.";
         String message = String.format(messageFormat, query);
         return new RuntimeException(message, cause);
     }
 
-    // TODO: Rename to reflect the purpose of the method
-    public void customizeGenerator(Customizer customizer) {
+    public void applyCustomizer(Customizer customizer) {
         if (customizer == null) {
             throw new IllegalArgumentException("The argument 'customizer' is null.");
         }

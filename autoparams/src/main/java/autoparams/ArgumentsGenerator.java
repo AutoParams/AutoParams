@@ -29,15 +29,13 @@ final class ArgumentsGenerator {
         this.repeat = repeat;
     }
 
-    public Stream<? extends Arguments> generateArguments(ExtensionContext context) {
-        customizeGenerator(context);
-        return generate(context.getRequiredTestMethod());
-    }
-
-    private void customizeGenerator(ExtensionContext context) {
-        Consumer<Customizer> visitor = this.context::customizeGenerator;
+    public Stream<? extends Arguments> generateArguments(
+        ExtensionContext context
+    ) {
+        Consumer<Customizer> visitor = this.context::applyCustomizer;
         visitCustomizers(context.getRequiredTestMethod(), visitor);
         Customizers.visitCustomizers(context, visitor);
+        return generate(context.getRequiredTestMethod());
     }
 
     private static void visitCustomizers(
@@ -67,21 +65,20 @@ final class ArgumentsGenerator {
         if (onProcessing.add(annotationType)) {
             if (annotation instanceof Customization) {
                 Customization customization = (Customization) annotation;
-                getCustomizers(customization).forEach(visitor);
+                stream(customization.value())
+                    .<Customizer>map(ArgumentsGenerator::createInstance)
+                    .forEach(visitor);
             }
 
             if (annotationType.isAnnotationPresent(CustomizerSource.class)) {
-                CustomizerSource source = annotationType.getAnnotation(CustomizerSource.class);
-                Class<? extends CustomizerFactory> factoryType = source.value();
+                Class<? extends CustomizerFactory> factoryType = annotationType
+                    .getAnnotation(CustomizerSource.class)
+                    .value();
                 visitor.accept(createCustomizer(factoryType, annotation));
             }
 
             visitCustomizers(annotationType, visitor, onProcessing);
         }
-    }
-
-    private static Stream<Customizer> getCustomizers(Customization customization) {
-        return stream(customization.value()).map(ArgumentsGenerator::createInstance);
     }
 
     @SuppressWarnings("unchecked")
@@ -105,24 +102,22 @@ final class ArgumentsGenerator {
     }
 
     private Stream<Arguments> generate(Method method) {
-        Arguments[] streamSource = new Arguments[repeat];
-        for (int i = 0; i < streamSource.length; i++) {
-            streamSource[i] = createArguments(method);
+        Arguments[] sets = new Arguments[repeat];
+        for (int i = 0; i < sets.length; i++) {
+            Object[] set = stream(method.getParameters())
+                .map(this::createThenProcessArgument)
+                .toArray();
+            sets[i] = Arguments.of(set);
         }
 
-        return stream(streamSource);
-    }
-
-    private Arguments createArguments(Method method) {
-        Parameter[] parameters = method.getParameters();
-        Stream<Object> arguments = stream(parameters).map(this::createThenProcessArgument);
-        return Arguments.of(arguments.toArray());
+        return stream(sets);
     }
 
     private Object createThenProcessArgument(Parameter parameter) {
-        Consumer<Customizer> visitor = context::customizeGenerator;
+        Consumer<Customizer> visitor = context::applyCustomizer;
         visitCustomizers(parameter, visitor);
-        Object argument = context.generate(ObjectQuery.fromParameter(parameter));
+        ObjectQuery argumentQuery = ObjectQuery.fromParameter(parameter);
+        Object argument = context.generate(argumentQuery);
         Customizers.processArgument(parameter, argument).forEach(visitor);
         return argument;
     }

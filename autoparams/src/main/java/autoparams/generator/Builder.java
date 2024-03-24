@@ -18,7 +18,7 @@ public final class Builder<T> {
     }
 
     public <U> Builder<T> fix(Class<U> type, U value) {
-        context.customizeGenerator(generator -> (query, context) -> query.getType() == type
+        context.applyCustomizer(generator -> (query, context) -> query.getType() == type
             ? new ObjectContainer(value)
             : generator.generate(query, context));
         return this;

@@ -19,7 +19,7 @@ class SpecsForArrays {
     @ParameterizedTest
     @AutoSource
     void sut_fills_array_of_int_with_arbitrary_values(int[] array) {
-        HashSet<Integer> set = new HashSet<Integer>();
+        HashSet<Integer> set = new HashSet<>();
         for (int element : array) {
             set.add(element);
         }
@@ -30,7 +30,7 @@ class SpecsForArrays {
     @ParameterizedTest
     @AutoSource
     void sut_fills_array_of_Integer_with_arbitrary_values(Integer[] array) {
-        HashSet<Integer> set = new HashSet<Integer>();
+        HashSet<Integer> set = new HashSet<>();
         Collections.addAll(set, array);
 
         assertThat(set).hasSize(array.length);
@@ -39,7 +39,7 @@ class SpecsForArrays {
     @ParameterizedTest
     @AutoSource
     void sut_fills_array_of_complex_type_with_arbitrary_objects(ComplexObject[] array) {
-        HashSet<ComplexObject> set = new HashSet<ComplexObject>();
+        HashSet<ComplexObject> set = new HashSet<>();
         Collections.addAll(set, array);
 
         assertThat(set).hasSize(array.length);
@@ -55,5 +55,4 @@ class SpecsForArrays {
         assertThat(set.size()).isGreaterThanOrEqualTo(1);
         assertThat(set.size()).isLessThanOrEqualTo(EnumType.values().length);
     }
-
 }
