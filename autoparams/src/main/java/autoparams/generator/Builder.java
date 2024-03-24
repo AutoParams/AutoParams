@@ -1,18 +1,19 @@
 package autoparams.generator;
 
+import autoparams.ResolutionContext;
 import java.lang.reflect.Type;
 
 public final class Builder<T> {
 
     private final Type type;
-    private final ObjectGenerationContext context;
+    private final ResolutionContext context;
 
-    private Builder(Type type, ObjectGenerationContext context) {
+    private Builder(Type type, ResolutionContext context) {
         this.type = type;
         this.context = context;
     }
 
-    static <T> Builder<T> create(Type type, ObjectGenerationContext context) {
+    static <T> Builder<T> create(Type type, ResolutionContext context) {
         return new Builder<>(type, context);
     }
 
