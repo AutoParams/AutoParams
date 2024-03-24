@@ -7,5 +7,4 @@ public final class UnwrapFailedException extends RuntimeException {
     UnwrapFailedException() {
         super("The container is empty and cannot be unwrapped.");
     }
-
 }
