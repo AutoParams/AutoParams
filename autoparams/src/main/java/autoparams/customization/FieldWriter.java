@@ -13,16 +13,16 @@ import java.util.function.Predicate;
 import static java.util.Arrays.stream;
 
 @Deprecated
-public final class InstanceFieldWriter implements Customizer {
+public final class FieldWriter implements Customizer {
 
     private final Class<?> targetType;
     private final Predicate<Field> predicate;
 
-    public InstanceFieldWriter(Class<?> targetType) {
+    public FieldWriter(Class<?> targetType) {
         this(targetType, x -> true);
     }
 
-    private InstanceFieldWriter(Class<?> targetType, Predicate<Field> predicate) {
+    private FieldWriter(Class<?> targetType, Predicate<Field> predicate) {
         this.targetType = targetType;
         this.predicate = predicate;
     }
@@ -68,7 +68,7 @@ public final class InstanceFieldWriter implements Customizer {
         RuntimeTypeResolver typeResolver
     ) {
         stream(getRawType(genericType).getDeclaredFields())
-            .filter(InstanceFieldWriter::isNonStatic)
+            .filter(FieldWriter::isNonStatic)
             .filter(predicate)
             .forEach(field -> writeField(target, field, context, typeResolver));
     }
@@ -93,14 +93,14 @@ public final class InstanceFieldWriter implements Customizer {
         }
     }
 
-    public InstanceFieldWriter including(String... fieldNames) {
-        return new InstanceFieldWriter(
+    public FieldWriter including(String... fieldNames) {
+        return new FieldWriter(
             targetType,
             predicate.and(field -> stream(fieldNames).anyMatch(x -> field.getName().equals(x))));
     }
 
-    public InstanceFieldWriter excluding(String... fieldNames) {
-        return new InstanceFieldWriter(
+    public FieldWriter excluding(String... fieldNames) {
+        return new FieldWriter(
             targetType,
             predicate.and(field ->
                 stream(fieldNames).allMatch(x -> field.getName().equals(x) == false)));

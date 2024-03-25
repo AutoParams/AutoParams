@@ -4,7 +4,7 @@ import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
-import autoparams.customization.InstanceFieldWriter;
+import autoparams.customization.FieldWriter;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Deprecated
-class SpecsForInstanceFieldWriter {
+class SpecsForFieldWriter {
 
     public static class DomainCustomizer extends CompositeCustomizer {
         public DomainCustomizer() {
             super(
-                new InstanceFieldWriter(Versioned.class),
-                new InstanceFieldWriter(Entity.class),
-                new InstanceFieldWriter(User.class),
-                new InstanceFieldWriter(Worker.class).excluding("activeWorks", "closedWorks"),
-                new InstanceFieldWriter(Operator.class).including("teamName", "phoneNumber"),
-                new InstanceFieldWriter(Inventory.class));
+                new FieldWriter(Versioned.class),
+                new FieldWriter(Entity.class),
+                new FieldWriter(User.class),
+                new FieldWriter(Worker.class).excluding("activeWorks", "closedWorks"),
+                new FieldWriter(Operator.class).including("teamName", "phoneNumber"),
+                new FieldWriter(Inventory.class));
         }
     }
 
@@ -85,7 +85,7 @@ class SpecsForInstanceFieldWriter {
     @AutoSource
     void including_accumulates_conditions(ResolutionContext context) {
         // Arrange
-        InstanceFieldWriter sut = new InstanceFieldWriter(Operator.class)
+        FieldWriter sut = new FieldWriter(Operator.class)
             .excluding("activeWorks")
             .including("teamName", "activeWorks");
 
@@ -103,7 +103,7 @@ class SpecsForInstanceFieldWriter {
     @AutoSource
     void excluding_accumulates_conditions(ResolutionContext context) {
         // Arrange
-        InstanceFieldWriter sut = new InstanceFieldWriter(Operator.class)
+        FieldWriter sut = new FieldWriter(Operator.class)
             .including("teamName", "activeWorks")
             .excluding("activeWorks");
 
