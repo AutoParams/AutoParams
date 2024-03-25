@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import static java.util.Arrays.stream;
 
+@Deprecated
 public final class InstanceFieldWriter implements Customizer {
 
     private final Class<?> targetType;

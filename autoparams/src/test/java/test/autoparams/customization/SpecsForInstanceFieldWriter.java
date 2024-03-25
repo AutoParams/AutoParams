@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@Deprecated
 class SpecsForInstanceFieldWriter {
 
     public static class DomainCustomizer extends CompositeCustomizer {

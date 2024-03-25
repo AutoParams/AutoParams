@@ -1,5 +1,6 @@
 package autoparams.customization;
 
+@Deprecated
 public class InstanceFieldWriterFactory implements
     AnnotationVisitor<WriteInstanceFields>,
     CustomizerFactory {
