@@ -25,10 +25,7 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(() -> String.class, Class.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
-            new TypeMatchingGenerator(
-                Factories::createBigDecimal,
-                BigDecimal.class,
-                Number.class),
+            new BigDecimalGenerator(),
             new TypeMatchingGenerator(Factories::createClock, Clock.class),
             new TypeMatchingGenerator(
                 Factories::createDuration,
