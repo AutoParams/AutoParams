@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SpecsForRecursionGuard {
 
     public static class User {
+
         private final String username;
         private final Following[] followings;
 
@@ -28,6 +29,7 @@ class SpecsForRecursionGuard {
     }
 
     public static class Following {
+
         private final User follower;
 
         public Following(User follower) {

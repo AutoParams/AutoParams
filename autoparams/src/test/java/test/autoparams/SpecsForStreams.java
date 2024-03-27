@@ -1,12 +1,13 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,5 +49,4 @@ class SpecsForStreams {
         assertThat(array).hasSize(3);
         assertThat(set).hasSize(array.length);
     }
-
 }

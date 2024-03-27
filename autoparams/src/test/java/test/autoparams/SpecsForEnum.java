@@ -1,7 +1,8 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.util.HashSet;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,5 +56,4 @@ class SpecsForEnum {
         set.add(value20);
         assertThat(EnumType.values()).containsAll(set);
     }
-
 }

@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Clock;
@@ -19,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+
+import autoparams.ResolutionContext;
 
 final class Factories {
 
@@ -86,7 +87,8 @@ final class Factories {
     public static Period createPeriod(ResolutionContext context) {
         final Period period = Period.between(
             context.generate(LocalDate.class),
-            context.generate(LocalDate.class));
+            context.generate(LocalDate.class)
+        );
         return period.isNegative() ? period.negated() : period;
     }
 

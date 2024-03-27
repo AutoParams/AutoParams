@@ -16,12 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class SpecsForCompositeCustomizer {
 
     public static final class EmptyGenerator implements ObjectGenerator {
+
         public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
             return ObjectContainer.EMPTY;
         }
     }
 
     public static final class RelayCustomizer implements Customizer {
+
         private final ObjectGenerator prev;
         private final ObjectGenerator next;
 
@@ -51,7 +53,8 @@ class SpecsForCompositeCustomizer {
         CompositeCustomizer sut = new CompositeCustomizer(
             new RelayCustomizer(gen0, gen1),
             new RelayCustomizer(gen1, gen2),
-            new RelayCustomizer(gen2, gen3));
+            new RelayCustomizer(gen2, gen3)
+        );
 
         ObjectGenerator actual = sut.customize(gen0);
 

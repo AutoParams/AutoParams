@@ -1,9 +1,10 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+
+import autoparams.ResolutionContext;
 
 final class GenericStreamGenerator implements ObjectGenerator {
 

@@ -79,5 +79,4 @@ class SpecsForCompositeObjectGenerator {
 
         assertThatCode(() -> sut.generate(query, context)).doesNotThrowAnyException();
     }
-
 }

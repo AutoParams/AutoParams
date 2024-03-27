@@ -1,9 +1,10 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
-import autoparams.generator.Builder;
 import java.net.URL;
 import java.util.stream.IntStream;
+
+import autoparams.AutoSource;
+import autoparams.generator.Builder;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,5 +46,4 @@ class SpecsForUrl {
 
         assertThat(actual / (double) 100).isEqualTo(0.5, offset(0.25));
     }
-
 }

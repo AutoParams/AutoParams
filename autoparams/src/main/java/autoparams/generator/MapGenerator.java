@@ -1,11 +1,12 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+
+import autoparams.ResolutionContext;
 
 final class MapGenerator implements ObjectGenerator {
 
@@ -21,9 +22,10 @@ final class MapGenerator implements ObjectGenerator {
     private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
         return isMap((Class<?>) type.getRawType())
             ? new ObjectContainer(factory(
-                type.getActualTypeArguments()[0],
-                type.getActualTypeArguments()[1],
-                context))
+            type.getActualTypeArguments()[0],
+            type.getActualTypeArguments()[1],
+            context
+        ))
             : ObjectContainer.EMPTY;
     }
 
@@ -47,7 +49,8 @@ final class MapGenerator implements ObjectGenerator {
         for (int i = 0; i < SIZE; i++) {
             instance.put(
                 (K) context.generate(keyQuery),
-                (V) context.generate(valueQuery));
+                (V) context.generate(valueQuery)
+            );
         }
 
         return instance;

@@ -1,7 +1,8 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.util.Optional;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

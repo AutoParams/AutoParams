@@ -43,5 +43,4 @@ class SpecsForRepeat {
     void verify_sut_has_default_value() {
         assertEquals(3, shouldBe3);
     }
-
 }

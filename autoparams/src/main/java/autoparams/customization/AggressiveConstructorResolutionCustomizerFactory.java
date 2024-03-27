@@ -1,14 +1,15 @@
 package autoparams.customization;
 
+import java.beans.ConstructorProperties;
+import java.lang.reflect.Constructor;
+import java.util.Comparator;
+import java.util.Optional;
+
 import autoparams.ResolutionContext;
 import autoparams.generator.CompositeConstructorResolver;
 import autoparams.generator.ConstructorExtractor;
 import autoparams.generator.ConstructorResolver;
 import autoparams.generator.ObjectContainer;
-import java.beans.ConstructorProperties;
-import java.lang.reflect.Constructor;
-import java.util.Comparator;
-import java.util.Optional;
 
 public class AggressiveConstructorResolutionCustomizerFactory implements
     AnnotationVisitor<ResolveConstructorAggressively>,
@@ -28,12 +29,15 @@ public class AggressiveConstructorResolutionCustomizerFactory implements
     public Customizer createCustomizer() {
         return generator -> (query, context) ->
             query.getType().equals(ConstructorResolver.class)
-                ? new ObjectContainer(
+                ?
+                new ObjectContainer(
                     new CompositeConstructorResolver(
                         createAggressiveResolver(context),
                         (ConstructorResolver) generator
                             .generate(query, context)
-                            .unwrapOrElseThrow()))
+                            .unwrapOrElseThrow()
+                    )
+                )
                 : generator.generate(query, context);
     }
 

@@ -1,9 +1,10 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
-import autoparams.Repeat;
 import java.util.Collections;
 import java.util.HashSet;
+
+import autoparams.AutoSource;
+import autoparams.Repeat;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

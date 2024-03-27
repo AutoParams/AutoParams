@@ -17,5 +17,4 @@ public class ServiceClient {
     public ServiceB getServiceB() {
         return serviceB;
     }
-
 }

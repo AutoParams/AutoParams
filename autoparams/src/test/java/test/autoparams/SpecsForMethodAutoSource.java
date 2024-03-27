@@ -1,10 +1,11 @@
 package test.autoparams;
 
-import autoparams.MethodAutoSource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
+
+import autoparams.MethodAutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 

@@ -1,11 +1,12 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Set;
+
+import autoparams.ResolutionContext;
 
 final class SetGenerator implements ObjectGenerator {
 

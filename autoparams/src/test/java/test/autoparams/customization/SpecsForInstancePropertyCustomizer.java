@@ -1,9 +1,10 @@
 package test.autoparams.customization;
 
+import java.util.UUID;
+
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.InstancePropertyCustomizer;
-import java.util.UUID;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasGenericSetters;
 import test.autoparams.HasSetter;

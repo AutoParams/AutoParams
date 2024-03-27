@@ -23,5 +23,4 @@ public class GenericObject<T1, T2> {
     public T2 getValue3() {
         return value3;
     }
-
 }

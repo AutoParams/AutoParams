@@ -1,8 +1,5 @@
 package test.autoparams.mockito;
 
-import autoparams.AutoSource;
-import autoparams.customization.Customization;
-import autoparams.mockito.MockitoCustomizer;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.AbstractCollection;
@@ -17,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntSupplier;
+
+import autoparams.AutoSource;
+import autoparams.customization.Customization;
+import autoparams.mockito.MockitoCustomizer;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static java.lang.annotation.ElementType.METHOD;

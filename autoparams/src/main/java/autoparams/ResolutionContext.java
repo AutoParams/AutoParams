@@ -1,11 +1,12 @@
 package autoparams;
 
+import java.lang.reflect.Type;
+
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
-import java.lang.reflect.Type;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public final class ResolutionContext {

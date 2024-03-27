@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SpecsForCustomization {
 
     public static class IntCustomization implements Customizer {
+
         @Override
         public ObjectGenerator customize(ObjectGenerator generator) {
             return (query, context) -> query.getType() == int.class
@@ -31,6 +32,7 @@ class SpecsForCustomization {
     }
 
     public static class StringCustomization implements Customizer {
+
         @Override
         public ObjectGenerator customize(ObjectGenerator generator) {
             return (query, context) -> query.getType() == String.class
@@ -41,7 +43,7 @@ class SpecsForCustomization {
 
     @ParameterizedTest
     @AutoSource
-    @Customization({IntCustomization.class, StringCustomization.class})
+    @Customization({ IntCustomization.class, StringCustomization.class })
     void sut_applies_multiple_customizers(int arg1, String arg2) {
         assertEquals(1024, arg1);
         assertEquals("hello world", arg2);
@@ -56,5 +58,4 @@ class SpecsForCustomization {
         assertNotEquals("hello world", arg1);
         assertEquals("hello world", arg2);
     }
-
 }

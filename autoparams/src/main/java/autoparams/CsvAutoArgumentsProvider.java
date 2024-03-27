@@ -2,6 +2,7 @@ package autoparams;
 
 import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -69,7 +70,7 @@ final class CsvAutoArgumentsProvider implements
 
             @Override
             public String[] nullValues() {
-                return new String[] {};
+                return new String[] { };
             }
 
             @Override

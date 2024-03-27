@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class SpecsForFieldWriter {
 
     public static class DomainCustomizer extends CompositeCustomizer {
+
         public DomainCustomizer() {
             super(
                 new FieldWriter(Versioned.class),
@@ -22,7 +23,8 @@ class SpecsForFieldWriter {
                 new FieldWriter(User.class),
                 new FieldWriter(Worker.class).excluding("activeWorks", "closedWorks"),
                 new FieldWriter(Operator.class).including("teamName", "phoneNumber"),
-                new FieldWriter(Inventory.class));
+                new FieldWriter(Inventory.class)
+            );
         }
     }
 

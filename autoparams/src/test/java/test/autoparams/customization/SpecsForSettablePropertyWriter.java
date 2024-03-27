@@ -1,9 +1,10 @@
 package test.autoparams.customization;
 
+import java.util.UUID;
+
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.SettablePropertyWriter;
-import java.util.UUID;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasGenericSetters;
 import test.autoparams.HasSetter;
@@ -36,7 +37,8 @@ class SpecsForSettablePropertyWriter {
     @AutoSource
     @Customization(SettablePropertyWriter.class)
     public void sut_sets_nested_generics_property(
-        HasGenericSetters<String, HasGenericSetters<UUID, HasSetter>> value) {
+        HasGenericSetters<String, HasGenericSetters<UUID, HasSetter>> value
+    ) {
         assertNotNull(value);
         assertThat(value.getValue2()).isInstanceOf(String.class);
         assertThat(value.getValue3()).isInstanceOf(HasGenericSetters.class);

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.converter.DefaultArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,7 +23,8 @@ final class ArgumentsAssembler {
         return foldl(
             (sets, provider) -> sets.flatMap(set -> supplementArguments(set, provider, context)),
             Stream.of(Arguments.of()),
-            Arrays.stream(providers));
+            Arrays.stream(providers)
+        );
     }
 
     private static <T, U> U foldl(BiFunction<U, T, U> f, U z, Stream<T> xs) {

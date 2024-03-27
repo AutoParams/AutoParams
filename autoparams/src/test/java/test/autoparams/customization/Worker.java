@@ -1,5 +1,6 @@
 package test.autoparams.customization;
 
+@SuppressWarnings("LombokSetterMayBeUsed")
 public class Worker extends User {
 
     private String teamName;
@@ -25,5 +26,4 @@ public class Worker extends User {
     public void setClosedWorks(int closedWorks) {
         this.closedWorks = closedWorks;
     }
-
 }

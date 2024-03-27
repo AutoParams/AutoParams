@@ -1,8 +1,9 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
+
+import autoparams.ResolutionContext;
 
 final class EnumGenerator implements ObjectGenerator {
 

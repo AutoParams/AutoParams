@@ -1,6 +1,7 @@
 package test.autoparams.lombok;
 
 import java.util.List;
+
 import lombok.Builder;
 
 @Builder

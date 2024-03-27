@@ -1,14 +1,15 @@
 package autoparams.customization;
 
-import autoparams.ResolutionContext;
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
+
+import autoparams.ResolutionContext;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectQuery;
 
 import static java.util.Arrays.stream;
 
@@ -88,7 +89,8 @@ public final class FieldWriter implements Customizer {
         Object argument = context.generate(ObjectQuery.fromType(type));
         try {
             field.set(target, argument);
-        } catch (IllegalArgumentException | IllegalAccessException exception) {
+        } catch (IllegalArgumentException |
+                 IllegalAccessException exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -96,13 +98,16 @@ public final class FieldWriter implements Customizer {
     public FieldWriter including(String... fieldNames) {
         return new FieldWriter(
             targetType,
-            predicate.and(field -> stream(fieldNames).anyMatch(x -> field.getName().equals(x))));
+            predicate.and(field -> stream(fieldNames)
+                .anyMatch(x -> field.getName().equals(x)))
+        );
     }
 
     public FieldWriter excluding(String... fieldNames) {
         return new FieldWriter(
             targetType,
-            predicate.and(field ->
-                stream(fieldNames).allMatch(x -> field.getName().equals(x) == false)));
+            predicate.and(field -> stream(fieldNames)
+                .allMatch(x -> field.getName().equals(x) == false))
+        );
     }
 }

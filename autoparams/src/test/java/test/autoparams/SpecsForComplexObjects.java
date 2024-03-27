@@ -38,6 +38,7 @@ class SpecsForComplexObjects {
     }
 
     public static final class OnlyPrivateConstructor {
+
         private OnlyPrivateConstructor() {
         }
     }

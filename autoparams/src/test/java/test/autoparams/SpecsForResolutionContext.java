@@ -31,7 +31,8 @@ class SpecsForResolutionContext {
         ResolutionContext sut = new ResolutionContext(
             extensionContext,
             (query, context) -> new ObjectContainer(value),
-            ObjectProcessor.DEFAULT);
+            ObjectProcessor.DEFAULT
+        );
 
         Object actual = sut.generate(int.class);
 
@@ -56,7 +57,8 @@ class SpecsForResolutionContext {
         ResolutionContext sut = new ResolutionContext(
             extensionContext,
             (query, context) -> new ObjectContainer(value1),
-            ObjectProcessor.DEFAULT);
+            ObjectProcessor.DEFAULT
+        );
 
         sut.applyCustomizer(
             generator -> (query, context) -> new ObjectContainer(value2));

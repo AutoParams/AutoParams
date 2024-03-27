@@ -1,12 +1,13 @@
 package autoparams.customization;
 
-import autoparams.generator.ObjectContainer;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+
+import autoparams.generator.ObjectContainer;
 
 final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
 

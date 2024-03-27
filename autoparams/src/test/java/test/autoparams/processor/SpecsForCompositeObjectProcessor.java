@@ -1,12 +1,13 @@
 package test.autoparams.processor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.processor.CompositeObjectProcessor;
 import autoparams.processor.ObjectProcessor;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasSetter;
 

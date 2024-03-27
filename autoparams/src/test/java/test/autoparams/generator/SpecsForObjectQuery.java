@@ -1,8 +1,9 @@
 package test.autoparams.generator;
 
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+
+import autoparams.generator.ObjectQuery;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

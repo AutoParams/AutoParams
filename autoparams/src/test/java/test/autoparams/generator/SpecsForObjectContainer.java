@@ -1,11 +1,12 @@
 package test.autoparams.generator;
 
-import autoparams.AutoSource;
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.UnwrapFailedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import autoparams.AutoSource;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.UnwrapFailedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 

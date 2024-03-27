@@ -1,9 +1,5 @@
 package autoparams;
 
-import autoparams.customization.AnnotationVisitor;
-import autoparams.customization.ArgumentProcessing;
-import autoparams.customization.ArgumentProcessor;
-import autoparams.customization.Customizer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import autoparams.customization.AnnotationVisitor;
+import autoparams.customization.ArgumentProcessing;
+import autoparams.customization.ArgumentProcessor;
+import autoparams.customization.Customizer;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 
@@ -33,7 +34,8 @@ final class Customizers {
         return (List<Customizer>) context.getStore(NAMESPACE).getOrComputeIfAbsent(
             Customizers.class,
             k -> new ArrayList<Customizer>(),
-            List.class);
+            List.class
+        );
     }
 
     static Stream<Customizer> processArgument(Parameter parameter, Object argument) {
@@ -43,7 +45,8 @@ final class Customizers {
                 .stream(annotation.annotationType().getAnnotationsByType(ArgumentProcessing.class))
                 .map(ArgumentProcessing::value)
                 .map(Customizers::createProcessor)
-                .map(processor -> visitAnnotation(processor, annotation)))
+                .map(processor -> visitAnnotation(processor, annotation))
+            )
             .map(processor -> processor.process(parameter, argument));
     }
 
@@ -52,12 +55,12 @@ final class Customizers {
             Constructor<? extends T> constructor = type.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
-        } catch (InstantiationException
-            | IllegalAccessException
-            | IllegalArgumentException
-            | InvocationTargetException
-            | NoSuchMethodException
-            | SecurityException exception) {
+        } catch (InstantiationException |
+                 IllegalAccessException |
+                 IllegalArgumentException |
+                 InvocationTargetException |
+                 NoSuchMethodException |
+                 SecurityException exception) {
             throw new RuntimeException(exception);
         }
     }

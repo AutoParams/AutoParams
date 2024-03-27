@@ -1,7 +1,8 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.util.UUID;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,11 +20,11 @@ class SpecsForGenerics {
     @ParameterizedTest
     @AutoSource
     void sut_correctly_creates_nested_generic_object(
-        GenericObject<String, GenericObject<UUID, ComplexObject>> value) {
+        GenericObject<String, GenericObject<UUID, ComplexObject>> value
+    ) {
         assertThat(value).isNotNull();
         assertThat(value.getValue2()).isInstanceOf(String.class);
         assertThat(value.getValue3()).isInstanceOf(GenericObject.class);
         assertThat(value.getValue3().getValue3()).isInstanceOf(ComplexObject.class);
     }
-
 }

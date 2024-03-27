@@ -1,12 +1,13 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import autoparams.ResolutionContext;
 
 public class TypeMatchingGenerator implements ObjectGenerator {
 

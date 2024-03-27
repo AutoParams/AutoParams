@@ -1,14 +1,15 @@
 package test.autoparams;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SpecsForAutoSource {
 
     public static class DomainCustomizer implements Customizer {
+
         @Override
         public ObjectGenerator customize(ObjectGenerator generator) {
             return (query, context) -> query.getType() == String.class
@@ -27,7 +29,7 @@ class SpecsForAutoSource {
         }
     }
 
-    @Target({ElementType.METHOD})
+    @Target({ ElementType.METHOD })
     @Retention(RetentionPolicy.RUNTIME)
     @AutoSource
     @Customization(DomainCustomizer.class)
@@ -50,6 +52,7 @@ class SpecsForAutoSource {
     }
 
     public static class RecursiveObject {
+
         private final RecursiveObject value;
 
         public RecursiveObject(RecursiveObject value) {

@@ -1,7 +1,8 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.util.Arrays;
+
+import autoparams.ResolutionContext;
 
 public class CompositeObjectGenerator implements ObjectGenerator {
 

@@ -1,10 +1,11 @@
 package test.autoparams.generator;
 
+import java.util.List;
+import java.util.Map;
+
 import autoparams.AutoSource;
 import autoparams.Repeat;
 import autoparams.generator.Builder;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.ComplexObject;
 
@@ -46,7 +47,8 @@ class SpecsForBuilder {
     @AutoSource
     @Repeat(10)
     void sut_correctly_fixes_int_value(
-        int fixedInt, Builder<ComplexObject> builder) {
+        int fixedInt, Builder<ComplexObject> builder
+    ) {
 
         ComplexObject actual = builder.fix(int.class, fixedInt).build();
         assertThat(actual.getValue1()).isEqualTo(fixedInt);
@@ -56,7 +58,8 @@ class SpecsForBuilder {
     @AutoSource
     @Repeat(10)
     void sut_correctly_fixes_elements_of_array(
-        int fixedInt, Builder<int[]> builder) {
+        int fixedInt, Builder<int[]> builder
+    ) {
 
         int[] actual = builder.fix(int.class, fixedInt).build();
         for (int fixedElement : actual) {
@@ -68,7 +71,8 @@ class SpecsForBuilder {
     @AutoSource
     @Repeat(10)
     void sut_separately_fixes_primitive_value_and_boxed_value(
-        int fixedInt, Builder<Integer> builder) {
+        int fixedInt, Builder<Integer> builder
+    ) {
 
         int actual = builder.fix(int.class, fixedInt).build();
         assertThat(actual).isNotEqualTo(fixedInt);

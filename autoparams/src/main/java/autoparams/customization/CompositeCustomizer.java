@@ -1,10 +1,11 @@
 package autoparams.customization;
 
-import autoparams.generator.ObjectGenerator;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+
+import autoparams.generator.ObjectGenerator;
 
 public class CompositeCustomizer implements Customizer {
 
@@ -27,5 +28,4 @@ public class CompositeCustomizer implements Customizer {
         }
         return a;
     }
-
 }

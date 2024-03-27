@@ -1,11 +1,5 @@
 package autoparams;
 
-import autoparams.customization.AnnotationVisitor;
-import autoparams.customization.Customization;
-import autoparams.customization.Customizer;
-import autoparams.customization.CustomizerFactory;
-import autoparams.customization.CustomizerSource;
-import autoparams.generator.ObjectQuery;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -14,6 +8,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import autoparams.customization.AnnotationVisitor;
+import autoparams.customization.Customization;
+import autoparams.customization.Customizer;
+import autoparams.customization.CustomizerFactory;
+import autoparams.customization.CustomizerSource;
+import autoparams.generator.ObjectQuery;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 

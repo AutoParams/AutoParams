@@ -7,5 +7,4 @@ public class Entity<T> extends Versioned {
     public T getId() {
         return id;
     }
-
 }

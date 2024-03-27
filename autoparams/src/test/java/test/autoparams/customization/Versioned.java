@@ -7,5 +7,4 @@ public class Versioned {
     public Long getVersion() {
         return version;
     }
-
 }

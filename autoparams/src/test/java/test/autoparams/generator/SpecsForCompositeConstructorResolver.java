@@ -1,9 +1,10 @@
 package test.autoparams.generator;
 
-import autoparams.generator.CompositeConstructorResolver;
-import autoparams.generator.ConstructorResolver;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
+
+import autoparams.generator.CompositeConstructorResolver;
+import autoparams.generator.ConstructorResolver;
 import org.junit.jupiter.api.Test;
 import test.autoparams.AutoParameterizedTest;
 
@@ -38,7 +39,8 @@ public class SpecsForCompositeConstructorResolver {
         Optional<Constructor<?>> container = Optional.of(constructor);
         CompositeConstructorResolver sut = new CompositeConstructorResolver(
             t -> Optional.empty(),
-            t -> container);
+            t -> container
+        );
 
         // Act
         Optional<Constructor<?>> actual = sut.resolve(type);

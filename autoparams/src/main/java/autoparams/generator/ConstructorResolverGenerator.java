@@ -1,9 +1,10 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.util.Comparator;
+
+import autoparams.ResolutionContext;
 
 class ConstructorResolverGenerator extends TypeMatchingGenerator {
 

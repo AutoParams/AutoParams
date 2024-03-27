@@ -1,7 +1,5 @@
 package autoparams.processor;
 
-import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +10,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
+
+import autoparams.ResolutionContext;
+import autoparams.generator.ObjectQuery;
 
 import static java.beans.Introspector.getBeanInfo;
 
@@ -43,7 +44,8 @@ public final class InstancePropertyWriter implements ObjectProcessor {
                 Object propertyValue = context.generate(query);
                 try {
                     method.invoke(value, propertyValue);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException |
+                         InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -64,7 +66,8 @@ public final class InstancePropertyWriter implements ObjectProcessor {
                 Object propertyValue = context.generate(query);
                 try {
                     method.invoke(value, propertyValue);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException |
+                         InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -91,10 +94,11 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Map<TypeVariable<?>, Type> typeMap
     ) {
         Type parameterType = method.getGenericParameterTypes()[0];
-        return ObjectQuery.fromType(parameterType instanceof TypeVariable
-            && typeMap.containsKey((TypeVariable<?>) parameterType)
-            ? typeMap.get((TypeVariable<?>) parameterType)
-            : method.getParameterTypes()[0]);
+        return ObjectQuery.fromType(
+            parameterType instanceof TypeVariable
+                && typeMap.containsKey((TypeVariable<?>) parameterType)
+                ? typeMap.get((TypeVariable<?>) parameterType)
+                : method.getParameterTypes()[0]);
     }
 
     private static PropertyDescriptor[] getProperties(Class<?> type) {

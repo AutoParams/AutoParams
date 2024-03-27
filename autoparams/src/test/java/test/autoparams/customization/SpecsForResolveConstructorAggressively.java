@@ -20,7 +20,6 @@ public class SpecsForResolveConstructorAggressively {
         public StringContainer1() {
             this(null);
         }
-
     }
 
     @Getter
@@ -35,7 +34,6 @@ public class SpecsForResolveConstructorAggressively {
         public StringContainer2() {
             this(null);
         }
-
     }
 
     @AutoParameterizedTest

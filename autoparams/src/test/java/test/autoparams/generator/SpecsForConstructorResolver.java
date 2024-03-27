@@ -1,8 +1,9 @@
 package test.autoparams.generator;
 
-import autoparams.generator.ConstructorResolver;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
+
+import autoparams.generator.ConstructorResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

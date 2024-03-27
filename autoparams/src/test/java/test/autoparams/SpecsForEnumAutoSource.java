@@ -1,8 +1,9 @@
 package test.autoparams;
 
-import autoparams.EnumAutoSource;
 import java.lang.annotation.ElementType;
 import java.util.UUID;
+
+import autoparams.EnumAutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -40,5 +41,4 @@ class SpecsForEnumAutoSource {
     void sut_accepts_mode(ElementType value) {
         assertNotEquals(ElementType.TYPE, value);
     }
-
 }

@@ -1,8 +1,9 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import autoparams.ResolutionContext;
 
 final class BuilderGenerator implements ObjectGenerator {
 

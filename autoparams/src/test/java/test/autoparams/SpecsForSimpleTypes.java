@@ -1,6 +1,5 @@
 package test.autoparams;
 
-import autoparams.Repeat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
@@ -13,6 +12,8 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.HashSet;
 import java.util.UUID;
+
+import autoparams.Repeat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;

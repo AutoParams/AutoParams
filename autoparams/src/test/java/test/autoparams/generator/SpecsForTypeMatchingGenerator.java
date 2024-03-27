@@ -1,10 +1,11 @@
 package test.autoparams.generator;
 
+import java.lang.reflect.Method;
+
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.TypeMatchingGenerator;
 import autoparams.generator.UnwrapFailedException;
-import java.lang.reflect.Method;
 import test.autoparams.AutoParameterizedTest;
 
 import static autoparams.generator.TypeMatchingGenerator.create;
@@ -35,7 +36,8 @@ public class SpecsForTypeMatchingGenerator {
     ) {
         TypeMatchingGenerator actual = create(
             String.class,
-            x -> x == context ? value : null);
+            x -> x == context ? value : null
+        );
 
         assertThat(actual).isNotNull();
         assertThat(actual.generate(String.class, context).unwrapOrElseThrow())
@@ -53,7 +55,8 @@ public class SpecsForTypeMatchingGenerator {
 
         TypeMatchingGenerator actual = new TypeMatchingGenerator(
             x -> x == String.class,
-            (x, y) -> x == query && y == context ? value : null);
+            (x, y) -> x == query && y == context ? value : null
+        );
 
         assertThat(actual).isNotNull();
         assertThat(actual.generate(query, context).unwrapOrElseThrow())
@@ -71,7 +74,8 @@ public class SpecsForTypeMatchingGenerator {
 
         TypeMatchingGenerator actual = new TypeMatchingGenerator(
             (x, y) -> x == query && y == context ? value : null,
-            String.class);
+            String.class
+        );
 
         assertThat(actual).isNotNull();
         assertThat(actual.generate(query, context).unwrapOrElseThrow())
@@ -88,7 +92,8 @@ public class SpecsForTypeMatchingGenerator {
 
         TypeMatchingGenerator actual = create(
             String.class,
-            (x, y) -> x == query && y == context ? value : null);
+            (x, y) -> x == query && y == context ? value : null
+        );
 
         assertThat(actual).isNotNull();
         assertThat(actual.generate(String.class, context).unwrapOrElseThrow())
@@ -107,7 +112,8 @@ public class SpecsForTypeMatchingGenerator {
         Method mut = TypeMatchingGenerator.class.getDeclaredMethod(
             "generate",
             ObjectQuery.class,
-            ResolutionContext.class);
+            ResolutionContext.class
+        );
         assertThat(mut.getModifiers() & FINAL).isNotZero();
     }
 }

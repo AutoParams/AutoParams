@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -11,6 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import autoparams.ResolutionContext;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
 

@@ -1,9 +1,10 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ThreadLocalRandom;
+
+import autoparams.ResolutionContext;
 
 final class UrlGenerator implements ObjectGenerator {
 

@@ -7,5 +7,4 @@ public class Operator extends Worker {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
 }

@@ -14,5 +14,4 @@ public class Inventory<T> {
     public Iterable<T> getItems() {
         return items;
     }
-
 }

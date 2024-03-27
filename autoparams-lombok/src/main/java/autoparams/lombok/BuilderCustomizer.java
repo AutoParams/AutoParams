@@ -1,16 +1,17 @@
 package autoparams.lombok;
 
-import autoparams.customization.Customizer;
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
-import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Optional;
+
+import autoparams.customization.Customizer;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerationContext;
+import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectQuery;
 
 public class BuilderCustomizer implements Customizer {
 
@@ -74,7 +75,8 @@ public class BuilderCustomizer implements Customizer {
         try {
             Method build = builder.getClass().getMethod(buildMethodName);
             return new ObjectContainer(invoke(builder, build));
-        } catch (NoSuchMethodException | SecurityException exception) {
+        } catch (NoSuchMethodException |
+                 SecurityException exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -82,11 +84,11 @@ public class BuilderCustomizer implements Customizer {
     private static Object invoke(Object obj, Method method, Object... args) {
         try {
             return method.invoke(obj, args);
-        } catch (IllegalAccessException
-            | IllegalArgumentException
-            | InvocationTargetException exception) {
+        } catch (IllegalAccessException |
+                 IllegalArgumentException |
+                 InvocationTargetException exception) {
             throw new RuntimeException(exception);
         }
     }
-
 }
+

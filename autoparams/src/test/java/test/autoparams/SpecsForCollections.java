@@ -1,6 +1,5 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.AbstractMap;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -136,5 +137,4 @@ class SpecsForCollections {
     void sut_creates_abstract_set(AbstractSet<String> set) {
         assertThat(set).isNotNull();
     }
-
 }

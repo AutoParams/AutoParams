@@ -1,7 +1,8 @@
 package test.autoparams;
 
-import autoparams.AutoSource;
 import java.time.OffsetDateTime;
+
+import autoparams.AutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,5 +23,4 @@ class SpecsForOffsetDateTime {
         assertThat(arg2).isNotEqualTo(arg3);
         assertThat(arg3).isNotEqualTo(arg1);
     }
-
 }

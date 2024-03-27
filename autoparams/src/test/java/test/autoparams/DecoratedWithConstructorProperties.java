@@ -11,7 +11,7 @@ public class DecoratedWithConstructorProperties {
         this(null, null);
     }
 
-    @ConstructorProperties({"value1"})
+    @ConstructorProperties({ "value1" })
     public DecoratedWithConstructorProperties(String value1) {
         this(value1, null);
     }

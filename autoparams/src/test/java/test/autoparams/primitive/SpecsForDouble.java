@@ -1,11 +1,12 @@
 package test.autoparams.primitive;
 
-import autoparams.Repeat;
-import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Parameter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import autoparams.Repeat;
+import autoparams.ResolutionContext;
+import autoparams.generator.ObjectQuery;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

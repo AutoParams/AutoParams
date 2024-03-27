@@ -1,7 +1,8 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.Array;
+
+import autoparams.ResolutionContext;
 
 final class ArrayGenerator implements ObjectGenerator {
 

@@ -1,12 +1,13 @@
 package test.autoparams.customization;
 
+import java.lang.reflect.Type;
+
 import autoparams.AutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.customization.Fix;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import java.lang.reflect.Type;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;

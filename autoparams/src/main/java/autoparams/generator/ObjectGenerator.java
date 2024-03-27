@@ -1,7 +1,8 @@
 package autoparams.generator;
 
-import autoparams.ResolutionContext;
 import java.lang.reflect.Type;
+
+import autoparams.ResolutionContext;
 
 @FunctionalInterface
 public interface ObjectGenerator {

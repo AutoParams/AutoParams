@@ -1,9 +1,10 @@
 package autoparams.customization;
 
-import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerator;
 import java.lang.reflect.Type;
 import java.util.Stack;
+
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public final class RecursionGuard implements Customizer {
@@ -29,6 +30,7 @@ public final class RecursionGuard implements Customizer {
     }
 
     private class RecursionContext {
+
         public final Stack<Type> monitor = new Stack<>();
         public final RecursionGuard guard;
         public final Object scope;
@@ -49,7 +51,8 @@ public final class RecursionGuard implements Customizer {
             final RecursionContext recursionContext = store.getOrComputeIfAbsent(
                 CONTEXT_KEY,
                 x -> new RecursionContext(scope),
-                RecursionContext.class);
+                RecursionContext.class
+            );
 
             try {
                 if (recursionContext.guard.equals(this) == false) {

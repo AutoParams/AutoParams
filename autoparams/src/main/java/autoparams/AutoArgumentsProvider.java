@@ -1,9 +1,10 @@
 package autoparams;
 
-import autoparams.generator.ObjectGenerator;
-import autoparams.processor.ObjectProcessor;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
+
+import autoparams.generator.ObjectGenerator;
+import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -29,7 +30,8 @@ final class AutoArgumentsProvider implements ArgumentsProvider {
         final int repeat = getRepeat(context);
         return new ArgumentsGenerator(
             new ResolutionContext(context, generator, processor),
-            repeat);
+            repeat
+        );
     }
 
     private int getRepeat(ExtensionContext context) {

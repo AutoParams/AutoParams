@@ -1,6 +1,7 @@
 package test.autoparams.primitive;
 
 import java.util.HashSet;
+
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
