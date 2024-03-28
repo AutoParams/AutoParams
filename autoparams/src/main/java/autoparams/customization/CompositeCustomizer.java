@@ -1,11 +1,13 @@
 package autoparams.customization;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import autoparams.generator.ObjectGenerator;
+import autoparams.processor.ObjectProcessor;
+
+import static java.util.Arrays.stream;
 
 public class CompositeCustomizer implements Customizer {
 
@@ -17,10 +19,15 @@ public class CompositeCustomizer implements Customizer {
 
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
-        return foldl(Arrays.stream(customizers), generator, (g, c) -> c.customize(g));
+        return foldl((g, c) -> c.customize(g), generator, stream(customizers));
     }
 
-    private static <T, U> U foldl(Stream<T> xs, U z, BiFunction<U, T, U> f) {
+    @Override
+    public ObjectProcessor customize(ObjectProcessor processor) {
+        return foldl((p, c) -> c.customize(p), processor, stream(customizers));
+    }
+
+    private static <T, U> U foldl(BiFunction<U, T, U> f, U z, Stream<T> xs) {
         Iterator<T> i = xs.iterator();
         U a = z;
         while (i.hasNext()) {
