@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-@CustomizerSource(FieldWriterFactory.class)
+@CustomizerSource(InstanceFieldWriterFactory.class)
 public @interface WriteInstanceFields {
 
     Class<?> value();

@@ -1,4 +1,4 @@
-package autoparams.customization;
+package autoparams.processor;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -15,16 +15,17 @@ final class RuntimeTypeResolver {
         this.map = map;
     }
 
-    public static RuntimeTypeResolver create(Type source) {
+    public static RuntimeTypeResolver of(Type source) {
         return new RuntimeTypeResolver(source instanceof ParameterizedType
             ? buildMap((ParameterizedType) source)
             : Collections.emptyMap());
     }
 
-    public static Map<TypeVariable<?>, Type> buildMap(ParameterizedType parameterizedType) {
+    private static Map<TypeVariable<?>, Type> buildMap(
+        ParameterizedType parameterizedType
+    ) {
         Class<?> rawType = (Class<?>) parameterizedType.getRawType();
         TypeVariable<?>[] typeVariables = rawType.getTypeParameters();
-
         Type[] typeValues = parameterizedType.getActualTypeArguments();
 
         HashMap<TypeVariable<?>, Type> map = new HashMap<>();

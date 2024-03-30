@@ -1,7 +1,8 @@
 package autoparams.customization;
 
-@Deprecated
-public class FieldWriterFactory implements
+import autoparams.processor.InstanceFieldWriter;
+
+public class InstanceFieldWriterFactory implements
     AnnotationVisitor<WriteInstanceFields>,
     CustomizerFactory {
 
@@ -14,6 +15,6 @@ public class FieldWriterFactory implements
 
     @Override
     public Customizer createCustomizer() {
-        return new FieldWriter(target);
+        return new InstanceFieldWriter(target).toCustomizer();
     }
 }
