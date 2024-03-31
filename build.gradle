@@ -1,104 +1,103 @@
 plugins {
-    id "java"
-    id "maven-publish"
-    id "signing"
-    id "checkstyle"
+  id "java"
+  id "maven-publish"
+  id "signing"
+  id "checkstyle"
 }
 
 allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
+  repositories {
+    mavenCentral()
+  }
 
-    group = "io.github.autoparams"
+  group = "io.github.autoparams"
 }
 
 subprojects {
-    apply plugin: "java"
-    apply plugin: "checkstyle"
-    apply plugin: "maven-publish"
-    apply plugin: "signing"
+  apply plugin: "java"
+  apply plugin: "checkstyle"
+  apply plugin: "maven-publish"
+  apply plugin: "signing"
 
-    version = artifactVersion
+  version = artifactVersion
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 
-    checkstyle {
-        configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
-        configProperties = ["suppressionFile": "${project.rootDir}/config/checkstyle/checkstyle-suppressions.xml"]
-        toolVersion = "8.40"
-        ignoreFailures = false
-        maxErrors = 0
-        maxWarnings = 0
+  checkstyle {
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties = ["suppressionFile": "${project.rootDir}/config/checkstyle/checkstyle-suppressions.xml"]
+    toolVersion = "8.40"
+    ignoreFailures = false
+    maxErrors = 0
+    maxWarnings = 0
+  }
+
+  jar {
+    manifest {
+      attributes(
+        "Specification-Title": artifactName,
+        "Specification-Version": artifactVersion,
+        "Specification-Vendor": "io.github.autoparams",
+        "Implementation-Title": artifactName,
+        "Implementation-Version": artifactVersion,
+        "Implementation-Vendor": "io.github.autoparams"
+      )
     }
+  }
 
-    jar {
-        manifest {
-            attributes(
-                "Specification-Title": artifactName,
-                "Specification-Version": artifactVersion,
-                "Specification-Vendor": "io.github.autoparams",
-                "Implementation-Title": artifactName,
-                "Implementation-Version": artifactVersion,
-                "Implementation-Vendor": "io.github.autoparams"
-            )
+  publishing {
+    repositories {
+      maven {
+        name "OSSRH"
+        url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        credentials {
+          username System.getenv("MAVEN_USERNAME")
+          password System.getenv("MAVEN_PASSWORD")
         }
+      }
     }
 
-    publishing {
-        repositories {
-            maven {
-                name "OSSRH"
-                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                credentials {
-                    username System.getenv("MAVEN_USERNAME")
-                    password System.getenv("MAVEN_PASSWORD")
-                }
+    publications {
+      maven(MavenPublication) {
+        artifactId artifactId
+        from components.java
+        pom {
+          name = artifactName
+          description = artifactDescription
+          url = "https://github.com/AutoParams/AutoParams"
+          licenses {
+            license {
+              name = "MIT License"
+              url = "https://github.com/AutoParams/AutoParams/blob/main/LICENSE"
             }
-        }
-
-        publications {
-            maven(MavenPublication) {
-                artifactId artifactId
-                from components.java
-                pom {
-                    name = artifactName
-                    description = artifactDescription
-                    url = "https://github.com/AutoParams/AutoParams"
-                    licenses {
-                        license {
-                            name = "MIT License"
-                            url = "https://github.com/AutoParams/AutoParams/blob/main/LICENSE"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "gyuwon"
-                            name = "Gyuwon Yi"
-                            email = "gyuwon@live.com"
-                        }
-                        developer {
-                            id = "mhyeon.lee"
-                            name = "Myeonghyeon Lee"
-                            email = "mhyeon.lee@navercorp.com"
-                        }
-                    }
-                    scm {
-                        connection = "https://github.com/AutoParams/AutoParams.git"
-                        developerConnection = "https://github.com/AutoParams/AutoParams.git"
-                        url = "https://github.com/AutoParams/AutoParams"
-                    }
-                }
+          }
+          developers {
+            developer {
+              id = "gyuwon"
+              name = "Gyuwon Yi"
+              email = "gyuwon@live.com"
             }
+            developer {
+              id = "mhyeon.lee"
+              name = "Myeonghyeon Lee"
+              email = "mhyeon.lee@navercorp.com"
+            }
+          }
+          scm {
+            connection = "https://github.com/AutoParams/AutoParams.git"
+            developerConnection = "https://github.com/AutoParams/AutoParams.git"
+            url = "https://github.com/AutoParams/AutoParams"
+          }
         }
+      }
     }
+  }
 
-    signing {
-        def signingKey = System.getenv("SIGNING_KEY")
-        def signingPassword = System.getenv("SIGNING_PASSWORD")
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign publishing.publications.maven
-    }
+  signing {
+    def signingKey = System.getenv("SIGNING_KEY")
+    def signingPassword = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.maven
+  }
 }
