@@ -1,6 +1,8 @@
 package autoparams;
 
 import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +12,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.DefaultArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -58,13 +61,51 @@ final class ArgumentsAssembler {
             Object[] arguments = supplement.get();
             for (int i = 0; i < arguments.length; i++) {
                 Parameter parameter = parameters[i];
-                processArgument(context, parameter, convertArgument(parameter, arguments[i]));
+                Object argument = convertArgument(i, parameter, arguments[i]);
+                processArgument(context, parameter, argument);
             }
         });
     }
 
-    private static Object convertArgument(Parameter parameter, Object argument) {
-        return DefaultArgumentConverter.INSTANCE.convert(argument, parameter.getType());
+    private static Object convertArgument(
+        int index,
+        Parameter parameter,
+        Object argument
+    ) {
+        DefaultArgumentConverter converter = DefaultArgumentConverter.INSTANCE;
+        try {
+            return converter.convert(argument, parameter.getType());
+        } catch (NoSuchMethodError e) {
+            return callConvertWithParameterContextReflectively(
+                converter, index,
+                parameter,
+                argument
+            );
+        }
+    }
+
+    private static Object callConvertWithParameterContextReflectively(
+        DefaultArgumentConverter converter,
+        int index,
+        Parameter parameter,
+        Object argument
+    ) {
+        try {
+            Method method = DefaultArgumentConverter.class.getMethod(
+                "convert",
+                Object.class,
+                ParameterContext.class
+            );
+            return method.invoke(
+                converter,
+                argument,
+                new IncompleteParameterContext(parameter, index)
+            );
+        } catch (NoSuchMethodException |
+                 InvocationTargetException |
+                 IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void processArgument(
