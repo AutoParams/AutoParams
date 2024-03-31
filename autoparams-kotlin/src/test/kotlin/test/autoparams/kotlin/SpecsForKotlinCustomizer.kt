@@ -1,7 +1,8 @@
-package autoparams.kotlin
+package test.autoparams.kotlin
 
 import autoparams.AutoSource
 import autoparams.customization.Customization
+import autoparams.kotlin.KotlinCustomizer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 

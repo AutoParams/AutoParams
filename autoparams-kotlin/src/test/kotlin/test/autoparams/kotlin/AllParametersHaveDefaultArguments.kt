@@ -1,4 +1,4 @@
-package autoparams.kotlin
+package test.autoparams.kotlin
 
 data class AllParametersHaveDefaultArguments(
     val value1: String = "",

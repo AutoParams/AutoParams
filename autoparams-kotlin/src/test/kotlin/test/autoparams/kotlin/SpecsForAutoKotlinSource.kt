@@ -1,5 +1,6 @@
-package autoparams.kotlin
+package test.autoparams.kotlin
 
+import autoparams.kotlin.AutoKotlinSource
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 

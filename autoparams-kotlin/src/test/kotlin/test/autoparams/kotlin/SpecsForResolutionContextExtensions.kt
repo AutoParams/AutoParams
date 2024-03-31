@@ -1,7 +1,9 @@
-package autoparams.kotlin
+package test.autoparams.kotlin
 
 import autoparams.ResolutionContext
 import autoparams.generator.ObjectContainer
+import autoparams.kotlin.AutoKotlinSource
+import autoparams.kotlin.generate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
