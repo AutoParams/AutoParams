@@ -69,7 +69,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>3.1.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:3.1.0'
+testImplementation 'io.github.autoparams:autoparams:4.0.0'
 ```
 
 ## Features
@@ -598,17 +598,19 @@ You can implement these rules using the `Customizer` interface:
 ```java
 public class ProductCustomization implements Customizer {
 
+    @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
         return (query, context) -> query.getType().equals(Product.class)
             ? new ObjectContainer(factory(context))
             : generator.generate(query, context);
     }
 
-    private Product factory(ObjectGenerationContext context) {
+    private Product factory(ResolutionContext context) {
         UUID id = context.generate(UUID.class);
         String name = context.generate(String.class);
 
-        BigDecimal listPriceAmount = new BigDecimal(ThreadLocalRandom.current().nextInt(100, 1000 + 1));
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        BigDecimal listPriceAmount = new BigDecimal(random.nextInt(100, 1000 + 1));
         BigDecimal sellingPriceAmount = listPriceAmount.multiply(new BigDecimal(0.9));
 
         return new Product(id, name, listPriceAmount, sellingPriceAmount);
@@ -657,7 +659,7 @@ void testMethod(Email email, User user, Supplier supplier, Product product) {
 
 #### Settable Properties
 
-If your object follows the JavaBeans spec and has settable properties, you can use `SettablePropertyWriter`:
+If your object follows the JavaBeans spec and has settable properties, you can use `InstancePropertyCustomizer`:
 
 ```java
 @Getter
@@ -671,7 +673,7 @@ public class User {
 ```java
 @ParameterizedTest
 @AutoSource
-@Customization(SettablePropertyWriter.class)
+@Customization(InstancePropertyCustomizer.class)
 void testMethod(User user) {
     assertNotNull(user.getId());
     assertNotNull(user.getName());
@@ -698,7 +700,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>3.1.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -707,7 +709,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:3.1.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:4.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -773,7 +775,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>3.1.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -782,7 +784,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:3.1.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:4.0.0'
 ```
 
 ### `BuilderCustomizer`
@@ -874,7 +876,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>3.1.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -883,7 +885,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:3.1.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:4.0.0'
 ```
 
 ### `@AutoKotlinSource` Annotation
