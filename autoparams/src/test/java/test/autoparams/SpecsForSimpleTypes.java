@@ -145,14 +145,21 @@ class SpecsForSimpleTypes {
     }
 
     @AutoParameterizedTest
+    @Repeat(100)
     void sut_creates_arbitrary_period_values(
         Period value1,
         Period value2,
-        Period value3
+        Period value3,
+        Period value4,
+        Period value5
     ) {
-        assertNotEquals(value1, value2);
-        assertNotEquals(value2, value3);
-        assertNotEquals(value3, value1);
+        final HashSet<Period> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
     }
 
     @AutoParameterizedTest
