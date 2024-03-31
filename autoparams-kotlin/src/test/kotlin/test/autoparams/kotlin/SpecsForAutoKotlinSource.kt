@@ -1,7 +1,7 @@
 package test.autoparams.kotlin
 
 import autoparams.kotlin.AutoKotlinSource
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 
 class SpecsForAutoKotlinSource {
@@ -9,11 +9,11 @@ class SpecsForAutoKotlinSource {
     @ParameterizedTest
     @AutoKotlinSource
     fun `SUT generates arbitrary arguments for constructor in which all parameters have default values`(
-        generated: AllParametersHaveDefaultArguments
+        bag: DataBagWithDefaultArguments
     ) {
-        val constructed = AllParametersHaveDefaultArguments()
-        Assertions.assertThat(generated.value1).isNotEqualTo(constructed.value1)
-        Assertions.assertThat(generated.value2).isNotEqualTo(constructed.value2)
-        Assertions.assertThat(generated.value3).isNotEqualTo(constructed.value3)
+        val defaults = DataBagWithDefaultArguments()
+        assertThat(bag.value1).isNotEqualTo(defaults.value1)
+        assertThat(bag.value2).isNotEqualTo(defaults.value2)
+        assertThat(bag.value3).isNotEqualTo(defaults.value3)
     }
 }

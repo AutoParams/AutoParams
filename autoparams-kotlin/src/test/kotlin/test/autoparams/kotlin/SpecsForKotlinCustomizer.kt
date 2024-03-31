@@ -12,11 +12,11 @@ class SpecsForKotlinCustomizer {
     @AutoSource
     @Customization(KotlinCustomizer::class)
     fun `SUT generates arbitrary arguments for constructor in which all parameters have default values`(
-        generated: AllParametersHaveDefaultArguments
+        bag: DataBagWithDefaultArguments
     ) {
-        val constructed = AllParametersHaveDefaultArguments()
-        assertThat(generated.value1).isNotEqualTo(constructed.value1)
-        assertThat(generated.value2).isNotEqualTo(constructed.value2)
-        assertThat(generated.value3).isNotEqualTo(constructed.value3)
+        val defaults = DataBagWithDefaultArguments()
+        assertThat(bag.value1).isNotEqualTo(defaults.value1)
+        assertThat(bag.value2).isNotEqualTo(defaults.value2)
+        assertThat(bag.value3).isNotEqualTo(defaults.value3)
     }
 }
