@@ -1,13 +1,12 @@
 package autoparams.kotlin
 
+import autoparams.ResolutionContext
 import autoparams.generator.ObjectContainer
-import autoparams.generator.ObjectGenerationContext
-import autoparams.generator.ObjectGenerator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
 
-class SpecsForObjectGenerationContextExtensions {
+class SpecsForResolutionContextExtensions {
 
     @ParameterizedTest
     @AutoKotlinSource
@@ -15,9 +14,10 @@ class SpecsForObjectGenerationContextExtensions {
         extensionContext: ExtensionContext,
         value: Int,
     ) {
-        val sut = ObjectGenerationContext(
+        val sut = ResolutionContext(
             extensionContext,
-            ObjectGenerator { _, _ -> ObjectContainer(value) },
+            { _, _ -> ObjectContainer(value) },
+            { _, _, _ -> }
         )
 
         val actual: Int = sut.generate()

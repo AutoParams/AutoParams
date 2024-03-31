@@ -7,9 +7,9 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Optional;
 
+import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerationContext;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 
@@ -18,11 +18,15 @@ public class BuilderCustomizer implements Customizer {
     private final String builderMethodName;
     private final String buildMethodName;
 
+    @SuppressWarnings("unused")
     public BuilderCustomizer() {
         this("builder", "build");
     }
 
-    protected BuilderCustomizer(String builderMethodName, String buildMethodName) {
+    protected BuilderCustomizer(
+        String builderMethodName,
+        String buildMethodName
+    ) {
         this.builderMethodName = builderMethodName;
         this.buildMethodName = buildMethodName;
     }
@@ -49,12 +53,15 @@ public class BuilderCustomizer implements Customizer {
             .findFirst();
     }
 
-    private ObjectContainer factory(Object builder, ObjectGenerationContext context) {
+    private ObjectContainer factory(Object builder, ResolutionContext context) {
         setProperties(builder, context);
         return buildObject(builder);
     }
 
-    private static void setProperties(Object builder, ObjectGenerationContext context) {
+    private static void setProperties(
+        Object builder,
+        ResolutionContext context
+    ) {
         Arrays
             .stream(builder.getClass().getDeclaredMethods())
             .filter(method -> method.getParameterCount() == 1)
@@ -64,7 +71,7 @@ public class BuilderCustomizer implements Customizer {
     private static void setProperty(
         Object builder,
         Method setter,
-        ObjectGenerationContext context
+        ResolutionContext context
     ) {
         ObjectQuery query = () -> setter.getGenericParameterTypes()[0];
         Object argument = context.generate(query);
@@ -91,4 +98,3 @@ public class BuilderCustomizer implements Customizer {
         }
     }
 }
-
