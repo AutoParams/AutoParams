@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-final class CsvAutoArgumentsProvider implements
+public final class CsvAutoArgumentsProvider implements
     ArgumentsProvider,
     AnnotationConsumer<CsvAutoSource> {
 
