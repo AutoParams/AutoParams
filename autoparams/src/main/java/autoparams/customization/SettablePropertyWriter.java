@@ -7,12 +7,13 @@ import autoparams.processor.InstancePropertyWriter;
 @Deprecated
 public final class SettablePropertyWriter implements Customizer {
 
+    private final InstancePropertyWriter writer = new InstancePropertyWriter();
+
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
         return (query, context) -> {
             ObjectContainer container = generator.generate(query, context);
-            InstancePropertyWriter processor = new InstancePropertyWriter();
-            processor.process(query, container.unwrapOrElseThrow(), context);
+            writer.process(query, container.unwrapOrElseThrow(), context);
             return container;
         };
     }

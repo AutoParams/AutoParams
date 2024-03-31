@@ -1,5 +1,6 @@
 package autoparams.customization;
 
+import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.InstanceFieldWriter;
 
@@ -18,12 +19,11 @@ public final class FieldWriter implements Customizer {
 
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
-        return (query, context) -> generator
-            .generate(query, context)
-            .process(value -> {
-                writer.process(query, value, context);
-                return value;
-            });
+        return (query, context) -> {
+            ObjectContainer container = generator.generate(query, context);
+            writer.process(query, container.unwrapOrElseThrow(), context);
+            return container;
+        };
     }
 
     public FieldWriter including(String... fieldNames) {
