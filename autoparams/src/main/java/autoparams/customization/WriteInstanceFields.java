@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @CustomizerSource(InstanceFieldWriterFactory.class)
 public @interface WriteInstanceFields {
 
-    Class<?> value();
+    Class<?>[] value();
 }

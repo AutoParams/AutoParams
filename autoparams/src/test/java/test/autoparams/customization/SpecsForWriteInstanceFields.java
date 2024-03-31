@@ -12,4 +12,14 @@ public class SpecsForWriteInstanceFields {
     void sut_sets_private_fields(Versioned actual) {
         assertNotNull(actual.getVersion());
     }
+
+    @AutoParameterizedTest
+    @WriteInstanceFields({ Versioned.class, User.class })
+    void sut_correctly_works_with_multiple_types(
+        Versioned versioned,
+        User user
+    ) {
+        assertNotNull(versioned.getVersion());
+        assertNotNull(user.getUsername());
+    }
 }
