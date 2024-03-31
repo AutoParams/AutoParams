@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generic.RuntimeTypeResolver;
 
 import static java.util.Arrays.stream;
 

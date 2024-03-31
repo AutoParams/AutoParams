@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generic.RuntimeTypeResolver;
 
 import static java.beans.Introspector.getBeanInfo;
 

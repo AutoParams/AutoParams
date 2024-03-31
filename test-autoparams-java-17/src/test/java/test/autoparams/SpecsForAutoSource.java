@@ -12,4 +12,10 @@ public class SpecsForAutoSource {
     void sut_generates_record(Point point) {
         assertThat(point).isNotNull();
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_generates_record_containing_iterable(IterableBag<Point> bag) {
+        assertThat(bag.items()).isNotNull();
+    }
 }

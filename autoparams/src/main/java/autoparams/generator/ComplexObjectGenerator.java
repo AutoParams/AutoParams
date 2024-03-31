@@ -5,99 +5,84 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import autoparams.ResolutionContext;
+import autoparams.generic.RuntimeTypeResolver;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
-        if (query.getType() instanceof Class<?>) {
-            return generateNonGeneric((Class<?>) query.getType(), context);
-        } else if (query.getType() instanceof ParameterizedType) {
-            return generateGeneric((ParameterizedType) query.getType(), context);
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        return generate(context, query.getType());
+    }
+
+    private ObjectContainer generate(ResolutionContext context, Type type) {
+        if (type instanceof Class<?>) {
+            return generateObject((Class<?>) type, context);
+        } else if (type instanceof ParameterizedType) {
+            return generateObject((ParameterizedType) type, context);
         } else {
             return ObjectContainer.EMPTY;
         }
     }
 
-    private ObjectContainer generateNonGeneric(Class<?> type, ResolutionContext context) {
+    private ObjectContainer generateObject(
+        Class<?> type,
+        ResolutionContext context
+    ) {
         if (isAbstract(type)) {
             return ObjectContainer.EMPTY;
         }
 
-        Constructor<?> constructor = context
-            .generate(ConstructorResolver.class)
-            .resolveOrElseThrow(type);
+        Constructor<?> constructor = resolveConstructor(type, context);
 
         Stream<ObjectQuery> argumentQueries = Arrays
             .stream(constructor.getParameters())
             .map(ObjectQuery::fromParameter);
 
-        return new ObjectContainer(createInstance(constructor, argumentQueries, context));
+        Object value = createInstance(constructor, argumentQueries, context);
+        return new ObjectContainer(value);
     }
 
-    private ObjectContainer generateGeneric(
-        ParameterizedType parameterizedType,
+    private ObjectContainer generateObject(
+        ParameterizedType type,
         ResolutionContext context
     ) {
-        Class<?> type = (Class<?>) parameterizedType.getRawType();
+        Class<?> rawType = (Class<?>) type.getRawType();
 
-        if (isAbstract(type) || type.equals(Builder.class)) {
+        if (isAbstract(rawType) || rawType.equals(Builder.class)) {
             return ObjectContainer.EMPTY;
         }
 
-        Constructor<?> constructor = context
-            .generate(ConstructorResolver.class)
-            .resolveOrElseThrow(type);
-
-        Map<TypeVariable<?>, Type> genericMap = getGenericMap(type, parameterizedType);
+        Constructor<?> constructor = resolveConstructor(rawType, context);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.of(type);
 
         Stream<ObjectQuery> argumentQueries = Arrays
             .stream(constructor.getParameters())
-            .map(parameter -> resolveArgumentQuery(parameter, genericMap));
+            .map(Parameter::getParameterizedType)
+            .map(typeResolver::resolve)
+            .map(ObjectQuery::fromType);
 
-        return new ObjectContainer(createInstance(constructor, argumentQueries, context));
+        Object value = createInstance(constructor, argumentQueries, context);
+        return new ObjectContainer(value);
+    }
+
+    private static Constructor<?> resolveConstructor(
+        Class<?> type,
+        ResolutionContext context
+    ) {
+        return context
+            .generate(ConstructorResolver.class)
+            .resolveOrElseThrow(type);
     }
 
     private boolean isAbstract(Class<?> type) {
         return type.isInterface() || Modifier.isAbstract(type.getModifiers());
-    }
-
-    private Map<TypeVariable<?>, Type> getGenericMap(
-        Class<?> type,
-        ParameterizedType parameterizedType
-    ) {
-        HashMap<TypeVariable<?>, Type> map = new HashMap<>();
-
-        TypeVariable<?>[] typeVariables = type.getTypeParameters();
-        Type[] typeValues = parameterizedType.getActualTypeArguments();
-        for (int i = 0; i < typeVariables.length; i++) {
-            map.put(typeVariables[i], typeValues[i]);
-        }
-
-        return map;
-    }
-
-    private ObjectQuery resolveArgumentQuery(
-        Parameter parameter,
-        Map<TypeVariable<?>, Type> genericMap
-    ) {
-        return parameter.getParameterizedType() instanceof TypeVariable
-            ? resolveParameterizedTypeQuery(parameter.getParameterizedType(), genericMap)
-            : ObjectQuery.fromParameter(parameter);
-    }
-
-    private ObjectQuery resolveParameterizedTypeQuery(
-        Type parameterizedType,
-        Map<TypeVariable<?>, Type> genericMap
-    ) {
-        return ObjectQuery.fromType(genericMap.get((TypeVariable<?>) parameterizedType));
     }
 
     private Object createInstance(
@@ -106,16 +91,10 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         try {
-            return constructor.newInstance(generateArguments(argumentQueries, context));
+            Object[] args = argumentQueries.map(context::generate).toArray();
+            return constructor.newInstance(args);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Object[] generateArguments(
-        Stream<ObjectQuery> argumentQueries,
-        ResolutionContext context
-    ) {
-        return argumentQueries.map(context::generate).toArray();
     }
 }
