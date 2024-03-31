@@ -13,9 +13,6 @@ import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 
 final class AutoArgumentsProvider implements ArgumentsProvider {
 
-    private final ObjectGenerator generator = ObjectGenerator.DEFAULT;
-    private final ObjectProcessor processor = ObjectProcessor.DEFAULT;
-
     @Override
     public Stream<? extends Arguments> provideArguments(
         ExtensionContext context
@@ -27,10 +24,13 @@ final class AutoArgumentsProvider implements ArgumentsProvider {
     private ArgumentsGenerator createArgumentsGenerator(
         ExtensionContext context
     ) {
-        final int repeat = getRepeat(context);
         return new ArgumentsGenerator(
-            new ResolutionContext(context, generator, processor),
-            repeat
+            new ResolutionContext(
+                context,
+                ObjectGenerator.DEFAULT,
+                ObjectProcessor.DEFAULT
+            ),
+            getRepeat(context)
         );
     }
 

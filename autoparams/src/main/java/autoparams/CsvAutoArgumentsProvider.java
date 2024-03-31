@@ -1,6 +1,6 @@
 package autoparams;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -22,72 +22,26 @@ final class CsvAutoArgumentsProvider implements
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return ArgumentsAssembler.assembleArguments(context, csvProvider, autoProvider);
-    }
-
-    private static CsvSource createDelegate(CsvAutoSource source) {
-        return new CsvSource() {
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return CsvSource.class;
-            }
-
-            @Override
-            public String[] value() {
-                return source.value();
-            }
-
-            @Override
-            public String textBlock() {
-                return "";
-            }
-
-            @Override
-            public boolean useHeadersInDisplayName() {
-                return false;
-            }
-
-            @Override
-            public char quoteCharacter() {
-                return '\'';
-            }
-
-            @Override
-            public char delimiter() {
-                return '\0';
-            }
-
-            @Override
-            public String delimiterString() {
-                return "";
-            }
-
-            @Override
-            public String emptyValue() {
-                return "";
-            }
-
-            @Override
-            public String[] nullValues() {
-                return new String[] { };
-            }
-
-            @Override
-            public int maxCharsPerColumn() {
-                return 4096;
-            }
-
-            @Override
-            public boolean ignoreLeadingAndTrailingWhitespace() {
-                return true;
-            }
-        };
+    public Stream<? extends Arguments> provideArguments(
+        ExtensionContext context
+    ) {
+        return ArgumentsAssembler.assembleArguments(
+            context,
+            csvProvider,
+            autoProvider
+        );
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void accept(CsvAutoSource annotation) {
-        ((AnnotationConsumer<CsvSource>) csvProvider).accept(createDelegate(annotation));
+        CsvSource delegate = (CsvSource) Proxy.newProxyInstance(
+            CsvSource.class.getClassLoader(),
+            new Class[] { CsvSource.class },
+            (proxy, method, args) -> method.getName().equals("value")
+                ? annotation.value()
+                : method.getDefaultValue()
+        );
+        ((AnnotationConsumer<CsvSource>) csvProvider).accept(delegate);
     }
 }
