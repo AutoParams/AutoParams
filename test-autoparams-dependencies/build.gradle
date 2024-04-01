@@ -5,10 +5,10 @@ plugins {
 }
 
 dependencies {
-  api "io.github.autoparams:autoparams:[4.2.0, 5.0.0)"
-  api "io.github.autoparams:autoparams-kotlin:[4.2.0, 5.0.0)"
-  api "io.github.autoparams:autoparams-lombok:[4.2.0, 5.0.0)"
-  api "io.github.autoparams:autoparams-mockito:[4.2.0, 5.0.0)"
+  api "io.github.autoparams:autoparams:[4.3.0, 5.0.0)"
+  api "io.github.autoparams:autoparams-kotlin:[4.3.0, 5.0.0)"
+  api "io.github.autoparams:autoparams-lombok:[4.3.0, 5.0.0)"
+  api "io.github.autoparams:autoparams-mockito:[4.3.0, 5.0.0)"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
 }
 
