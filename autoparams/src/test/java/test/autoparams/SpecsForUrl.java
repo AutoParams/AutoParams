@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.stream.IntStream;
 
 import autoparams.AutoSource;
-import autoparams.generator.Builder;
+import autoparams.generator.Factory;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,9 +14,9 @@ class SpecsForUrl {
 
     @ParameterizedTest
     @AutoSource
-    void sut_supports_various_protocols(Builder<URL> builder) {
+    void sut_supports_various_protocols(Factory<URL> factory) {
         long actual = IntStream.range(0, 100)
-            .mapToObj(it -> builder.build())
+            .mapToObj(it -> factory.get())
             .map(URL::getProtocol)
             .distinct()
             .count();
@@ -26,9 +26,9 @@ class SpecsForUrl {
 
     @ParameterizedTest
     @AutoSource
-    void sut_supports_various_ports(Builder<URL> builder) {
+    void sut_supports_various_ports(Factory<URL> factory) {
         long actual = IntStream.range(0, 100)
-            .mapToObj(it -> builder.build())
+            .mapToObj(it -> factory.get())
             .map(URL::getPort)
             .distinct()
             .count();
@@ -38,9 +38,11 @@ class SpecsForUrl {
 
     @ParameterizedTest
     @AutoSource
-    void sut_generates_urls_with_port_numbers_about_50_percent(Builder<URL> builder) {
+    void sut_generates_urls_with_port_numbers_about_50_percent(
+        Factory<URL> factory
+    ) {
         long actual = IntStream.range(0, 100)
-            .mapToObj(it -> builder.build())
+            .mapToObj(it -> factory.get())
             .filter(it -> it.getPort() >= 0)
             .count();
 

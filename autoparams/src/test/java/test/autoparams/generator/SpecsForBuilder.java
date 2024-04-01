@@ -17,6 +17,7 @@ import test.autoparams.ComplexObject;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Deprecated
 class SpecsForBuilder {
 
     @ParameterizedTest

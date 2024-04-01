@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Deprecated
 public final class Builder<T> {
 
     private final Factory<T> factory;
