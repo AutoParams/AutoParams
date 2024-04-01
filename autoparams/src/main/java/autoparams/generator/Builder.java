@@ -1,30 +1,18 @@
 package autoparams.generator;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
-import autoparams.ResolutionContext;
-
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toList;
-
 public final class Builder<T> {
 
-    private final Type type;
-    private final ResolutionContext context;
+    private final Factory<T> factory;
 
-    private Builder(Type type, ResolutionContext context) {
-        this.type = type;
-        this.context = context;
-    }
-
-    static <T> Builder<T> create(Type type, ResolutionContext context) {
-        return new Builder<>(type, context);
+    public Builder(Factory<T> factory) {
+        this.factory = factory;
     }
 
     public <U> Builder<T> fix(Class<U> type, U value) {
-        context.applyCustomizer(generator ->
+        factory.applyCustomizer(generator ->
             (query, context) ->
                 query.getType() == type
                     ? new ObjectContainer(value)
@@ -32,16 +20,15 @@ public final class Builder<T> {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public T build() {
-        return (T) context.generate(ObjectQuery.fromType(type));
+        return factory.get();
     }
 
     public List<T> buildRange(int size) {
-        return unmodifiableList(stream().limit(size).collect(toList()));
+        return factory.getRange(size);
     }
 
     public Stream<T> stream() {
-        return Stream.generate(this::build);
+        return factory.stream();
     }
 }

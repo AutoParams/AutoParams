@@ -55,7 +55,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
     ) {
         Class<?> rawType = (Class<?>) type.getRawType();
 
-        if (isAbstract(rawType) || rawType.equals(Builder.class)) {
+        if (isAbstract(rawType)) {
             return ObjectContainer.EMPTY;
         }
 

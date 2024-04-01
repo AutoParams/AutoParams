@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
 
-final class BuilderGenerator implements ObjectGenerator {
+final class FactoryGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
@@ -21,9 +21,10 @@ final class BuilderGenerator implements ObjectGenerator {
         ParameterizedType type,
         ResolutionContext context
     ) {
-        if (type.getRawType().equals(Builder.class)) {
+        if (type.getRawType().equals(Factory.class)) {
             Type targetType = type.getActualTypeArguments()[0];
-            return new ObjectContainer(Builder.create(targetType, context));
+            ResolutionContext branch = context.branch();
+            return new ObjectContainer(Factory.create(targetType, branch));
         } else {
             return ObjectContainer.EMPTY;
         }

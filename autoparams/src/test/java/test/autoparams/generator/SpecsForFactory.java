@@ -1,0 +1,116 @@
+package test.autoparams.generator;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import autoparams.AutoSource;
+import autoparams.ResolutionContext;
+import autoparams.ValueAutoSource;
+import autoparams.generator.Factory;
+import autoparams.generator.ObjectContainer;
+import org.junit.jupiter.params.ParameterizedTest;
+import test.autoparams.ComplexObject;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+public class SpecsForFactory {
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_integer_array(Factory<Integer[]> sut) {
+        Integer[] value = sut.get();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_integer_list(Factory<List<Integer>> sut) {
+        List<Integer> value = sut.get();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_array_of_complex_type(
+        Factory<ComplexObject[]> sut
+    ) {
+        ComplexObject[] value = sut.get();
+        assertThat(value).hasSize(3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_generates_map(
+        Factory<Map<String, ComplexObject>> sut
+    ) {
+        Map<String, ComplexObject> value = sut.get();
+        assertThat(value).isNotEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 10, 20, 30 })
+    void stream_returns_stream_of_anonymous_objects(
+        int size,
+        Factory<UUID> sut
+    ) {
+        Stream<UUID> stream = sut.stream();
+        Set<UUID> set = stream.limit(size).collect(Collectors.toSet());
+        assertThat(set).hasSize(size);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 10, 20, 30 })
+    void getRange_returns_list_of_anonymous_objects(
+        int size,
+        Factory<UUID> sut
+    ) {
+        List<UUID> list = sut.getRange(size);
+        assertThat(list).hasSize(size);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @ParameterizedTest
+    @AutoSource
+    void getRange_returns_unmodifiable_list(Factory<Integer> sut) {
+        List<Integer> list = sut.getRange(3);
+        assertThatThrownBy(() -> list.add(1))
+            .isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void applyCustomizer_correctly_works(Factory<UUID> sut, UUID fixedValue) {
+        sut.applyCustomizer(generator ->
+            (query, context) ->
+                query.getType() == UUID.class
+                    ? new ObjectContainer(fixedValue)
+                    : generator.generate(query, context));
+
+        UUID actual = sut.get();
+
+        assertThat(actual).isEqualTo(fixedValue);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void applyCustomizer_does_not_effect_main_context(
+        Factory<UUID> sut,
+        UUID fixedValue,
+        ResolutionContext mainContext
+    ) {
+        sut.applyCustomizer(generator ->
+            (query, context) ->
+                query.getType() == UUID.class
+                    ? new ObjectContainer(fixedValue)
+                    : generator.generate(query, context));
+
+        UUID actual = mainContext.generate(UUID.class);
+
+        assertThat(actual).isNotEqualTo(fixedValue);
+    }
+}

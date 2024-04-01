@@ -79,4 +79,8 @@ public final class ResolutionContext {
         generator = customizer.customize(generator);
         processor = customizer.customize(processor);
     }
+
+    public ResolutionContext branch() {
+        return new ResolutionContext(extensionContext, generator, processor);
+    }
 }
