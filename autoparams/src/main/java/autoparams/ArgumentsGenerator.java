@@ -118,7 +118,7 @@ final class ArgumentsGenerator {
         Consumer<Customizer> visitor = context::applyCustomizer;
         visitCustomizers(parameter, visitor);
         ObjectQuery argumentQuery = ObjectQuery.fromParameter(parameter);
-        Object argument = context.generate(argumentQuery);
+        Object argument = context.resolve(argumentQuery);
         Customizers.processArgument(parameter, argument).forEach(visitor);
         return argument;
     }

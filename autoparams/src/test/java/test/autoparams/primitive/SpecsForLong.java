@@ -77,7 +77,7 @@ public class SpecsForLong {
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", long.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) long arg) {

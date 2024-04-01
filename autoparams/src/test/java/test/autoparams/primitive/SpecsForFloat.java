@@ -72,7 +72,7 @@ public class SpecsForFloat {
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", float.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(0) @Max(-1) float arg) {

@@ -109,7 +109,7 @@ public class SpecsForFactory {
                     ? new ObjectContainer(fixedValue)
                     : generator.generate(query, context));
 
-        UUID actual = mainContext.generate(UUID.class);
+        UUID actual = mainContext.resolve(UUID.class);
 
         assertThat(actual).isNotEqualTo(fixedValue);
     }

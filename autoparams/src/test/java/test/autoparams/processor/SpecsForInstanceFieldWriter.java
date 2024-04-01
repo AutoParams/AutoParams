@@ -87,7 +87,7 @@ public class SpecsForInstanceFieldWriter {
         context.applyCustomizer(sut.toCustomizer());
 
         // Act
-        Operator actual = context.generate(Operator.class);
+        Operator actual = context.resolve(Operator.class);
 
         // Assert
         assertNotNull(actual.getTeamName());
@@ -104,7 +104,7 @@ public class SpecsForInstanceFieldWriter {
         context.applyCustomizer(sut.toCustomizer());
 
         // Act
-        Operator actual = context.generate(Operator.class);
+        Operator actual = context.resolve(Operator.class);
 
         // Assert
         assertNull(actual.getPhoneNumber());

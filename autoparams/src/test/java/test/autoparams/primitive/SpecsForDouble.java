@@ -73,9 +73,10 @@ public class SpecsForDouble {
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", double.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
+    @SuppressWarnings("unused")
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(0) double arg) {
     }
 }

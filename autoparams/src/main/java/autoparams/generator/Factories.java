@@ -86,8 +86,8 @@ final class Factories {
 
     public static Period createPeriod(ResolutionContext context) {
         final Period period = Period.between(
-            context.generate(LocalDate.class),
-            context.generate(LocalDate.class)
+            context.resolve(LocalDate.class),
+            context.resolve(LocalDate.class)
         );
         return period.isNegative() ? period.negated() : period;
     }
@@ -95,13 +95,13 @@ final class Factories {
     public static OffsetDateTime createOffsetDateTime(ResolutionContext context) {
         int bound = (int) TimeUnit.DAYS.toSeconds(7);
         int seconds = random().nextInt(bound);
-        Clock clock = context.generate(Clock.class);
+        Clock clock = context.resolve(Clock.class);
         return OffsetDateTime.now(clock).minusSeconds(seconds);
     }
 
     public static ZonedDateTime createZonedDateTime(ResolutionContext context) {
-        LocalDateTime localDateTime = context.generate(LocalDateTime.class);
-        ZoneId zoneId = context.generate(ZoneId.class);
+        LocalDateTime localDateTime = context.resolve(LocalDateTime.class);
+        ZoneId zoneId = context.resolve(ZoneId.class);
         return localDateTime.atZone(zoneId);
     }
 

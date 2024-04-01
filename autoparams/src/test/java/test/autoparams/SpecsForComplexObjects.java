@@ -49,7 +49,7 @@ class SpecsForComplexObjects {
         assertThat(
             assertThrows(
                 RuntimeException.class,
-                () -> context.generate(OnlyPrivateConstructor.class)
+                () -> context.resolve(OnlyPrivateConstructor.class)
             )
         ).hasMessageContaining(OnlyPrivateConstructor.class.getSimpleName());
     }

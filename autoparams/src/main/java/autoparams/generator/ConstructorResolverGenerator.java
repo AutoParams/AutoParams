@@ -19,7 +19,7 @@ class ConstructorResolverGenerator extends TypeMatchingGenerator {
     }
 
     private static ConstructorResolver factory(ResolutionContext context) {
-        ConstructorExtractor extractor = context.generate(ConstructorExtractor.class);
+        ConstructorExtractor extractor = context.resolve(ConstructorExtractor.class);
         return createDefensiveResolver(extractor);
     }
 

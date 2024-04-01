@@ -29,12 +29,7 @@ public final class ResolutionContext {
         return extensionContext;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T generate(Class<T> type) {
-        return (T) generate(ObjectQuery.fromType(type));
-    }
-
-    public Object generate(ObjectQuery query) {
+    public Object resolve(ObjectQuery query) {
         if (query == null) {
             throw new IllegalArgumentException("The argument 'query' is null.");
         }
@@ -42,6 +37,21 @@ public final class ResolutionContext {
         Object value = generateValue(query);
         processor.process(query, value, this);
         return value;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(Class<T> type) {
+        return (T) resolve(ObjectQuery.fromType(type));
+    }
+
+    @Deprecated
+    public Object generate(ObjectQuery query) {
+        return resolve(query);
+    }
+
+    @Deprecated
+    public <T> T generate(Class<T> type) {
+        return resolve(type);
     }
 
     private Object generateValue(ObjectQuery query) {

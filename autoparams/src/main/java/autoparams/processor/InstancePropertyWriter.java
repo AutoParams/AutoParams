@@ -39,7 +39,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
             if (method != null) {
                 Parameter parameter = method.getParameters()[0];
                 ObjectQuery query = ObjectQuery.fromParameter(parameter);
-                Object propertyValue = context.generate(query);
+                Object propertyValue = context.resolve(query);
                 try {
                     method.invoke(value, propertyValue);
                 } catch (IllegalAccessException |
@@ -60,7 +60,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
             Method method = property.getWriteMethod();
             if (method != null) {
                 ObjectQuery query = resolveArgumentQuery(method, typeResolver);
-                Object propertyValue = context.generate(query);
+                Object propertyValue = context.resolve(query);
                 try {
                     method.invoke(value, propertyValue);
                 } catch (IllegalAccessException |

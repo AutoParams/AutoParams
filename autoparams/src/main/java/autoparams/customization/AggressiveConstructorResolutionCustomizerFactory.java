@@ -42,7 +42,7 @@ public class AggressiveConstructorResolutionCustomizerFactory implements
     }
 
     private ConstructorResolver createAggressiveResolver(ResolutionContext context) {
-        return createAggressiveResolver(context.generate(ConstructorExtractor.class));
+        return createAggressiveResolver(context.resolve(ConstructorExtractor.class));
     }
 
     private ConstructorResolver createAggressiveResolver(ConstructorExtractor extractor) {

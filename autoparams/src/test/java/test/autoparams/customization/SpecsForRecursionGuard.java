@@ -47,7 +47,7 @@ class SpecsForRecursionGuard {
         final int recursionDepth = 1;
         context.applyCustomizer(new RecursionGuard(recursionDepth));
 
-        final User actual = context.generate(User.class);
+        final User actual = context.resolve(User.class);
 
         assertThat(actual.getFollowings()[0].getFollower()).isNull();
         assertThat(actual.getFollowings()[1].getFollower()).isNull();
@@ -60,7 +60,7 @@ class SpecsForRecursionGuard {
         final int recursionDepth = 2;
         context.applyCustomizer(new RecursionGuard(recursionDepth));
 
-        final User actual = context.generate(User.class);
+        final User actual = context.resolve(User.class);
 
         assertThat(actual.getFollowings()[0].getFollower()).isNotNull();
         assertThat(actual.getFollowings()[1].getFollower()).isNotNull();

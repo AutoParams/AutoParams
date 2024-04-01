@@ -77,7 +77,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         return context
-            .generate(ConstructorResolver.class)
+            .resolve(ConstructorResolver.class)
             .resolveOrElseThrow(type);
     }
 
@@ -91,7 +91,7 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         try {
-            Object[] args = argumentQueries.map(context::generate).toArray();
+            Object[] args = argumentQueries.map(context::resolve).toArray();
             return constructor.newInstance(args);
         } catch (Exception e) {
             throw new RuntimeException(e);

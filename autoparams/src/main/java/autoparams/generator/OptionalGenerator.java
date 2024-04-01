@@ -24,6 +24,6 @@ final class OptionalGenerator implements ObjectGenerator {
         Class<? extends T> elementType,
         ResolutionContext context
     ) {
-        return Optional.of(context.generate(elementType));
+        return Optional.of(context.resolve(elementType));
     }
 }

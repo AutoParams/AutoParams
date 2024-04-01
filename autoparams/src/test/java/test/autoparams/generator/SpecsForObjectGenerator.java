@@ -54,7 +54,7 @@ public class SpecsForObjectGenerator {
         Customizer actual = sut.toCustomizer();
 
         context.applyCustomizer(actual);
-        StringFactory factory = context.generate(StringFactory.class);
+        StringFactory factory = context.resolve(StringFactory.class);
         assertThat(factory.get()).isEqualTo(value);
     }
 }

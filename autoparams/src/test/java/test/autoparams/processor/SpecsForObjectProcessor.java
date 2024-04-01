@@ -24,7 +24,7 @@ public class SpecsForObjectProcessor {
         Customizer actual = sut.toCustomizer();
 
         context.applyCustomizer(actual);
-        HasSetter value = context.generate(HasSetter.class);
+        HasSetter value = context.resolve(HasSetter.class);
         assertThat(value.getValue()).isNotNull();
     }
 }

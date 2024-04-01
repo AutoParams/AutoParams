@@ -44,7 +44,7 @@ final class SequenceGenerator implements ObjectGenerator {
         ArrayList<T> instance = new ArrayList<>();
         ObjectQuery query = ObjectQuery.fromType(elementType);
         for (int i = 0; i < SIZE; i++) {
-            instance.add((T) context.generate(query));
+            instance.add((T) context.resolve(query));
         }
 
         return instance;

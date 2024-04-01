@@ -20,7 +20,7 @@ class SpecsForRepeat {
     @AutoSource
     @Repeat(10)
     @Order(1)
-    void sut_work_correctly(int x) {
+    void sut_work_correctly(@SuppressWarnings("unused") int x) {
         shouldBe10++;
     }
 

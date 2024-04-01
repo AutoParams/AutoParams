@@ -103,10 +103,12 @@ public class SpecsForByte {
             .getDeclaredMethod("excessivelyLargeMaxConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
-    void excessivelyLargeMaxConstraint(@Max(Byte.MAX_VALUE + 1) byte arg) {
+    void excessivelyLargeMaxConstraint(
+        @SuppressWarnings("unused") @Max(Byte.MAX_VALUE + 1) byte arg
+    ) {
     }
 
     @AutoParameterizedTest
@@ -117,10 +119,12 @@ public class SpecsForByte {
             .getDeclaredMethod("excessivelySmallMaxConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
-    void excessivelySmallMaxConstraint(@Max(Byte.MIN_VALUE - 1) byte arg) {
+    void excessivelySmallMaxConstraint(
+        @SuppressWarnings("unused") @Max(Byte.MIN_VALUE - 1) byte arg
+    ) {
     }
 
     @AutoParameterizedTest
@@ -137,10 +141,12 @@ public class SpecsForByte {
             .getDeclaredMethod("excessivelyLargeMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
-    void excessivelyLargeMinConstraint(@Min(Byte.MAX_VALUE + 1) byte arg) {
+    void excessivelyLargeMinConstraint(
+        @SuppressWarnings("unused") @Min(Byte.MAX_VALUE + 1) byte arg
+    ) {
     }
 
     @AutoParameterizedTest
@@ -151,10 +157,12 @@ public class SpecsForByte {
             .getDeclaredMethod("excessivelySmallMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
-    void excessivelySmallMinConstraint(@Min(Byte.MIN_VALUE - 1) byte arg) {
+    void excessivelySmallMinConstraint(
+        @SuppressWarnings("unused") @Min(Byte.MIN_VALUE - 1) byte arg
+    ) {
     }
 
     @AutoParameterizedTest
@@ -165,9 +173,11 @@ public class SpecsForByte {
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", byte.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
-    void maxConstraintLessThanMinConstraint(@Min(1) @Max(0) byte arg) {
+    void maxConstraintLessThanMinConstraint(
+        @SuppressWarnings("unused") @Min(1) @Max(0) byte arg
+    ) {
     }
 }

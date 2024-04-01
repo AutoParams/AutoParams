@@ -71,7 +71,7 @@ public class SpecsForInt {
             .getDeclaredMethod("excessivelyLargeMaxConstraint", int.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void excessivelyLargeMaxConstraint(@Max(Integer.MAX_VALUE + 1L) int arg) {
@@ -85,7 +85,7 @@ public class SpecsForInt {
             .getDeclaredMethod("excessivelySmallMaxConstraint", int.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void excessivelySmallMaxConstraint(@Max(Integer.MIN_VALUE - 1L) int arg) {
@@ -105,7 +105,7 @@ public class SpecsForInt {
             .getDeclaredMethod("excessivelyLargeMinConstraint", int.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void excessivelyLargeMinConstraint(@Min(Integer.MAX_VALUE + 1L) int arg) {
@@ -119,7 +119,7 @@ public class SpecsForInt {
             .getDeclaredMethod("excessivelySmallMinConstraint", int.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void excessivelySmallMinConstraint(@Min(Integer.MIN_VALUE - 1L) int arg) {
@@ -133,7 +133,7 @@ public class SpecsForInt {
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", int.class)
             .getParameters()[0];
         ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) int arg) {

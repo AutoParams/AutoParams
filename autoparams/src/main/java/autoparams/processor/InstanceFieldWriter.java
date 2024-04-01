@@ -72,7 +72,7 @@ public class InstanceFieldWriter implements ObjectProcessor {
     ) {
         field.setAccessible(true);
         Type type = typeResolver.resolve(field.getGenericType());
-        Object argument = context.generate(ObjectQuery.fromType(type));
+        Object argument = context.resolve(ObjectQuery.fromType(type));
         try {
             field.set(target, argument);
         } catch (IllegalArgumentException |

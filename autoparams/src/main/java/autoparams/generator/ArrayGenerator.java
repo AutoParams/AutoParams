@@ -28,6 +28,6 @@ final class ArrayGenerator implements ObjectGenerator {
     }
 
     private Object generateElement(Class<?> elementType, ResolutionContext context) {
-        return context.generate(elementType);
+        return context.resolve(elementType);
     }
 }
