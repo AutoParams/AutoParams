@@ -9,6 +9,9 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
+import static autoparams.ArgumentsAssembler.assembleArguments;
+import static autoparams.ArgumentsProviderCreator.createProvider;
+
 public final class CsvAutoArgumentsProvider implements
     ArgumentsProvider,
     AnnotationConsumer<CsvAutoSource> {
@@ -17,7 +20,7 @@ public final class CsvAutoArgumentsProvider implements
     private final AutoArgumentsProvider autoProvider;
 
     public CsvAutoArgumentsProvider() {
-        csvProvider = ArgumentsProviderCreator.createProvider(CsvSource.class);
+        csvProvider = createProvider(CsvSource.class);
         autoProvider = new AutoArgumentsProvider();
     }
 
@@ -25,11 +28,7 @@ public final class CsvAutoArgumentsProvider implements
     public Stream<? extends Arguments> provideArguments(
         ExtensionContext context
     ) {
-        return ArgumentsAssembler.assembleArguments(
-            context,
-            csvProvider,
-            autoProvider
-        );
+        return assembleArguments(context, csvProvider, autoProvider);
     }
 
     @Override

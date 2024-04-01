@@ -1,6 +1,6 @@
 package autoparams;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -9,7 +9,10 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-final class ValueAutoArgumentsProvider implements
+import static autoparams.ArgumentsAssembler.assembleArguments;
+import static autoparams.ArgumentsProviderCreator.createProvider;
+
+public final class ValueAutoArgumentsProvider implements
     ArgumentsProvider,
     AnnotationConsumer<ValueAutoSource> {
 
@@ -17,77 +20,37 @@ final class ValueAutoArgumentsProvider implements
     private final AutoArgumentsProvider autoProvider;
 
     public ValueAutoArgumentsProvider() {
-        valueProvider = ArgumentsProviderCreator.createProvider(ValueSource.class);
+        valueProvider = createProvider(ValueSource.class);
         autoProvider = new AutoArgumentsProvider();
     }
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return ArgumentsAssembler.assembleArguments(context, valueProvider, autoProvider);
-    }
-
-    private static ValueSource createDelegate(ValueAutoSource source) {
-        return new ValueSource() {
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return ValueSource.class;
-            }
-
-            @Override
-            public short[] shorts() {
-                return source.shorts();
-            }
-
-            @Override
-            public byte[] bytes() {
-                return source.bytes();
-            }
-
-            @Override
-            public int[] ints() {
-                return source.ints();
-            }
-
-            @Override
-            public long[] longs() {
-                return source.longs();
-            }
-
-            @Override
-            public float[] floats() {
-                return source.floats();
-            }
-
-            @Override
-            public double[] doubles() {
-                return source.doubles();
-            }
-
-            @Override
-            public char[] chars() {
-                return source.chars();
-            }
-
-            @Override
-            public boolean[] booleans() {
-                return source.booleans();
-            }
-
-            @Override
-            public String[] strings() {
-                return source.strings();
-            }
-
-            @Override
-            public Class<?>[] classes() {
-                return source.classes();
-            }
-        };
+        return assembleArguments(context, valueProvider, autoProvider);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void accept(ValueAutoSource annotation) {
-        ((AnnotationConsumer<ValueSource>) valueProvider).accept(createDelegate(annotation));
+        ValueSource delegate = (ValueSource) Proxy.newProxyInstance(
+            ValueSource.class.getClassLoader(),
+            new Class[] { ValueSource.class },
+            (proxy, method, args) -> {
+                switch (method.getName()) {
+                    case "shorts": return annotation.shorts();
+                    case "bytes": return annotation.bytes();
+                    case "ints": return annotation.ints();
+                    case "longs": return annotation.longs();
+                    case "floats": return annotation.floats();
+                    case "doubles": return annotation.doubles();
+                    case "chars": return annotation.chars();
+                    case "booleans": return annotation.booleans();
+                    case "strings": return annotation.strings();
+                    case "classes": return annotation.classes();
+                    default: return method.getDefaultValue();
+                }
+            }
+        );
+        ((AnnotationConsumer<ValueSource>) valueProvider).accept(delegate);
     }
 }
