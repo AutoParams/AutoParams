@@ -15,13 +15,19 @@ final class SequenceGenerator implements ObjectGenerator {
     private static final int SIZE = 3;
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         return query.getType() instanceof ParameterizedType
             ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
+    private ObjectContainer generate(
+        ParameterizedType type,
+        ResolutionContext context
+    ) {
         return isCollection((Class<?>) type.getRawType())
             ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
             : ObjectContainer.EMPTY;
@@ -37,7 +43,7 @@ final class SequenceGenerator implements ObjectGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    static <T> ArrayList<T> factory(
+    private static <T> ArrayList<T> factory(
         Type elementType,
         ResolutionContext context
     ) {

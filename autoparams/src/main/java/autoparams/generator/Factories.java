@@ -72,16 +72,16 @@ final class Factories {
         return LocalDateTime.of(createLocalDate(), createLocalTime());
     }
 
-    public static IntStream createIntStream() {
-        return IntStream.generate(random()::nextInt).limit(3);
+    public static IntStream createIntStream(ResolutionContext context) {
+        return IntStream.generate(() -> context.resolve(int.class)).limit(3);
     }
 
-    public static LongStream createLongStream() {
-        return LongStream.generate(Factories::createLong).limit(3);
+    public static LongStream createLongStream(ResolutionContext context) {
+        return LongStream.generate(() -> context.resolve(long.class)).limit(3);
     }
 
-    public static DoubleStream createDoubleStream() {
-        return DoubleStream.generate(() -> random().nextDouble()).limit(3);
+    public static DoubleStream createDoubleStream(ResolutionContext context) {
+        return DoubleStream.generate(() -> context.resolve(double.class)).limit(3);
     }
 
     public static Period createPeriod(ResolutionContext context) {
