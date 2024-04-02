@@ -56,4 +56,10 @@ class SpecsForArrays {
         assertThat(set.size()).isGreaterThanOrEqualTo(1);
         assertThat(set.size()).isLessThanOrEqualTo(EnumType.values().length);
     }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_fills_array_of_generic_element_type(Iterable<String>[] array) {
+        assertThat(array).doesNotContainNull();
+    }
 }
