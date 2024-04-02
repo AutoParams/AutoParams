@@ -45,6 +45,11 @@ public final class CsvAutoArgumentsProvider implements
                     case "quoteCharacter": return annotation.quoteCharacter();
                     case "delimiter": return annotation.delimiter();
                     case "delimiterString": return annotation.delimiterString();
+                    case "emptyValue": return annotation.emptyValue();
+                    case "nullValues": return annotation.nullValues();
+                    case "maxCharsPerColumn": return annotation.maxCharsPerColumn();
+                    case "ignoreLeadingAndTrailingWhitespace":
+                        return annotation.ignoreLeadingAndTrailingWhitespace();
                     default: return method.getDefaultValue();
                 }
             }

@@ -23,4 +23,12 @@ public @interface CsvAutoSource {
     char delimiter() default '\0';
 
     String delimiterString() default "";
+
+    String emptyValue() default "";
+
+    String[] nullValues() default { };
+
+    int maxCharsPerColumn() default 4096;
+
+    boolean ignoreLeadingAndTrailingWhitespace() default true;
 }

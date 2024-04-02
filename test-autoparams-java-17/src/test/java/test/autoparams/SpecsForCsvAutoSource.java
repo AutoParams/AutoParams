@@ -1,6 +1,7 @@
 package test.autoparams;
 
 import autoparams.CsvAutoSource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -14,9 +15,14 @@ class SpecsForCsvAutoSource {
         # FRUIT,       RANK
         apple,         1
         """)
-    void sut_correctly_works_with_textBlock(String fruit, int rank) {
+    void sut_correctly_works_with_textBlock(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
     }
 
     @ParameterizedTest(name = "[{index}] {arguments}")
@@ -27,12 +33,14 @@ class SpecsForCsvAutoSource {
     void sut_correctly_works_with_useHeadersInDisplayName(
         String fruit,
         int rank,
+        String anonymous,
         TestInfo testInfo
     ) {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
         assertThat(testInfo.getDisplayName())
-            .isEqualTo("[1] FRUIT = apple, RANK = 1");
+            .startsWith("[1] FRUIT = apple, RANK = 1");
     }
 
     @ParameterizedTest
@@ -40,9 +48,14 @@ class SpecsForCsvAutoSource {
         # FRUIT,       RANK
         %apple%,         1
         """)
-    void sut_correctly_works_with_quoteCharacter(String fruit, int rank) {
+    void sut_correctly_works_with_quoteCharacter(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
     }
 
     @ParameterizedTest
@@ -50,9 +63,14 @@ class SpecsForCsvAutoSource {
         # FRUIT;       RANK
         apple;         1
         """)
-    void sut_correctly_works_with_delimiter(String fruit, int rank) {
+    void sut_correctly_works_with_delimiter(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
     }
 
     @ParameterizedTest
@@ -60,8 +78,72 @@ class SpecsForCsvAutoSource {
         # FRUIT;;       RANK
         apple;;         1
         """)
-    void sut_correctly_works_with_delimiterString(String fruit, int rank) {
+    void sut_correctly_works_with_delimiterString(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvAutoSource(emptyValue = "EMPTY", textBlock = """
+        # FRUIT,       RANK
+        '',         1
+        """)
+    void sut_correctly_works_with_emptyValue(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
+        assertThat(fruit).isEqualTo("EMPTY");
+        assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvAutoSource(nullValues = { "N/A", "NULL" }, textBlock = """
+        # FRUIT,       RANK
+        NULL,         1
+        N/A,          2
+        """)
+    void sut_correctly_works_with_nullValues(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
+        assertThat(fruit).isNull();
+        assertThat(anonymous).isNotEmpty();
+    }
+
+    // This test is disabled because it fails if the implementation is correct and otherwise passes.
+    @Disabled
+    @ParameterizedTest
+    @CsvAutoSource(maxCharsPerColumn = 2, textBlock = """
+        # FRUIT,       RANK
+        apple,         1
+        """)
+    void sut_correctly_works_with_maxCharsPerColumn(
+        String fruit,
+        int rank,
+        String anonymous
+    ) {
+    }
+
+    @ParameterizedTest
+    @CsvAutoSource(ignoreLeadingAndTrailingWhitespace = false, textBlock = """
+        # RANK,    FRUIT
+        1,         apple
+        """)
+    void sut_correctly_works_with_ignoreLeadingAndTrailingWhitespace(
+        int rank,
+        String fruit,
+        String anonymous
+    ) {
+        assertThat(fruit).isNotEqualTo("apple").endsWith("apple");
+        assertThat(rank).isEqualTo(1);
+        assertThat(anonymous).isNotEmpty();
     }
 }
