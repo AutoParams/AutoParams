@@ -44,4 +44,14 @@ class SpecsForCsvAutoSource {
         assertThat(fruit).isEqualTo("apple");
         assertThat(rank).isEqualTo(1);
     }
+
+    @ParameterizedTest
+    @CsvAutoSource(delimiter = ';', textBlock = """
+        # FRUIT;       RANK
+        apple;         1
+        """)
+    void sut_correctly_works_with_delimiter(String fruit, int rank) {
+        assertThat(fruit).isEqualTo("apple");
+        assertThat(rank).isEqualTo(1);
+    }
 }

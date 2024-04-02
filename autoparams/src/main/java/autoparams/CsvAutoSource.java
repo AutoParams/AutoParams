@@ -19,4 +19,6 @@ public @interface CsvAutoSource {
     boolean useHeadersInDisplayName() default false;
 
     char quoteCharacter() default '\'';
+
+    char delimiter() default '\0';
 }
