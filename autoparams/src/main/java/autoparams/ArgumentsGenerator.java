@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -15,6 +16,8 @@ import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
 import autoparams.generator.ObjectQuery;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -103,15 +106,37 @@ final class ArgumentsGenerator {
     }
 
     private Stream<Arguments> generate(Method method) {
+        Parameter[] parameters = getTargetParameters(method);
         Arguments[] sets = new Arguments[repeat];
         for (int i = 0; i < sets.length; i++) {
-            Object[] set = stream(method.getParameters())
+            Object[] set = stream(parameters)
                 .map(this::createThenProcessArgument)
                 .toArray();
             sets[i] = Arguments.of(set);
         }
 
         return stream(sets);
+    }
+
+    private static Parameter[] getTargetParameters(Method method) {
+        Parameter[] parameters = method.getParameters();
+        return Arrays.copyOf(parameters, countTargetParameter(parameters));
+    }
+
+    private static int countTargetParameter(Parameter[] parameters) {
+        int count = 0;
+        for (Parameter parameter : parameters) {
+            if (isPlatformType(parameter.getType())) {
+                break;
+            }
+            count++;
+        }
+        return count;
+    }
+
+    private static boolean isPlatformType(Class<?> parameterType) {
+        return parameterType.equals(TestInfo.class)
+            || parameterType.equals(TestReporter.class);
     }
 
     private Object createThenProcessArgument(Parameter parameter) {

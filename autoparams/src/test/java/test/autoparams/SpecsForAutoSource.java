@@ -10,6 +10,8 @@ import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -64,8 +66,29 @@ class SpecsForAutoSource {
         }
     }
 
+    @SuppressWarnings("unused")
     @ParameterizedTest
     @AutoSource
     void sut_prevents_stack_overflow_for_recursive_structure(RecursiveObject value) {
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_works_with_TestInfo_tail_parameter(
+        String x,
+        TestInfo testInfo
+    ) {
+        assertThat(x).isNotNull();
+        assertThat(testInfo).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_works_with_TestReporter_tail_parameter(
+        String x,
+        TestReporter testReporter
+    ) {
+        assertThat(x).isNotNull();
+        assertThat(testReporter).isNotNull();
     }
 }
