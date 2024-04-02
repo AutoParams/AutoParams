@@ -44,6 +44,7 @@ public final class CsvAutoArgumentsProvider implements
                     case "useHeadersInDisplayName": return annotation.useHeadersInDisplayName();
                     case "quoteCharacter": return annotation.quoteCharacter();
                     case "delimiter": return annotation.delimiter();
+                    case "delimiterString": return annotation.delimiterString();
                     default: return method.getDefaultValue();
                 }
             }

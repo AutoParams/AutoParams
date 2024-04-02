@@ -21,4 +21,6 @@ public @interface CsvAutoSource {
     char quoteCharacter() default '\'';
 
     char delimiter() default '\0';
+
+    String delimiterString() default "";
 }
