@@ -41,6 +41,7 @@ public final class CsvAutoArgumentsProvider implements
                 switch (method.getName()) {
                     case "value": return annotation.value();
                     case "textBlock": return annotation.textBlock();
+                    case "useHeadersInDisplayName": return annotation.useHeadersInDisplayName();
                     default: return method.getDefaultValue();
                 }
             }

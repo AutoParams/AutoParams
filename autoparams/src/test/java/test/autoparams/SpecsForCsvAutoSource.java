@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SuppressWarnings("unused")
 class SpecsForCsvAutoSource {
 
     @ParameterizedTest
@@ -21,7 +22,11 @@ class SpecsForCsvAutoSource {
 
     @ParameterizedTest
     @CsvAutoSource({ "1, foo" })
-    void sut_correctly_fills_forepart_arguments(int value1, String value2, UUID value3) {
+    void sut_correctly_fills_forepart_arguments(
+        int value1,
+        String value2,
+        UUID value3
+    ) {
         assertEquals(1, value1);
         assertEquals("foo", value2);
     }

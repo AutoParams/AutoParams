@@ -15,4 +15,6 @@ public @interface CsvAutoSource {
     String[] value() default { };
 
     String textBlock() default "";
+
+    boolean useHeadersInDisplayName() default false;
 }

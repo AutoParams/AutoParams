@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.DefaultArgumentConverter;
@@ -48,7 +50,7 @@ final class ArgumentsAssembler {
             return provider
                 .provideArguments(context)
                 .map(supplement -> {
-                    processArguments(context, supplement);
+                    processArguments(context, supplement.get());
                     return coalesceArguments(source, supplement);
                 });
         } catch (Exception exception) {
@@ -56,15 +58,28 @@ final class ArgumentsAssembler {
         }
     }
 
-    private static void processArguments(ExtensionContext context, Arguments supplement) {
-        context.getTestMethod().map(Executable::getParameters).ifPresent(parameters -> {
-            Object[] arguments = supplement.get();
+    private static void processArguments(
+        ExtensionContext context,
+        Object[] arguments
+    ) {
+        Optional<Method> method = context.getTestMethod();
+        method.map(Executable::getParameters).ifPresent(parameters -> {
             for (int i = 0; i < arguments.length; i++) {
                 Parameter parameter = parameters[i];
-                Object argument = convertArgument(i, parameter, arguments[i]);
+                Object argument = convertArgument(
+                    i,
+                    parameter,
+                    refineArgument(arguments[i])
+                );
                 processArgument(context, parameter, argument);
             }
         });
+    }
+
+    private static Object refineArgument(Object argument) {
+        return argument instanceof Named
+            ? ((Named<?>) argument).getPayload()
+            : argument;
     }
 
     private static Object convertArgument(
