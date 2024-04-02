@@ -37,9 +37,13 @@ public final class CsvAutoArgumentsProvider implements
         CsvSource delegate = (CsvSource) Proxy.newProxyInstance(
             CsvSource.class.getClassLoader(),
             new Class[] { CsvSource.class },
-            (proxy, method, args) -> method.getName().equals("value")
-                ? annotation.value()
-                : method.getDefaultValue()
+            (proxy, method, args) -> {
+                switch (method.getName()) {
+                    case "value": return annotation.value();
+                    case "textBlock": return annotation.textBlock();
+                    default: return method.getDefaultValue();
+                }
+            }
         );
         ((AnnotationConsumer<CsvSource>) csvProvider).accept(delegate);
     }

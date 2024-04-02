@@ -12,5 +12,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 @ArgumentsSource(CsvAutoArgumentsProvider.class)
 public @interface CsvAutoSource {
 
-    String[] value();
+    String[] value() default { };
+
+    String textBlock() default "";
 }
