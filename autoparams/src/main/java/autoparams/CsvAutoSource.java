@@ -17,4 +17,6 @@ public @interface CsvAutoSource {
     String textBlock() default "";
 
     boolean useHeadersInDisplayName() default false;
+
+    char quoteCharacter() default '\'';
 }

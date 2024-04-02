@@ -34,4 +34,14 @@ class SpecsForCsvAutoSource {
         assertThat(testInfo.getDisplayName())
             .isEqualTo("[1] FRUIT = apple, RANK = 1");
     }
+
+    @ParameterizedTest
+    @CsvAutoSource(quoteCharacter = '%', textBlock = """
+        # FRUIT,       RANK
+        %apple%,         1
+        """)
+    void sut_correctly_works_with_quoteCharacter(String fruit, int rank) {
+        assertThat(fruit).isEqualTo("apple");
+        assertThat(rank).isEqualTo(1);
+    }
 }

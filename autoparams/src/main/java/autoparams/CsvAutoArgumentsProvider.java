@@ -42,6 +42,7 @@ public final class CsvAutoArgumentsProvider implements
                     case "value": return annotation.value();
                     case "textBlock": return annotation.textBlock();
                     case "useHeadersInDisplayName": return annotation.useHeadersInDisplayName();
+                    case "quoteCharacter": return annotation.quoteCharacter();
                     default: return method.getDefaultValue();
                 }
             }
