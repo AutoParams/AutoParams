@@ -91,7 +91,7 @@ class SpecsForCsvAutoSource {
     @ParameterizedTest
     @CsvAutoSource(emptyValue = "EMPTY", textBlock = """
         # FRUIT,       RANK
-        '',         1
+        '',            1
         """)
     void sut_correctly_works_with_emptyValue(
         String fruit,
@@ -106,8 +106,8 @@ class SpecsForCsvAutoSource {
     @ParameterizedTest
     @CsvAutoSource(nullValues = { "N/A", "NULL" }, textBlock = """
         # FRUIT,       RANK
-        NULL,         1
-        N/A,          2
+        NULL,          1
+        N/A,           2
         """)
     void sut_correctly_works_with_nullValues(
         String fruit,
