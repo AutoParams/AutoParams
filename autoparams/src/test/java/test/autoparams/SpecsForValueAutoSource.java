@@ -2,6 +2,7 @@ package test.autoparams;
 
 import java.util.UUID;
 
+import autoparams.AutoSource;
 import autoparams.ValueAutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -74,9 +75,112 @@ class SpecsForValueAutoSource {
 
     @ParameterizedTest
     @ValueAutoSource(ints = { 16 })
-    void sut_arbitrarily_generates_remaining_arguments(int value1, UUID value2, UUID value3) {
+    void sut_arbitrarily_generates_remaining_arguments(
+        int value1,
+        UUID value2,
+        UUID value3
+    ) {
         assertNotNull(value2);
         assertNotNull(value3);
         assertNotEquals(value2, value3);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_creates_instance(
+        short[] shorts,
+        byte[] bytes,
+        int[] ints,
+        long[] longs,
+        float[] floats,
+        double[] doubles,
+        char[] chars,
+        boolean[] booleans,
+        String[] strings,
+        Class<?>[] classes
+    ) {
+        ValueAutoSource actual = ValueAutoSource.ProxyFactory.create(
+            shorts,
+            bytes,
+            ints,
+            longs,
+            floats,
+            doubles,
+            chars,
+            booleans,
+            strings,
+            classes
+        );
+
+        assertNotNull(actual);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_correctly_configures_annotationType(
+        short[] shorts,
+        byte[] bytes,
+        int[] ints,
+        long[] longs,
+        float[] floats,
+        double[] doubles,
+        char[] chars,
+        boolean[] booleans,
+        String[] strings,
+        Class<?>[] classes
+    ) {
+        ValueAutoSource actual = ValueAutoSource.ProxyFactory.create(
+            shorts,
+            bytes,
+            ints,
+            longs,
+            floats,
+            doubles,
+            chars,
+            booleans,
+            strings,
+            classes
+        );
+
+        assertEquals(ValueAutoSource.class, actual.annotationType());
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_correctly_configures_properties(
+        short[] shorts,
+        byte[] bytes,
+        int[] ints,
+        long[] longs,
+        float[] floats,
+        double[] doubles,
+        char[] chars,
+        boolean[] booleans,
+        String[] strings,
+        Class<?>[] classes
+    ) {
+        ValueAutoSource actual = ValueAutoSource.ProxyFactory.create(
+            shorts,
+            bytes,
+            ints,
+            longs,
+            floats,
+            doubles,
+            chars,
+            booleans,
+            strings,
+            classes
+        );
+
+        assertEquals(shorts, actual.shorts());
+        assertEquals(bytes, actual.bytes());
+        assertEquals(ints, actual.ints());
+        assertEquals(longs, actual.longs());
+        assertEquals(floats, actual.floats());
+        assertEquals(doubles, actual.doubles());
+        assertEquals(chars, actual.chars());
+        assertEquals(booleans, actual.booleans());
+        assertEquals(strings, actual.strings());
+        assertEquals(classes, actual.classes());
     }
 }
