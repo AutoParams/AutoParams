@@ -38,7 +38,11 @@ class SpecsForEnumAutoSource {
     }
 
     @ParameterizedTest
-    @EnumAutoSource(value = ElementType.class, names = { "TYPE" }, mode = EnumSource.Mode.EXCLUDE)
+    @EnumAutoSource(
+        value = ElementType.class,
+        names = { "TYPE" },
+        mode = EnumSource.Mode.EXCLUDE
+    )
     void sut_accepts_mode(ElementType value) {
         assertNotEquals(ElementType.TYPE, value);
     }
