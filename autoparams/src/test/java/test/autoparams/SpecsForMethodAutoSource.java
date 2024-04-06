@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import autoparams.AutoSource;
 import autoparams.MethodAutoSource;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -37,5 +38,26 @@ class SpecsForMethodAutoSource {
         return Stream.of(
             arguments("apple", 1, Arrays.asList("a", "b"))
         );
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_creates_instance(String[] value) {
+        MethodAutoSource actual = MethodAutoSource.ProxyFactory.create(value);
+        assertThat(actual).isNotNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_correctly_configures_annotationType(String[] value) {
+        MethodAutoSource actual = MethodAutoSource.ProxyFactory.create(value);
+        assertThat(actual.annotationType()).isEqualTo(MethodAutoSource.class);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void proxy_factory_correctly_configures_properties(String[] value) {
+        MethodAutoSource actual = MethodAutoSource.ProxyFactory.create(value);
+        assertThat(actual.value()).isEqualTo(value);
     }
 }
