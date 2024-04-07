@@ -4,6 +4,8 @@ import java.lang.reflect.Proxy
 import autoparams.customization.Customization
 import org.junit.jupiter.params.provider.ArgumentsSource
 
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
 @ArgumentsSource(CsvAutoKotlinArgumentsProvider::class)
 @Customization(KotlinCustomizer::class)
 annotation class CsvAutoKotlinSource(
