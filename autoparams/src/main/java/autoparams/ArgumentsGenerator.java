@@ -67,21 +67,25 @@ final class ArgumentsGenerator {
         Class<? extends Annotation> annotationType = annotation.annotationType();
 
         if (onProcessing.add(annotationType)) {
-            if (annotation instanceof Customization) {
-                Customization customization = (Customization) annotation;
-                stream(customization.value())
-                    .<Customizer>map(ArgumentsGenerator::createInstance)
-                    .forEach(visitor);
-            }
+            try {
+                if (annotation instanceof Customization) {
+                    Customization customization = (Customization) annotation;
+                    stream(customization.value())
+                        .<Customizer>map(ArgumentsGenerator::createInstance)
+                        .forEach(visitor);
+                }
 
-            if (annotationType.isAnnotationPresent(CustomizerSource.class)) {
-                Class<? extends CustomizerFactory> factoryType = annotationType
-                    .getAnnotation(CustomizerSource.class)
-                    .value();
-                visitor.accept(createCustomizer(factoryType, annotation));
-            }
+                if (annotationType.isAnnotationPresent(CustomizerSource.class)) {
+                    Class<? extends CustomizerFactory> factoryType = annotationType
+                        .getAnnotation(CustomizerSource.class)
+                        .value();
+                    visitor.accept(createCustomizer(factoryType, annotation));
+                }
 
-            visitCustomizers(annotationType, visitor, onProcessing);
+                visitCustomizers(annotationType, visitor, onProcessing);
+            } finally {
+                onProcessing.remove(annotationType);
+            }
         }
     }
 
