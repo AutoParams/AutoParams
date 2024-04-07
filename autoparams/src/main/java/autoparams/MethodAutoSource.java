@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 @ArgumentsSource(MethodAutoArgumentsProvider.class)
 public @interface MethodAutoSource {
 
-    String[] value() default "";
+    String[] value() default { "" };
 
     class ProxyFactory {
 
