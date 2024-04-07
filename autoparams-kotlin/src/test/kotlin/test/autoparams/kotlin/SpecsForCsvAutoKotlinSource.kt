@@ -1,5 +1,6 @@
 package test.autoparams.kotlin
 
+import autoparams.kotlin.AutoKotlinSource
 import autoparams.kotlin.CsvAutoKotlinSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
@@ -188,5 +189,106 @@ class SpecsForCsvAutoKotlinSource {
         assertThat(fruit).isNotEqualTo("apple").endsWith("apple")
         assertThat(rank).isEqualTo(1)
         assertThat(anonymous).isNotEmpty()
+    }
+
+    @ParameterizedTest
+    @AutoKotlinSource
+    fun `Proxy factory creates instance`(
+        value: Array<String>,
+        textBlock: String,
+        useHeadersInDisplayName: Boolean,
+        quoteCharacter: Char,
+        delimiter: Char,
+        delimiterString: String,
+        emptyValue: String,
+        nullValues: Array<String>,
+        maxCharsPerColumn: Int,
+        ignoreLeadingAndTrailingWhitespace: Boolean
+    ) {
+        val actual: CsvAutoKotlinSource = CsvAutoKotlinSource.create(
+            value,
+            textBlock,
+            useHeadersInDisplayName,
+            quoteCharacter,
+            delimiter,
+            delimiterString,
+            emptyValue,
+            nullValues,
+            maxCharsPerColumn,
+            ignoreLeadingAndTrailingWhitespace
+        )
+
+        assertThat(actual).isNotNull()
+    }
+
+    @ParameterizedTest
+    @AutoKotlinSource
+    fun `Proxy factory correctly configures annotationClass`(
+        value: Array<String>,
+        textBlock: String,
+        useHeadersInDisplayName: Boolean,
+        quoteCharacter: Char,
+        delimiter: Char,
+        delimiterString: String,
+        emptyValue: String,
+        nullValues: Array<String>,
+        maxCharsPerColumn: Int,
+        ignoreLeadingAndTrailingWhitespace: Boolean
+    ) {
+        val actual: CsvAutoKotlinSource = CsvAutoKotlinSource.create(
+            value,
+            textBlock,
+            useHeadersInDisplayName,
+            quoteCharacter,
+            delimiter,
+            delimiterString,
+            emptyValue,
+            nullValues,
+            maxCharsPerColumn,
+            ignoreLeadingAndTrailingWhitespace
+        )
+
+        assertThat(actual.annotationClass)
+            .isEqualTo(CsvAutoKotlinSource::class)
+    }
+
+    @ParameterizedTest
+    @AutoKotlinSource
+    fun `Proxy factory correctly configures properties`(
+        value: Array<String>,
+        textBlock: String,
+        useHeadersInDisplayName: Boolean,
+        quoteCharacter: Char,
+        delimiter: Char,
+        delimiterString: String,
+        emptyValue: String,
+        nullValues: Array<String>,
+        maxCharsPerColumn: Int,
+        ignoreLeadingAndTrailingWhitespace: Boolean
+    ) {
+        val actual: CsvAutoKotlinSource = CsvAutoKotlinSource.create(
+            value,
+            textBlock,
+            useHeadersInDisplayName,
+            quoteCharacter,
+            delimiter,
+            delimiterString,
+            emptyValue,
+            nullValues,
+            maxCharsPerColumn,
+            ignoreLeadingAndTrailingWhitespace
+        )
+
+        assertThat(actual.value).isEqualTo(value)
+        assertThat(actual.textBlock).isEqualTo(textBlock)
+        assertThat(actual.useHeadersInDisplayName).isEqualTo(useHeadersInDisplayName)
+        assertThat(actual.quoteCharacter).isEqualTo(quoteCharacter)
+        assertThat(actual.delimiter).isEqualTo(delimiter)
+        assertThat(actual.delimiterString).isEqualTo(delimiterString)
+        assertThat(actual.emptyValue).isEqualTo(emptyValue)
+        assertThat(actual.nullValues).isEqualTo(nullValues)
+        assertThat(actual.maxCharsPerColumn).isEqualTo(maxCharsPerColumn)
+        assertThat(actual.ignoreLeadingAndTrailingWhitespace)
+            .isEqualTo(ignoreLeadingAndTrailingWhitespace)
     }
 }
