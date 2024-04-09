@@ -1,42 +1,38 @@
 package autoparams;
 
 import java.lang.reflect.Proxy;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-import static autoparams.ArgumentsAssembler.assembleArguments;
-import static autoparams.ArgumentsProviderCreator.createProvider;
+import static autoparams.ArgumentsProviderCreator.createArgumentsProvider;
 
-public final class ValueAutoArgumentsProvider implements
-    ArgumentsProvider,
-    AnnotationConsumer<ValueAutoSource> {
+public final class ValueAutoArgumentsProvider
+    extends AutoArgumentsProvider
+    implements AnnotationConsumer<ValueAutoSource> {
 
-    private final ArgumentsProvider valueProvider;
-    private final AutoArgumentsProvider autoProvider;
+    private final AnnotationConsumer<ValueSource> annotationConsumer;
 
+    @SuppressWarnings("unused")
     public ValueAutoArgumentsProvider() {
-        valueProvider = createProvider(ValueSource.class);
-        autoProvider = new AutoArgumentsProvider();
+        this(createArgumentsProvider(ValueSource.class));
     }
 
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return assembleArguments(context, valueProvider, autoProvider);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
+    public ValueAutoArgumentsProvider(ArgumentsProvider seedProvider) {
+        super(seedProvider);
+        annotationConsumer = (AnnotationConsumer<ValueSource>) seedProvider;
+    }
+
+    @Override
     public void accept(ValueAutoSource annotation) {
-        ValueSource delegate = (ValueSource) Proxy.newProxyInstance(
+        annotationConsumer.accept((ValueSource) Proxy.newProxyInstance(
             ValueSource.class.getClassLoader(),
             new Class[] { ValueSource.class },
             (proxy, method, args) -> {
                 switch (method.getName()) {
+                    case "annotationType": return ValueSource.class;
                     case "shorts": return annotation.shorts();
                     case "bytes": return annotation.bytes();
                     case "ints": return annotation.ints();
@@ -50,7 +46,6 @@ public final class ValueAutoArgumentsProvider implements
                     default: return method.getDefaultValue();
                 }
             }
-        );
-        ((AnnotationConsumer<ValueSource>) valueProvider).accept(delegate);
+        ));
     }
 }

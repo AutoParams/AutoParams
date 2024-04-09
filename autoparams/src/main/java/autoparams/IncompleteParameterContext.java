@@ -13,9 +13,23 @@ final class IncompleteParameterContext implements ParameterContext {
     private final Parameter parameter;
     private final int index;
 
-    public IncompleteParameterContext(Parameter parameter, int index) {
+    public IncompleteParameterContext(Parameter parameter) {
         this.parameter = parameter;
-        this.index = index;
+        this.index = inferIndex(parameter);
+    }
+
+    private static int inferIndex(Parameter parameter) {
+        Parameter[] parameters = parameter
+            .getDeclaringExecutable()
+            .getParameters();
+
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i].equals(parameter)) {
+                return i;
+            }
+        }
+
+        throw new IllegalArgumentException("Cannot infer index of parameter.");
     }
 
     @Override

@@ -1,46 +1,42 @@
 package autoparams;
 
 import java.lang.reflect.Proxy;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-import static autoparams.ArgumentsAssembler.assembleArguments;
-import static autoparams.ArgumentsProviderCreator.createProvider;
+import static autoparams.ArgumentsProviderCreator.createArgumentsProvider;
 
-public final class MethodAutoArgumentsProvider implements
-    ArgumentsProvider,
-    AnnotationConsumer<MethodAutoSource> {
+public final class MethodAutoArgumentsProvider
+    extends AutoArgumentsProvider
+    implements AnnotationConsumer<MethodAutoSource> {
 
-    private final ArgumentsProvider methodProvider;
-    private final AutoArgumentsProvider autoProvider;
+    private final AnnotationConsumer<MethodSource> annotationConsumer;
 
+    @SuppressWarnings("unused")
     public MethodAutoArgumentsProvider() {
-        methodProvider = createProvider(MethodSource.class);
-        autoProvider = new AutoArgumentsProvider();
+        this(createArgumentsProvider(MethodSource.class));
     }
 
-    @Override
-    public Stream<? extends Arguments> provideArguments(
-        ExtensionContext context
-    ) {
-        return assembleArguments(context, methodProvider, autoProvider);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
+    public MethodAutoArgumentsProvider(ArgumentsProvider seedProvider) {
+        super(seedProvider);
+        annotationConsumer = (AnnotationConsumer<MethodSource>) seedProvider;
+    }
+
+    @Override
     public void accept(MethodAutoSource annotation) {
-        MethodSource delegate = (MethodSource) Proxy.newProxyInstance(
+        annotationConsumer.accept((MethodSource) Proxy.newProxyInstance(
             MethodSource.class.getClassLoader(),
             new Class[] { MethodSource.class },
-            (proxy, method, args) -> method.getName().equals("value")
-                ? annotation.value()
-                : method.getDefaultValue()
-        );
-        ((AnnotationConsumer<MethodSource>) methodProvider).accept(delegate);
+            (proxy, method, args) -> {
+                switch (method.getName()) {
+                    case "annotationType": return MethodSource.class;
+                    case "value": return annotation.value();
+                    default: return method.getDefaultValue();
+                }
+            }
+        ));
     }
 }

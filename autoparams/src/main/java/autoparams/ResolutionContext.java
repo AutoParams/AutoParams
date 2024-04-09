@@ -25,6 +25,10 @@ public final class ResolutionContext {
         this.processor = processor;
     }
 
+    ResolutionContext(ExtensionContext context) {
+        this(context, ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
+    }
+
     public ExtensionContext getExtensionContext() {
         return extensionContext;
     }
