@@ -2,6 +2,7 @@ package autoparams.kotlin
 
 import autoparams.customization.CompositeCustomizer
 
-class KotlinCustomizer: CompositeCustomizer(
-    KotlinConstructorExtractorCustomizer()
+class KotlinCustomizer : CompositeCustomizer(
+    KotlinConstructorExtractorCustomizer(),
+    KotlinClassCustomizer()
 )

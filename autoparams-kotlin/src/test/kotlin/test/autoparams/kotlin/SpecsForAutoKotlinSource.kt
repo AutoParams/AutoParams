@@ -3,6 +3,7 @@ package test.autoparams.kotlin
 import autoparams.kotlin.AutoKotlinSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
+import kotlin.reflect.KClass
 
 class SpecsForAutoKotlinSource {
 
@@ -15,5 +16,13 @@ class SpecsForAutoKotlinSource {
         assertThat(bag.value1).isNotEqualTo(defaults.value1)
         assertThat(bag.value2).isNotEqualTo(defaults.value2)
         assertThat(bag.value3).isNotEqualTo(defaults.value3)
+    }
+
+    @ParameterizedTest
+    @AutoKotlinSource
+    fun `SUT generates KClass arguments`(
+        arg: KClass<*>
+    ) {
+        assertThat(arg).isNotNull
     }
 }
