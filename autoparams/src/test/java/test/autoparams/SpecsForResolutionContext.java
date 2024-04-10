@@ -7,6 +7,7 @@ import autoparams.generator.ObjectQuery;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ArgumentConverter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -92,5 +93,12 @@ class SpecsForResolutionContext {
 
         Object actual = sut.resolve(int.class);
         assertThat(actual).isEqualTo(value2);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_resolves_ArgumentConverter(ResolutionContext sut) {
+        ArgumentConverter actual = sut.resolve(ArgumentConverter.class);
+        assertThat(actual).isNotNull();
     }
 }

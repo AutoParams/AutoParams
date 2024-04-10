@@ -17,7 +17,8 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new OptionalGenerator(),
                     new ConstructorExtractorGenerator(),
                     new ConstructorResolverGenerator(),
-                    new ComplexObjectGenerator()
+                    new ComplexObjectGenerator(),
+                    new ArgumentConverterGenerator()
                 )
             )
         );
