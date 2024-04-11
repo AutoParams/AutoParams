@@ -1,6 +1,7 @@
 package test.autoparams;
 
 import autoparams.CsvAutoSource;
+import autoparams.customization.Fix;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,6 +42,22 @@ class SpecsForCsvAutoSource {
         assertThat(anonymous).isNotEmpty();
         assertThat(testInfo.getDisplayName())
             .startsWith("[1] FRUIT = apple, RANK = 1");
+    }
+
+    public record StringBag(String value) {
+    }
+
+    @ParameterizedTest
+    @CsvAutoSource(useHeadersInDisplayName = true, textBlock = """
+        FRUIT,       RANK
+        apple,         1
+        """)
+    void useHeadersInDisplayName_correctly_works_with_ArgumentProcessor(
+        @Fix String fruit,
+        int rank,
+        StringBag bag
+    ) {
+        assertThat(bag.value()).isEqualTo(fruit);
     }
 
     @ParameterizedTest

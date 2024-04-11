@@ -190,6 +190,10 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         Object argument,
         ResolutionContext context
     ) {
+        Object unnamedArgument = argument instanceof Named<?>
+            ? ((Named<?>) argument).getPayload()
+            : argument;
+
         traverseAnnotations(
             parameter,
             annotation -> {
@@ -199,7 +203,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
                     ArgumentProcessing::value
                 );
                 processor
-                    .map(p -> p.process(parameter, argument))
+                    .map(p -> p.process(parameter, unnamedArgument))
                     .ifPresent(context::applyCustomizer);
             }
         );
