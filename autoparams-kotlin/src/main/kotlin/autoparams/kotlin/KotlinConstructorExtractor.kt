@@ -9,7 +9,7 @@ internal class KotlinConstructorExtractor : ConstructorExtractor {
     override fun extract(type: Class<*>): MutableCollection<Constructor<*>> {
         return type
             .constructors
-            .filter { it.kotlinFunction != null }
+            .filter { it.parameterCount > 0 || it.kotlinFunction != null }
             .toMutableList()
     }
 }
