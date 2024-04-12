@@ -69,7 +69,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>4.6.0</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:4.6.0'
+testImplementation 'io.github.autoparams:autoparams:5.0.0'
 ```
 
 ## Features
@@ -700,7 +700,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>4.6.0</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
@@ -709,7 +709,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:4.6.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:5.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -775,7 +775,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>4.6.0</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
@@ -784,7 +784,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:4.6.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:5.0.0'
 ```
 
 ### `BuilderCustomizer`
@@ -876,7 +876,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>4.6.0</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
@@ -885,7 +885,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:4.6.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:5.0.0'
 ```
 
 ### `@AutoKotlinSource` Annotation
