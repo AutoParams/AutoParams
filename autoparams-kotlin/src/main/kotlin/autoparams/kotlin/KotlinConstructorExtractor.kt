@@ -1,10 +1,11 @@
 package autoparams.kotlin
 
-import autoparams.generator.ConstructorExtractor
 import java.lang.reflect.Constructor
+import autoparams.generator.ConstructorExtractor
 import kotlin.reflect.jvm.kotlinFunction
 
-class KotlinConstructorExtractor: ConstructorExtractor {
+internal class KotlinConstructorExtractor : ConstructorExtractor {
+
     override fun extract(type: Class<*>): MutableCollection<Constructor<*>> {
         return type
             .constructors
