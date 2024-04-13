@@ -8,28 +8,26 @@ import java.util.Optional;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.platform.commons.util.AnnotationUtils;
 
-final class IncompleteParameterContext implements ParameterContext {
+public final class PlainParameterContext implements ParameterContext {
 
     private final Parameter parameter;
     private final int index;
+    private final Object target;
 
-    public IncompleteParameterContext(Parameter parameter) {
+    public PlainParameterContext(Parameter parameter, int index) {
         this.parameter = parameter;
-        this.index = inferIndex(parameter);
+        this.index = index;
+        this.target = null;
     }
 
-    private static int inferIndex(Parameter parameter) {
-        Parameter[] parameters = parameter
-            .getDeclaringExecutable()
-            .getParameters();
-
-        for (int i = 0; i < parameters.length; i++) {
-            if (parameters[i].equals(parameter)) {
-                return i;
-            }
-        }
-
-        throw new IllegalArgumentException("Cannot infer index of parameter.");
+    public PlainParameterContext(
+        Parameter parameter,
+        int index,
+        Object target
+    ) {
+        this.parameter = parameter;
+        this.index = index;
+        this.target = target;
     }
 
     @Override
@@ -44,7 +42,7 @@ final class IncompleteParameterContext implements ParameterContext {
 
     @Override
     public Optional<Object> getTarget() {
-        return Optional.empty();
+        return Optional.ofNullable(target);
     }
 
     @Override

@@ -91,7 +91,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         Object[] result = new Object[seed.length];
         Parameter[] parameters = getTargetParameters(context);
         for (int i = 0; i < seed.length; i++) {
-            result[i] = convertArgument(converter, seed[i], parameters[i]);
+            result[i] = convertArgument(converter, seed[i], parameters[i], i);
         }
         return result;
     }
@@ -122,28 +122,34 @@ class AutoArgumentsProvider implements ArgumentsProvider {
     ) {
         Object[] supplement = new Object[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
-            supplement[i] = createThenProcessArgument(parameters[i], context);
+            supplement[i] = createThenProcessArgument(
+                parameters[i],
+                i,
+                context
+            );
         }
         return supplement;
     }
 
     private static Object createThenProcessArgument(
         Parameter parameter,
+        int index,
         ResolutionContext context
     ) {
         applyCustomizers(parameter, context);
-        Object convertedArgument = createArgument(parameter, context);
+        Object convertedArgument = createArgument(parameter, index, context);
         processArgument(parameter, convertedArgument, context);
         return convertedArgument;
     }
 
     private static Object createArgument(
         Parameter parameter,
+        int index,
         ResolutionContext context
     ) {
         ArgumentConverter converter = context.resolve(ArgumentConverter.class);
         Object argument = context.resolve(ObjectQuery.fromParameter(parameter));
-        return convertArgument(converter, argument, parameter);
+        return convertArgument(converter, argument, parameter, index);
     }
 
     private static void applyCustomizers(
@@ -249,23 +255,34 @@ class AutoArgumentsProvider implements ArgumentsProvider {
     public static Object convertArgument(
         ArgumentConverter converter,
         Object argument,
-        Parameter parameter
+        Parameter parameter,
+        int index
     ) {
         if (argument instanceof Named<?>) {
-            return convertArgument(converter, (Named<?>) argument, parameter);
+            return convertArgument(
+                converter,
+                (Named<?>) argument,
+                parameter,
+                index
+            );
         }
 
-        ParameterContext context = new IncompleteParameterContext(parameter);
+        ParameterContext context = new PlainParameterContext(parameter, index);
         return converter.convert(argument, context);
     }
 
     private static Object convertArgument(
         ArgumentConverter converter,
         Named<?> argument,
-        Parameter parameter
+        Parameter parameter,
+        int index
     ) {
-        String name = argument.getName();
-        Object payload = argument.getPayload();
-        return Named.of(name, convertArgument(converter, payload, parameter));
+        Object payload = convertArgument(
+            converter,
+            argument.getPayload(),
+            parameter,
+            index
+        );
+        return Named.of(argument.getName(), payload);
     }
 }
