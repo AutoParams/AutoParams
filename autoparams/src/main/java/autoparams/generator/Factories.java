@@ -27,16 +27,8 @@ final class Factories {
         return ThreadLocalRandom.current();
     }
 
-    public static boolean createBoolean() {
-        return random().nextInt() % 2 == 0;
-    }
-
     private static long createLong() {
         return random().nextLong();
-    }
-
-    public static char createChar() {
-        return (char) random().nextInt(Character.MAX_VALUE + 1);
     }
 
     public static BigInteger createBigInteger() {

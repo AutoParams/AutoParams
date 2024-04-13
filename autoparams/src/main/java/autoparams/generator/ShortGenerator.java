@@ -4,25 +4,31 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ResolutionContext;
+
 import static java.lang.Short.MAX_VALUE;
 import static java.lang.Short.MIN_VALUE;
 
-final class ShortGenerator extends TypeMatchingGenerator {
+final class ShortGenerator extends PrimitiveTypeGenerator<Short> {
 
     ShortGenerator() {
-        super((query, context) -> factory(query), short.class, Short.class);
+        super(short.class, Short.class);
     }
 
-    private static short factory(ObjectQuery query) {
-        return factory(getMin(query), getMax(query));
-    }
-
-    private static short factory(short min, short max) {
+    @Override
+    protected Short generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        short min = getMin(query);
+        short max = getMax(query);
         return (short) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
 
     private static short getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery
+            ? getMin((ParameterQuery) query)
+            : MIN_VALUE;
     }
 
     private static short getMin(ParameterQuery query) {
@@ -40,7 +46,9 @@ final class ShortGenerator extends TypeMatchingGenerator {
     }
 
     private static short getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery
+            ? getMax((ParameterQuery) query)
+            : MAX_VALUE;
     }
 
     private static short getMax(ParameterQuery query) {

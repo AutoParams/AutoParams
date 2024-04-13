@@ -5,20 +5,28 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-final class DoubleGenerator extends TypeMatchingGenerator {
+import autoparams.ResolutionContext;
+
+final class DoubleGenerator extends PrimitiveTypeGenerator<Double> {
 
     DoubleGenerator() {
-        super((query, context) -> factory(query), double.class, Double.class);
+        super(double.class, Double.class);
     }
 
-    private static double factory(ObjectQuery query) {
+    @Override
+    protected Double generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         double origin = getOrigin(query);
         double bound = getBound(query);
         return ThreadLocalRandom.current().nextDouble(origin, bound);
     }
 
     private static double getOrigin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getOrigin((ParameterQuery) query) : 0.0;
+        return query instanceof ParameterQuery
+            ? getOrigin((ParameterQuery) query)
+            : 0.0;
     }
 
     private static double getOrigin(ParameterQuery query) {
@@ -33,7 +41,9 @@ final class DoubleGenerator extends TypeMatchingGenerator {
     }
 
     private static double getBound(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getBound((ParameterQuery) query) : 1.0;
+        return query instanceof ParameterQuery
+            ? getBound((ParameterQuery) query)
+            : 1.0;
     }
 
     private static double getBound(ParameterQuery query) {

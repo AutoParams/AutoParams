@@ -4,25 +4,28 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ResolutionContext;
+
 import static java.lang.Byte.MAX_VALUE;
 import static java.lang.Byte.MIN_VALUE;
 
-final class ByteGenerator extends TypeMatchingGenerator {
+final class ByteGenerator extends PrimitiveTypeGenerator<Byte> {
 
     ByteGenerator() {
-        super((query, context) -> factory(query), byte.class, Byte.class);
+        super(byte.class, Byte.class);
     }
 
-    private static byte factory(ObjectQuery query) {
-        return factory(getMin(query), getMax(query));
-    }
-
-    private static byte factory(byte min, byte max) {
+    @Override
+    protected Byte generateValue(ObjectQuery query, ResolutionContext context) {
+        byte min = getMin(query);
+        byte max = getMax(query);
         return (byte) ThreadLocalRandom.current().nextInt(min, (max + 1));
     }
 
     private static byte getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery
+            ? getMin((ParameterQuery) query)
+            : MIN_VALUE;
     }
 
     private static byte getMin(ParameterQuery query) {
@@ -40,7 +43,9 @@ final class ByteGenerator extends TypeMatchingGenerator {
     }
 
     private static byte getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery
+            ? getMax((ParameterQuery) query)
+            : MAX_VALUE;
     }
 
     private static byte getMax(ParameterQuery query) {

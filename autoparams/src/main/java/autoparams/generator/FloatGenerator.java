@@ -5,20 +5,28 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-final class FloatGenerator extends TypeMatchingGenerator {
+import autoparams.ResolutionContext;
+
+final class FloatGenerator extends PrimitiveTypeGenerator<Float> {
 
     FloatGenerator() {
-        super((query, context) -> factory(query), float.class, Float.class);
+        super(float.class, Float.class);
     }
 
-    private static float factory(ObjectQuery query) {
+    @Override
+    protected Float generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         float origin = getOrigin(query);
         float bound = getBound(query);
         return (float) ThreadLocalRandom.current().nextDouble(origin, bound);
     }
 
     private static float getOrigin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getOrigin((ParameterQuery) query) : 0.0f;
+        return query instanceof ParameterQuery
+            ? getOrigin((ParameterQuery) query)
+            : 0.0f;
     }
 
     private static float getOrigin(ParameterQuery query) {
@@ -33,7 +41,9 @@ final class FloatGenerator extends TypeMatchingGenerator {
     }
 
     private static float getBound(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getBound((ParameterQuery) query) : 1.0f;
+        return query instanceof ParameterQuery
+            ? getBound((ParameterQuery) query)
+            : 1.0f;
     }
 
     private static float getBound(ParameterQuery query) {

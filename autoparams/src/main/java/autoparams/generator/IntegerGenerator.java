@@ -4,20 +4,25 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ResolutionContext;
+
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
-final class IntegerGenerator extends TypeMatchingGenerator {
+final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
 
     IntegerGenerator() {
-        super((query, context) -> factory(query), int.class, Integer.class);
+        super(int.class, Integer.class);
     }
 
-    private static int factory(ObjectQuery query) {
-        return factory(getMin(query), getMax(query));
-    }
+    @Override
+    protected Integer generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        int min = getMin(query);
+        int max = getMax(query);
 
-    private static int factory(int min, int max) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         if (min == MIN_VALUE && max == MAX_VALUE) {
@@ -31,7 +36,9 @@ final class IntegerGenerator extends TypeMatchingGenerator {
     }
 
     private static int getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+        return query instanceof ParameterQuery
+            ? getMin((ParameterQuery) query)
+            : MIN_VALUE;
     }
 
     private static int getMin(ParameterQuery query) {
@@ -49,7 +56,9 @@ final class IntegerGenerator extends TypeMatchingGenerator {
     }
 
     private static int getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
+        return query instanceof ParameterQuery
+            ? getMax((ParameterQuery) query)
+            : MAX_VALUE;
     }
 
     private static int getMax(ParameterQuery query) {

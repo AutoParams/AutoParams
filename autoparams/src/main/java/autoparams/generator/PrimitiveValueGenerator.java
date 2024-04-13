@@ -4,8 +4,8 @@ final class PrimitiveValueGenerator extends CompositeObjectGenerator {
 
     public PrimitiveValueGenerator() {
         super(
-            new TypeMatchingGenerator(Factories::createBoolean, boolean.class, Boolean.class),
-            new TypeMatchingGenerator(Factories::createChar, char.class, Character.class),
+            new BooleanGenerator(),
+            new CharacterGenerator(),
             new ByteGenerator(),
             new ShortGenerator(),
             new IntegerGenerator(),
