@@ -18,7 +18,12 @@ public final class RuntimeTypeResolver {
         this.map = map;
     }
 
+    @Deprecated
     public static RuntimeTypeResolver of(Type rootType) {
+        return create(rootType);
+    }
+
+    public static RuntimeTypeResolver create(Type rootType) {
         return new RuntimeTypeResolver(buildMap(rootType));
     }
 

@@ -47,7 +47,7 @@ public class InstanceFieldWriter implements ObjectProcessor {
         Object value,
         ResolutionContext context
     ) {
-        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.of(type);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
         stream(getRawType(type).getDeclaredFields())
             .filter(field -> Modifier.isStatic(field.getModifiers()) == false)
             .filter(predicate)

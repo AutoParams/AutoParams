@@ -56,14 +56,11 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Object value,
         ResolutionContext context
     ) {
-        RuntimeTypeResolver runtimeTypeResolver = RuntimeTypeResolver.of(type);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
         for (PropertyDescriptor property : getProperties(type)) {
             Method method = property.getWriteMethod();
             if (method != null) {
-                ObjectQuery query = resolveArgumentQuery(
-                    method,
-                    runtimeTypeResolver
-                );
+                ObjectQuery query = resolveArgumentQuery(method, typeResolver);
                 Object propertyValue = context.resolve(query);
                 try {
                     method.invoke(value, propertyValue);
