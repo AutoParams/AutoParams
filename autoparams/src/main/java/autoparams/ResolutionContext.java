@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.TypeQuery;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -45,7 +46,7 @@ public final class ResolutionContext {
 
     @SuppressWarnings("unchecked")
     public <T> T resolve(Class<T> type) {
-        return (T) resolve(ObjectQuery.fromType(type));
+        return (T) resolve(new TypeQuery(type));
     }
 
     @Deprecated

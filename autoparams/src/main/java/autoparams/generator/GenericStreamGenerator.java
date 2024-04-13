@@ -32,7 +32,7 @@ final class GenericStreamGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = streamType.getActualTypeArguments()[0];
-        ObjectQuery query = ObjectQuery.fromType(elementType);
+        ObjectQuery query = new TypeQuery(elementType);
         return Stream.generate(() -> context.resolve(query)).limit(3);
     }
 }

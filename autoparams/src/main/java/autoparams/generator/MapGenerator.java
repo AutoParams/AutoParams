@@ -45,8 +45,8 @@ final class MapGenerator implements ObjectGenerator {
 
         for (int i = 0; i < SIZE; i++) {
             instance.put(
-                (K) context.resolve(ObjectQuery.fromType(keyType)),
-                (V) context.resolve(ObjectQuery.fromType(valueType))
+                (K) context.resolve(new TypeQuery(keyType)),
+                (V) context.resolve(new TypeQuery(valueType))
             );
         }
 

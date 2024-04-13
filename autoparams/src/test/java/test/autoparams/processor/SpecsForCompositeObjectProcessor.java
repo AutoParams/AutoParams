@@ -6,6 +6,7 @@ import java.util.List;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.TypeQuery;
 import autoparams.processor.CompositeObjectProcessor;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -80,7 +81,7 @@ public class SpecsForCompositeObjectProcessor {
             processor3
         );
 
-        ObjectQuery query = ObjectQuery.fromType(String.class);
+        ObjectQuery query = new TypeQuery(String.class);
 
         // Act
         sut.process(query, value, context);
@@ -115,7 +116,7 @@ public class SpecsForCompositeObjectProcessor {
         );
 
         // Act
-        sut.process(ObjectQuery.fromType(HasSetter.class), value, context);
+        sut.process(new TypeQuery(HasSetter.class), value, context);
 
         // Assert
         assertThat(value.getValue()).isEqualTo("2");

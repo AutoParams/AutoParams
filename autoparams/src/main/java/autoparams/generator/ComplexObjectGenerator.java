@@ -60,13 +60,13 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         }
 
         Constructor<?> constructor = resolveConstructor(rawType, context);
-        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.of(type);
 
+        RuntimeTypeResolver runtimeTypeResolver = RuntimeTypeResolver.of(type);
         Stream<ObjectQuery> argumentQueries = Arrays
             .stream(constructor.getParameters())
             .map(Parameter::getParameterizedType)
-            .map(typeResolver::resolve)
-            .map(ObjectQuery::fromType);
+            .map(runtimeTypeResolver::resolve)
+            .map(TypeQuery::new);
 
         Object value = createInstance(constructor, argumentQueries, context);
         return new ObjectContainer(value);

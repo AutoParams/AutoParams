@@ -28,7 +28,7 @@ public final class Factory<T> implements Supplier<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T get() {
-        return (T) context.resolve(ObjectQuery.fromType(type));
+        return (T) context.resolve(new TypeQuery(type));
     }
 
     public Stream<T> stream() {

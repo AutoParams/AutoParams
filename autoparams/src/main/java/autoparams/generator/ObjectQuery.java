@@ -12,6 +12,7 @@ public interface ObjectQuery {
         return new ParameterQuery(parameter);
     }
 
+    @Deprecated
     static ObjectQuery fromType(Type type) {
         return new TypeQuery(type);
     }

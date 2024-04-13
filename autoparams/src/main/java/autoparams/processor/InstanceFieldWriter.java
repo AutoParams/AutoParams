@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.TypeQuery;
 import autoparams.generic.RuntimeTypeResolver;
 
 import static java.util.Arrays.stream;
@@ -72,7 +73,7 @@ public class InstanceFieldWriter implements ObjectProcessor {
     ) {
         field.setAccessible(true);
         Type type = typeResolver.resolve(field.getGenericType());
-        Object argument = context.resolve(ObjectQuery.fromType(type));
+        Object argument = context.resolve(new TypeQuery(type));
         try {
             field.set(target, argument);
         } catch (IllegalArgumentException |

@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.TypeMatchingGenerator;
+import autoparams.generator.TypeQuery;
 import autoparams.generator.UnwrapFailedException;
 import test.autoparams.AutoParameterizedTest;
 
@@ -51,7 +52,7 @@ public class SpecsForTypeMatchingGenerator {
         String value,
         ResolutionContext context
     ) {
-        ObjectQuery query = ObjectQuery.fromType(String.class);
+        ObjectQuery query = new TypeQuery(String.class);
 
         TypeMatchingGenerator actual = new TypeMatchingGenerator(
             x -> x == String.class,
@@ -70,7 +71,7 @@ public class SpecsForTypeMatchingGenerator {
         String value,
         ResolutionContext context
     ) {
-        ObjectQuery query = ObjectQuery.fromType(String.class);
+        ObjectQuery query = new TypeQuery(String.class);
 
         TypeMatchingGenerator actual = new TypeMatchingGenerator(
             (x, y) -> x == query && y == context ? value : null,
@@ -88,7 +89,7 @@ public class SpecsForTypeMatchingGenerator {
         String value,
         ResolutionContext context
     ) {
-        ObjectQuery query = ObjectQuery.fromType(String.class);
+        ObjectQuery query = new TypeQuery(String.class);
 
         TypeMatchingGenerator actual = create(
             String.class,

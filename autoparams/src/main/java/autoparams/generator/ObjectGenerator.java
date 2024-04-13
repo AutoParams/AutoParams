@@ -14,7 +14,7 @@ public interface ObjectGenerator {
     ObjectGenerator DEFAULT = new DefaultObjectGenerator();
 
     default ObjectContainer generate(Type type, ResolutionContext context) {
-        return generate(ObjectQuery.fromType(type), context);
+        return generate(new TypeQuery(type), context);
     }
 
     default Customizer toCustomizer() {

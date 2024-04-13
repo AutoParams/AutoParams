@@ -10,7 +10,10 @@ import autoparams.ResolutionContext;
 final class ArrayGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         Type type = query.getType();
         return isArrayType(type)
             ? generateArray((Class<?>) query.getType(), context)
@@ -27,7 +30,10 @@ final class ArrayGenerator implements ObjectGenerator {
         return type instanceof GenericArrayType;
     }
 
-    private ObjectContainer generateArray(Class<?> arrayType, ResolutionContext context) {
+    private ObjectContainer generateArray(
+        Class<?> arrayType,
+        ResolutionContext context
+    ) {
         Class<?> elementType = arrayType.getComponentType();
         Object array = Array.newInstance(elementType, 3);
         for (int i = 0; i < Array.getLength(array); i++) {
@@ -40,15 +46,28 @@ final class ArrayGenerator implements ObjectGenerator {
         GenericArrayType type,
         ResolutionContext context
     ) {
-        ParameterizedType elementType = (ParameterizedType) type.getGenericComponentType();
-        Object array = Array.newInstance((Class<?>) elementType.getRawType(), 3);
+        return generateArray(
+            (ParameterizedType) type.getGenericComponentType(),
+            context
+        );
+    }
+
+    private ObjectContainer generateArray(
+        ParameterizedType elementType,
+        ResolutionContext context
+    ) {
+        Class<?> rawElementType = (Class<?>) elementType.getRawType();
+        Object array = Array.newInstance(rawElementType, 3);
         for (int i = 0; i < Array.getLength(array); i++) {
             Array.set(array, i, generateElement(elementType, context));
         }
         return new ObjectContainer(array);
     }
 
-    private Object generateElement(Type elementType, ResolutionContext context) {
-        return context.resolve(ObjectQuery.fromType(elementType));
+    private Object generateElement(
+        Type elementType,
+        ResolutionContext context
+    ) {
+        return context.resolve(new TypeQuery(elementType));
     }
 }

@@ -48,7 +48,7 @@ final class SequenceGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         ArrayList<T> instance = new ArrayList<>();
-        ObjectQuery query = ObjectQuery.fromType(elementType);
+        ObjectQuery query = new TypeQuery(elementType);
         for (int i = 0; i < SIZE; i++) {
             instance.add((T) context.resolve(query));
         }
