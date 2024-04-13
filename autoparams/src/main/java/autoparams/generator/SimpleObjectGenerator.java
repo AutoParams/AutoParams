@@ -28,16 +28,19 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(
                 Factories::createBigDecimal,
                 BigDecimal.class,
-                Number.class),
+                Number.class
+            ),
             new TypeMatchingGenerator(Factories::createClock, Clock.class),
             new TypeMatchingGenerator(
                 Factories::createDuration,
                 Duration.class,
-                TemporalAmount.class),
+                TemporalAmount.class
+            ),
             new TypeMatchingGenerator(
                 Factories::createPeriod,
                 Period.class,
-                ChronoPeriod.class),
+                ChronoPeriod.class
+            ),
             new TypeMatchingGenerator(Factories::createLocalDate, LocalDate.class),
             new TypeMatchingGenerator(Factories::createLocalTime, LocalTime.class),
             new TypeMatchingGenerator(Factories::createLocalDateTime, LocalDateTime.class),
@@ -45,10 +48,11 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
             new TypeMatchingGenerator(
                 Factories::createZonedDateTime,
                 ZonedDateTime.class,
-                Temporal.class),
+                Temporal.class
+            ),
             new TypeMatchingGenerator(Factories::createZoneId, ZoneId.class),
             new EnumGenerator(),
-            new UrlGenerator()
+            new URLGenerator()
         );
     }
 }
