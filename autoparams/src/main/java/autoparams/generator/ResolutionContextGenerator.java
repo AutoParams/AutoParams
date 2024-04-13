@@ -2,9 +2,18 @@ package autoparams.generator;
 
 import autoparams.ResolutionContext;
 
-final class ResolutionContextGenerator extends TypeMatchingGenerator {
+final class ResolutionContextGenerator
+    extends PlainObjectGenerator<ResolutionContext> {
 
-    public ResolutionContextGenerator() {
-        super((query, context) -> context, ResolutionContext.class);
+    ResolutionContextGenerator() {
+        super(ResolutionContext.class);
+    }
+
+    @Override
+    protected ResolutionContext generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        return context;
     }
 }
