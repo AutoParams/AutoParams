@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import autoparams.Repeat;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.ParameterQuery;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,11 +100,17 @@ public class SpecsForByte {
     void sut_throws_if_max_constraint_is_excessively_large(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelyLargeMaxConstraint", byte.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = getFirstParameterQuery(parameter);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void excessivelyLargeMaxConstraint(
@@ -115,11 +122,17 @@ public class SpecsForByte {
     void sut_throws_if_max_constraint_is_excessively_small(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelySmallMaxConstraint", byte.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = getFirstParameterQuery(parameter);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void excessivelySmallMaxConstraint(
@@ -137,11 +150,17 @@ public class SpecsForByte {
     void sut_throws_if_min_constraint_is_excessively_large(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelyLargeMinConstraint", byte.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = getFirstParameterQuery(parameter);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void excessivelyLargeMinConstraint(
@@ -153,11 +172,17 @@ public class SpecsForByte {
     void sut_throws_if_min_constraint_is_excessively_small(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("excessivelySmallMinConstraint", byte.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = getFirstParameterQuery(parameter);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void excessivelySmallMinConstraint(
@@ -169,15 +194,29 @@ public class SpecsForByte {
     void sut_throws_if_max_constraint_is_less_than_min_constraint(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", byte.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = getFirstParameterQuery(parameter);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void maxConstraintLessThanMinConstraint(
         @SuppressWarnings("unused") @Min(1) @Max(0) byte arg
     ) {
+    }
+
+    private static ObjectQuery getFirstParameterQuery(Parameter parameter) {
+        return new ParameterQuery(
+            parameter,
+            0,
+            parameter.getAnnotatedType().getType()
+        );
     }
 }

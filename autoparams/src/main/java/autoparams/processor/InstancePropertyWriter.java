@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
+import autoparams.generator.ParameterQuery;
 import autoparams.generic.RuntimeTypeResolver;
 
 import static java.beans.Introspector.getBeanInfo;
@@ -39,7 +39,11 @@ public final class InstancePropertyWriter implements ObjectProcessor {
             Method method = property.getWriteMethod();
             if (method != null) {
                 Parameter parameter = method.getParameters()[0];
-                ObjectQuery query = ObjectQuery.fromParameter(parameter);
+                ParameterQuery query = new ParameterQuery(
+                    parameter,
+                    0,
+                    parameter.getAnnotatedType().getType()
+                );
                 Object propertyValue = context.resolve(query);
                 try {
                     method.invoke(value, propertyValue);
@@ -90,7 +94,12 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Method method,
         RuntimeTypeResolver runtimeTypeResolver
     ) {
-        Type parameterType = method.getGenericParameterTypes()[0];
-        return new TypeQuery(runtimeTypeResolver.resolve(parameterType));
+        Parameter parameter = method.getParameters()[0];
+        Type parameterType = parameter.getParameterizedType();
+        return new ParameterQuery(
+            parameter,
+            0,
+            runtimeTypeResolver.resolve(parameterType)
+        );
     }
 }

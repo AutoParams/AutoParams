@@ -8,6 +8,7 @@ public interface ObjectQuery {
 
     Type getType();
 
+    @Deprecated
     static ObjectQuery fromParameter(Parameter parameter) {
         return new ParameterQuery(parameter);
     }

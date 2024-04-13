@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import autoparams.Repeat;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.ParameterQuery;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,11 +74,21 @@ public class SpecsForLong {
     void sut_throws_if_max_constraint_is_less_than_min_constraint(
         ResolutionContext context
     ) throws NoSuchMethodException {
+
         Parameter parameter = getClass()
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", long.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.resolve(query));
+
+        ObjectQuery query = new ParameterQuery(
+            parameter,
+            0,
+            parameter.getAnnotatedType().getType()
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> context.resolve(query)
+        );
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) long arg) {

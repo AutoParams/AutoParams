@@ -17,6 +17,7 @@ import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
 import autoparams.generator.ObjectQuery;
+import autoparams.generator.ParameterQuery;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestReporter;
@@ -148,7 +149,12 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         ResolutionContext context
     ) {
         ArgumentConverter converter = context.resolve(ArgumentConverter.class);
-        Object argument = context.resolve(ObjectQuery.fromParameter(parameter));
+        ObjectQuery query = new ParameterQuery(
+            parameter,
+            index,
+            parameter.getAnnotatedType().getType()
+        );
+        Object argument = context.resolve(query);
         return convertArgument(converter, argument, parameter, index);
     }
 

@@ -6,7 +6,6 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 import autoparams.ResolutionContext;
 import autoparams.generic.RuntimeTypeResolver;
@@ -41,9 +40,16 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
         Constructor<?> constructor = resolveConstructor(type, context);
 
-        Stream<ObjectQuery> argumentQueries = Arrays
-            .stream(constructor.getParameters())
-            .map(ObjectQuery::fromParameter);
+        Parameter[] parameters = constructor.getParameters();
+        ObjectQuery[] argumentQueries = new ObjectQuery[parameters.length];
+        for (int index = 0; index < parameters.length; index++) {
+            Parameter parameter = parameters[index];
+            argumentQueries[index] = new ParameterQuery(
+                parameter,
+                index,
+                parameter.getAnnotatedType().getType()
+            );
+        }
 
         Object value = createInstance(constructor, argumentQueries, context);
         return new ObjectContainer(value);
@@ -62,11 +68,16 @@ final class ComplexObjectGenerator implements ObjectGenerator {
         Constructor<?> constructor = resolveConstructor(rawType, context);
 
         RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
-        Stream<ObjectQuery> argumentQueries = Arrays
-            .stream(constructor.getParameters())
-            .map(Parameter::getParameterizedType)
-            .map(typeResolver::resolve)
-            .map(TypeQuery::new);
+        Parameter[] parameters = constructor.getParameters();
+        ObjectQuery[] argumentQueries = new ObjectQuery[parameters.length];
+        for (int index = 0; index < parameters.length; index++) {
+            Parameter parameter = parameters[index];
+            argumentQueries[index] = new ParameterQuery(
+                parameter,
+                index,
+                typeResolver.resolve(parameter.getAnnotatedType().getType())
+            );
+        }
 
         Object value = createInstance(constructor, argumentQueries, context);
         return new ObjectContainer(value);
@@ -87,12 +98,15 @@ final class ComplexObjectGenerator implements ObjectGenerator {
 
     private Object createInstance(
         Constructor<?> constructor,
-        Stream<ObjectQuery> argumentQueries,
+        ObjectQuery[] argumentQueries,
         ResolutionContext context
     ) {
         try {
-            Object[] args = argumentQueries.map(context::resolve).toArray();
-            return constructor.newInstance(args);
+            Object[] arguments = Arrays
+                .stream(argumentQueries)
+                .map(context::resolve)
+                .toArray();
+            return constructor.newInstance(arguments);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
