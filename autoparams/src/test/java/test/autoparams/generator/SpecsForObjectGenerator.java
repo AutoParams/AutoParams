@@ -38,6 +38,7 @@ public class SpecsForObjectGenerator {
         }
     }
 
+    @Deprecated
     @AutoParameterizedTest
     void toCustomizer_returns_customizer(String value) {
         ObjectGenerator sut = StringFactory.createGeneratorWith(value);
@@ -45,6 +46,7 @@ public class SpecsForObjectGenerator {
         assertThat(actual).isNotNull();
     }
 
+    @Deprecated
     @AutoParameterizedTest
     void toCustomizer_returns_customizer_that_works_correctly(
         ResolutionContext context,
