@@ -5,6 +5,7 @@ import autoparams.processor.CompositeObjectProcessor;
 import autoparams.processor.InstancePropertyWriter;
 import autoparams.processor.ObjectProcessor;
 
+@Deprecated
 public class InstancePropertyCustomizer implements Customizer {
 
     @Override
