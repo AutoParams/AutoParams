@@ -22,16 +22,14 @@ public class SpecsForInstanceFieldWriter {
 
         public DomainCustomizer() {
             super(
-                new InstanceFieldWriter(Versioned.class).toCustomizer(),
-                new InstanceFieldWriter(Entity.class).toCustomizer(),
-                new InstanceFieldWriter(Inventory.class).toCustomizer(),
+                new InstanceFieldWriter(Versioned.class),
+                new InstanceFieldWriter(Entity.class),
+                new InstanceFieldWriter(Inventory.class),
                 new InstanceFieldWriter(Worker.class)
-                    .excluding("activeWorks", "closedWorks")
-                    .toCustomizer(),
+                    .excluding("activeWorks", "closedWorks"),
                 new InstanceFieldWriter(Operator.class)
-                    .including("teamName", "phoneNumber")
-                    .toCustomizer(),
-                new InstanceFieldWriter(User.class).toCustomizer()
+                    .including("teamName", "phoneNumber"),
+                new InstanceFieldWriter(User.class)
             );
         }
     }
@@ -84,7 +82,7 @@ public class SpecsForInstanceFieldWriter {
             .excluding("activeWorks")
             .including("teamName", "activeWorks");
 
-        context.applyCustomizer(sut.toCustomizer());
+        context.applyCustomizer(sut);
 
         // Act
         Operator actual = context.resolve(Operator.class);
@@ -101,7 +99,7 @@ public class SpecsForInstanceFieldWriter {
             .including("teamName", "activeWorks")
             .excluding("activeWorks");
 
-        context.applyCustomizer(sut.toCustomizer());
+        context.applyCustomizer(sut);
 
         // Act
         Operator actual = context.resolve(Operator.class);

@@ -3,7 +3,6 @@ package autoparams.customization;
 import java.util.Arrays;
 
 import autoparams.processor.InstanceFieldWriter;
-import autoparams.processor.ObjectProcessor;
 
 public class InstanceFieldWriterFactory implements
     AnnotationVisitor<WriteInstanceFields>,
@@ -21,7 +20,6 @@ public class InstanceFieldWriterFactory implements
         return new CompositeCustomizer(
             Arrays.stream(target)
                 .map(InstanceFieldWriter::new)
-                .map(ObjectProcessor::toCustomizer)
                 .toArray(Customizer[]::new)
         );
     }

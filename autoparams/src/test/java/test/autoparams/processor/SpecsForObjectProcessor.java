@@ -12,12 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForObjectProcessor {
 
+    @Deprecated
     @AutoParameterizedTest
     void toCustomizer_returns_customizer(InstancePropertyWriter sut) {
         Customizer actual = sut.toCustomizer();
         assertThat(actual).isNotNull();
     }
 
+    @Deprecated
     @AutoParameterizedTest
     void toCustomizer_returns_customizer_that_works_correctly(
         InstancePropertyWriter sut,

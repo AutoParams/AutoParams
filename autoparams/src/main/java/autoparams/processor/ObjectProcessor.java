@@ -17,6 +17,7 @@ public interface ObjectProcessor extends Customizer {
         return new CompositeObjectProcessor(processor, this);
     }
 
+    @Deprecated
     default Customizer toCustomizer() {
         return new DelegatingCustomizer(
             generator -> generator,
