@@ -13,9 +13,13 @@ public class CompositeObjectGenerator implements ObjectGenerator {
     }
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         return Folder.foldl(
-            (result, generator) -> result.yieldIfEmpty(() -> generator.generate(query, context)),
+            (result, generator) -> result
+                .yieldIfEmpty(() -> generator.generate(query, context)),
             ObjectContainer.EMPTY,
             Arrays.stream(generators)
         );

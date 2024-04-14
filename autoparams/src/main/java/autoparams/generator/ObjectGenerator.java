@@ -7,7 +7,7 @@ import autoparams.customization.Customizer;
 import autoparams.customization.DelegatingCustomizer;
 
 @FunctionalInterface
-public interface ObjectGenerator {
+public interface ObjectGenerator extends Customizer {
 
     ObjectContainer generate(ObjectQuery query, ResolutionContext context);
 
@@ -15,6 +15,11 @@ public interface ObjectGenerator {
 
     default ObjectContainer generate(Type type, ResolutionContext context) {
         return generate(new TypeQuery(type), context);
+    }
+
+    @Override
+    default ObjectGenerator customize(ObjectGenerator generator) {
+        return new CompositeObjectGenerator(this, generator);
     }
 
     default Customizer toCustomizer() {
