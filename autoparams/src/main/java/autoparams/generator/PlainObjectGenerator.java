@@ -1,5 +1,7 @@
 package autoparams.generator;
 
+import java.lang.reflect.Type;
+
 import autoparams.ResolutionContext;
 
 abstract class PlainObjectGenerator<T> implements ObjectGenerator {
@@ -15,9 +17,17 @@ abstract class PlainObjectGenerator<T> implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return query.getType().equals(type)
+        return matches(query.getType())
             ? new ObjectContainer(generateValue(query, context))
             : ObjectContainer.EMPTY;
+    }
+
+    private boolean matches(Type type) {
+        return type instanceof Class && matches((Class<?>) type);
+    }
+
+    private boolean matches(Class<?> type) {
+        return type.isAssignableFrom(this.type);
     }
 
     protected abstract T generateValue(

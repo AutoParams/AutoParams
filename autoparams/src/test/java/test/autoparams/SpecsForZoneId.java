@@ -18,7 +18,11 @@ public class SpecsForZoneId {
 
     @ParameterizedTest
     @AutoSource
-    void sut_creates_anonymous_ZoneId_value(ZoneId value1, ZoneId value2, ZoneId value3) {
+    void sut_creates_anonymous_ZoneId_value(
+        ZoneId value1,
+        ZoneId value2,
+        ZoneId value3
+    ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
