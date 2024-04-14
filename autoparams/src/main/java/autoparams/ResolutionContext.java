@@ -95,6 +95,22 @@ public final class ResolutionContext {
         processor = customizer.customize(processor);
     }
 
+    public void applyCustomizer(ObjectGenerator generator) {
+        if (generator == null) {
+            throw new IllegalArgumentException("The argument 'generator' is null.");
+        }
+
+        this.generator = generator.customize(this.generator);
+    }
+
+    public void applyCustomizer(ObjectProcessor processor) {
+        if (processor == null) {
+            throw new IllegalArgumentException("The argument 'processor' is null.");
+        }
+
+        this.processor = processor.customize(this.processor);
+    }
+
     public ResolutionContext branch() {
         return new ResolutionContext(extensionContext, generator, processor);
     }

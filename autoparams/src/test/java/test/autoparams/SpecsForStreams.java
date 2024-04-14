@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +31,7 @@ class SpecsForStreams {
         ResolutionContext sut,
         int value
     ) {
-        sut.applyCustomizer((ObjectGenerator) (query, context) ->
+        sut.applyCustomizer((query, context) ->
             query.getType().equals(int.class)
                 ? new ObjectContainer(value)
                 : ObjectContainer.EMPTY);
@@ -55,7 +54,7 @@ class SpecsForStreams {
         ResolutionContext sut,
         long value
     ) {
-        sut.applyCustomizer((ObjectGenerator) (query, context) ->
+        sut.applyCustomizer((query, context) ->
             query.getType().equals(long.class)
                 ? new ObjectContainer(value)
                 : ObjectContainer.EMPTY);
@@ -78,7 +77,7 @@ class SpecsForStreams {
         ResolutionContext sut,
         double value
     ) {
-        sut.applyCustomizer((ObjectGenerator) (query, context) ->
+        sut.applyCustomizer((query, context) ->
             query.getType().equals(double.class)
                 ? new ObjectContainer(value)
                 : ObjectContainer.EMPTY);

@@ -2,6 +2,7 @@ package test.autoparams;
 
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
+import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
@@ -71,8 +72,30 @@ class SpecsForResolutionContext {
     @SuppressWarnings("ConstantConditions")
     @ParameterizedTest
     @AutoSource
-    void applyCustomizer_has_guard_clause(ResolutionContext sut) {
-        assertThatThrownBy(() -> sut.applyCustomizer(null))
+    void applyCustomizer_has_guard_clause_for_customizer(
+        ResolutionContext sut
+    ) {
+        assertThatThrownBy(() -> sut.applyCustomizer((Customizer) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @ParameterizedTest
+    @AutoSource
+    void applyCustomizer_has_guard_clause_for_generator(
+        ResolutionContext sut
+    ) {
+        assertThatThrownBy(() -> sut.applyCustomizer((ObjectGenerator) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @ParameterizedTest
+    @AutoSource
+    void applyCustomizer_has_guard_clause_for_processor(
+        ResolutionContext sut
+    ) {
+        assertThatThrownBy(() -> sut.applyCustomizer((ObjectProcessor) null))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -83,20 +106,14 @@ class SpecsForResolutionContext {
         int value1,
         int value2
     ) {
-        // Arrange
         ResolutionContext sut = new ResolutionContext(
             extensionContext,
             (query, context) -> new ObjectContainer(value1),
             ObjectProcessor.DEFAULT
         );
 
-        ObjectGenerator generator =
-            (query, context) -> new ObjectContainer(value2);
+        sut.applyCustomizer((query, context) -> new ObjectContainer(value2));
 
-        // Act
-        sut.applyCustomizer(generator);
-
-        // Assert
         Object actual = sut.resolve(int.class);
         assertThat(actual).isEqualTo(value2);
     }
