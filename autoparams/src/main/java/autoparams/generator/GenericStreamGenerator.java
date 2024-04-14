@@ -23,11 +23,11 @@ final class GenericStreamGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         return type.getRawType().equals(Stream.class)
-            ? new ObjectContainer(factory(type, context))
+            ? new ObjectContainer(generateStream(type, context))
             : ObjectContainer.EMPTY;
     }
 
-    private Stream<?> factory(
+    private Stream<?> generateStream(
         ParameterizedType streamType,
         ResolutionContext context
     ) {
