@@ -4,18 +4,11 @@ import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.TypeMatchingGenerator;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForObjectGenerator {
-
-    @FunctionalInterface
-    public interface StringFactory {
-
-        String get();
-    }
 
     @AutoParameterizedTest
     void generate_with_type_correctly_generates_value_of_the_type(
@@ -29,15 +22,23 @@ public class SpecsForObjectGenerator {
         assertThat(actual.unwrapOrElseThrow()).isInstanceOf(String.class);
     }
 
+    @FunctionalInterface
+    public interface StringFactory {
+
+        String get();
+
+        static ObjectGenerator createGeneratorWith(String value) {
+            return (query, context) ->
+                query.getType().equals(StringFactory.class)
+                    ? new ObjectContainer((StringFactory) () -> value)
+                    : ObjectContainer.EMPTY;
+        }
+    }
+
     @AutoParameterizedTest
     void toCustomizer_returns_customizer(String value) {
-        ObjectGenerator sut = TypeMatchingGenerator.create(
-            StringFactory.class,
-            () -> () -> value
-        );
-
+        ObjectGenerator sut = StringFactory.createGeneratorWith(value);
         Customizer actual = sut.toCustomizer();
-
         assertThat(actual).isNotNull();
     }
 
@@ -46,10 +47,7 @@ public class SpecsForObjectGenerator {
         ResolutionContext context,
         String value
     ) {
-        ObjectGenerator sut = TypeMatchingGenerator.create(
-            StringFactory.class,
-            () -> () -> value
-        );
+        ObjectGenerator sut = StringFactory.createGeneratorWith(value);
 
         Customizer actual = sut.toCustomizer();
 

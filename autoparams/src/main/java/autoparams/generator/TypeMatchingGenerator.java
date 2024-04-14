@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import autoparams.ResolutionContext;
 
+@Deprecated
 public class TypeMatchingGenerator implements ObjectGenerator {
 
     private final Function<Type, Boolean> predicate;
