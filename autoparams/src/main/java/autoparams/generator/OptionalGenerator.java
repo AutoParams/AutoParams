@@ -1,6 +1,7 @@
 package autoparams.generator;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import autoparams.ResolutionContext;
@@ -8,22 +9,29 @@ import autoparams.ResolutionContext;
 final class OptionalGenerator implements ObjectGenerator {
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         return query.getType() instanceof ParameterizedType
             ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
+    private ObjectContainer generate(
+        ParameterizedType type,
+        ResolutionContext context
+    ) {
         return type.getRawType().equals(Optional.class)
-            ? new ObjectContainer(factory((Class<?>) type.getActualTypeArguments()[0], context))
+            ? new ObjectContainer(generateOptional(type, context))
             : ObjectContainer.EMPTY;
     }
 
-    private <T> Optional<T> factory(
-        Class<? extends T> elementType,
+    private Optional<Object> generateOptional(
+        ParameterizedType optionalType,
         ResolutionContext context
     ) {
-        return Optional.of(context.resolve(elementType));
+        Type elementType = optionalType.getActualTypeArguments()[0];
+        return Optional.of(context.resolve(new TypeQuery(elementType)));
     }
 }
