@@ -20,9 +20,9 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
 
     public SimpleObjectGenerator() {
         super(
+            new ClassGenerator(),
             new RootGenerator(),
             new StringGenerator(),
-            new TypeMatchingGenerator(() -> String.class, Class.class),
             new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
             new TypeMatchingGenerator(
