@@ -1,7 +1,6 @@
 package autoparams.generator;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -23,7 +22,7 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
             new RootGenerator(),
             new StringGenerator(),
             new UUIDGenerator(),
-            new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
+            new BigIntegerGenerator(),
             new TypeMatchingGenerator(
                 Factories::createBigDecimal,
                 BigDecimal.class,
