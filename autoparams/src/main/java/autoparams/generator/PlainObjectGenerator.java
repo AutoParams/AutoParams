@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
@@ -27,7 +28,9 @@ abstract class PlainObjectGenerator<T> implements ObjectGenerator {
     }
 
     private boolean matches(Class<?> type) {
-        return type.isAssignableFrom(this.type);
+        return type.isInterface() || Modifier.isAbstract(type.getModifiers())
+            ? type.isAssignableFrom(this.type)
+            : type.equals(this.type);
     }
 
     protected abstract T generateValue(

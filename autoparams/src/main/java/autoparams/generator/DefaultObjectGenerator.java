@@ -9,7 +9,14 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
             new RecursionGuard().customize(
                 new CompositeObjectGenerator(
                     new PrimitiveValueGenerator(),
-                    new SimpleObjectGenerator(),
+                    new RootGenerator(),
+                    new ClassGenerator(),
+                    new StringGenerator(),
+                    new UUIDGenerator(),
+                    new NumberGenerator(),
+                    new TimeGenerator(),
+                    new EnumGenerator(),
+                    new URLGenerator(),
                     new CollectionGenerator(),
                     new StreamGenerator(),
                     new OptionalGenerator(),
