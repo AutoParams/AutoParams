@@ -29,7 +29,7 @@ final class SequenceGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         return isCollection((Class<?>) type.getRawType())
-            ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
+            ? new ObjectContainer(generateList(type, context))
             : ObjectContainer.EMPTY;
     }
 
@@ -42,17 +42,16 @@ final class SequenceGenerator implements ObjectGenerator {
             || type.equals(Iterable.class);
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T> ArrayList<T> factory(
-        Type elementType,
+    private static ArrayList<Object> generateList(
+        ParameterizedType listType,
         ResolutionContext context
     ) {
-        ArrayList<T> instance = new ArrayList<>();
+        Type elementType = listType.getActualTypeArguments()[0];
         ObjectQuery query = new TypeQuery(elementType);
+        ArrayList<Object> instance = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
-            instance.add((T) context.resolve(query));
+            instance.add(context.resolve(query));
         }
-
         return instance;
     }
 }

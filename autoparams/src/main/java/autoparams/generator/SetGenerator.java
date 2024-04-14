@@ -13,15 +13,21 @@ final class SetGenerator implements ObjectGenerator {
     private static final int SIZE = 3;
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         return query.getType() instanceof ParameterizedType
             ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
+    private ObjectContainer generate(
+        ParameterizedType type,
+        ResolutionContext context
+    ) {
         return isSet((Class<?>) type.getRawType())
-            ? new ObjectContainer(factory(type.getActualTypeArguments()[0], context))
+            ? new ObjectContainer(generateSet(type, context))
             : ObjectContainer.EMPTY;
     }
 
@@ -31,17 +37,16 @@ final class SetGenerator implements ObjectGenerator {
             || type.equals(AbstractSet.class);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> HashSet<T> factory(
-        Type elementType,
+    public static HashSet<Object> generateSet(
+        ParameterizedType setType,
         ResolutionContext context
     ) {
-        HashSet<T> instance = new HashSet<>();
+        Type elementType = setType.getActualTypeArguments()[0];
         ObjectQuery query = new TypeQuery(elementType);
+        HashSet<Object> instance = new HashSet<>();
         for (int i = 0; i < SIZE; i++) {
-            instance.add((T) context.resolve(query));
+            instance.add(context.resolve(query));
         }
-
         return instance;
     }
 }

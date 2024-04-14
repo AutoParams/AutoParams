@@ -13,19 +13,21 @@ final class MapGenerator implements ObjectGenerator {
     private static final int SIZE = 3;
 
     @Override
-    public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
         return query.getType() instanceof ParameterizedType
             ? generate((ParameterizedType) query.getType(), context)
             : ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(ParameterizedType type, ResolutionContext context) {
+    private ObjectContainer generate(
+        ParameterizedType type,
+        ResolutionContext context
+    ) {
         return isMap((Class<?>) type.getRawType())
-            ? new ObjectContainer(factory(
-            type.getActualTypeArguments()[0],
-            type.getActualTypeArguments()[1],
-            context
-        ))
+            ? new ObjectContainer(generateMap(type, context))
             : ObjectContainer.EMPTY;
     }
 
@@ -35,18 +37,21 @@ final class MapGenerator implements ObjectGenerator {
             || type.equals(AbstractMap.class);
     }
 
-    @SuppressWarnings("unchecked")
-    private <K, V> HashMap<K, V> factory(
-        Type keyType,
-        Type valueType,
+    private HashMap<Object, Object> generateMap(
+        ParameterizedType mapType,
         ResolutionContext context
     ) {
-        HashMap<K, V> instance = new HashMap<>();
+        Type keyType = mapType.getActualTypeArguments()[0];
+        ObjectQuery keyQuery = new TypeQuery(keyType);
 
+        Type valueType = mapType.getActualTypeArguments()[1];
+        ObjectQuery valueQuery = new TypeQuery(valueType);
+
+        HashMap<Object, Object> instance = new HashMap<>();
         for (int i = 0; i < SIZE; i++) {
             instance.put(
-                (K) context.resolve(new TypeQuery(keyType)),
-                (V) context.resolve(new TypeQuery(valueType))
+                context.resolve(keyQuery),
+                context.resolve(valueQuery)
             );
         }
 
