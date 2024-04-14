@@ -14,7 +14,6 @@ import java.time.ZonedDateTime;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
-import java.util.UUID;
 
 final class SimpleObjectGenerator extends CompositeObjectGenerator {
 
@@ -23,7 +22,7 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
             new ClassGenerator(),
             new RootGenerator(),
             new StringGenerator(),
-            new TypeMatchingGenerator(UUID::randomUUID, UUID.class),
+            new UUIDGenerator(),
             new TypeMatchingGenerator(Factories::createBigInteger, BigInteger.class),
             new TypeMatchingGenerator(
                 Factories::createBigDecimal,
