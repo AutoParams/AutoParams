@@ -16,9 +16,7 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new FactoryGenerator(),
                     new ComplexObjectGenerator(),
                     new ResolutionContextGenerator(),
-                    new ConstructorExtractorGenerator(),
-                    new ConstructorResolverGenerator(),
-                    new ArgumentConverterGenerator()
+                    new ServiceGenerator()
                 )
             )
         );

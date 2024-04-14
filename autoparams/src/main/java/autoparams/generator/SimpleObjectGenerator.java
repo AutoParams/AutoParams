@@ -4,8 +4,8 @@ final class SimpleObjectGenerator extends CompositeObjectGenerator {
 
     public SimpleObjectGenerator() {
         super(
-            new ClassGenerator(),
             new RootGenerator(),
+            new ClassGenerator(),
             new StringGenerator(),
             new UUIDGenerator(),
             new BigIntegerGenerator(),

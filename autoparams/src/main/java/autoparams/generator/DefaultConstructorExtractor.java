@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import static java.util.Arrays.asList;
 
-class DefaultConstructorExtractor implements ConstructorExtractor {
+final class DefaultConstructorExtractor implements ConstructorExtractor {
 
     @Override
     public Collection<Constructor<?>> extract(Class<?> type) {

@@ -16,8 +16,11 @@ public class CompositeConstructorResolver implements ConstructorResolver {
     @Override
     public final Optional<Constructor<?>> resolve(Class<?> type) {
         return Folder.foldl(
-            (resolved, resolver) -> resolved.isPresent() ? resolved : resolver.resolve(type),
+            (resolved, resolver) -> resolved.isPresent()
+                ? resolved
+                : resolver.resolve(type),
             Optional.empty(),
-            stream(resolvers));
+            stream(resolvers)
+        );
     }
 }

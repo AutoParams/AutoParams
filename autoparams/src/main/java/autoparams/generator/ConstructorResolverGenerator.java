@@ -1,34 +1,28 @@
 package autoparams.generator;
 
-import java.beans.ConstructorProperties;
-import java.lang.reflect.Constructor;
-import java.util.Comparator;
-
 import autoparams.ResolutionContext;
 
-class ConstructorResolverGenerator extends TypeMatchingGenerator {
+final class ConstructorResolverGenerator
+    extends PlainObjectGenerator<ConstructorResolver> {
 
-    private static final Comparator<Constructor<?>> byParameters =
-        Comparator.comparingInt(Constructor::getParameterCount);
-
-    public ConstructorResolverGenerator() {
-        super(
-            ConstructorResolverGenerator::factory,
-            ConstructorResolver.class
-        );
+    ConstructorResolverGenerator() {
+        super(ConstructorResolver.class);
     }
 
-    private static ConstructorResolver factory(ResolutionContext context) {
-        ConstructorExtractor extractor = context.resolve(ConstructorExtractor.class);
-        return createDefensiveResolver(extractor);
+    @Override
+    protected ConstructorResolver generateValue(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        return generateResolver(context.resolve(ConstructorExtractor.class));
     }
 
-    private static ConstructorResolver createDefensiveResolver(ConstructorExtractor extractor) {
+    private static CompositeConstructorResolver generateResolver(
+        ConstructorExtractor extractor
+    ) {
         return new CompositeConstructorResolver(
-            t -> extractor.extract(t).stream()
-                .filter(c -> c.isAnnotationPresent(ConstructorProperties.class))
-                .min(byParameters),
-            t -> extractor.extract(t).stream().min(byParameters)
+            new AnnotatedModestConstructorResolver(extractor),
+            new ModestConstructorResolver(extractor)
         );
     }
 }
