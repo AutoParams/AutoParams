@@ -3,6 +3,7 @@ package test.autoparams;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectQuery;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -82,15 +83,20 @@ class SpecsForResolutionContext {
         int value1,
         int value2
     ) {
+        // Arrange
         ResolutionContext sut = new ResolutionContext(
             extensionContext,
             (query, context) -> new ObjectContainer(value1),
             ObjectProcessor.DEFAULT
         );
 
-        sut.applyCustomizer(
-            generator -> (query, context) -> new ObjectContainer(value2));
+        ObjectGenerator generator =
+            (query, context) -> new ObjectContainer(value2);
 
+        // Act
+        sut.applyCustomizer(generator);
+
+        // Assert
         Object actual = sut.resolve(int.class);
         assertThat(actual).isEqualTo(value2);
     }

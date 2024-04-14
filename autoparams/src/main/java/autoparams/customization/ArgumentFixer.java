@@ -2,12 +2,13 @@ package autoparams.customization;
 
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
+
+import static java.util.Arrays.asList;
 
 final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
 
@@ -16,21 +17,28 @@ final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
 
     @Override
     public Customizer process(Parameter parameter, Object argument) {
-        List<Function<Type, Boolean>> predicates = new ArrayList<>();
+        return getGenerator(parameter, argument);
+    }
+
+    private ObjectGenerator getGenerator(Parameter parameter, Object argument) {
+        return (query, context) -> getPredicate(parameter).test(query.getType())
+            ? new ObjectContainer(argument)
+            : ObjectContainer.EMPTY;
+    }
+
+    private Predicate<Type> getPredicate(Parameter parameter) {
+        Predicate<Type> predicate = type -> false;
 
         if (byExactType) {
-            predicates.add(type -> type.equals(parameter.getType()));
+            predicate = predicate.or(type -> type.equals(parameter.getType()));
         }
 
         if (byImplementedInterfaces) {
-            Type[] interfaces = parameter.getType().getInterfaces();
-            predicates.add(type -> Arrays.asList(interfaces).contains(type));
+            List<Type> interfaces = asList(parameter.getType().getInterfaces());
+            predicate = predicate.or(interfaces::contains);
         }
 
-        return generator -> (query, context) ->
-            predicates.stream().anyMatch(predicate -> predicate.apply(query.getType()))
-                ? new ObjectContainer(argument)
-                : generator.generate(query, context);
+        return predicate;
     }
 
     @Override

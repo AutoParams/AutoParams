@@ -12,6 +12,7 @@ import autoparams.ResolutionContext;
 import autoparams.ValueAutoSource;
 import autoparams.generator.Factory;
 import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.ComplexObject;
 
@@ -85,11 +86,10 @@ public class SpecsForFactory {
     @ParameterizedTest
     @AutoSource
     void applyCustomizer_correctly_works(Factory<UUID> sut, UUID fixedValue) {
-        sut.applyCustomizer(generator ->
-            (query, context) ->
-                query.getType() == UUID.class
-                    ? new ObjectContainer(fixedValue)
-                    : generator.generate(query, context));
+        sut.applyCustomizer((ObjectGenerator) (query, context) ->
+            query.getType() == UUID.class
+                ? new ObjectContainer(fixedValue)
+                : ObjectContainer.EMPTY);
 
         UUID actual = sut.get();
 
@@ -103,11 +103,10 @@ public class SpecsForFactory {
         UUID fixedValue,
         ResolutionContext mainContext
     ) {
-        sut.applyCustomizer(generator ->
-            (query, context) ->
-                query.getType() == UUID.class
-                    ? new ObjectContainer(fixedValue)
-                    : generator.generate(query, context));
+        sut.applyCustomizer((ObjectGenerator) (query, context) ->
+            query.getType() == UUID.class
+                ? new ObjectContainer(fixedValue)
+                : ObjectContainer.EMPTY);
 
         UUID actual = mainContext.resolve(UUID.class);
 

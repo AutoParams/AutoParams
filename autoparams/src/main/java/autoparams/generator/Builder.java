@@ -13,11 +13,11 @@ public final class Builder<T> {
     }
 
     public <U> Builder<T> fix(Class<U> type, U value) {
-        factory.applyCustomizer(generator ->
-            (query, context) ->
-                query.getType() == type
-                    ? new ObjectContainer(value)
-                    : generator.generate(query, context));
+        ObjectGenerator generator = (query, context) ->
+            query.getType() == type
+                ? new ObjectContainer(value)
+                : ObjectContainer.EMPTY;
+        factory.applyCustomizer(generator);
         return this;
     }
 
