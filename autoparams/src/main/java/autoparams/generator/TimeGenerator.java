@@ -7,6 +7,8 @@ final class TimeGenerator extends CompositeObjectGenerator {
             new ClockGenerator(),
             new DurationGenerator(),
             new YearGenerator(),
+            new YearMonthGenerator(),
+            new MonthDayGenerator(),
             new LocalDateGenerator(),
             new LocalDateTimeGenerator(),
             new LocalTimeGenerator(),

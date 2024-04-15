@@ -6,8 +6,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.Period;
 import java.time.Year;
+import java.time.YearMonth;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
@@ -236,6 +238,40 @@ class SpecsForSimpleTypes {
         Year value5
     ) {
         final HashSet<Year> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_year_month_values(
+        YearMonth value1,
+        YearMonth value2,
+        YearMonth value3,
+        YearMonth value4,
+        YearMonth value5
+    ) {
+        final HashSet<YearMonth> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
+    }
+
+    @AutoParameterizedTest
+    void sut_create_arbitrary_month_day_values(
+        MonthDay value1,
+        MonthDay value2,
+        MonthDay value3,
+        MonthDay value4,
+        MonthDay value5
+    ) {
+        final HashSet<MonthDay> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);
