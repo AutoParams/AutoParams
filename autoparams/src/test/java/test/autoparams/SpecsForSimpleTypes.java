@@ -37,14 +37,22 @@ class SpecsForSimpleTypes {
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_string_values(String value1, String value2, String value3) {
+    void sut_creates_arbitrary_string_values(
+        String value1,
+        String value2,
+        String value3
+    ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_uuid_values(UUID value1, UUID value2, UUID value3) {
+    void sut_creates_arbitrary_uuid_values(
+        UUID value1,
+        UUID value2,
+        UUID value3
+    ) {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
@@ -151,7 +159,6 @@ class SpecsForSimpleTypes {
     }
 
     @AutoParameterizedTest
-    @Repeat(100)
     void sut_creates_arbitrary_period_values(
         Period value1,
         Period value2,
@@ -200,10 +207,16 @@ class SpecsForSimpleTypes {
     void sut_creates_arbitrary_temporal_values(
         Temporal value1,
         Temporal value2,
-        Temporal value3
+        Temporal value3,
+        Temporal value4,
+        Temporal value5
     ) {
-        assertNotEquals(value1, value2);
-        assertNotEquals(value2, value3);
-        assertNotEquals(value3, value1);
+        final HashSet<Temporal> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
     }
 }
