@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-  api "io.github.autoparams:autoparams:[5.0.0, 6.0.0)"
+  api "io.github.autoparams:autoparams:[6.0.0, 7.0.0)"
   implementation "org.jetbrains.kotlin:kotlin-stdlib"
   implementation "org.jetbrains.kotlin:kotlin-reflect"
   testImplementation "org.assertj:assertj-core:3.20.2"
