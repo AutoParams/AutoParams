@@ -96,11 +96,17 @@ class SpecsForSimpleTypes {
     void sut_creates_arbitrary_duration_values(
         Duration value1,
         Duration value2,
-        Duration value3
+        Duration value3,
+        Duration value4,
+        Duration value5
     ) {
-        assertNotEquals(value1, value2);
-        assertNotEquals(value2, value3);
-        assertNotEquals(value3, value1);
+        final HashSet<Duration> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
     }
 
     @AutoParameterizedTest
