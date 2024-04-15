@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.time.Year;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
@@ -212,6 +213,23 @@ class SpecsForSimpleTypes {
         Temporal value5
     ) {
         final HashSet<Temporal> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_year_values(
+        Year value1,
+        Year value2,
+        Year value3,
+        Year value4,
+        Year value5
+    ) {
+        final HashSet<Year> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);
