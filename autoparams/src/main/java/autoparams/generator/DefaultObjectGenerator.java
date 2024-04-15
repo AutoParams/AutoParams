@@ -8,6 +8,8 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
         super(
             new RecursionGuard().customize(
                 new CompositeObjectGenerator(
+                    new ResolutionContextGenerator(),
+                    new ExtensionContextGenerator(),
                     new PrimitiveValueGenerator(),
                     new RootGenerator(),
                     new ClassGenerator(),
@@ -21,9 +23,8 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new StreamGenerator(),
                     new OptionalGenerator(),
                     new FactoryGenerator(),
-                    new ComplexObjectGenerator(),
-                    new ResolutionContextGenerator(),
-                    new ServiceGenerator()
+                    new ServiceGenerator(),
+                    new ComplexObjectGenerator()
                 )
             )
         );

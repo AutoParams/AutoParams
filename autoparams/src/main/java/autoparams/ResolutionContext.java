@@ -34,19 +34,9 @@ public final class ResolutionContext {
         return extensionContext;
     }
 
-    public Object resolve(ObjectQuery query) {
-        if (query == null) {
-            throw new IllegalArgumentException("The argument 'query' is null.");
-        }
-
-        Object value = generateValue(query);
-        processor.process(query, value, this);
-        return value;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T resolve(Class<T> type) {
-        return (T) resolve(new TypeQuery(type));
+    @Deprecated
+    public <T> T generate(Class<T> type) {
+        return resolve(type);
     }
 
     @Deprecated
@@ -54,16 +44,24 @@ public final class ResolutionContext {
         return resolve(query);
     }
 
-    @Deprecated
-    public <T> T generate(Class<T> type) {
-        return resolve(type);
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(Class<T> type) {
+        return (T) resolve(new TypeQuery(type));
+    }
+
+    public Object resolve(ObjectQuery query) {
+        if (query == null) {
+            throw new IllegalArgumentException("The argument 'query' is null.");
+        }
+
+        Object value = generateValue(query);
+        processValue(query, value);
+        return value;
     }
 
     private Object generateValue(ObjectQuery query) {
         final Type type = query.getType();
-        if (ExtensionContext.class.equals(type)) {
-            return extensionContext;
-        } else if (ObjectGenerator.class.equals(type)) {
+        if (ObjectGenerator.class.equals(type)) {
             return generator;
         } else if (ObjectProcessor.class.equals(type)) {
             return processor;
@@ -84,6 +82,10 @@ public final class ResolutionContext {
             + " This can happen if the query represents an interface or abstract class.";
         String message = String.format(messageFormat, query);
         return new RuntimeException(message, cause);
+    }
+
+    private void processValue(ObjectQuery query, Object value) {
+        processor.process(query, value, this);
     }
 
     public void applyCustomizer(Customizer customizer) {
