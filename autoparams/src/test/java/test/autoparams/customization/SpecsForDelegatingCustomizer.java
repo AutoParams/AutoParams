@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Deprecated
 public class SpecsForDelegatingCustomizer {
 
     public static class Spy<T> implements Function<T, T> {

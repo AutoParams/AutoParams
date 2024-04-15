@@ -5,6 +5,7 @@ import java.util.function.Function;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.ObjectProcessor;
 
+@Deprecated
 public class DelegatingCustomizer implements Customizer {
 
     private final Function<ObjectGenerator, ObjectGenerator> customizeGenerator;
