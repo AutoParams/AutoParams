@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpecsForAutoSource {
+public class SpecsForRecord {
 
     @ParameterizedTest
     @AutoSource

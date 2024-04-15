@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("unused")
-class SpecsForCsvAutoSource {
+class SpecsForCsvAutoSourceWithMultiLineTextBlock {
 
     @ParameterizedTest
     @CsvAutoSource(textBlock = """
