@@ -2,14 +2,10 @@ package autoparams.generator;
 
 import autoparams.ResolutionContext;
 
-final class RootGenerator extends PlainObjectGenerator<Object> {
-
-    RootGenerator() {
-        super(Object.class);
-    }
+final class RootGenerator extends ObjectGeneratorBase<Object> {
 
     @Override
-    protected Object generateValue(
+    protected Object generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

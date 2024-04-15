@@ -8,14 +8,10 @@ import java.util.concurrent.TimeUnit;
 import autoparams.ResolutionContext;
 
 final class OffsetDateTimeGenerator
-    extends PlainObjectGenerator<OffsetDateTime> {
-
-    OffsetDateTimeGenerator() {
-        super(OffsetDateTime.class);
-    }
+    extends ObjectGeneratorBase<OffsetDateTime> {
 
     @Override
-    protected OffsetDateTime generateValue(
+    protected OffsetDateTime generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

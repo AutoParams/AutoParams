@@ -3,14 +3,10 @@ package autoparams.generator;
 import autoparams.ResolutionContext;
 
 final class ConstructorExtractorGenerator
-    extends PlainObjectGenerator<ConstructorExtractor> {
-
-    ConstructorExtractorGenerator() {
-        super(ConstructorExtractor.class);
-    }
+    extends ObjectGeneratorBase<ConstructorExtractor> {
 
     @Override
-    protected ConstructorExtractor generateValue(
+    protected ConstructorExtractor generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

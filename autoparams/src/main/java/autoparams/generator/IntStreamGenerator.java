@@ -4,14 +4,10 @@ import java.util.stream.IntStream;
 
 import autoparams.ResolutionContext;
 
-final class IntStreamGenerator extends PlainObjectGenerator<IntStream> {
-
-    IntStreamGenerator() {
-        super(IntStream.class);
-    }
+final class IntStreamGenerator extends ObjectGeneratorBase<IntStream> {
 
     @Override
-    protected IntStream generateValue(
+    protected IntStream generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

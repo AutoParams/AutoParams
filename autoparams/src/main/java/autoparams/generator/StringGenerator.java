@@ -4,14 +4,10 @@ import java.util.UUID;
 
 import autoparams.ResolutionContext;
 
-final class StringGenerator extends PlainObjectGenerator<String> {
-
-    StringGenerator() {
-        super(String.class);
-    }
+final class StringGenerator extends ObjectGeneratorBase<String> {
 
     @Override
-    protected String generateValue(
+    protected String generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

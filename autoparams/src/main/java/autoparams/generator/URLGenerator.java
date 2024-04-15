@@ -8,7 +8,7 @@ import autoparams.ResolutionContext;
 
 import static java.lang.String.format;
 
-final class URLGenerator extends PlainObjectGenerator<URL> {
+final class URLGenerator extends ObjectGeneratorBase<URL> {
 
     private static final String[] PROTOCOLS = new String[] {
         "http",
@@ -16,12 +16,8 @@ final class URLGenerator extends PlainObjectGenerator<URL> {
         "ftp"
     };
 
-    URLGenerator() {
-        super(URL.class);
-    }
-
     @Override
-    protected URL generateValue(ObjectQuery query, ResolutionContext context) {
+    protected URL generateObject(ObjectQuery query, ResolutionContext context) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         int index = random.nextInt(PROTOCOLS.length);

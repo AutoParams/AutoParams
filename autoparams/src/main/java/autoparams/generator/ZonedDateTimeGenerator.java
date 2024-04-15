@@ -6,14 +6,10 @@ import java.time.ZonedDateTime;
 
 import autoparams.ResolutionContext;
 
-final class ZonedDateTimeGenerator extends PlainObjectGenerator<ZonedDateTime> {
-
-    ZonedDateTimeGenerator() {
-        super(ZonedDateTime.class);
-    }
+final class ZonedDateTimeGenerator extends ObjectGeneratorBase<ZonedDateTime> {
 
     @Override
-    protected ZonedDateTime generateValue(
+    protected ZonedDateTime generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

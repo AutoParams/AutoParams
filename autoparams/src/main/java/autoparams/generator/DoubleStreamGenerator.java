@@ -4,14 +4,10 @@ import java.util.stream.DoubleStream;
 
 import autoparams.ResolutionContext;
 
-final class DoubleStreamGenerator extends PlainObjectGenerator<DoubleStream> {
-
-    DoubleStreamGenerator() {
-        super(DoubleStream.class);
-    }
+final class DoubleStreamGenerator extends ObjectGeneratorBase<DoubleStream> {
 
     @Override
-    protected DoubleStream generateValue(
+    protected DoubleStream generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

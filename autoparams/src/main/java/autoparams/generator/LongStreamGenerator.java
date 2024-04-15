@@ -4,14 +4,10 @@ import java.util.stream.LongStream;
 
 import autoparams.ResolutionContext;
 
-final class LongStreamGenerator extends PlainObjectGenerator<LongStream> {
-
-    LongStreamGenerator() {
-        super(LongStream.class);
-    }
+final class LongStreamGenerator extends ObjectGeneratorBase<LongStream> {
 
     @Override
-    protected LongStream generateValue(
+    protected LongStream generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

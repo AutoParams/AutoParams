@@ -5,14 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ResolutionContext;
 
-final class DurationGenerator extends PlainObjectGenerator<Duration> {
-
-    DurationGenerator() {
-        super(Duration.class);
-    }
+final class DurationGenerator extends ObjectGeneratorBase<Duration> {
 
     @Override
-    protected Duration generateValue(
+    protected Duration generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

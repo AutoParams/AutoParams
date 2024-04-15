@@ -7,14 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ResolutionContext;
 
-final class ZoneIdGenerator extends PlainObjectGenerator<ZoneId> {
-
-    ZoneIdGenerator() {
-        super(ZoneId.class);
-    }
+final class ZoneIdGenerator extends ObjectGeneratorBase<ZoneId> {
 
     @Override
-    protected ZoneId generateValue(
+    protected ZoneId generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

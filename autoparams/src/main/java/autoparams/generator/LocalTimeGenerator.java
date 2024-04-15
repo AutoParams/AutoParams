@@ -5,14 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ResolutionContext;
 
-final class LocalTimeGenerator extends PlainObjectGenerator<LocalTime> {
-
-    LocalTimeGenerator() {
-        super(LocalTime.class);
-    }
+final class LocalTimeGenerator extends ObjectGeneratorBase<LocalTime> {
 
     @Override
-    protected LocalTime generateValue(
+    protected LocalTime generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

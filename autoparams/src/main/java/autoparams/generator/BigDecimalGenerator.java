@@ -5,14 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ResolutionContext;
 
-final class BigDecimalGenerator extends PlainObjectGenerator<BigDecimal> {
-
-    BigDecimalGenerator() {
-        super(BigDecimal.class);
-    }
+final class BigDecimalGenerator extends ObjectGeneratorBase<BigDecimal> {
 
     @Override
-    protected BigDecimal generateValue(
+    protected BigDecimal generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

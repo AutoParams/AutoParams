@@ -4,14 +4,10 @@ import java.util.UUID;
 
 import autoparams.ResolutionContext;
 
-final class UUIDGenerator extends PlainObjectGenerator<UUID> {
-
-    UUIDGenerator() {
-        super(UUID.class);
-    }
+final class UUIDGenerator extends ObjectGeneratorBase<UUID> {
 
     @Override
-    protected UUID generateValue(ObjectQuery query, ResolutionContext context) {
+    protected UUID generateObject(ObjectQuery query, ResolutionContext context) {
         return UUID.randomUUID();
     }
 }

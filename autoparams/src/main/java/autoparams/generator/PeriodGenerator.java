@@ -5,14 +5,10 @@ import java.time.Period;
 
 import autoparams.ResolutionContext;
 
-final class PeriodGenerator extends PlainObjectGenerator<Period> {
-
-    PeriodGenerator() {
-        super(Period.class);
-    }
+final class PeriodGenerator extends ObjectGeneratorBase<Period> {
 
     @Override
-    protected Period generateValue(
+    protected Period generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

@@ -6,14 +6,10 @@ import java.time.LocalTime;
 
 import autoparams.ResolutionContext;
 
-final class LocalDateTimeGenerator extends PlainObjectGenerator<LocalDateTime> {
-
-    LocalDateTimeGenerator() {
-        super(LocalDateTime.class);
-    }
+final class LocalDateTimeGenerator extends ObjectGeneratorBase<LocalDateTime> {
 
     @Override
-    protected LocalDateTime generateValue(
+    protected LocalDateTime generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {
