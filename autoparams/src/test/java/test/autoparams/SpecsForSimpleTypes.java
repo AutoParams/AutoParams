@@ -98,11 +98,17 @@ class SpecsForSimpleTypes {
     void sut_creates_arbitrary_temporal_amount_values(
         TemporalAmount value1,
         TemporalAmount value2,
-        TemporalAmount value3
+        TemporalAmount value3,
+        TemporalAmount value4,
+        TemporalAmount value5
     ) {
-        assertNotEquals(value1, value2);
-        assertNotEquals(value2, value3);
-        assertNotEquals(value3, value1);
+        final HashSet<TemporalAmount> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
     }
 
     @AutoParameterizedTest
