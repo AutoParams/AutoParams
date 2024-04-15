@@ -1,5 +1,7 @@
 package test.autoparams.generator;
 
+import java.time.LocalDate;
+import java.time.temporal.Temporal;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
@@ -122,5 +124,38 @@ public class SpecsForObjectGeneratorBase {
                 return value;
             }
         ).generate(query, context);
+    }
+
+    public static class LocalDateStubbingProxy
+        extends ObjectGeneratorBase<LocalDate> {
+
+        private final LocalDate value;
+
+        public LocalDateStubbingProxy(LocalDate value) {
+            this.value = value;
+        }
+
+        @Override
+        protected LocalDate generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return value;
+        }
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_supports_implemented_interfaces(
+        ResolutionContext context,
+        LocalDate value
+    ) {
+        ObjectQuery query = new TypeQuery(Temporal.class);
+        ObjectGenerator sut = new LocalDateStubbingProxy(value);
+
+        ObjectContainer actual = sut.generate(query, context);
+
+        assert actual != null;
+        assertThat(actual.unwrapOrElseThrow()).isSameAs(value);
     }
 }

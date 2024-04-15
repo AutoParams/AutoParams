@@ -1,6 +1,7 @@
 package autoparams.generator;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
@@ -28,7 +29,7 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        if (query.getType().equals(type)) {
+        if (matches(query.getType())) {
             return new ObjectContainer(generateObject(query, context));
         } else {
             return ObjectContainer.EMPTY;
@@ -51,6 +52,17 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
     @Override
     public final ObjectProcessor customize(ObjectProcessor processor) {
         return ObjectGenerator.super.customize(processor);
+    }
+
+    private boolean matches(Type type) {
+        return type instanceof Class && matches((Class<?>) type);
+    }
+
+    private boolean matches(Class<?> type) {
+        return Modifier.isAbstract(type.getModifiers())
+            && this.type instanceof Class
+            ? type.isAssignableFrom((Class<?>) this.type)
+            : type.equals(this.type);
     }
 
     protected abstract T generateObject(
