@@ -10,6 +10,7 @@ import java.time.MonthDay;
 import java.time.Period;
 import java.time.Year;
 import java.time.YearMonth;
+import java.time.ZoneOffset;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
@@ -272,6 +273,23 @@ class SpecsForSimpleTypes {
         MonthDay value5
     ) {
         final HashSet<MonthDay> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_zone_offset_values(
+        ZoneOffset value1,
+        ZoneOffset value2,
+        ZoneOffset value3,
+        ZoneOffset value4,
+        ZoneOffset value5
+    ) {
+        final HashSet<ZoneOffset> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);

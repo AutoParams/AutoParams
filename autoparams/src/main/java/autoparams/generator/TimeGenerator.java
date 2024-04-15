@@ -15,7 +15,8 @@ final class TimeGenerator extends CompositeObjectGenerator {
             new OffsetDateTimeGenerator(),
             new PeriodGenerator(),
             new ZonedDateTimeGenerator(),
-            new ZoneIdGenerator()
+            new ZoneIdGenerator(),
+            new ZoneOffsetGenerator()
         );
     }
 }
