@@ -13,13 +13,16 @@ public final class MockitoCustomizer implements Customizer {
 
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
-        return (query, context) ->
-            generator.generate(query, context).yieldIfEmpty(() -> generate(query.getType()));
+        return (query, context) -> generator
+            .generate(query, context)
+            .yieldIfEmpty(() -> generate(query.getType()));
     }
 
     private ObjectContainer generate(Type type) {
-        return type instanceof Class<?> ? generate((Class<?>) type)
-            : type instanceof ParameterizedType ? generate((ParameterizedType) type)
+        return type instanceof Class<?>
+            ? generate((Class<?>) type)
+            : type instanceof ParameterizedType
+            ? generate((ParameterizedType) type)
             : ObjectContainer.EMPTY;
     }
 
@@ -29,6 +32,8 @@ public final class MockitoCustomizer implements Customizer {
 
     private ObjectContainer generate(ParameterizedType parameterizedType) {
         Type type = parameterizedType.getRawType();
-        return type instanceof Class<?> ? generate((Class<?>) type) : ObjectContainer.EMPTY;
+        return type instanceof Class<?>
+            ? generate((Class<?>) type)
+            : ObjectContainer.EMPTY;
     }
 }
