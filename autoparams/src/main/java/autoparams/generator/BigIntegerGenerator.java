@@ -5,14 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ResolutionContext;
 
-final class BigIntegerGenerator extends PrimitiveTypeGenerator<BigInteger> {
-
-    BigIntegerGenerator() {
-        super(BigInteger.class, BigInteger.class);
-    }
+final class BigIntegerGenerator extends ObjectGeneratorBase<BigInteger> {
 
     @Override
-    protected BigInteger generateValue(
+    protected BigInteger generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {

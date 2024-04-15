@@ -4,17 +4,14 @@ import autoparams.ResolutionContext;
 import org.junit.jupiter.params.converter.ArgumentConverter;
 import org.junit.jupiter.params.converter.DefaultArgumentConverter;
 
-final class ArgumentConverterGenerator implements ObjectGenerator {
+final class ArgumentConverterGenerator
+    extends ObjectGeneratorBase<ArgumentConverter> {
 
     @Override
-    public ObjectContainer generate(
+    protected ArgumentConverter generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {
-        if (query.getType().equals(ArgumentConverter.class)) {
-            return new ObjectContainer(DefaultArgumentConverter.INSTANCE);
-        } else {
-            return ObjectContainer.EMPTY;
-        }
+        return DefaultArgumentConverter.INSTANCE;
     }
 }
