@@ -74,7 +74,7 @@ public class BuilderCustomizer implements Customizer {
         ResolutionContext context
     ) {
         ObjectQuery query = () -> setter.getGenericParameterTypes()[0];
-        Object argument = context.generate(query);
+        Object argument = context.resolve(query);
         invoke(builder, setter, argument);
     }
 
