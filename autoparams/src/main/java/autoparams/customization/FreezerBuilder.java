@@ -32,14 +32,18 @@ final class FreezerBuilder implements
     }
 
     private Predicate<Type> getPredicate(Parameter parameter) {
+        return getPredicate(parameter.getType());
+    }
+
+    private Predicate<Type> getPredicate(Class<?> parameterType) {
         Predicate<Type> predicate = type -> false;
 
         if (byExactType) {
-            predicate = predicate.or(type -> type.equals(parameter.getType()));
+            predicate = predicate.or(type -> type.equals(parameterType));
         }
 
         if (byImplementedInterfaces) {
-            List<Type> interfaces = asList(parameter.getType().getInterfaces());
+            List<Type> interfaces = asList(parameterType.getInterfaces());
             predicate = predicate.or(interfaces::contains);
         }
 
