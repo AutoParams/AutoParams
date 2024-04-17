@@ -92,7 +92,13 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         Object[] result = new Object[seed.length];
         Parameter[] parameters = getTargetParameters(context);
         for (int i = 0; i < seed.length; i++) {
-            result[i] = convertArgument(converter, seed[i], parameters[i], i);
+            result[i] = convertArgument(
+                converter,
+                seed[i],
+                parameters[i],
+                i,
+                context
+            );
         }
         return result;
     }
@@ -155,7 +161,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
             parameter.getAnnotatedType().getType()
         );
         Object argument = context.resolve(query);
-        return convertArgument(converter, argument, parameter, index);
+        return convertArgument(converter, argument, parameter, index, context);
     }
 
     private static void applyCustomizers(
@@ -262,32 +268,40 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         ArgumentConverter converter,
         Object argument,
         Parameter parameter,
-        int index
+        int index,
+        ResolutionContext resolutionContext
     ) {
         if (argument instanceof Named<?>) {
             return convertArgument(
                 converter,
                 (Named<?>) argument,
                 parameter,
-                index
+                index,
+                resolutionContext
             );
         }
 
-        ParameterContext context = new PlainParameterContext(parameter, index);
-        return converter.convert(argument, context);
+        ParameterContext parameterContext = new ArgumentResolutionContext(
+            resolutionContext,
+            parameter,
+            index
+        );
+        return converter.convert(argument, parameterContext);
     }
 
     private static Object convertArgument(
         ArgumentConverter converter,
         Named<?> argument,
         Parameter parameter,
-        int index
+        int index,
+        ResolutionContext context
     ) {
         Object payload = convertArgument(
             converter,
             argument.getPayload(),
             parameter,
-            index
+            index,
+            context
         );
         return Named.of(argument.getName(), payload);
     }

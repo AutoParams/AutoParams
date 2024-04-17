@@ -8,28 +8,35 @@ import java.util.Optional;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.platform.commons.util.AnnotationUtils;
 
-@Deprecated
-public final class PlainParameterContext implements ParameterContext {
+public final class ArgumentResolutionContext implements ParameterContext {
 
+    private final ResolutionContext resolutionContext;
     private final Parameter parameter;
     private final int index;
     private final Object target;
 
-    @Deprecated
-    public PlainParameterContext(Parameter parameter, int index) {
-        this.parameter = parameter;
-        this.index = index;
-        this.target = null;
+    public ArgumentResolutionContext(
+        ResolutionContext resolutionContext,
+        Parameter parameter,
+        int index
+    ) {
+        this(resolutionContext, parameter, index, null);
     }
 
-    public PlainParameterContext(
+    public ArgumentResolutionContext(
+        ResolutionContext resolutionContext,
         Parameter parameter,
         int index,
         Object target
     ) {
+        this.resolutionContext = resolutionContext;
         this.parameter = parameter;
         this.index = index;
         this.target = target;
+    }
+
+    public ResolutionContext getResolutionContext() {
+        return resolutionContext;
     }
 
     @Override

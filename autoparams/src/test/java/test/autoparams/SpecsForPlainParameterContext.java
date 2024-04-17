@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForPlainParameterContext {
 
+    @Deprecated
     @ParameterizedTest
     @AutoSource
     void getTarget_returns_some_if_target_is_present(
