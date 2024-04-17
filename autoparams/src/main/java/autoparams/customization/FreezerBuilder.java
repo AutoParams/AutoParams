@@ -12,7 +12,7 @@ import org.junit.jupiter.params.support.AnnotationConsumer;
 import static java.util.Arrays.asList;
 
 @SuppressWarnings("deprecation")
-final class ArgumentFixer implements
+final class FreezerBuilder implements
     AnnotationConsumer<Fix>,
     AnnotationVisitor<Fix>,
     ArgumentProcessor {

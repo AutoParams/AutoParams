@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.PARAMETER})
+@Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@ArgumentProcessing(ArgumentFixer.class)
+@ArgumentProcessing(FreezerBuilder.class)
 public @interface Fix {
 
     boolean byExactType() default true;
