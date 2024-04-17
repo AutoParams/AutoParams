@@ -2,7 +2,15 @@ package autoparams.customization;
 
 import java.lang.annotation.Annotation;
 
-public interface AnnotationVisitor<T extends Annotation> {
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
-    void visit(T annotation);
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
+public interface AnnotationVisitor<T extends Annotation>
+    extends AnnotationConsumer<T> {
+
+    @SuppressWarnings("unused")
+    default void visit(T annotation) {
+        accept(annotation);
+    }
 }

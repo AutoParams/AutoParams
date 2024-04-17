@@ -3,17 +3,15 @@ package autoparams.customization;
 import java.util.Arrays;
 
 import autoparams.processor.InstanceFieldWriter;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
+@SuppressWarnings("deprecation")
 public class InstanceFieldWriterFactory implements
+    AnnotationConsumer<WriteInstanceFields>,
     AnnotationVisitor<WriteInstanceFields>,
     CustomizerFactory {
 
     private Class<?>[] target;
-
-    @Override
-    public void visit(WriteInstanceFields annotation) {
-        this.target = annotation.value();
-    }
 
     @Override
     public Customizer createCustomizer() {
@@ -22,5 +20,10 @@ public class InstanceFieldWriterFactory implements
                 .map(InstanceFieldWriter::new)
                 .toArray(Customizer[]::new)
         );
+    }
+
+    @Override
+    public void accept(WriteInstanceFields annotation) {
+        this.target = annotation.value();
     }
 }

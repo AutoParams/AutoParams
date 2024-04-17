@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import autoparams.customization.AnnotationVisitor;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import static autoparams.Instantiator.instantiate;
 
@@ -86,8 +86,8 @@ final class Annotations {
         Function<L, Class<? extends S>> locateServiceType
     ) {
         S service = instantiate(locateServiceType.apply(locator));
-        if (service instanceof AnnotationVisitor<?>) {
-            ((AnnotationVisitor<Annotation>) service).visit(annotation);
+        if (service instanceof AnnotationConsumer<?>) {
+            ((AnnotationConsumer<Annotation>) service).accept(annotation);
         }
         return service;
     }

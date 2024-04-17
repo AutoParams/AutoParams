@@ -7,10 +7,15 @@ import java.util.function.Predicate;
 
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import static java.util.Arrays.asList;
 
-final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
+@SuppressWarnings("deprecation")
+final class ArgumentFixer implements
+    AnnotationConsumer<Fix>,
+    AnnotationVisitor<Fix>,
+    ArgumentProcessor {
 
     private boolean byExactType = false;
     private boolean byImplementedInterfaces = false;
@@ -42,7 +47,7 @@ final class ArgumentFixer implements ArgumentProcessor, AnnotationVisitor<Fix> {
     }
 
     @Override
-    public void visit(Fix annotation) {
+    public void accept(Fix annotation) {
         byExactType = annotation.byExactType();
         byImplementedInterfaces = annotation.byImplementedInterfaces();
     }
