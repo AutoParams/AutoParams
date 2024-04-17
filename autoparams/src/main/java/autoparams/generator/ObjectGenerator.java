@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
-import autoparams.customization.DelegatingCustomizer;
 
 @FunctionalInterface
 public interface ObjectGenerator extends Customizer {
@@ -24,9 +23,6 @@ public interface ObjectGenerator extends Customizer {
 
     @Deprecated
     default Customizer toCustomizer() {
-        return new DelegatingCustomizer(
-            generator -> new CompositeObjectGenerator(this, generator),
-            processor -> processor
-        );
+        return this;
     }
 }
