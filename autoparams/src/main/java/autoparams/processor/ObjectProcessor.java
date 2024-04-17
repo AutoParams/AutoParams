@@ -2,7 +2,6 @@ package autoparams.processor;
 
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
-import autoparams.customization.DelegatingCustomizer;
 import autoparams.generator.ObjectQuery;
 
 @FunctionalInterface
@@ -19,9 +18,6 @@ public interface ObjectProcessor extends Customizer {
 
     @Deprecated
     default Customizer toCustomizer() {
-        return new DelegatingCustomizer(
-            generator -> generator,
-            processor -> new CompositeObjectProcessor(processor, this)
-        );
+        return this;
     }
 }
