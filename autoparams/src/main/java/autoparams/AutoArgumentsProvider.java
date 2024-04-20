@@ -4,10 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import autoparams.customization.ArgumentProcessing;
@@ -26,9 +27,9 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
-import static autoparams.Annotations.findService;
-import static autoparams.Annotations.traverseAnnotations;
+import static autoparams.AnnotationTraverser.traverseAnnotations;
 import static autoparams.Instantiator.instantiate;
 import static java.lang.System.arraycopy;
 
@@ -168,21 +169,13 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         AnnotatedElement element,
         ResolutionContext context
     ) {
-        traverseAnnotations(
-            element,
-            annotation -> applyCustomizers(annotation, context)
-        );
-    }
-
-    private static void applyCustomizers(
-        Annotation annotation,
-        ResolutionContext context
-    ) {
-        if (annotation.annotationType().equals(Customization.class)) {
-            applyCustomization((Customization) annotation, context);
-        } else {
-            applyCustomizerSource(annotation, context);
-        }
+        traverseAnnotations(element, (annotation, parent) -> {
+            if (annotation.annotationType().equals(Customization.class)) {
+                applyCustomization((Customization) annotation, context);
+            } else {
+                applyCustomizerSource(annotation, parent, context);
+            }
+        });
     }
 
     private static void applyCustomization(
@@ -196,11 +189,15 @@ class AutoArgumentsProvider implements ArgumentsProvider {
 
     private static void applyCustomizerSource(
         Annotation annotation,
+        Annotation parent,
         ResolutionContext context
     ) {
-        findService(annotation, CustomizerSource.class, CustomizerSource::value)
-            .map(CustomizerFactory::createCustomizer)
-            .ifPresent(context::applyCustomizer);
+        if (annotation instanceof CustomizerSource) {
+            CustomizerSource source = (CustomizerSource) annotation;
+            CustomizerFactory factory = instantiate(source.value());
+            consumeAnnotationIfMatch(factory, parent);
+            context.applyCustomizer(factory.createCustomizer());
+        }
     }
 
     private static void processArgument(
@@ -208,21 +205,20 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         Object argument,
         ResolutionContext context
     ) {
-        Object unnamedArgument = argument instanceof Named<?>
-            ? ((Named<?>) argument).getPayload()
-            : argument;
+        if (argument instanceof Named<?>) {
+            Object unnamedArgument = ((Named<?>) argument).getPayload();
+            processArgument(parameter, unnamedArgument, context);
+            return;
+        }
 
         traverseAnnotations(
             parameter,
-            annotation -> {
-                Optional<ArgumentProcessor> processor = findService(
-                    annotation,
-                    ArgumentProcessing.class,
-                    ArgumentProcessing::value
-                );
-                processor
-                    .map(p -> p.process(parameter, unnamedArgument))
-                    .ifPresent(context::applyCustomizer);
+            ArgumentProcessing.class,
+            (annotation, parent) -> {
+                ArgumentProcessor processor = instantiate(annotation.value());
+                consumeAnnotationIfMatch(processor, parent);
+                Customizer customizer = processor.process(parameter, argument);
+                context.applyCustomizer(customizer);
             }
         );
     }
@@ -252,7 +248,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         traverseAnnotations(
             context.getRequiredTestMethod(),
             Repeat.class,
-            annotations::add
+            (annotation, parent) -> annotations.add(annotation)
         );
         return Math.max(1, annotations.stream().mapToInt(Repeat::value).sum());
     }
@@ -304,5 +300,49 @@ class AutoArgumentsProvider implements ArgumentsProvider {
             context
         );
         return Named.of(argument.getName(), payload);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void consumeAnnotationIfMatch(
+        Object service,
+        Annotation annotation
+    ) {
+        if (isAnnotationConsumer(service, getAnnotationType(annotation))) {
+            ((AnnotationConsumer<Annotation>) service).accept(annotation);
+        }
+    }
+
+    private static boolean isAnnotationConsumer(
+        Object service,
+        Class<?> annotationType
+    ) {
+        for (Type type : service.getClass().getGenericInterfaces()) {
+            if (type instanceof ParameterizedType) {
+                ParameterizedType implemented = (ParameterizedType) type;
+                if (isAnnotationConsumer(implemented, annotationType)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isAnnotationConsumer(
+        ParameterizedType implemented,
+        Class<?> annotationType
+    ) {
+        return implemented.getRawType().equals(AnnotationConsumer.class)
+            && implemented.getActualTypeArguments()[0].equals(annotationType);
+    }
+
+    private static Class<?> getAnnotationType(Annotation annotation) {
+        for (Class<?> type : annotation.getClass().getInterfaces()) {
+            if (type.isAnnotation()) {
+                return type;
+            }
+        }
+
+        throw new RuntimeException("Unreachable code");
     }
 }
