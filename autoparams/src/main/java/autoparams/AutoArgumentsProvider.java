@@ -20,8 +20,6 @@ import autoparams.customization.CustomizerSource;
 import autoparams.generator.ObjectQuery;
 import autoparams.generator.ParameterQuery;
 import org.junit.jupiter.api.Named;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConverter;
@@ -239,11 +237,6 @@ class AutoArgumentsProvider implements ArgumentsProvider {
             if (brake.shouldBrakeBefore(parameterContext)) {
                 break;
             }
-            Class<?> parameterType = parameter.getType();
-            if (parameterType.equals(TestInfo.class) ||
-                parameterType.equals(TestReporter.class)) {
-                break;
-            }
             targetCount++;
         }
         return Arrays.copyOf(allParameters, targetCount);
@@ -251,6 +244,8 @@ class AutoArgumentsProvider implements ArgumentsProvider {
 
     private static ParameterScanBrake getParameterScanBrake(Method method) {
         List<ParameterScanBrake> brakes = new ArrayList<>();
+
+        brakes.add(DefaultParameterScanBrake.INSTANCE);
 
         traverseAnnotations(
             method,
