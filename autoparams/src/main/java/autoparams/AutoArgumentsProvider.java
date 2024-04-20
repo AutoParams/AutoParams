@@ -224,9 +224,20 @@ class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private static Parameter[] getTargetParameters(ResolutionContext context) {
-        Parameter[] allParameters = getTestMethod(context).getParameters();
+        Method method = getTestMethod(context);
+        ParameterScanBrake brake = getParameterScanBrake(method);
+        Parameter[] allParameters = method.getParameters();
         int targetCount = 0;
-        for (Parameter parameter : allParameters) {
+        for (int index = 0; index < allParameters.length; index++) {
+            Parameter parameter = allParameters[index];
+            ParameterContext parameterContext = new ArgumentResolutionContext(
+                context,
+                parameter,
+                index
+            );
+            if (brake.shouldBrakeBefore(parameterContext)) {
+                break;
+            }
             Class<?> parameterType = parameter.getType();
             if (parameterType.equals(TestInfo.class) ||
                 parameterType.equals(TestReporter.class)) {
@@ -235,6 +246,24 @@ class AutoArgumentsProvider implements ArgumentsProvider {
             targetCount++;
         }
         return Arrays.copyOf(allParameters, targetCount);
+    }
+
+    private static ParameterScanBrake getParameterScanBrake(Method method) {
+        List<ParameterScanBrake> brakes = new ArrayList<>();
+
+        traverseAnnotations(
+            method,
+            BrakeParameterScanWith.class,
+            (annotation, parent) -> {
+                ParameterScanBrake brake = instantiate(annotation.value());
+                consumeAnnotationIfMatch(brake, parent);
+                brakes.add(brake);
+            }
+        );
+
+        return parameterContext -> brakes
+            .stream()
+            .anyMatch(brake -> brake.shouldBrakeBefore(parameterContext));
     }
 
     private static Method getTestMethod(ResolutionContext context) {
