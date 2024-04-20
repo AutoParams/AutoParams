@@ -92,13 +92,12 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         ArgumentConverter converter = context.resolve(ArgumentConverter.class);
         Object[] result = new Object[seed.length];
         Parameter[] parameters = getTargetParameters(context);
-        for (int i = 0; i < seed.length; i++) {
-            result[i] = convertArgument(
+        for (int index = 0; index < seed.length; index++) {
+            result[index] = convertArgument(
                 converter,
-                seed[i],
-                parameters[i],
-                i,
-                context
+                seed[index],
+                parameters[index],
+                index
             );
         }
         return result;
@@ -162,7 +161,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
             parameter.getAnnotatedType().getType()
         );
         Object argument = context.resolve(query);
-        return convertArgument(converter, argument, parameter, index, context);
+        return convertArgument(converter, argument, parameter, index);
     }
 
     private static void applyCustomizers(
@@ -224,14 +223,16 @@ class AutoArgumentsProvider implements ArgumentsProvider {
     }
 
     private static Parameter[] getTargetParameters(ResolutionContext context) {
-        Method method = getTestMethod(context);
+        return getTargetParameters(getTestMethod(context));
+    }
+
+    private static Parameter[] getTargetParameters(Method method) {
         ParameterScanBrake brake = getParameterScanBrake(method);
         Parameter[] allParameters = method.getParameters();
         int targetCount = 0;
         for (int index = 0; index < allParameters.length; index++) {
             Parameter parameter = allParameters[index];
-            ParameterContext parameterContext = new ArgumentResolutionContext(
-                context,
+            ParameterContext parameterContext = new SimpleParameterContext(
                 parameter,
                 index
             );
@@ -293,24 +294,22 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         ArgumentConverter converter,
         Object argument,
         Parameter parameter,
-        int index,
-        ResolutionContext resolutionContext
+        int index
     ) {
         if (argument instanceof Named<?>) {
             return convertArgument(
                 converter,
                 (Named<?>) argument,
                 parameter,
-                index,
-                resolutionContext
+                index
             );
         }
 
-        ParameterContext parameterContext = new ArgumentResolutionContext(
-            resolutionContext,
+        ParameterContext parameterContext = new SimpleParameterContext(
             parameter,
             index
         );
+
         return converter.convert(argument, parameterContext);
     }
 
@@ -318,16 +317,15 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         ArgumentConverter converter,
         Named<?> argument,
         Parameter parameter,
-        int index,
-        ResolutionContext context
+        int index
     ) {
         Object payload = convertArgument(
             converter,
             argument.getPayload(),
             parameter,
-            index,
-            context
+            index
         );
+
         return Named.of(argument.getName(), payload);
     }
 
