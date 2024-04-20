@@ -7,21 +7,20 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.ParameterContext;
 
-final class DefaultParameterScanBrake implements ParameterScanBrake {
+final class TestGearBrake implements Brake {
 
-    private static final List<Class<?>> TEST_GEARS = Arrays.asList(
+    private static final List<Class<?>> GEARS = Arrays.asList(
         TestInfo.class,
         TestReporter.class
     );
 
-    public static final DefaultParameterScanBrake INSTANCE;
+    public static final TestGearBrake INSTANCE = new TestGearBrake();
 
-    static {
-        INSTANCE = new DefaultParameterScanBrake();
+    private TestGearBrake() {
     }
 
     @Override
     public boolean shouldBrakeBefore(ParameterContext parameterContext) {
-        return TEST_GEARS.contains(parameterContext.getParameter().getType());
+        return GEARS.contains(parameterContext.getParameter().getType());
     }
 }

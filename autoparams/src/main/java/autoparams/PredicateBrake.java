@@ -5,8 +5,8 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-final class PredicateParameterScanBrake implements
-    ParameterScanBrake,
+final class PredicateBrake implements
+    Brake,
     AnnotationConsumer<BrakeBefore> {
 
     private static final Predicate<ParameterContext> NEGATIVE = x -> false;
@@ -19,7 +19,7 @@ final class PredicateParameterScanBrake implements
     }
 
     @Override
-    public void accept(BrakeBefore brakeBefore) {
-        predicate = Instantiator.instantiate(brakeBefore.value());
+    public void accept(BrakeBefore annotation) {
+        predicate = Instantiator.instantiate(annotation.value());
     }
 }

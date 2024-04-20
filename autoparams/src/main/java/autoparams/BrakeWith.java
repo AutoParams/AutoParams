@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@interface BrakeParameterScanWith {
+@interface BrakeWith {
 
-    Class<? extends ParameterScanBrake> value();
+    Class<? extends Brake> value();
 }

@@ -10,7 +10,7 @@ import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public final class ResolutionContext {
+public class ResolutionContext {
 
     private final ExtensionContext extensionContext;
     private ObjectGenerator generator;
@@ -61,7 +61,9 @@ public final class ResolutionContext {
 
     private Object generateValue(ObjectQuery query) {
         final Type type = query.getType();
-        if (ObjectGenerator.class.equals(type)) {
+        if (ResolutionContext.class.equals(type)) {
+            return this;
+        } else if (ObjectGenerator.class.equals(type)) {
             return generator;
         } else if (ObjectProcessor.class.equals(type)) {
             return processor;

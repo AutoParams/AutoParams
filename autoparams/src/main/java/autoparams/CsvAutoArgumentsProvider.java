@@ -20,9 +20,9 @@ public final class CsvAutoArgumentsProvider
     }
 
     @SuppressWarnings("unchecked")
-    private CsvAutoArgumentsProvider(ArgumentsProvider seedProvider) {
-        super(seedProvider);
-        annotationConsumer = (AnnotationConsumer<CsvSource>) seedProvider;
+    private CsvAutoArgumentsProvider(ArgumentsProvider assetProvider) {
+        super(assetProvider);
+        annotationConsumer = (AnnotationConsumer<CsvSource>) assetProvider;
     }
 
     @Override

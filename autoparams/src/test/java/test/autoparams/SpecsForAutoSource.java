@@ -142,7 +142,7 @@ class SpecsForAutoSource {
     @ParameterizedTest
     @ValueAutoSource(strings = { "a", "b", "c" })
     @Customization(PrefixerCustomizer.class)
-    void sut_applies_ArgumentConverter_to_seed_arguments(String x, String y) {
+    void sut_applies_ArgumentConverter_to_asset_arguments(String x, String y) {
         assertThat(x).startsWith("prefix");
     }
 }

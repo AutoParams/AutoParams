@@ -20,9 +20,9 @@ public final class ValueAutoArgumentsProvider
     }
 
     @SuppressWarnings("unchecked")
-    public ValueAutoArgumentsProvider(ArgumentsProvider seedProvider) {
-        super(seedProvider);
-        annotationConsumer = (AnnotationConsumer<ValueSource>) seedProvider;
+    public ValueAutoArgumentsProvider(ArgumentsProvider assetProvider) {
+        super(assetProvider);
+        annotationConsumer = (AnnotationConsumer<ValueSource>) assetProvider;
     }
 
     @Override

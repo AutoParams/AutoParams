@@ -20,9 +20,9 @@ public final class EnumAutoArgumentsProvider
     }
 
     @SuppressWarnings("unchecked")
-    private EnumAutoArgumentsProvider(ArgumentsProvider seedProvider) {
-        super(seedProvider);
-        annotationConsumer = (AnnotationConsumer<EnumSource>) seedProvider;
+    private EnumAutoArgumentsProvider(ArgumentsProvider assetProvider) {
+        super(assetProvider);
+        annotationConsumer = (AnnotationConsumer<EnumSource>) assetProvider;
     }
 
     @Override

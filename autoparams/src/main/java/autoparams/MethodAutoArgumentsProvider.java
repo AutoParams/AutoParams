@@ -20,9 +20,9 @@ public final class MethodAutoArgumentsProvider
     }
 
     @SuppressWarnings("unchecked")
-    public MethodAutoArgumentsProvider(ArgumentsProvider seedProvider) {
-        super(seedProvider);
-        annotationConsumer = (AnnotationConsumer<MethodSource>) seedProvider;
+    public MethodAutoArgumentsProvider(ArgumentsProvider assetProvider) {
+        super(assetProvider);
+        annotationConsumer = (AnnotationConsumer<MethodSource>) assetProvider;
     }
 
     @Override

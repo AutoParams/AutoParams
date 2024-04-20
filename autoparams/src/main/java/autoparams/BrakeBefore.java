@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
 
 @Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-@BrakeParameterScanWith(PredicateParameterScanBrake.class)
+@BrakeWith(PredicateBrake.class)
 public @interface BrakeBefore {
 
     Class<? extends Predicate<ParameterContext>> value();
