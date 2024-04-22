@@ -42,6 +42,7 @@ public class SpecsForBrakeBeforeAnnotation {
     public @interface ResolveWithExtension {
     }
 
+    @SuppressWarnings("unused")
     @ParameterizedTest
     @AutoSource
     @BrakeBeforeAnnotation(ResolveWithExtension.class)
