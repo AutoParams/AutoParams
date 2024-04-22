@@ -5,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Deprecated
-@Target({ ElementType.PARAMETER })
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@ArgumentProcessing(FreezerBuilder.class)
-public @interface Fix {
+@RecycleArgument(FreezingRecycler.class)
+public @interface Freeze {
 
     boolean byExactType() default true;
 

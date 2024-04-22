@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 @Target({ ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ArgumentProcessing {

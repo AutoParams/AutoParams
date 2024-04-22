@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import autoparams.AutoSource;
 import autoparams.CsvAutoSource;
-import autoparams.customization.Fix;
+import autoparams.customization.Freeze;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,9 +47,9 @@ class SpecsForCsvAutoSource {
 
     @ParameterizedTest
     @CsvAutoSource({ "16, foo" })
-    void sut_reuses_values_fixed_by_specified_argument(
-        @Fix int value1,
-        @Fix String value2,
+    void sut_reuses_values_frozen_by_specified_argument(
+        @Freeze int value1,
+        @Freeze String value2,
         ComplexObject value3
     ) {
         assertEquals(16, value3.getValue1());

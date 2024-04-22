@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import autoparams.AutoSource;
-import autoparams.customization.Fix;
+import autoparams.customization.Freeze;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,9 +31,9 @@ public class SpecsForZonedDateTime {
 
     @ParameterizedTest
     @AutoSource
-    void sut_fixes_value_by_ZoneId(
-        @Fix ZoneId fixedZoneId, ZonedDateTime zonedDateTime
+    void sut_uses_frozen_ZoneId(
+        @Freeze ZoneId frozenZoneId, ZonedDateTime zonedDateTime
     ) {
-        assertEquals(fixedZoneId, zonedDateTime.getZone());
+        assertEquals(frozenZoneId, zonedDateTime.getZone());
     }
 }

@@ -9,7 +9,9 @@ import java.util.Optional;
 import autoparams.AnnotationScanner.Edge;
 import autoparams.customization.ArgumentProcessing;
 import autoparams.customization.ArgumentProcessor;
+import autoparams.customization.ArgumentRecycler;
 import autoparams.customization.Customizer;
+import autoparams.customization.RecycleArgument;
 import autoparams.generator.ParameterQuery;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -86,7 +88,7 @@ final class TestParameterContext implements ParameterContext {
     public Object resolveArgument(Arguments asset) {
         Object supplied = supplyArgument(asset);
         Object argument = convertArgument(supplied);
-        consumeArgument(argument);
+        recycleArgument(argument);
         return argument;
     }
 
@@ -118,24 +120,43 @@ final class TestParameterContext implements ParameterContext {
         return resolutionContext.resolve(ArgumentConverter.class);
     }
 
-    private void consumeArgument(Object argument) {
+    @SuppressWarnings("deprecation")
+    private void recycleArgument(Object argument) {
         if (argument instanceof Named<?>) {
-            consumeArgument((Named<?>) argument);
+            recycleArgument((Named<?>) argument);
             return;
+        }
+
+        for (Edge<RecycleArgument> edge :
+            scanAnnotations(parameter, RecycleArgument.class)
+        ) {
+            recycleArgument(argument, edge);
         }
 
         for (Edge<ArgumentProcessing> edge :
             scanAnnotations(parameter, ArgumentProcessing.class)
         ) {
-            consumeArgument(argument, edge);
+            recycleArgumentWithArgumentProcessor(argument, edge);
         }
     }
 
-    private void consumeArgument(Named<?> argument) {
-        consumeArgument(argument.getPayload());
+    private void recycleArgument(Named<?> argument) {
+        recycleArgument(argument.getPayload());
     }
 
-    private void consumeArgument(
+    private void recycleArgument(
+        Object argument,
+        Edge<RecycleArgument> edge
+    ) {
+        ArgumentRecycler recycler = instantiate(edge.getCurrent().value());
+        edge.useParent(parent -> consumeAnnotationIfMatch(recycler, parent));
+        Customizer customizer = recycler.recycle(argument, this);
+        resolutionContext.applyCustomizer(customizer);
+    }
+
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated
+    private void recycleArgumentWithArgumentProcessor(
         Object argument,
         Edge<ArgumentProcessing> edge
     ) {

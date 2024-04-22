@@ -1,7 +1,7 @@
 package test.autoparams;
 
 import autoparams.CsvAutoSource;
-import autoparams.customization.Fix;
+import autoparams.customization.Freeze;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,8 +52,8 @@ class SpecsForCsvAutoSourceWithMultiLineTextBlock {
         FRUIT,       RANK
         apple,         1
         """)
-    void useHeadersInDisplayName_correctly_works_with_ArgumentProcessor(
-        @Fix String fruit,
+    void useHeadersInDisplayName_correctly_works_with_ArgumentRecycler(
+        @Freeze String fruit,
         int rank,
         StringBag bag
     ) {
