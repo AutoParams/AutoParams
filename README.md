@@ -21,7 +21,7 @@ void parameterizedTest(int a, int b) {
 
 In the example above, the automatic generation of test data by AutoParams can potentially eliminate the need for triangulation in tests, streamlining the testing process.
 
-AutoParams also simplifies the writing of test setup code. For instance, if you need to generate multiple review entities for a single product, you can effortlessly accomplish this using the `@Fix` annotation.
+AutoParams also simplifies the writing of test setup code. For instance, if you need to generate multiple review entities for a single product, you can effortlessly accomplish this using the `@Freeze` annotation.
 
 ```java
 @AllArgsConstructor
@@ -46,7 +46,7 @@ public class Review {
 ```java
 @ParameterizedTest
 @AutoSource
-void testMethod(@Fix Product product, Review[] reviews) {
+void testMethod(@Freeze Product product, Review[] reviews) {
     for (Review review : reviews) {
         assertSame(product, review.getProduct());
     }
@@ -69,7 +69,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>5.0.0</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:5.0.0'
+testImplementation 'io.github.autoparams:autoparams:7.0.0'
 ```
 
 ## Features
@@ -317,13 +317,13 @@ In the example above, the test method testMethod will run ten times. Each run wi
 
 By using the `@Repeat` feature, you can increase the comprehensiveness and reliability of your test suite with minimal additional effort.
 
-### `@Fix` Annotation
+### `@Freeze` Annotation
 
-AutoParams provides a `@Fix` annotation to let you "freeze" or fix the value of a generated argument. Once an argument is fixed using the `@Fix` annotation, `@AutoSource` will reuse this fixed value for any subsequent parameters of the same type within the same test method.
+AutoParams provides a `@Freeze` annotation to let you fix the value of a generated argument. Once an argument is fixed using the `@Freeze` annotation, `@AutoSource` will reuse this fixed value for any subsequent parameters of the same type within the same test method.
 
 #### How to Use
 
-Simply decorate the parameter in your test method with the `@Fix` annotation. This will instruct AutoParams to keep that parameter's value constant while generating new values for other parameters.
+Simply decorate the parameter in your test method with the `@Freeze` annotation. This will instruct AutoParams to keep that parameter's value constant while generating new values for other parameters.
 
 Here's an example:
 
@@ -338,21 +338,21 @@ public class ValueContainer {
 ```java
 @ParameterizedTest
 @AutoSource
-void testMethod(@Fix String arg1, String arg2, ValueContainer arg3) {
+void testMethod(@Freeze String arg1, String arg2, ValueContainer arg3) {
     assertEquals(arg1, arg2);
     assertEquals(arg1, arg3.getValue());
 }
 ```
 
-In the above example, the value of `arg1` is fixed by the `@Fix` annotation. The test verifies that `arg1` is equal to `arg2` and also equal to the value property of `arg3`. As a result, `arg1`, `arg2`, and `arg3.getValue()` will all contain the same string value, thanks to the `@Fix` annotation.
+In the above example, the value of `arg1` is fixed by the `@Freeze` annotation. The test verifies that `arg1` is equal to `arg2` and also equal to the value property of `arg3`. As a result, `arg1`, `arg2`, and `arg3.getValue()` will all contain the same string value, thanks to the `@Freeze` annotation.
 
 #### Benefits
 
-1. **Consistency**: `@Fix` ensures that certain values stay constant, making it easier to verify relations between different parameters in your tests.
+1. **Consistency**: `@Freeze` ensures that certain values stay constant, making it easier to verify relations between different parameters in your tests.
 1. **Simpler Test Logic**: Reusing a fixed value across multiple parameters simplifies your test logic and makes your tests easier to read and maintain.
-1. **Control Over Randomness**: While `@AutoSource` provides the benefit of random value generation, `@Fix` gives you control when you need specific values to be consistent throughout a test.
+1. **Control Over Randomness**: While `@AutoSource` provides the benefit of random value generation, `@Freeze` gives you control when you need specific values to be consistent throughout a test.
 
-The `@Fix` annotation is a powerful feature for scenarios where you need to maintain the consistency of certain test parameters while still benefiting from the randomness and coverage offered by AutoParams.
+The `@Freeze` annotation is a powerful feature for scenarios where you need to maintain the consistency of certain test parameters while still benefiting from the randomness and coverage offered by AutoParams.
 
 ### `@ValueAutoSource` Annotation
 
@@ -375,9 +375,9 @@ void testMethod(String arg1, String arg2) {
 
 In this case, `arg1` is set to `"foo"`, while `arg2` will receive an automatically generated value. The test confirms that `arg1` is exactly `"foo"` and that `arg2` is different from `arg1`.
 
-#### Compatibility with `@Fix`
+#### Compatibility with `@Freeze`
 
-The `@ValueAutoSource` annotation is fully compatible with the `@Fix` annotation, allowing you to fix certain parameter values while also providing predefined values for others.
+The `@ValueAutoSource` annotation is fully compatible with the `@Freeze` annotation, allowing you to fix certain parameter values while also providing predefined values for others.
 
 Here is how they can work together:
 
@@ -392,7 +392,7 @@ public class ValueContainer {
 ```java
 @ParameterizedTest
 @ValueAutoSource(strings = {"foo"})
-void testMethod(@Fix String arg1, String arg2, ValueContainer arg3) {
+void testMethod(@Freeze String arg1, String arg2, ValueContainer arg3) {
     assertEquals("foo", arg2);
     assertEquals("foo", arg3.getValue());
 }
@@ -428,9 +428,9 @@ void testMethod(int arg1, String arg2, String arg3) {
 
 In this example, `arg1` is set to `16` and `arg2` is set to `"foo"` based on the provided CSV input. Meanwhile, `arg3` will be assigned a randomly generated value. The test verifies that `arg3` is different from `arg2`.
 
-#### Compatibility with `@Fix`
+#### Compatibility with `@Freeze`
 
-Just like `@ValueAutoSource`, `@CsvAutoSource` is fully compatible with the `@Fix` annotation, allowing you to lock in values for specific parameters while also defining others via CSV.
+Just like `@ValueAutoSource`, `@CsvAutoSource` is fully compatible with the `@Freeze` annotation, allowing you to lock in values for specific parameters while also defining others via CSV.
 
 Here's how they can work together:
 
@@ -445,7 +445,7 @@ public class ValueContainer {
 ```java
 @ParameterizedTest
 @CsvAutoSource({"16, foo"})
-void testMethod(int arg1, @Fix String arg2, ValueContainer arg3) {
+void testMethod(int arg1, @Freeze String arg2, ValueContainer arg3) {
     assertEquals("foo", arg3.getValue());
 }
 ```
@@ -486,9 +486,9 @@ static Stream<Arguments> factoryMethod() {
 
 In this instance, `arg1` and `arg2` are set based on the values provided by the `factoryMethod`. `arg3` will be assigned a randomly generated value, and the test confirms that `arg3` is not equal to `arg2`.
 
-#### Compatibility with `@Fix`
+#### Compatibility with `@Freeze`
 
-The `@MethodAutoSource` annotation is also fully compatible with the `@Fix` annotation. This lets you lock in values for particular parameters while dynamically populating others through a factory method.
+The `@MethodAutoSource` annotation is also fully compatible with the `@Freeze` annotation. This lets you lock in values for particular parameters while dynamically populating others through a factory method.
 
 Here's how it works together:
 
@@ -503,7 +503,7 @@ public class ValueContainer {
 ```java
 @ParameterizedTest
 @MethodAutoSource("factoryMethod")
-void testMethod(int arg1, @Fix String arg2, ValueContainer arg3) {
+void testMethod(int arg1, @Freeze String arg2, ValueContainer arg3) {
     assertEquals("foo", arg3.getValue());
 }
 
@@ -596,16 +596,10 @@ public class Product {
 You can implement these rules using the `Customizer` interface:
 
 ```java
-public class ProductCustomization implements Customizer {
+public class ProductGenerator extends ObjectGeneratorBase<Product> {
 
     @Override
-    public ObjectGenerator customize(ObjectGenerator generator) {
-        return (query, context) -> query.getType().equals(Product.class)
-            ? new ObjectContainer(factory(context))
-            : generator.generate(query, context);
-    }
-
-    private Product factory(ResolutionContext context) {
+    protected Product generateObject(ObjectQuery query, ResolutionContext context) {
         UUID id = context.generate(UUID.class);
         String name = context.generate(String.class);
 
@@ -624,24 +618,24 @@ Annotate your test method to apply the customization:
 ```java
 @ParameterizedTest
 @AutoSource
-@Customization(ProductCustomization.class)
+@Customization(ProductGenerator.class)
 void testMethod(Product arg) {
     assertTrue(arg.getSellingPriceAmount().compareTo(arg.getListPriceAmount()) < 0);
 }
 ```
 
-#### Composite Customization
+#### Composite Customizer
 
-You can also create composite customizations to apply multiple custom rules:
+You can also create a composite customizer to apply multiple custom rules:
 
 ```java
-public class DomainCustomization extends CompositeCustomzer {
-    public DomainCustomization() {
+public class DomainCustomizer extends CompositeCustomzer {
+    public DomainCustomizer() {
         super(
-            new EmailCustomization(),
-            new UserCustomization(),
-            new SupplierCustomization(),
-            new ProductCustomization()
+            new EmailGenerator(),
+            new UserGenerator(),
+            new SupplierGenerator(),
+            new ProductGenerator()
         );
     }
 }
@@ -652,7 +646,7 @@ And use it like this:
 ```java
 @ParameterizedTest
 @AutoSource
-@Customization(DomainCustomization.class)
+@Customization(DomainCustomizer.class)
 void testMethod(Email email, User user, Supplier supplier, Product product) {
 }
 ```
@@ -673,7 +667,7 @@ public class User {
 ```java
 @ParameterizedTest
 @AutoSource
-@Customization(InstancePropertyCustomizer.class)
+@Customization(InstancePropertyWriter.class)
 void testMethod(User user) {
     assertNotNull(user.getId());
     assertNotNull(user.getName());
@@ -700,7 +694,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>5.0.0</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
@@ -709,7 +703,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:5.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:7.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -748,7 +742,7 @@ Here's how you can apply this in practice:
 @ParameterizedTest
 @AutoSource
 @Customization(MockitoCustomizer.class)
-void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
+void testUsingMockito(@Freeze Dependency stub, SystemUnderTest sut) {
     when(stub.getName()).thenReturn("World");
     assertEquals("Hello World", sut.getMessage());
 }
@@ -757,7 +751,7 @@ void testUsingMockito(@Fix Dependency stub, SystemUnderTest sut) {
 In the above example:
 
 - The `stub` argument is a mock generated by Mockito, thanks to the `MockitoCustomizer`.
-- The `@Fix` annotation ensures that this mock object (`stub`) is reused as a parameter for the construction of the `SystemUnderTest` object (`sut`).
+- The `@Freeze` annotation ensures that this mock object (`stub`) is reused as a parameter for the construction of the `SystemUnderTest` object (`sut`).
 
 This integration simplifies the creation of mock objects for parameterized tests, making testing more efficient and straightforward.
 
@@ -775,7 +769,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>5.0.0</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
@@ -784,7 +778,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:5.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:7.0.0'
 ```
 
 ### `BuilderCustomizer`
@@ -876,7 +870,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>5.0.0</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
@@ -885,7 +879,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:5.0.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:7.0.0'
 ```
 
 ### `@AutoKotlinSource` Annotation
