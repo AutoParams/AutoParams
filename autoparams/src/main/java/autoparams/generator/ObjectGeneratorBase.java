@@ -44,16 +44,6 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
         return ObjectGenerator.super.generate(type, context);
     }
 
-    @Override
-    public final ObjectGenerator customize(ObjectGenerator generator) {
-        return ObjectGenerator.super.customize(generator);
-    }
-
-    @Override
-    public final ObjectProcessor customize(ObjectProcessor processor) {
-        return ObjectGenerator.super.customize(processor);
-    }
-
     private boolean matches(Type type) {
         return type instanceof Class && matches((Class<?>) type);
     }
@@ -69,4 +59,14 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     );
+
+    @Override
+    public final ObjectGenerator customize(ObjectGenerator generator) {
+        return ObjectGenerator.super.customize(generator);
+    }
+
+    @Override
+    public final ObjectProcessor customize(ObjectProcessor processor) {
+        return ObjectGenerator.super.customize(processor);
+    }
 }
