@@ -1,7 +1,9 @@
 package autoparams.generator;
 
+import java.beans.ConstructorProperties;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 public final class ParameterQuery implements ObjectQuery {
 
@@ -48,6 +50,26 @@ public final class ParameterQuery implements ObjectQuery {
     @Override
     public Type getType() {
         return type;
+    }
+
+    public Optional<String> getParameterName() {
+        if (parameter.isNamePresent()) {
+            return Optional.of(parameter.getName());
+        } else {
+            return Optional
+                .ofNullable(parameter
+                    .getDeclaringExecutable()
+                    .getDeclaredAnnotation(ConstructorProperties.class))
+                .map(ConstructorProperties::value)
+                .map(names -> names[index]);
+        }
+    }
+
+    public String getRequiredParameterName() {
+        return getParameterName().orElseThrow(() -> {
+            String message = "Cannot resolve parameter name.";
+            return new RuntimeException(message);
+        });
     }
 
     @Override
