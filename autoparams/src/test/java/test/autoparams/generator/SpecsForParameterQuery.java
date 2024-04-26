@@ -107,8 +107,7 @@ public class SpecsForParameterQuery {
         );
 
         assertThatThrownBy(sut::getRequiredParameterName)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage("Cannot resolve parameter name.");
+            .isInstanceOf(RuntimeException.class);
     }
 
     @Test

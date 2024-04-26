@@ -67,7 +67,20 @@ public final class ParameterQuery implements ObjectQuery {
 
     public String getRequiredParameterName() {
         return getParameterName().orElseThrow(() -> {
-            String message = "Cannot resolve parameter name.";
+            String message = String.format(
+                "Unable to determine the parameter name at index %d of executable %s."
+                    + " Parameter names can be determined in the following ways:\n"
+                    + "1. Use of the Record class.\n"
+                    + "2. Compile the code with the javac command using the -parameters option.\n"
+                    + "3. Apply the @ConstructorProperties annotation."
+                    + " If using Lombok, the @ConstructorProperties annotation"
+                    + " can be automatically generated with"
+                    + " the lombok.anyConstructor.addConstructorProperties = true option."
+                    + " For more information,"
+                    + " refer to https://projectlombok.org/features/constructor.",
+                index,
+                parameter.getDeclaringExecutable()
+            );
             return new RuntimeException(message);
         });
     }
