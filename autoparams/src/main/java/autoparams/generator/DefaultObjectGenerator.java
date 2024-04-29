@@ -13,6 +13,7 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new PrimitiveValueGenerator(),
                     new RootGenerator(),
                     new ClassGenerator(),
+                    new EmailGenerator(),
                     new StringGenerator(),
                     new UUIDGenerator(),
                     new NumberGenerator(),
