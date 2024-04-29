@@ -69,7 +69,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>7.0.0</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:7.0.0'
+testImplementation 'io.github.autoparams:autoparams:8.0.0'
 ```
 
 ## Features
@@ -694,7 +694,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>7.0.0</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
@@ -703,7 +703,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:7.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:8.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -769,7 +769,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>7.0.0</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
@@ -778,7 +778,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:7.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:8.0.0'
 ```
 
 ### `BuilderCustomizer`
@@ -870,7 +870,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>7.0.0</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
@@ -879,7 +879,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:7.0.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:8.0.0'
 ```
 
 ### `@AutoKotlinSource` Annotation
