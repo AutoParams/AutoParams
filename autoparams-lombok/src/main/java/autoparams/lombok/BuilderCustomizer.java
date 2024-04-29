@@ -7,11 +7,11 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Optional;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 
 public class BuilderCustomizer implements Customizer {
 

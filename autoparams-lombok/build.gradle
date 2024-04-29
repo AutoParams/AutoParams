@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-  api "io.github.autoparams:autoparams:[7.1.0, 8.0.0)"
+  api "io.github.autoparams:autoparams:[8.0.0, 9.0.0)"
   testImplementation "org.assertj:assertj-core:3.8.0"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
 }

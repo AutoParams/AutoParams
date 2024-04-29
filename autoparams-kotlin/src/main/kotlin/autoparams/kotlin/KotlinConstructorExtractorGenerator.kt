@@ -1,9 +1,9 @@
 package autoparams.kotlin
 
+import autoparams.ObjectQuery
 import autoparams.ResolutionContext
 import autoparams.generator.ConstructorExtractor
 import autoparams.generator.ObjectGeneratorBase
-import autoparams.generator.ObjectQuery
 
 internal class KotlinConstructorExtractorGenerator :
     ObjectGeneratorBase<ConstructorExtractor>() {
