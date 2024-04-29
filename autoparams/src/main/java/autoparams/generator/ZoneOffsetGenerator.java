@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.ZoneOffset;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class ZoneOffsetGenerator extends ObjectGeneratorBase<ZoneOffset> {

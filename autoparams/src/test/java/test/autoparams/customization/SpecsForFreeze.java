@@ -1,11 +1,11 @@
 package test.autoparams.customization;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customization;
 import autoparams.customization.Freeze;
 import autoparams.generator.ObjectGeneratorBase;
-import autoparams.generator.ObjectQuery;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;

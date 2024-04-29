@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class ClassGenerator implements ObjectGenerator {

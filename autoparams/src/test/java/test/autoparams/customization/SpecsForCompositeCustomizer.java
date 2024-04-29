@@ -1,12 +1,12 @@
 package test.autoparams.customization;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -2,11 +2,11 @@ package test.autoparams.generator;
 
 import java.util.UUID;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

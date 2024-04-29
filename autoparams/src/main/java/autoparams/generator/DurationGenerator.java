@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class DurationGenerator extends ObjectGeneratorBase<Duration> {

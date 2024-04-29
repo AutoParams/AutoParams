@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.util.stream.DoubleStream;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class DoubleStreamGenerator extends ObjectGeneratorBase<DoubleStream> {

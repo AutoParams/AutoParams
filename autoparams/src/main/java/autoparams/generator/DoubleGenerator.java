@@ -5,6 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 final class DoubleGenerator extends PrimitiveTypeGenerator<Double> {

@@ -2,7 +2,7 @@ package test.autoparams.processor;
 
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
-import autoparams.generator.TypeQuery;
+import autoparams.TypeQuery;
 import autoparams.processor.InstancePropertyWriter;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasSetter;

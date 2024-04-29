@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.Year;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class YearGenerator extends ObjectGeneratorBase<Year> {

@@ -4,6 +4,7 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class YearMonthGenerator extends ObjectGeneratorBase<YearMonth> {

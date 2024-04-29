@@ -8,9 +8,9 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.ParameterQuery;
 import autoparams.generic.RuntimeTypeResolver;
 
 import static java.beans.Introspector.getBeanInfo;

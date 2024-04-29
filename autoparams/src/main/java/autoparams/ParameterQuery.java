@@ -1,4 +1,4 @@
-package autoparams.generator;
+package autoparams;
 
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Parameter;

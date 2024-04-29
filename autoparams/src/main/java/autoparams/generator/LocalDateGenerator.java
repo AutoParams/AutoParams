@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class LocalDateGenerator extends ObjectGeneratorBase<LocalDate> {

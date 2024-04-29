@@ -6,12 +6,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectGeneratorBase;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

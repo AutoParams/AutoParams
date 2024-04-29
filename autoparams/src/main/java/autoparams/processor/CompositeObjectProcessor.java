@@ -1,7 +1,7 @@
 package autoparams.processor;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
 
 public class CompositeObjectProcessor implements ObjectProcessor {
 

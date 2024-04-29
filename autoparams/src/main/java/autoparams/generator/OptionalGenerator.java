@@ -4,7 +4,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 
 final class OptionalGenerator implements ObjectGenerator {
 

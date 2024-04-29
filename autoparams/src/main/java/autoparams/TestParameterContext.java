@@ -12,7 +12,6 @@ import autoparams.customization.ArgumentProcessor;
 import autoparams.customization.ArgumentRecycler;
 import autoparams.customization.Customizer;
 import autoparams.customization.RecycleArgument;
-import autoparams.generator.ParameterQuery;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConverter;

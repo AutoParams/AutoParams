@@ -4,6 +4,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static java.lang.Short.MAX_VALUE;

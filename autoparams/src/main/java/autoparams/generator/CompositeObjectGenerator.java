@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.util.Arrays;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 public class CompositeObjectGenerator implements ObjectGenerator {

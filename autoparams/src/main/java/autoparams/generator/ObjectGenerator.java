@@ -2,7 +2,9 @@ package autoparams.generator;
 
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 import autoparams.customization.Customizer;
 
 @FunctionalInterface

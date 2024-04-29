@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.time.Clock;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class ClockGenerator extends ObjectGeneratorBase<Clock> {

@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.LocalDate;
 import java.time.Period;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class PeriodGenerator extends ObjectGeneratorBase<Period> {

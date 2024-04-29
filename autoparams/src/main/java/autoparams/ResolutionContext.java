@@ -4,8 +4,6 @@ import java.lang.reflect.Type;
 
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;

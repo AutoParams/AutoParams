@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.time.LocalDate;
 import java.time.MonthDay;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class MonthDayGenerator extends ObjectGeneratorBase<MonthDay> {

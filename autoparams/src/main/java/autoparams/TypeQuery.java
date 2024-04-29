@@ -1,4 +1,4 @@
-package autoparams.generator;
+package autoparams;
 
 import java.lang.reflect.Type;
 

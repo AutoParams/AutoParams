@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.processor.ObjectProcessor;
 

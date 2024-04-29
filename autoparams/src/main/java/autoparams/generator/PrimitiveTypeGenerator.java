@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 abstract class PrimitiveTypeGenerator<T> implements ObjectGenerator {

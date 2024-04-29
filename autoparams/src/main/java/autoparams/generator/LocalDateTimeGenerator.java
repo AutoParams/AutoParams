@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class LocalDateTimeGenerator extends ObjectGeneratorBase<LocalDateTime> {

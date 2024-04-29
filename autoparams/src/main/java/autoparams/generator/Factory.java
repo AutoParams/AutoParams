@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 import autoparams.customization.Customizer;
 
 import static java.util.Collections.unmodifiableList;

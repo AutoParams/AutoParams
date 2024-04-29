@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.util.stream.IntStream;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class IntStreamGenerator extends ObjectGeneratorBase<IntStream> {

@@ -5,7 +5,9 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 
 final class ArrayGenerator implements ObjectGenerator {
 

@@ -1,10 +1,10 @@
-package test.autoparams.generator;
+package test.autoparams;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
-import autoparams.generator.ParameterQuery;
+import autoparams.ParameterQuery;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class OffsetDateTimeGenerator

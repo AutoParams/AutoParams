@@ -1,11 +1,11 @@
 package test.autoparams.generator;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 import autoparams.generator.CompositeObjectGenerator;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThatCode;

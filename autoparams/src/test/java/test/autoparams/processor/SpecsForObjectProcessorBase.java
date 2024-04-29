@@ -3,9 +3,9 @@ package test.autoparams.processor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
+import autoparams.TypeQuery;
 import autoparams.processor.ObjectProcessor;
 import autoparams.processor.ObjectProcessorBase;
 import lombok.Getter;

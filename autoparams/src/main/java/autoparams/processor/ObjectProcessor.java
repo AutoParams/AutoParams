@@ -1,8 +1,8 @@
 package autoparams.processor;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
-import autoparams.generator.ObjectQuery;
 
 @FunctionalInterface
 public interface ObjectProcessor extends Customizer {

@@ -3,9 +3,9 @@ package autoparams.processor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectQuery;
 
 public abstract class ObjectProcessorBase<T> implements ObjectProcessor {
 

@@ -7,6 +7,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 import autoparams.generic.RuntimeTypeResolver;
 

@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.util.stream.LongStream;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class LongStreamGenerator extends ObjectGeneratorBase<LongStream> {

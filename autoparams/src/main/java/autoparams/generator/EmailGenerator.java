@@ -2,6 +2,8 @@ package autoparams.generator;
 
 import java.util.UUID;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 final class EmailGenerator implements ObjectGenerator {

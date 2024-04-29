@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.math.BigInteger;
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class BigIntegerGenerator extends ObjectGeneratorBase<BigInteger> {

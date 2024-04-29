@@ -6,9 +6,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
+import autoparams.TypeQuery;
 import autoparams.generic.RuntimeTypeResolver;
 
 import static java.util.Arrays.stream;

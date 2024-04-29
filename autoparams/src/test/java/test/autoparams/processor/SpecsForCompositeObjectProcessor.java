@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoparams.AutoSource;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.TypeQuery;
+import autoparams.TypeQuery;
 import autoparams.processor.CompositeObjectProcessor;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.params.ParameterizedTest;

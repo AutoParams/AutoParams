@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import org.junit.jupiter.params.converter.ArgumentConverter;
 import org.junit.jupiter.params.converter.DefaultArgumentConverter;

@@ -1,8 +1,8 @@
 package test.autoparams.processor;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
-import autoparams.generator.ObjectQuery;
 import autoparams.processor.InstancePropertyWriter;
 import autoparams.processor.ObjectProcessor;
 import test.autoparams.AutoParameterizedTest;

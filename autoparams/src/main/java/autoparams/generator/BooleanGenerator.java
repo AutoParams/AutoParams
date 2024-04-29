@@ -2,6 +2,7 @@ package autoparams.generator;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class BooleanGenerator extends PrimitiveTypeGenerator<Boolean> {

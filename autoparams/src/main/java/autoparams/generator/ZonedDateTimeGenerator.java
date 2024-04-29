@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class ZonedDateTimeGenerator extends ObjectGeneratorBase<ZonedDateTime> {

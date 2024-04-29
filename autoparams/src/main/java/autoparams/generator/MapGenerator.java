@@ -6,7 +6,9 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 
 final class MapGenerator implements ObjectGenerator {
 

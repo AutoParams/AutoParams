@@ -1,4 +1,4 @@
-package test.autoparams.generator;
+package test.autoparams;
 
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
@@ -7,7 +7,7 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import autoparams.AutoSource;
-import autoparams.generator.ParameterQuery;
+import autoparams.ParameterQuery;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;

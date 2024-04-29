@@ -1,5 +1,6 @@
 package autoparams.generator;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class ConstructorExtractorGenerator

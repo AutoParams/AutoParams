@@ -4,10 +4,10 @@ import java.lang.reflect.Parameter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.Repeat;
 import autoparams.ResolutionContext;
-import autoparams.generator.ObjectQuery;
-import autoparams.generator.ParameterQuery;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

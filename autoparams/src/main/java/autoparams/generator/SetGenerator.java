@@ -6,7 +6,9 @@ import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.TypeQuery;
 
 final class SetGenerator implements ObjectGenerator {
 
