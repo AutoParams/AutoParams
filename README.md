@@ -478,9 +478,7 @@ void testMethod(int arg1, String arg2, String arg3) {
 }
 
 static Stream<Arguments> factoryMethod() {
-    return Stream.of(
-        Arguments.arguments(16, "foo")
-    );
+    return Stream.of(Arguments.of(16, "foo"));
 }
 ```
 
@@ -508,9 +506,7 @@ void testMethod(int arg1, @Freeze String arg2, ValueContainer arg3) {
 }
 
 static Stream<Arguments> factoryMethod() {
-    return Stream.of(
-        Arguments.arguments(16, "foo")
-    );
+    return Stream.of(Arguments.of(16, "foo"));
 }
 ```
 
@@ -600,8 +596,8 @@ public class ProductGenerator extends ObjectGeneratorBase<Product> {
 
     @Override
     protected Product generateObject(ObjectQuery query, ResolutionContext context) {
-        UUID id = context.generate(UUID.class);
-        String name = context.generate(String.class);
+        UUID id = context.resolve(UUID.class);
+        String name = context.resolve(String.class);
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
         BigDecimal listPriceAmount = new BigDecimal(random.nextInt(100, 1000 + 1));
