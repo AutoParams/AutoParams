@@ -3,7 +3,7 @@ package autoparams.generator;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-final class DefaultURLGenerationOptionsProvider
+final class URLGenerationOptionsProvider
     extends ObjectGeneratorBase<URIGenerationOptions> {
 
     @Override
