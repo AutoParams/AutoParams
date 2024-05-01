@@ -2,38 +2,53 @@ package autoparams.generator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.Sampling.sample;
 import static java.lang.String.format;
 
 final class URLGenerator extends ObjectGeneratorBase<URL> {
 
-    private static final String[] PROTOCOLS = new String[] {
-        "http",
-        "https",
-        "ftp"
-    };
-
     @Override
     protected URL generateObject(ObjectQuery query, ResolutionContext context) {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        URLGenerationOptions options = getOptions(context);
 
-        int index = random.nextInt(PROTOCOLS.length);
-        String protocol = PROTOCOLS[index];
+        String protocol = getProtocol(options);
+        String host = getHost(options);
+        Integer port = getPort(options);
+        String path = getPath();
 
-        boolean hasPort = random.nextBoolean();
-
-        String urlSource = hasPort
-            ? format("%s://auto.params:%s", protocol, random.nextInt(0, 99999))
-            : format("%s://auto.params", protocol);
+        String source = port == null
+            ? format("%s://%s%s", protocol, host, path)
+            : format("%s://%s:%s%s", protocol, host, port, path);
 
         try {
-            return new URL(urlSource);
+            return new URL(source);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static URLGenerationOptions getOptions(ResolutionContext context) {
+        return context.resolve(URLGenerationOptions.class);
+    }
+
+    private String getProtocol(URLGenerationOptions options) {
+        return sample(options.protocols());
+    }
+
+    private String getHost(URLGenerationOptions options) {
+        return sample(options.hosts());
+    }
+
+    private Integer getPort(URLGenerationOptions options) {
+        return options.ports().isEmpty() ? null : sample(options.ports());
+    }
+
+    private String getPath() {
+        return "/" + UUID.randomUUID();
     }
 }
