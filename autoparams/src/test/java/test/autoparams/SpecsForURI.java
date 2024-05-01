@@ -1,6 +1,6 @@
 package test.autoparams;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class SpecsForURL {
+class SpecsForURI {
 
     public static final class OptionsProvider
         extends ObjectGeneratorBase<URIGenerationOptions> {
@@ -28,11 +28,11 @@ class SpecsForURL {
         private final URIGenerationOptions options;
 
         public OptionsProvider(
-            String[] protocols,
+            String[] schemes,
             String[] hosts,
             int[] ports
         ) {
-            options = new URIGenerationOptions(protocols, hosts, ports);
+            options = new URIGenerationOptions(schemes, hosts, ports);
         }
 
         @Override
@@ -45,15 +45,15 @@ class SpecsForURL {
     }
 
     @ParameterizedTest
-    @MethodAutoSource("getProtocols")
+    @MethodAutoSource("getSchemes")
     void sut_consumes_protocols_option(
-        String[] protocols,
-        Factory<URL> factory
+        String[] schemes,
+        Factory<URI> factory
     ) {
         String[] hosts = { "test.com" };
         int[] ports = { };
         OptionsProvider optionsProvider = new OptionsProvider(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -61,16 +61,16 @@ class SpecsForURL {
 
         List<String> actual = factory
             .stream()
-            .map(URL::getProtocol)
+            .map(URI::getScheme)
             .limit(100)
             .distinct()
             .collect(toList());
 
-        assertThat(actual).hasSameSizeAs(protocols);
-        assertThat(actual).allMatch(x -> asList(protocols).contains(x));
+        assertThat(actual).hasSameSizeAs(schemes);
+        assertThat(actual).allMatch(x -> asList(schemes).contains(x));
     }
 
-    static Stream<Arguments> getProtocols() {
+    static Stream<Arguments> getSchemes() {
         return Stream.of(
             arguments((Object) new String[] { "https", "http", "ftp" }),
             arguments((Object) new String[] { "https", "http" }),
@@ -80,11 +80,11 @@ class SpecsForURL {
 
     @ParameterizedTest
     @MethodAutoSource("getHosts")
-    void sut_consumes_hosts_option(String[] hosts, Factory<URL> factory) {
-        String[] protocols = { "https" };
+    void sut_consumes_hosts_option(String[] hosts, Factory<URI> factory) {
+        String[] schemes = { "https" };
         int[] ports = { };
         OptionsProvider optionsProvider = new OptionsProvider(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -92,7 +92,7 @@ class SpecsForURL {
 
         List<String> actual = factory
             .stream()
-            .map(URL::getHost)
+            .map(URI::getHost)
             .limit(100)
             .distinct()
             .collect(toList());
@@ -111,17 +111,17 @@ class SpecsForURL {
 
     @ParameterizedTest
     @AutoSource
-    void sut_omits_port_if_port_is_not_specified(URL url) {
-        assertThat(url.getPort()).isEqualTo(-1);
+    void sut_omits_port_if_port_is_not_specified(URI uri) {
+        assertThat(uri.getPort()).isEqualTo(-1);
     }
 
     @ParameterizedTest
     @MethodAutoSource("getPorts")
-    void sut_consumes_ports_option(int[] ports, Factory<URL> factory) {
-        String[] protocols = { "https" };
+    void sut_consumes_ports_option(int[] ports, Factory<URI> factory) {
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
         OptionsProvider optionsProvider = new OptionsProvider(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -129,7 +129,7 @@ class SpecsForURL {
 
         List<Integer> actual = factory
             .stream()
-            .map(URL::getPort)
+            .map(URI::getPort)
             .limit(100)
             .distinct()
             .collect(toList());
