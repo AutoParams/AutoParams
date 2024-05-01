@@ -13,7 +13,7 @@ final class EmailAddressGenerationOptionsProviderFactory implements
     @Override
     public Customizer createCustomizer() {
         return new EmailAddressGenerationOptionsProvider(
-            new EmailAddressGenerationOptions(this.domains)
+            new EmailAddressGenerationOptions(domains)
         );
     }
 

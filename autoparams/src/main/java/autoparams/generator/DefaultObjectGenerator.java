@@ -19,7 +19,7 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new NumberGenerator(),
                     new TimeGenerator(),
                     new EnumGenerator(),
-                    new URLGenerationOptionsProvider(),
+                    new URIGenerationOptionsProvider(),
                     new URIGenerator(),
                     new URLGenerator(),
                     new URIStringGenerator(),
