@@ -16,26 +16,26 @@ public final class URIGenerationOptions {
             new int[] { }
         );
 
-    private final List<String> protocols;
+    private final List<String> schemes;
     private final List<String> hosts;
     private final List<Integer> ports;
 
     public URIGenerationOptions(
-        String[] protocols,
+        String[] schemes,
         String[] hosts,
         int[] ports
     ) {
-        if (protocols == null) {
-            throw new IllegalArgumentException("The argument 'protocols' is null.");
+        if (schemes == null) {
+            throw new IllegalArgumentException("The argument 'schemes' is null.");
         }
 
-        if (protocols.length == 0) {
-            throw new IllegalArgumentException("The argument 'protocols' is empty.");
+        if (schemes.length == 0) {
+            throw new IllegalArgumentException("The argument 'schemes' is empty.");
         }
 
-        for (String protocol : protocols) {
+        for (String protocol : schemes) {
             if (protocol == null) {
-                String message = "The argument 'protocols' contains null element.";
+                String message = "The argument 'schemes' contains null element.";
                 throw new IllegalArgumentException(message);
             }
         }
@@ -66,13 +66,13 @@ public final class URIGenerationOptions {
             }
         }
 
-        this.protocols = unmodifiableList(asList(protocols));
+        this.schemes = unmodifiableList(asList(schemes));
         this.hosts = unmodifiableList(asList(hosts));
         this.ports = unmodifiableList(stream(ports).boxed().collect(toList()));
     }
 
-    public List<String> protocols() {
-        return protocols;
+    public List<String> schemes() {
+        return schemes;
     }
 
     public List<String> hosts() {

@@ -37,7 +37,7 @@ final class URLGenerator extends ObjectGeneratorBase<URL> {
     }
 
     private String getProtocol(URIGenerationOptions options) {
-        return sample(options.protocols());
+        return sample(options.schemes());
     }
 
     private String getHost(URIGenerationOptions options) {

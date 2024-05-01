@@ -20,7 +20,7 @@ public class SpecsForURIGenerationOptions {
 
     @SuppressWarnings("DataFlowIssue")
     @Test
-    void constructor_has_guard_against_null_protocols() {
+    void constructor_has_guard_against_null_schemes() {
         String[] hosts = { "test.com" };
         int[] ports = { };
 
@@ -29,44 +29,44 @@ public class SpecsForURIGenerationOptions {
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("protocols");
+            .hasMessageContaining("schemes");
     }
 
     @Test
-    void constructor_has_guard_against_empty_protocols() {
-        String[] protocols = { };
+    void constructor_has_guard_against_empty_schemes() {
+        String[] schemes = { };
         String[] hosts = { "test.com" };
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(schemes, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("protocols");
+            .hasMessageContaining("schemes");
     }
 
     @Test
     void constructor_has_guard_against_null_element_in_protocol() {
-        String[] protocols = { null };
+        String[] schemes = { null };
         String[] hosts = { "test.com" };
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(schemes, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("protocols");
+            .hasMessageContaining("schemes");
     }
 
     @Test
     void constructor_has_guard_against_null_hosts() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, null, ports);
+            new URIGenerationOptions(schemes, null, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -75,12 +75,12 @@ public class SpecsForURIGenerationOptions {
 
     @Test
     void constructor_has_guard_against_empty_hosts() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { };
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(schemes, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -89,12 +89,12 @@ public class SpecsForURIGenerationOptions {
 
     @Test
     void constructor_has_guard_against_null_element_in_host() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { null };
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(schemes, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -103,11 +103,11 @@ public class SpecsForURIGenerationOptions {
 
     @Test
     void constructor_has_guard_against_null_ports() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, null);
+            new URIGenerationOptions(schemes, hosts, null);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -119,12 +119,12 @@ public class SpecsForURIGenerationOptions {
     void constructor_has_guard_against_negative_element_in_ports(
         @Max(-1) int port
     ) {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
         int[] ports = { port };
 
         ThrowingCallable callable = () ->
-            new URIGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(schemes, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -132,21 +132,21 @@ public class SpecsForURIGenerationOptions {
     }
 
     @ParameterizedTest
-    @MethodSource("getProtocols")
-    void constructor_correctly_sets_protocols(String[] protocols) {
+    @MethodSource("getSchemes")
+    void constructor_correctly_sets_schemes(String[] schemes) {
         String[] hosts = { "test.com" };
         int[] ports = { };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
 
-        assertThat(sut.protocols()).containsExactlyInAnyOrder(protocols);
+        assertThat(sut.schemes()).containsExactlyInAnyOrder(schemes);
     }
 
-    static Stream<Arguments> getProtocols() {
+    static Stream<Arguments> getSchemes() {
         return Stream.of(
             arguments((Object) new String[] { "https", "http", "ftp" }),
             arguments((Object) new String[] { "https", "http" }),
@@ -157,11 +157,11 @@ public class SpecsForURIGenerationOptions {
     @ParameterizedTest
     @MethodSource("getHosts")
     void constructor_correctly_sets_hosts(String[] hosts) {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         int[] ports = { };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -180,11 +180,11 @@ public class SpecsForURIGenerationOptions {
     @ParameterizedTest
     @MethodSource("getPorts")
     void constructor_correctly_sets_ports(int[] ports) {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -203,29 +203,29 @@ public class SpecsForURIGenerationOptions {
     }
 
     @Test
-    void protocols_returns_immutable_list() {
-        String[] protocols = { "https" };
+    void schemes_returns_immutable_list() {
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
         int[] ports = { };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
 
-        assertThatThrownBy(() -> sut.protocols().set(0, "ftp"))
+        assertThatThrownBy(() -> sut.schemes().set(0, "ftp"))
             .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
     void hosts_returns_immutable_list() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
         int[] ports = { };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -236,12 +236,12 @@ public class SpecsForURIGenerationOptions {
 
     @Test
     void ports_returns_immutable_list() {
-        String[] protocols = { "https" };
+        String[] schemes = { "https" };
         String[] hosts = { "test.com" };
         int[] ports = { 443 };
 
         URIGenerationOptions sut = new URIGenerationOptions(
-            protocols,
+            schemes,
             hosts,
             ports
         );
@@ -251,9 +251,9 @@ public class SpecsForURIGenerationOptions {
     }
 
     @Test
-    void default_instance_has_single_protocol() {
+    void default_instance_has_single_scheme() {
         URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
-        assertThat(sut.protocols()).containsExactlyInAnyOrder("https");
+        assertThat(sut.schemes()).containsExactlyInAnyOrder("https");
     }
 
     @Test
