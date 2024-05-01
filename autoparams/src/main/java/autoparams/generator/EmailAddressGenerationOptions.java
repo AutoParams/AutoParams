@@ -17,6 +17,10 @@ public final class EmailAddressGenerationOptions {
             throw new IllegalArgumentException("The argument 'domains' is null.");
         }
 
+        if (domains.length == 0) {
+            throw new IllegalArgumentException("The argument 'domains' is empty.");
+        }
+
         for (String domain : domains) {
             if (domain == null) {
                 throw new IllegalArgumentException("The argument 'domains' contains null element.");

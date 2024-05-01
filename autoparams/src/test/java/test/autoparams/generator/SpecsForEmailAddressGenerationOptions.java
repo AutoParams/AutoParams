@@ -15,14 +15,22 @@ public class SpecsForEmailAddressGenerationOptions {
 
     @SuppressWarnings("DataFlowIssue")
     @Test
-    void constructor_has_null_guard_against_null_domains() {
+    void constructor_has_guard_against_null_domains() {
         assertThatThrownBy(() -> new EmailAddressGenerationOptions(null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("domains");
     }
 
     @Test
-    void constructor_has_null_guard_against_null_element_in_domain() {
+    void constructor_has_guard_against_empty_domains() {
+        String[] domains = { };
+        assertThatThrownBy(() -> new EmailAddressGenerationOptions(domains))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("domains");
+    }
+
+    @Test
+    void constructor_has_guard_against_null_element_in_domain() {
         String[] domains = { null };
         assertThatThrownBy(() -> new EmailAddressGenerationOptions(domains))
             .isInstanceOf(IllegalArgumentException.class)
