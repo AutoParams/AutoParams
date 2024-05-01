@@ -22,6 +22,7 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new DefaultURLGenerationOptionsProvider(),
                     new URIGenerator(),
                     new URLGenerator(),
+                    new URIStringGenerator(),
                     new StringGenerator(),
                     new CollectionGenerator(),
                     new StreamGenerator(),
