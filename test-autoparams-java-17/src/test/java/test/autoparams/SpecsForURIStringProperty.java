@@ -7,8 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForURIStringProperty {
 
-    public record Properties(String imageUri, String videoUrl) {
-    }
+    public record Properties(String imageUri, String videoUrl) { }
 
     @ParameterizedTest
     @AutoSource
