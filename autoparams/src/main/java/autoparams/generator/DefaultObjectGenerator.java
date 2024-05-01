@@ -14,7 +14,7 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new RootGenerator(),
                     new ClassGenerator(),
                     new DefaultEmailAddressGenerationOptionsProvider(),
-                    new EmailAddressGenerator(),
+                    new EmailAddressStringGenerator(),
                     new UUIDGenerator(),
                     new NumberGenerator(),
                     new TimeGenerator(),

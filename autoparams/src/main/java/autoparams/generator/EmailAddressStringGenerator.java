@@ -9,7 +9,7 @@ import autoparams.ResolutionContext;
 
 import static autoparams.generator.Sampling.sample;
 
-final class EmailAddressGenerator implements ObjectGenerator {
+final class EmailAddressStringGenerator implements ObjectGenerator {
 
     private static final String[] SUFFIXES = { "email", "emailaddress" };
 

@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpecsForEmail {
+public class SpecsForEmailAddress {
 
     public record SignUp(String userEmail, String password) { }
 
