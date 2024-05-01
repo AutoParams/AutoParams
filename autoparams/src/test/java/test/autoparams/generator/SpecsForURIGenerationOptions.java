@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 import javax.validation.constraints.Max;
 
 import autoparams.AutoSource;
-import autoparams.generator.URLGenerationOptions;
+import autoparams.generator.URIGenerationOptions;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class SpecsForURLGenerationOptions {
+public class SpecsForURIGenerationOptions {
 
     @SuppressWarnings("DataFlowIssue")
     @Test
@@ -25,7 +25,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(null, hosts, ports);
+            new URIGenerationOptions(null, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -39,7 +39,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(protocols, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -53,7 +53,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(protocols, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -66,7 +66,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, null, ports);
+            new URIGenerationOptions(protocols, null, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -80,7 +80,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(protocols, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -94,7 +94,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(protocols, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -107,7 +107,7 @@ public class SpecsForURLGenerationOptions {
         String[] hosts = { "test.com" };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, null);
+            new URIGenerationOptions(protocols, hosts, null);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -124,7 +124,7 @@ public class SpecsForURLGenerationOptions {
         int[] ports = { port };
 
         ThrowingCallable callable = () ->
-            new URLGenerationOptions(protocols, hosts, ports);
+            new URIGenerationOptions(protocols, hosts, ports);
 
         assertThatThrownBy(callable)
             .isInstanceOf(IllegalArgumentException.class)
@@ -137,7 +137,7 @@ public class SpecsForURLGenerationOptions {
         String[] hosts = { "test.com" };
         int[] ports = { };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -160,7 +160,7 @@ public class SpecsForURLGenerationOptions {
         String[] protocols = { "https" };
         int[] ports = { };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -183,7 +183,7 @@ public class SpecsForURLGenerationOptions {
         String[] protocols = { "https" };
         String[] hosts = { "test.com" };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -208,7 +208,7 @@ public class SpecsForURLGenerationOptions {
         String[] hosts = { "test.com" };
         int[] ports = { };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -224,7 +224,7 @@ public class SpecsForURLGenerationOptions {
         String[] hosts = { "test.com" };
         int[] ports = { };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -240,7 +240,7 @@ public class SpecsForURLGenerationOptions {
         String[] hosts = { "test.com" };
         int[] ports = { 443 };
 
-        URLGenerationOptions sut = new URLGenerationOptions(
+        URIGenerationOptions sut = new URIGenerationOptions(
             protocols,
             hosts,
             ports
@@ -252,19 +252,19 @@ public class SpecsForURLGenerationOptions {
 
     @Test
     void default_instance_has_single_protocol() {
-        URLGenerationOptions sut = URLGenerationOptions.DEFAULT;
+        URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
         assertThat(sut.protocols()).containsExactlyInAnyOrder("https");
     }
 
     @Test
     void default_instance_has_single_host() {
-        URLGenerationOptions sut = URLGenerationOptions.DEFAULT;
+        URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
         assertThat(sut.hosts()).containsExactlyInAnyOrder("test.com");
     }
 
     @Test
     void default_instance_has_no_ports() {
-        URLGenerationOptions sut = URLGenerationOptions.DEFAULT;
+        URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
         assertThat(sut.ports()).isEmpty();
     }
 }

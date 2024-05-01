@@ -14,7 +14,7 @@ final class URLGenerator extends ObjectGeneratorBase<URL> {
 
     @Override
     protected URL generateObject(ObjectQuery query, ResolutionContext context) {
-        URLGenerationOptions options = getOptions(context);
+        URIGenerationOptions options = getOptions(context);
 
         String protocol = getProtocol(options);
         String host = getHost(options);
@@ -32,19 +32,19 @@ final class URLGenerator extends ObjectGeneratorBase<URL> {
         }
     }
 
-    private static URLGenerationOptions getOptions(ResolutionContext context) {
-        return context.resolve(URLGenerationOptions.class);
+    private static URIGenerationOptions getOptions(ResolutionContext context) {
+        return context.resolve(URIGenerationOptions.class);
     }
 
-    private String getProtocol(URLGenerationOptions options) {
+    private String getProtocol(URIGenerationOptions options) {
         return sample(options.protocols());
     }
 
-    private String getHost(URLGenerationOptions options) {
+    private String getHost(URIGenerationOptions options) {
         return sample(options.hosts());
     }
 
-    private Integer getPort(URLGenerationOptions options) {
+    private Integer getPort(URIGenerationOptions options) {
         return options.ports().isEmpty() ? null : sample(options.ports());
     }
 

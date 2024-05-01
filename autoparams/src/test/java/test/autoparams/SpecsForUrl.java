@@ -10,7 +10,7 @@ import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.generator.Factory;
 import autoparams.generator.ObjectGeneratorBase;
-import autoparams.generator.URLGenerationOptions;
+import autoparams.generator.URIGenerationOptions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -23,20 +23,20 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 class SpecsForURL {
 
     public static final class OptionsProvider
-        extends ObjectGeneratorBase<URLGenerationOptions> {
+        extends ObjectGeneratorBase<URIGenerationOptions> {
 
-        private final URLGenerationOptions options;
+        private final URIGenerationOptions options;
 
         public OptionsProvider(
             String[] protocols,
             String[] hosts,
             int[] ports
         ) {
-            options = new URLGenerationOptions(protocols, hosts, ports);
+            options = new URIGenerationOptions(protocols, hosts, ports);
         }
 
         @Override
-        protected URLGenerationOptions generateObject(
+        protected URIGenerationOptions generateObject(
             ObjectQuery query,
             ResolutionContext context
         ) {

@@ -4,13 +4,13 @@ import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
 final class DefaultURLGenerationOptionsProvider
-    extends ObjectGeneratorBase<URLGenerationOptions> {
+    extends ObjectGeneratorBase<URIGenerationOptions> {
 
     @Override
-    protected URLGenerationOptions generateObject(
+    protected URIGenerationOptions generateObject(
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return URLGenerationOptions.DEFAULT;
+        return URIGenerationOptions.DEFAULT;
     }
 }

@@ -7,10 +7,10 @@ import static java.util.Arrays.stream;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
-public final class URLGenerationOptions {
+public final class URIGenerationOptions {
 
-    public static final URLGenerationOptions DEFAULT =
-        new URLGenerationOptions(
+    public static final URIGenerationOptions DEFAULT =
+        new URIGenerationOptions(
             new String[] { "https" },
             new String[] { "test.com" },
             new int[] { }
@@ -20,7 +20,7 @@ public final class URLGenerationOptions {
     private final List<String> hosts;
     private final List<Integer> ports;
 
-    public URLGenerationOptions(
+    public URIGenerationOptions(
         String[] protocols,
         String[] hosts,
         int[] ports
