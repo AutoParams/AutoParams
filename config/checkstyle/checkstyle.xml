@@ -58,7 +58,10 @@
     <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
   </module>
 
+  <module name="SuppressWarningsFilter"/>
+
   <module name="TreeWalker">
+    <module name="SuppressWarningsHolder"/>
     <module name="OuterTypeFilename"/>
     <module name="IllegalTokenText">
       <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
@@ -229,7 +232,7 @@
                value="Class type name ''{0}'' must match pattern ''{1}''."/>
     </module>
     <module name="RecordComponentName">
-      <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9_]*)?$"/>
+      <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
       <message key="name.invalidPattern"
                value="Record component name ''{0}'' must match pattern ''{1}''."/>
     </module>

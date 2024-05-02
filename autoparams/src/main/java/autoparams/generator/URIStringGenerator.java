@@ -2,8 +2,6 @@ package autoparams.generator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URI;
 
@@ -49,27 +47,9 @@ final class URIStringGenerator implements ObjectGenerator {
         return stream(PLURAL_SUFFIXES).anyMatch(suffix -> {
             Parameter parameter = query.getParameter();
             Executable executable = parameter.getDeclaringExecutable();
-            return isRecordConstructor(executable)
+            return executable instanceof Constructor<?>
+                && RecordPredicate.test(executable.getDeclaringClass())
                 && executable.getName().toLowerCase().endsWith(suffix);
         });
-    }
-
-    private boolean isRecordConstructor(Executable executable) {
-        return executable instanceof Constructor<?>
-            && isRecord(executable.getDeclaringClass());
-    }
-
-    private boolean isRecord(Class<?> type) {
-        try {
-            Method predicate = Class.class.getMethod("isRecord");
-            try {
-                return (boolean) predicate.invoke(type);
-            } catch (IllegalAccessException |
-                     InvocationTargetException exception) {
-                throw new RuntimeException(exception);
-            }
-        } catch (NoSuchMethodException exception) {
-            return false;
-        }
     }
 }

@@ -1,17 +1,30 @@
 package autoparams.generator;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Parameter;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static autoparams.generator.Sampling.sample;
+import static java.util.Arrays.stream;
 
 final class EmailAddressStringGenerator implements ObjectGenerator {
 
-    private static final String[] SUFFIXES = { "email", "emailaddress" };
+    private static final String[] SINGULAR_SUFFIXES = {
+        "email",
+        "emailaddress",
+        "email_address"
+    };
+
+    private static final String[] PLURAL_SUFFIXES = {
+        "emails",
+        "emailaddresses",
+        "email_addresses"
+    };
 
     @Override
     public ObjectContainer generate(
@@ -28,18 +41,34 @@ final class EmailAddressStringGenerator implements ObjectGenerator {
         ParameterQuery query,
         ResolutionContext context
     ) {
-        return query.getParameterName()
-            .map(String::toLowerCase)
-            .map(name -> name.replaceAll("_", ""))
-            .filter(name -> Stream.of(SUFFIXES).anyMatch(name::endsWith))
-            .map(name -> generateEmailAddress(context))
-            .map(ObjectContainer::new)
-            .orElse(ObjectContainer.EMPTY);
+        return isEmailAddressParameter(query)
+            || isPropertyOfEmailAddressContainer(query)
+            ? generateEmailAddress(context)
+            : ObjectContainer.EMPTY;
     }
 
-    private String generateEmailAddress(ResolutionContext context) {
+    private boolean isEmailAddressParameter(ParameterQuery query) {
+        return query.getParameterName()
+            .map(String::toLowerCase)
+            .filter(name -> stream(SINGULAR_SUFFIXES).anyMatch(name::endsWith))
+            .isPresent();
+    }
+
+    private boolean isPropertyOfEmailAddressContainer(ParameterQuery query) {
+        return stream(PLURAL_SUFFIXES).anyMatch(suffix -> {
+            Parameter parameter = query.getParameter();
+            Executable executable = parameter.getDeclaringExecutable();
+            return executable instanceof Constructor<?>
+                && RecordPredicate.test(executable.getDeclaringClass())
+                && executable.getName().toLowerCase().endsWith(suffix);
+        });
+    }
+
+    private ObjectContainer generateEmailAddress(ResolutionContext context) {
         EmailAddressGenerationOptions options = getOptions(context);
-        return UUID.randomUUID() + "@" + getDomain(options);
+        String localPart = UUID.randomUUID().toString();
+        String domainPart = getDomain(options);
+        return new ObjectContainer(localPart + "@" + domainPart);
     }
 
     private static EmailAddressGenerationOptions getOptions(

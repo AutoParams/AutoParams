@@ -36,7 +36,7 @@ public @interface EnumAutoSource {
                         case "value": return value;
                         case "names": return names;
                         case "mode": return mode;
-                        default: throw new NoSuchMethodException(method.getName());
+                        default: return method.getDefaultValue();
                     }
                 }
             );

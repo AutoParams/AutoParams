@@ -5,6 +5,7 @@ import java.util.List;
 
 import autoparams.AutoSource;
 import autoparams.ObjectQuery;
+import autoparams.Repeat;
 import autoparams.ResolutionContext;
 import autoparams.generator.EmailAddressGenerationOptions;
 import autoparams.generator.Factory;
@@ -29,17 +30,20 @@ public class SpecsForEmailAddressStringProperty {
 
     @ParameterizedTest
     @AutoSource
-    void sut_generates_email_address_for_emailaddress_suffix(User entity) {
+    void sut_generates_email_address_for_email_address_suffix(User entity) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         assertThat(entity.emailAddress().matches(emailRegex)).isTrue();
         assertThat(entity.encodedPassword().matches(emailRegex)).isFalse();
     }
 
+    @SuppressWarnings("RecordComponentName")
     public record Customer(int customerId, String email_address) { }
 
     @ParameterizedTest
     @AutoSource
-    void sut_generates_email_address_for_email_address_suffix(Customer value) {
+    void sut_generates_email_address_for_underscored_email_address_suffix(
+        Customer value
+    ) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         assertThat(value.email_address().matches(emailRegex)).isTrue();
     }
@@ -76,5 +80,44 @@ public class SpecsForEmailAddressStringProperty {
             .stream()
             .map(User::emailAddress)
             .anyMatch(email -> email.endsWith(domain)));
+    }
+
+    public record UserEmails(String primary, String secondary) { }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(10)
+    void sut_generates_email_address_for_string_properties_of_type_with_emails_suffix(
+        UserEmails emails
+    ) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        assertThat(emails.primary().matches(emailRegex)).isTrue();
+        assertThat(emails.secondary().matches(emailRegex)).isTrue();
+    }
+
+    public record UserEmailAddresses(String primary, String secondary) { }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_generates_email_address_for_string_properties_of_type_with_email_addresses_suffix(
+        UserEmailAddresses addresses
+    ) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        assertThat(addresses.primary().matches(emailRegex)).isTrue();
+        assertThat(addresses.secondary().matches(emailRegex)).isTrue();
+    }
+
+    @SuppressWarnings("TypeName")
+    public record User_Email_Addresses(String primary, String secondary) { }
+
+    @SuppressWarnings("LineLength")
+    @ParameterizedTest
+    @AutoSource
+    void sut_generates_email_address_for_string_properties_of_type_with_underscored_email_addresses_suffix(
+        User_Email_Addresses addresses
+    ) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        assertThat(addresses.primary().matches(emailRegex)).isTrue();
+        assertThat(addresses.secondary().matches(emailRegex)).isTrue();
     }
 }
