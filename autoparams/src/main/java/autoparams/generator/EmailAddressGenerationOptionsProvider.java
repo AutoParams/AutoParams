@@ -3,7 +3,7 @@ package autoparams.generator;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-final class EmailAddressGenerationOptionsProvider
+public final class EmailAddressGenerationOptionsProvider
     extends ObjectGeneratorBase<EmailAddressGenerationOptions> {
 
     private final EmailAddressGenerationOptions options;
@@ -14,7 +14,7 @@ final class EmailAddressGenerationOptionsProvider
         this.options = options;
     }
 
-    public EmailAddressGenerationOptionsProvider() {
+    EmailAddressGenerationOptionsProvider() {
         this(EmailAddressGenerationOptions.DEFAULT);
     }
 
