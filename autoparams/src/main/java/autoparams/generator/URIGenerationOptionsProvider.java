@@ -3,7 +3,7 @@ package autoparams.generator;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-final class URIGenerationOptionsProvider
+public final class URIGenerationOptionsProvider
     extends ObjectGeneratorBase<URIGenerationOptions> {
 
     private final URIGenerationOptions options;
@@ -12,7 +12,7 @@ final class URIGenerationOptionsProvider
         this.options = options;
     }
 
-    public URIGenerationOptionsProvider() {
+    URIGenerationOptionsProvider() {
         this(URIGenerationOptions.DEFAULT);
     }
 
