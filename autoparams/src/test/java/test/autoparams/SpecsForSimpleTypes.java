@@ -3,6 +3,7 @@ package test.autoparams;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -290,6 +291,23 @@ class SpecsForSimpleTypes {
         ZoneOffset value5
     ) {
         final HashSet<ZoneOffset> set = new HashSet<>();
+        set.add(value1);
+        set.add(value2);
+        set.add(value3);
+        set.add(value4);
+        set.add(value5);
+        assertThat(set.size()).isGreaterThan(1);
+    }
+
+    @AutoParameterizedTest
+    void sut_creates_arbitrary_instant_values(
+        Instant value1,
+        Instant value2,
+        Instant value3,
+        Instant value4,
+        Instant value5
+    ) {
+        final HashSet<Instant> set = new HashSet<>();
         set.add(value1);
         set.add(value2);
         set.add(value3);
