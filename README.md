@@ -870,7 +870,7 @@ For Maven, you can add the following dependency to your pom.xml:
 </dependency>
 ```
 
-#### Gradle-Groovy
+#### Gradle (Groovy)
 
 For Gradle-Groovy, use:
 
@@ -878,7 +878,7 @@ For Gradle-Groovy, use:
 testImplementation 'io.github.autoparams:autoparams-kotlin:8.3.0'
 ```
 
-#### Gradle-Kotlin
+#### Gradle (Kotlin)
 
 For Gradle-Kotlin, use:
 
