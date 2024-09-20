@@ -37,14 +37,6 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
         }
     }
 
-    @Override
-    public final ObjectContainer generate(
-        Type type,
-        ResolutionContext context
-    ) {
-        return ObjectGenerator.super.generate(type, context);
-    }
-
     private boolean matches(Type type) {
         return type instanceof Class && matches((Class<?>) type);
     }
