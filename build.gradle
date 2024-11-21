@@ -83,6 +83,11 @@ subprojects {
               name = "Myeonghyeon Lee"
               email = "mhyeon.lee@navercorp.com"
             }
+            developer {
+              id = "jwchung"
+              name = "Jin-Wook Chung"
+              email = "jwchung@hotmail.com"
+            }
           }
           scm {
             connection = "https://github.com/AutoParams/AutoParams.git"
