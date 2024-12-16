@@ -117,4 +117,10 @@ class SpecsForMockitoCustomizer {
         when(arg.getValue()).thenReturn(100);
         assertThat(arg.square()).isEqualTo(10000);
     }
+
+    @AutoMockitoParameterizedTest
+    void sut_does_not_stub_default_method(InterfaceWithDefaultMethod arg) {
+        when(arg.getValue()).thenReturn(10);
+        assertThat(arg.getSquaredValue()).isEqualTo(100);
+    }
 }
