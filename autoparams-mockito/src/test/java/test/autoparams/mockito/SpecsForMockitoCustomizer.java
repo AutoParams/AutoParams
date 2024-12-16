@@ -57,10 +57,12 @@ class SpecsForMockitoCustomizer {
         assertNotNull(value);
     }
 
+    @SuppressWarnings("unused")
     @AutoMockitoParameterizedTest
     void sut_ignores_parameters_of_primitive_types(int arg1, double arg2) {
     }
 
+    @SuppressWarnings("unused")
     @AutoMockitoParameterizedTest
     void sut_ignores_array(int[] arg1) {
     }
@@ -111,7 +113,7 @@ class SpecsForMockitoCustomizer {
     }
 
     @AutoMockitoParameterizedTest
-    void sut_creates_value_of_spy_mode(IntContainer arg) {
+    void sut_does_not_stub_non_abstract_method(IntContainer arg) {
         when(arg.getValue()).thenReturn(100);
         assertThat(arg.square()).isEqualTo(10000);
     }

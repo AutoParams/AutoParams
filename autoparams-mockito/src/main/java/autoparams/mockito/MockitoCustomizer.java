@@ -7,7 +7,8 @@ import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
 
 public final class MockitoCustomizer implements Customizer {
 
@@ -27,7 +28,7 @@ public final class MockitoCustomizer implements Customizer {
     }
 
     private ObjectContainer generate(Class<?> type) {
-        return new ObjectContainer(spy(type));
+        return new ObjectContainer(mock(type, CALLS_REAL_METHODS));
     }
 
     private ObjectContainer generate(ParameterizedType parameterizedType) {
