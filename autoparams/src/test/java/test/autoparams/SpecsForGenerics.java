@@ -3,6 +3,9 @@ package test.autoparams;
 import java.util.UUID;
 
 import autoparams.AutoSource;
+import autoparams.customization.Freeze;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,5 +29,31 @@ class SpecsForGenerics {
         assertThat(value.getValue2()).isInstanceOf(String.class);
         assertThat(value.getValue3()).isInstanceOf(GenericObject.class);
         assertThat(value.getValue3().getValue3()).isInstanceOf(ComplexObject.class);
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class Container<T> {
+
+        private final T value;
+    }
+
+    @AllArgsConstructor
+    public static class Accessor<T> {
+
+        private final Container<T> container;
+
+        public T getValue() {
+            return container.getValue();
+        }
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_correctly_works_with_generic_argument(
+        @Freeze String value,
+        Accessor<String> accessor
+    ) {
+        assertThat(accessor.getValue()).isSameAs(value);
     }
 }
