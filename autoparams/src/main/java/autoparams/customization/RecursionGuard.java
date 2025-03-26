@@ -2,21 +2,20 @@ package autoparams.customization;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import org.junit.jupiter.api.extension.ExtensionContext;
 
 public final class RecursionGuard implements Customizer {
 
     public static final int DEFAULT_RECURSION_DEPTH = 1;
 
-    private static final ExtensionContext.Namespace NAMESPACE;
-    private static final Object CONTEXT_KEY;
+    private static final ConcurrentMap<Object, RecursionContext> STORE;
 
     static {
-        NAMESPACE = ExtensionContext.Namespace.create(RecursionGuard.class);
-        CONTEXT_KEY = RecursionGuard.class;
+        STORE = new ConcurrentHashMap<>();
     }
 
     private final int recursionDepth;
@@ -46,12 +45,9 @@ public final class RecursionGuard implements Customizer {
         return (query, context) -> {
             final Object scope = new Object();
 
-            final ExtensionContext.Store store = context.getExtensionContext().getStore(NAMESPACE);
-
-            final RecursionContext recursionContext = store.getOrComputeIfAbsent(
-                CONTEXT_KEY,
-                x -> new RecursionContext(scope),
-                RecursionContext.class
+            final RecursionContext recursionContext = STORE.computeIfAbsent(
+                context,
+                x -> new RecursionContext(scope)
             );
 
             try {
@@ -64,7 +60,10 @@ public final class RecursionGuard implements Customizer {
 
                 monitor.push(type);
                 try {
-                    final long depth = monitor.stream().filter(x -> x.equals(type)).count();
+                    final long depth = monitor
+                        .stream()
+                        .filter(x -> x.equals(type))
+                        .count();
                     return depth > recursionDepth
                         ? new ObjectContainer(null)
                         : generator.generate(query, context);
@@ -73,7 +72,7 @@ public final class RecursionGuard implements Customizer {
                 }
             } finally {
                 if (recursionContext.scope.equals(scope)) {
-                    store.remove(CONTEXT_KEY);
+                    STORE.remove(context);
                 }
             }
         };
