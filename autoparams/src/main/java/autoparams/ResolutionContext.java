@@ -4,22 +4,49 @@ import java.lang.reflect.Type;
 
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectGeneratorBase;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class ResolutionContext {
 
-    private final ExtensionContext extensionContext;
     private ObjectGenerator generator;
     private ObjectProcessor processor;
+
+    private static final class ExtensionContextProvider
+        extends ObjectGeneratorBase<ExtensionContext> {
+
+        private final ExtensionContext extensionContext;
+
+        private ExtensionContextProvider(ExtensionContext extensionContext) {
+            this.extensionContext = extensionContext;
+        }
+
+        @Override
+        protected ExtensionContext generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return extensionContext;
+        }
+    }
 
     public ResolutionContext(
         ExtensionContext extensionContext,
         ObjectGenerator generator,
         ObjectProcessor processor
     ) {
-        this.extensionContext = extensionContext;
+        this(
+            generator.customize(new ExtensionContextProvider(extensionContext)),
+            processor
+        );
+    }
+
+    public ResolutionContext(
+        ObjectGenerator generator,
+        ObjectProcessor processor
+    ) {
         this.generator = generator;
         this.processor = processor;
     }
@@ -28,8 +55,9 @@ public class ResolutionContext {
         this(context, ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
     }
 
+    @Deprecated
     public ExtensionContext getExtensionContext() {
-        return extensionContext;
+        return resolve(ExtensionContext.class);
     }
 
     @Deprecated
@@ -114,6 +142,6 @@ public class ResolutionContext {
     }
 
     public ResolutionContext branch() {
-        return new ResolutionContext(extensionContext, generator, processor);
+        return new ResolutionContext(generator, processor);
     }
 }

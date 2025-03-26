@@ -9,7 +9,6 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
             new RecursionGuard().customize(
                 new CompositeObjectGenerator(
                     new ResolutionContextGenerator(),
-                    new ExtensionContextGenerator(),
                     new PrimitiveValueGenerator(),
                     new RootGenerator(),
                     new ClassGenerator(),
