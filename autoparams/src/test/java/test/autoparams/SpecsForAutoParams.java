@@ -13,6 +13,8 @@ import autoparams.customization.Freeze;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -77,5 +79,12 @@ public class SpecsForAutoParams {
     @AutoParams
     void sut_consumes_ArgumentRecycler(@Freeze String arg1, String arg2) {
         assertEquals(arg1, arg2);
+    }
+
+    @Test
+    @AutoParams
+    void sut_passes_test_gears(TestInfo testInfo, TestReporter testReporter) {
+        assertNotNull(testInfo);
+        assertNotNull(testReporter);
     }
 }

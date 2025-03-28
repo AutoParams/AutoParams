@@ -24,7 +24,8 @@ public final class AutoParamsExtension implements
         ParameterContext parameterContext,
         ExtensionContext extensionContext
     ) throws ParameterResolutionException {
-        return true;
+        Parameter parameter = parameterContext.getParameter();
+        return TestGear.TYPES.contains(parameter.getType()) == false;
     }
 
     @Override
