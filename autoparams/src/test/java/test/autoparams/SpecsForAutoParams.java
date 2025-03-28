@@ -9,6 +9,7 @@ import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
+import autoparams.customization.Freeze;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.api.Test;
@@ -70,5 +71,11 @@ public class SpecsForAutoParams {
     void sut_consumes_CustomizerSource(int arg1, String arg2) {
         assertEquals(1024, arg1);
         assertNotNull(arg2);
+    }
+
+    @Test
+    @AutoParams
+    void sut_consumes_ArgumentRecycler(@Freeze String arg1, String arg2) {
+        assertEquals(arg1, arg2);
     }
 }

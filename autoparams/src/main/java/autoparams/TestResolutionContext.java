@@ -34,18 +34,6 @@ class TestResolutionContext extends ResolutionContext {
         applyAnnotatedCustomizers(extensionContext.getRequiredTestMethod());
     }
 
-    TestParameterContext[] getParameterContexts(
-        ExtensionContext extensionContext
-    ) {
-        Method testMethod = extensionContext.getRequiredTestMethod();
-        Parameter[] parameters = testMethod.getParameters();
-        List<TestParameterContext> contexts = new ArrayList<>();
-        for (int i = 0; i < parameters.length; i++) {
-            contexts.add(new TestParameterContext(this, parameters[i], i));
-        }
-        return contexts.toArray(new TestParameterContext[parameters.length]);
-    }
-
     public void applyAnnotatedCustomizers(AnnotatedElement element) {
         for (Edge<Annotation> edge : scanAnnotations(element)) {
             if (edge.getCurrent() instanceof Customization) {
@@ -68,5 +56,18 @@ class TestResolutionContext extends ResolutionContext {
         CustomizerFactory factory = instantiate(source.value());
         edge.useParent(parent -> consumeAnnotationIfMatch(factory, parent));
         applyCustomizer(factory.createCustomizer());
+    }
+
+    TestParameterContext[] getParameterContexts(
+        ExtensionContext extensionContext
+    ) {
+        Method testMethod = extensionContext.getRequiredTestMethod();
+        Parameter[] parameters = testMethod.getParameters();
+        List<TestParameterContext> contexts = new ArrayList<>();
+        for (int i = 0; i < parameters.length; i++) {
+            contexts.add(new TestParameterContext(this, parameters[i], i));
+        }
+
+        return contexts.toArray(new TestParameterContext[parameters.length]);
     }
 }

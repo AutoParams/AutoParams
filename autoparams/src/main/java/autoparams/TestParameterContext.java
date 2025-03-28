@@ -21,6 +21,7 @@ import org.junit.platform.commons.util.AnnotationUtils;
 import static autoparams.AnnotationConsumption.consumeAnnotationIfMatch;
 import static autoparams.AnnotationScanner.scanAnnotations;
 import static autoparams.Instantiator.instantiate;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 final class TestParameterContext implements ParameterContext {
 
@@ -82,6 +83,11 @@ final class TestParameterContext implements ParameterContext {
             this.index,
             annotationType
         );
+    }
+
+    public Object resolveArgument() {
+        Arguments emptyAsset = arguments();
+        return resolveArgument(emptyAsset);
     }
 
     public Object resolveArgument(Arguments asset) {
