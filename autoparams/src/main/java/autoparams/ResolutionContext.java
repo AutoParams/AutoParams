@@ -13,6 +13,7 @@ public class ResolutionContext {
     private ObjectGenerator generator;
     private ObjectProcessor processor;
 
+    @Deprecated
     public ResolutionContext(
         ExtensionContext extensionContext,
         ObjectGenerator generator,

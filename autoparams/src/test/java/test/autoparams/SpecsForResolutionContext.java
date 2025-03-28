@@ -7,7 +7,6 @@ import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.ObjectProcessor;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ArgumentConverter;
 
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SpecsForResolutionContext {
 
-    @SuppressWarnings("DataFlowIssue")
     @ParameterizedTest
     @AutoSource
     void resolve_has_guard_clause(ResolutionContext sut) {
@@ -26,12 +24,8 @@ class SpecsForResolutionContext {
 
     @ParameterizedTest
     @AutoSource
-    void resolve_correctly_returns_generated_value(
-        ExtensionContext extensionContext,
-        int value
-    ) {
+    void resolve_correctly_returns_generated_value(int value) {
         ResolutionContext sut = new ResolutionContext(
-            extensionContext,
             (query, context) -> new ObjectContainer(value),
             ObjectProcessor.DEFAULT
         );
@@ -54,12 +48,8 @@ class SpecsForResolutionContext {
     @Deprecated
     @ParameterizedTest
     @AutoSource
-    void generate_correctly_returns_generated_value(
-        ExtensionContext extensionContext,
-        int value
-    ) {
+    void generate_correctly_returns_generated_value(int value) {
         ResolutionContext sut = new ResolutionContext(
-            extensionContext,
             (query, context) -> new ObjectContainer(value),
             ObjectProcessor.DEFAULT
         );
@@ -101,13 +91,8 @@ class SpecsForResolutionContext {
 
     @ParameterizedTest
     @AutoSource
-    void applyCustomizer_correctly_replaces_generator(
-        ExtensionContext extensionContext,
-        int value1,
-        int value2
-    ) {
+    void applyCustomizer_correctly_replaces_generator(int value1, int value2) {
         ResolutionContext sut = new ResolutionContext(
-            extensionContext,
             (query, context) -> new ObjectContainer(value1),
             ObjectProcessor.DEFAULT
         );
