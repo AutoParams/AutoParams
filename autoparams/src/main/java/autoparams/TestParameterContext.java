@@ -24,12 +24,12 @@ import static autoparams.Instantiator.instantiate;
 
 final class TestParameterContext implements ParameterContext {
 
-    private final ResolutionContext resolutionContext;
+    private final TestResolutionContext resolutionContext;
     private final Parameter parameter;
     private final int index;
 
     public TestParameterContext(
-        ResolutionContext resolutionContext,
+        TestResolutionContext resolutionContext,
         Parameter parameter,
         int index
     ) {
@@ -85,6 +85,7 @@ final class TestParameterContext implements ParameterContext {
     }
 
     public Object resolveArgument(Arguments asset) {
+        resolutionContext.applyAnnotatedCustomizers(parameter);
         Object supplied = supplyArgument(asset);
         Object argument = convertArgument(supplied);
         recycleArgument(argument);

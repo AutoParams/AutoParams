@@ -12,11 +12,11 @@ public final class AutoParamsExtension implements
     BeforeTestExecutionCallback,
     ParameterResolver {
 
-    private ResolutionContext resolutionContext = null;
+    private TestResolutionContext resolutionContext = null;
 
     @Override
     public void beforeTestExecution(ExtensionContext context) {
-        resolutionContext = new ResolutionContext(context);
+        resolutionContext = TestResolutionContext.create(context);
     }
 
     @Override
@@ -38,6 +38,7 @@ public final class AutoParamsExtension implements
             parameterContext.getIndex(),
             parameter.getParameterizedType()
         );
+        resolutionContext.applyAnnotatedCustomizers(parameter);
         return resolutionContext.resolve(query);
     }
 }

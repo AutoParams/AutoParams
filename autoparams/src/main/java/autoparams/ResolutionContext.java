@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 
 import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
-import autoparams.generator.ObjectGeneratorBase;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -13,24 +12,6 @@ public class ResolutionContext {
 
     private ObjectGenerator generator;
     private ObjectProcessor processor;
-
-    private static final class ExtensionContextProvider
-        extends ObjectGeneratorBase<ExtensionContext> {
-
-        private final ExtensionContext extensionContext;
-
-        private ExtensionContextProvider(ExtensionContext extensionContext) {
-            this.extensionContext = extensionContext;
-        }
-
-        @Override
-        protected ExtensionContext generateObject(
-            ObjectQuery query,
-            ResolutionContext context
-        ) {
-            return extensionContext;
-        }
-    }
 
     public ResolutionContext(
         ExtensionContext extensionContext,
@@ -51,8 +32,8 @@ public class ResolutionContext {
         this.processor = processor;
     }
 
-    ResolutionContext(ExtensionContext context) {
-        this(context, ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
+    ResolutionContext() {
+        this(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
     }
 
     @Deprecated
