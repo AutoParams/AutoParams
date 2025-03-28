@@ -33,7 +33,7 @@ public class ResolutionContext {
         this.processor = processor;
     }
 
-    ResolutionContext() {
+    public ResolutionContext() {
         this(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
     }
 
