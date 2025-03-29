@@ -64,12 +64,7 @@ class DefaultStringConverter implements StringConverter {
         }
     }
 
-    private final Converter converter = Converter
-        .with(primitiveConverter)
-        .and(timeConverter)
-        .and(otherBclObjectConverter);
-
-    private static final Converter primitiveConverter = Converter
+    private static final Converter PRIMITIVE_CONVERTER = Converter
         .with(int.class, Integer::decode)
         .and(Integer.class, Integer::decode)
         .and(long.class, Long::decode)
@@ -87,7 +82,7 @@ class DefaultStringConverter implements StringConverter {
         .and(char.class, DefaultStringConverter::convertToCharacter)
         .and(Character.class, DefaultStringConverter::convertToCharacter);
 
-    private static final Converter timeConverter = Converter
+    private static final Converter TIME_OBJECT_CONVERTER = Converter
         .with(Duration.class, Duration::parse)
         .and(Instant.class, Instant::parse)
         .and(LocalDateTime.class, LocalDateTime::parse)
@@ -103,7 +98,7 @@ class DefaultStringConverter implements StringConverter {
         .and(ZoneId.class, ZoneId::of)
         .and(ZoneOffset.class, ZoneOffset::of);
 
-    private static final Converter otherBclObjectConverter = Converter
+    private static final Converter OTHER_BCL_OBJECT_CONVERTER = Converter
         .with(DefaultStringConverter::convertToString)
         .and(DefaultStringConverter::convertToEnum)
         .and(UUID.class, UUID::fromString)
@@ -118,9 +113,14 @@ class DefaultStringConverter implements StringConverter {
         .and(File.class, File::new)
         .and(DefaultStringConverter::convertToClass);
 
+    private static final Converter CONVERTER = Converter
+        .with(PRIMITIVE_CONVERTER)
+        .and(TIME_OBJECT_CONVERTER)
+        .and(OTHER_BCL_OBJECT_CONVERTER);
+
     @Override
     public Optional<Object> convert(String source, ObjectQuery query) {
-        return converter.apply(source, query.getType());
+        return CONVERTER.apply(source, query.getType());
     }
 
     private static Optional<Object> convertToString(String source, Type type) {
