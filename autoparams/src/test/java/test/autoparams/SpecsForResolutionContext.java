@@ -34,30 +34,6 @@ class SpecsForResolutionContext {
         assertThat(actual).isEqualTo(value);
     }
 
-    @Deprecated
-    @SuppressWarnings("ConstantConditions")
-    @ParameterizedTest
-    @AutoSource
-    void generate_has_guard_clause(ResolutionContext sut) {
-        ObjectQuery query = null;
-        assertThatThrownBy(() -> sut.generate(query))
-            .isExactlyInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Deprecated
-    @ParameterizedTest
-    @AutoSource
-    void generate_correctly_returns_generated_value(int value) {
-        ResolutionContext sut = new ResolutionContext(
-            (query, context) -> new ObjectContainer(value),
-            ObjectProcessor.DEFAULT
-        );
-
-        Object actual = sut.generate(int.class);
-
-        assertThat(actual).isEqualTo(value);
-    }
-
     @SuppressWarnings("ConstantConditions")
     @ParameterizedTest
     @AutoSource
