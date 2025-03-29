@@ -5,10 +5,8 @@ import java.util.Arrays;
 import autoparams.processor.InstanceFieldWriter;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-@SuppressWarnings("deprecation")
 public class InstanceFieldWriterFactory implements
     AnnotationConsumer<WriteInstanceFields>,
-    AnnotationVisitor<WriteInstanceFields>,
     CustomizerFactory {
 
     private Class<?>[] target;
