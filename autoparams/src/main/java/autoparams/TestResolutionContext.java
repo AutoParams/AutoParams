@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoparams.AnnotationScanner.Edge;
-import autoparams.customization.ArgumentProcessing;
-import autoparams.customization.ArgumentProcessor;
 import autoparams.customization.ArgumentRecycler;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
@@ -118,7 +116,6 @@ class TestResolutionContext extends ResolutionContext {
         return argument;
     }
 
-    @SuppressWarnings("deprecation")
     private void recycleArgument(Object argument, ParameterQuery query) {
         if (argument instanceof Named<?>) {
             recycleArgument((Named<?>) argument, query);
@@ -129,12 +126,6 @@ class TestResolutionContext extends ResolutionContext {
             scanAnnotations(query.getParameter(), RecycleArgument.class)
         ) {
             recycleArgument(argument, edge, query);
-        }
-
-        for (Edge<ArgumentProcessing> edge :
-            scanAnnotations(query.getParameter(), ArgumentProcessing.class)
-        ) {
-            processArgument(argument, edge, query);
         }
     }
 
@@ -150,18 +141,6 @@ class TestResolutionContext extends ResolutionContext {
         ArgumentRecycler recycler = instantiate(edge.getCurrent().value());
         edge.useParent(parent -> consumeAnnotationIfMatch(recycler, parent));
         applyCustomizer(recycler.recycle(argument, query.getParameter()));
-    }
-
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    @Deprecated
-    private void processArgument(
-        Object argument,
-        Edge<ArgumentProcessing> edge,
-        ParameterQuery query
-    ) {
-        ArgumentProcessor processor = instantiate(edge.getCurrent().value());
-        edge.useParent(parent -> consumeAnnotationIfMatch(processor, parent));
-        applyCustomizer(processor.process(query.getParameter(), argument));
     }
 
     private Object convertArgument(Object source, ParameterQuery query) {
