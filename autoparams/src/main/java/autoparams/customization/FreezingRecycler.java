@@ -2,7 +2,6 @@ package autoparams.customization;
 
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.function.Predicate;
 
 import autoparams.generator.ObjectContainer;
@@ -27,21 +26,32 @@ final class FreezingRecycler implements
         return getGenerator(parameter, argument);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     private ObjectGenerator getGenerator(Parameter parameter, Object argument) {
-        final boolean byExactType = this.byExactType;
-        final boolean byImplementedInterfaces = this.byImplementedInterfaces;
+        Predicate<Type> predicate = NEGATIVE
+            .or(type -> matchExactType(parameter, type))
+            .or(type -> matchInterfaces(parameter, type));
 
-        Class<?> parameterType = parameter.getType();
-        List<Class<?>> interfaces = asList(parameterType.getInterfaces());
-
-        Predicate<Type> isTypeFrozen = NEGATIVE
-            .or(type -> byExactType && type.equals(parameterType))
-            .or(type -> byImplementedInterfaces && interfaces.contains(type));
-
-        return (query, context) -> isTypeFrozen.test(query.getType())
+        return (query, context) -> predicate.test(query.getType())
             ? new ObjectContainer(argument)
             : ObjectContainer.EMPTY;
+    }
+
+    private boolean matchExactType(Parameter parameter, Type requestedType) {
+        if (byExactType == false) {
+            return false;
+        }
+
+        Type parameterType = parameter.getParameterizedType();
+        return requestedType.equals(parameterType);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    private boolean matchInterfaces(Parameter parameter, Type type) {
+        if (byImplementedInterfaces == false) {
+            return false;
+        }
+
+        return asList(parameter.getType().getInterfaces()).contains(type);
     }
 
     @Override

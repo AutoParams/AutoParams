@@ -65,7 +65,13 @@ class TestResolutionContext extends ResolutionContext {
         Parameter[] parameters = testMethod.getParameters();
         List<TestParameterContext> contexts = new ArrayList<>();
         for (int i = 0; i < parameters.length; i++) {
-            contexts.add(new TestParameterContext(this, parameters[i], i));
+            Parameter parameter = parameters[i];
+            ParameterQuery query = new ParameterQuery(
+                parameter,
+                i,
+                parameter.getParameterizedType()
+            );
+            contexts.add(new TestParameterContext(this, query));
         }
 
         return contexts.toArray(new TestParameterContext[parameters.length]);

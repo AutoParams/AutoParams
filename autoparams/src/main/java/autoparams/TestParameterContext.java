@@ -2,7 +2,6 @@ package autoparams;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import autoparams.customization.Customizer;
 import autoparams.customization.RecycleArgument;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.params.converter.ArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.platform.commons.util.AnnotationUtils;
 
@@ -26,27 +24,24 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 final class TestParameterContext implements ParameterContext {
 
     private final TestResolutionContext resolutionContext;
-    private final Parameter parameter;
-    private final int index;
+    private final ParameterQuery query;
 
     public TestParameterContext(
         TestResolutionContext resolutionContext,
-        Parameter parameter,
-        int index
+        ParameterQuery query
     ) {
         this.resolutionContext = resolutionContext;
-        this.parameter = parameter;
-        this.index = index;
+        this.query = query;
     }
 
     @Override
     public Parameter getParameter() {
-        return parameter;
+        return query.getParameter();
     }
 
     @Override
     public int getIndex() {
-        return index;
+        return query.getIndex();
     }
 
     @Override
@@ -57,8 +52,8 @@ final class TestParameterContext implements ParameterContext {
     @Override
     public boolean isAnnotated(Class<? extends Annotation> annotationType) {
         return AnnotationUtils.isAnnotated(
-            this.parameter,
-            this.index,
+            query.getParameter(),
+            query.getIndex(),
             annotationType
         );
     }
@@ -68,8 +63,8 @@ final class TestParameterContext implements ParameterContext {
         Class<A> annotationType
     ) {
         return AnnotationUtils.findAnnotation(
-            this.parameter,
-            this.index,
+            query.getParameter(),
+            query.getIndex(),
             annotationType
         );
     }
@@ -79,8 +74,8 @@ final class TestParameterContext implements ParameterContext {
         Class<A> annotationType
     ) {
         return AnnotationUtils.findRepeatableAnnotations(
-            this.parameter,
-            this.index,
+            query.getParameter(),
+            query.getIndex(),
             annotationType
         );
     }
@@ -91,29 +86,25 @@ final class TestParameterContext implements ParameterContext {
     }
 
     public Object resolveArgument(Arguments asset) {
-        resolutionContext.applyAnnotatedCustomizers(parameter);
-        Object supplied = supplyArgument(asset);
-        Object argument = convertArgument(supplied);
+        resolutionContext.applyAnnotatedCustomizers(query.getParameter());
+        Object argument = supplyArgument(asset);
         recycleArgument(argument);
         return argument;
     }
 
     private Object supplyArgument(Arguments asset) {
-        return index < asset.get().length
-            ? asset.get()[index]
-            : resolutionContext.resolve(getQuery());
-    }
-
-    private ParameterQuery getQuery() {
-        Type type = parameter.getParameterizedType();
-        return new ParameterQuery(parameter, index, type);
+        return query.getIndex() < asset.get().length
+            ? convertArgument(asset.get()[query.getIndex()])
+            : resolutionContext.resolve(query);
     }
 
     private Object convertArgument(Object source) {
         if (source instanceof Named<?>) {
             return convertArgument((Named<?>) source);
+        } else if (source instanceof String) {
+            return convertArgument((String) source);
         } else {
-            return getConverter().convert(source, this);
+            return source;
         }
     }
 
@@ -122,8 +113,18 @@ final class TestParameterContext implements ParameterContext {
         return Named.of(source.getName(), payload);
     }
 
-    private ArgumentConverter getConverter() {
-        return resolutionContext.resolve(ArgumentConverter.class);
+    private Object convertArgument(String source) {
+        return getConverter()
+            .convert(source, query)
+            .orElseThrow(() -> {
+                String message = "Cannot convert \"" + source
+                    + "\" to an argument for " + query.getParameter() + ".";
+                return new IllegalArgumentException(message);
+            });
+    }
+
+    private StringConverter getConverter() {
+        return resolutionContext.resolve(StringConverter.class);
     }
 
     @SuppressWarnings("deprecation")
@@ -134,13 +135,13 @@ final class TestParameterContext implements ParameterContext {
         }
 
         for (Edge<RecycleArgument> edge :
-            scanAnnotations(parameter, RecycleArgument.class)
+            scanAnnotations(query.getParameter(), RecycleArgument.class)
         ) {
             recycleArgument(argument, edge);
         }
 
         for (Edge<ArgumentProcessing> edge :
-            scanAnnotations(parameter, ArgumentProcessing.class)
+            scanAnnotations(query.getParameter(), ArgumentProcessing.class)
         ) {
             recycleArgumentWithArgumentProcessor(argument, edge);
         }
@@ -168,7 +169,10 @@ final class TestParameterContext implements ParameterContext {
     ) {
         ArgumentProcessor processor = instantiate(edge.getCurrent().value());
         edge.useParent(parent -> consumeAnnotationIfMatch(processor, parent));
-        Customizer customizer = processor.process(parameter, argument);
+        Customizer customizer = processor.process(
+            query.getParameter(),
+            argument
+        );
         resolutionContext.applyCustomizer(customizer);
     }
 }

@@ -35,8 +35,11 @@ public final class AutoParamsExtension implements
     ) throws ParameterResolutionException {
         TestParameterContext testParameterContext = new TestParameterContext(
             resolutionContext,
-            parameterContext.getParameter(),
-            parameterContext.getIndex()
+            new ParameterQuery(
+                parameterContext.getParameter(),
+                parameterContext.getIndex(),
+                parameterContext.getParameter().getParameterizedType()
+            )
         );
         return testParameterContext.resolveArgument();
     }

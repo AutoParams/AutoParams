@@ -33,6 +33,7 @@ interface Brake {
                     return true;
                 }
             }
+
             return false;
         };
     }
