@@ -1,10 +1,10 @@
 package autoparams;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Parameter;
 import java.util.function.Consumer;
 
 import autoparams.AnnotationScanner.Edge;
-import org.junit.jupiter.api.extension.ParameterContext;
 
 import static autoparams.AnnotationConsumption.consumeAnnotationIfMatch;
 import static autoparams.AnnotationScanner.scanAnnotations;
@@ -13,7 +13,7 @@ import static autoparams.Instantiator.instantiate;
 @FunctionalInterface
 interface Brake {
 
-    boolean shouldBrakeBefore(ParameterContext parameterContext);
+    boolean shouldBrakeBefore(Parameter parameter);
 
     static void collectBrakes(
         AnnotatedElement element,
@@ -27,9 +27,9 @@ interface Brake {
     }
 
     static Brake compose(Brake... brakes) {
-        return parameterContext -> {
+        return parameter -> {
             for (Brake brake : brakes) {
-                if (brake.shouldBrakeBefore(parameterContext)) {
+                if (brake.shouldBrakeBefore(parameter)) {
                     return true;
                 }
             }

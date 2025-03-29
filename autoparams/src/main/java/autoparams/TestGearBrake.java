@@ -1,8 +1,7 @@
 package autoparams;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
-
-import org.junit.jupiter.api.extension.ParameterContext;
 
 final class TestGearBrake implements Brake {
 
@@ -14,7 +13,7 @@ final class TestGearBrake implements Brake {
     }
 
     @Override
-    public boolean shouldBrakeBefore(ParameterContext parameterContext) {
-        return GEARS.contains(parameterContext.getParameter().getType());
+    public boolean shouldBrakeBefore(Parameter parameter) {
+        return GEARS.contains(parameter.getType());
     }
 }

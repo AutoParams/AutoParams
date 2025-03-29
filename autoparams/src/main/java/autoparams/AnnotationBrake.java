@@ -1,8 +1,8 @@
 package autoparams;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 
-import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
 final class AnnotationBrake implements
@@ -15,9 +15,9 @@ final class AnnotationBrake implements
     private Class<? extends Annotation>[] annotationTypes = EMPTY;
 
     @Override
-    public boolean shouldBrakeBefore(ParameterContext parameterContext) {
+    public boolean shouldBrakeBefore(Parameter parameter) {
         for (Class<? extends Annotation> annotationType : annotationTypes) {
-            if (parameterContext.isAnnotated(annotationType)) {
+            if (parameter.getAnnotation(annotationType) != null) {
                 return true;
             }
         }

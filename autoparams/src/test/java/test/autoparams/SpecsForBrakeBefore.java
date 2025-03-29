@@ -17,11 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForBrakeBefore {
 
-    public static class StringPredicate implements Predicate<ParameterContext> {
+    public static class StringPredicate implements Predicate<Parameter> {
 
         @Override
-        public boolean test(ParameterContext parameterContext) {
-            Parameter parameter = parameterContext.getParameter();
+        public boolean test(Parameter parameter) {
             return parameter.getType().equals(String.class);
         }
     }
@@ -33,7 +32,7 @@ public class SpecsForBrakeBefore {
             ParameterContext parameterContext,
             ExtensionContext extensionContext
         ) throws ParameterResolutionException {
-            return new StringPredicate().test(parameterContext);
+            return new StringPredicate().test(parameterContext.getParameter());
         }
 
         @Override

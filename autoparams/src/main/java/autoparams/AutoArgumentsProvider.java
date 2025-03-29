@@ -109,7 +109,7 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         public Arguments getTestCase() {
             List<Object> arguments = new ArrayList<>();
             for (TestParameterContext parameterContext : parameterContexts) {
-                if (brake.shouldBrakeBefore(parameterContext)) {
+                if (brake.shouldBrakeBefore(parameterContext.getParameter())) {
                     break;
                 }
 
