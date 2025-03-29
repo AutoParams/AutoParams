@@ -1,7 +1,6 @@
 package autoparams;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -11,9 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 import static autoparams.AnnotationScanner.scanAnnotations;
-import static autoparams.Brake.collectBrakes;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class AutoArgumentsProvider implements ArgumentsProvider {
 
@@ -53,70 +50,15 @@ class AutoArgumentsProvider implements ArgumentsProvider {
         return Math.max(1, repetition);
     }
 
-    private List<? extends Arguments> getAssets(
-        ExtensionContext context
-    ) throws Exception {
+    private List<? extends Arguments> getAssets(ExtensionContext context)
+        throws Exception {
         return assetProvider.provideArguments(context).collect(toList());
     }
 
     private static Arguments getTestCase(
-        ExtensionContext extensionContext,
+        ExtensionContext context,
         Arguments asset
     ) {
-        TestCaseContext testCaseContext = TestCaseContext.create(
-            extensionContext,
-            TestResolutionContext.create(extensionContext),
-            asset
-        );
-        return testCaseContext.getTestCase();
-    }
-
-    private static class TestCaseContext {
-
-        private final TestParameterContext[] parameterContexts;
-        private final Arguments asset;
-        private final Brake brake;
-
-        private TestCaseContext(
-            TestParameterContext[] parameterContexts,
-            Arguments asset,
-            Brake brake
-        ) {
-            this.parameterContexts = parameterContexts;
-            this.asset = asset;
-            this.brake = brake;
-        }
-
-        public static TestCaseContext create(
-            ExtensionContext extensionContext,
-            TestResolutionContext resolutionContext,
-            Arguments asset
-        ) {
-            return new TestCaseContext(
-                resolutionContext.getParameterContexts(extensionContext),
-                asset,
-                getBrake(extensionContext)
-            );
-        }
-
-        private static Brake getBrake(ExtensionContext context) {
-            List<Brake> brakes = new ArrayList<>();
-            collectBrakes(context.getRequiredTestMethod(), brakes::add);
-            brakes.add(TestGearBrake.INSTANCE);
-            return Brake.compose(brakes.toArray(new Brake[0]));
-        }
-
-        public Arguments getTestCase() {
-            List<Object> arguments = new ArrayList<>();
-            for (TestParameterContext parameterContext : parameterContexts) {
-                if (brake.shouldBrakeBefore(parameterContext.getParameter())) {
-                    break;
-                }
-
-                arguments.add(parameterContext.resolveArgument(asset));
-            }
-
-            return arguments(arguments.toArray());
-        }
+        return TestResolutionContext.create(context).getTestCase(asset);
     }
 }
