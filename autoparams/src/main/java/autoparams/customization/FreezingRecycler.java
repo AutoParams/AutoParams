@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
-import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import static java.util.Arrays.asList;
@@ -21,8 +20,7 @@ final class FreezingRecycler implements
     private boolean byImplementedInterfaces = false;
 
     @Override
-    public Customizer recycle(Object argument, ParameterContext context) {
-        Parameter parameter = context.getParameter();
+    public Customizer recycle(Object argument, Parameter parameter) {
         return getGenerator(parameter, argument);
     }
 

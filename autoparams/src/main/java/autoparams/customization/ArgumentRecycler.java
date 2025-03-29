@@ -1,17 +1,16 @@
 package autoparams.customization;
 
+import java.lang.reflect.Parameter;
 import java.util.function.BiFunction;
-
-import org.junit.jupiter.api.extension.ParameterContext;
 
 @FunctionalInterface
 public interface ArgumentRecycler
-    extends BiFunction<Object, ParameterContext, Customizer> {
+    extends BiFunction<Object, Parameter, Customizer> {
 
-    Customizer recycle(Object argument, ParameterContext context);
+    Customizer recycle(Object argument, Parameter parameter);
 
     @Override
-    default Customizer apply(Object argument, ParameterContext context) {
-        return recycle(argument, context);
+    default Customizer apply(Object argument, Parameter parameter) {
+        return recycle(argument, parameter);
     }
 }

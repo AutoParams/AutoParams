@@ -157,7 +157,8 @@ final class TestParameterContext implements ParameterContext {
     ) {
         ArgumentRecycler recycler = instantiate(edge.getCurrent().value());
         edge.useParent(parent -> consumeAnnotationIfMatch(recycler, parent));
-        Customizer customizer = recycler.recycle(argument, this);
+        Parameter parameter = query.getParameter();
+        Customizer customizer = recycler.recycle(argument, parameter);
         resolutionContext.applyCustomizer(customizer);
     }
 
