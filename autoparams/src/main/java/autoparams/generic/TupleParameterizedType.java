@@ -19,11 +19,13 @@ final class TupleParameterizedType implements ParameterizedType {
         this.ownerType = ownerType;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public Type[] getActualTypeArguments() {
         return actualTypeArguments.clone();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public Type getRawType() {
         return rawType;
