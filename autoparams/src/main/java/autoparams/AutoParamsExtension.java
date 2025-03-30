@@ -36,8 +36,15 @@ public final class AutoParamsExtension implements
         ExtensionContext extensionContext
     ) throws ParameterResolutionException {
 
-        Parameter parameter = parameterContext.getParameter();
-        return TestGear.TYPES.contains(parameter.getType()) == false;
+        Store store = extensionContext.getStore(NAMESPACE);
+        TestResolutionContext resolutionContext = store.get(
+            extensionContext,
+            TestResolutionContext.class
+        );
+        SupportedParameterPredicate predicate = resolutionContext.resolve(
+            SupportedParameterPredicate.class
+        );
+        return predicate.test(parameterContext, extensionContext);
     }
 
     @Override
