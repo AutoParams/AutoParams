@@ -8,8 +8,6 @@ import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-import static java.util.Arrays.asList;
-
 final class FreezingRecycler implements
     ArgumentRecycler,
     AnnotationConsumer<Freeze> {
@@ -43,13 +41,13 @@ final class FreezingRecycler implements
         return requestedType.equals(parameterType);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     private boolean matchInterfaces(Parameter parameter, Type type) {
         if (byImplementedInterfaces == false) {
             return false;
         }
 
-        return asList(parameter.getType().getInterfaces()).contains(type);
+        Type parameterType = parameter.getParameterizedType();
+        return new TypeSpokesman(parameterType).implementsInterface(type);
     }
 
     @Override

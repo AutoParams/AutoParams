@@ -22,6 +22,6 @@ public class InstanceFieldWriterFactory implements
 
     @Override
     public void accept(WriteInstanceFields annotation) {
-        this.target = annotation.value();
+        target = annotation.value();
     }
 }
