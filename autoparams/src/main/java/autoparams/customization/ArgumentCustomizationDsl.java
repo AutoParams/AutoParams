@@ -16,7 +16,7 @@ public final class ArgumentCustomizationDsl {
         return FreezeArgument.withParameterTypeAndName(parameterType, name);
     }
 
-    public static FreezeArgument freezeArgumentOf(Class<?> parameterType) {
+    public static FreezeArgument freezeArgumentsOf(Class<?> parameterType) {
         return FreezeArgument.withParameterType(parameterType);
     }
 }

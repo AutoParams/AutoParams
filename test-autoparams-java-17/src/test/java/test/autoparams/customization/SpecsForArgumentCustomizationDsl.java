@@ -8,7 +8,7 @@ import autoparams.ResolutionContext;
 import org.junit.jupiter.api.Test;
 
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgument;
-import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentOf;
+import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentsOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
@@ -66,11 +66,11 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void freezeArgumentOf_correctly_sets_argument(
+    void freezeArgumentsOf_correctly_sets_argument(
         ResolutionContext context,
         UUID id
     ) {
-        context.applyCustomizer(freezeArgumentOf(UUID.class).to(id));
+        context.applyCustomizer(freezeArgumentsOf(UUID.class).to(id));
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
     }
