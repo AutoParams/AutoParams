@@ -3,16 +3,23 @@ package test.autoparams.customization;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.UUID;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import autoparams.AutoParams;
-import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
+import autoparams.ValueAutoSource;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.IterableBag;
 
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgument;
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentOf;
+import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEndsWith;
+import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEndsWithIgnoreCase;
+import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEquals;
+import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEqualsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
@@ -27,17 +34,17 @@ public class SpecsForArgumentCustomizationDsl {
     ) {
     }
 
-    public record Seller(UUID id, String email, String username) {
+    public record Comment(long id, String content) {
     }
 
-    public record Comment(long id, String content) {
+    public record Seller(UUID id, String email, String username) {
     }
 
     @Test
     @AutoParams
     void freezeArgument_correctly_sets_argument_with_name(
         ResolutionContext context,
-        int stockQuantity
+        @Min(0) @Max(1000) int stockQuantity
     ) {
         context.applyCustomizer(
             freezeArgument("stockQuantity").to(stockQuantity)
@@ -156,5 +163,63 @@ public class SpecsForArgumentCustomizationDsl {
         );
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
+    }
+
+    @Test
+    @AutoParams
+    void parameterNameEquals_creates_predicate_correctly(
+        ResolutionContext context,
+        @Min(0) @Max(1000) int stockQuantity
+    ) {
+        context.applyCustomizer(
+            freezeArgument(parameterNameEquals("stockQuantity"))
+                .to(stockQuantity)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(strings = { "stockQuantity", "StockQuantity" })
+    void parameterNameEqualsIgnoreCase_creates_predicate_correctly(
+        String parameterName,
+        ResolutionContext context,
+        @Min(0) @Max(1000) int stockQuantity
+    ) {
+        context.applyCustomizer(
+            freezeArgument(parameterNameEqualsIgnoreCase(parameterName))
+                .to(stockQuantity)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(strings = { "Quantity", "y" })
+    void parameterNameEndsWith_creates_predicate_correctly(
+        String suffix,
+        ResolutionContext context,
+        @Min(0) @Max(1000) int stockQuantity
+    ) {
+        context.applyCustomizer(
+            freezeArgument(parameterNameEndsWith(suffix)).to(stockQuantity)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(strings = { "Quantity", "quantity" })
+    void parameterNameEndsWithIgnoreCase_creates_predicate_correctly(
+        String suffix,
+        ResolutionContext context,
+        @Min(0) @Max(1000) int stockQuantity
+    ) {
+        context.applyCustomizer(
+            freezeArgument(parameterNameEndsWithIgnoreCase(suffix))
+                .to(stockQuantity)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
     }
 }

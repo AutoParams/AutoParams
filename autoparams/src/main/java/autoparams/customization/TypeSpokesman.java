@@ -53,7 +53,7 @@ class TypeSpokesman {
     ) {
         for (AnnotatedType annotatedType :
             implementationType.getAnnotatedInterfaces()) {
-            if (match(annotatedType.getType(), type)) {
+            if (equals(type, annotatedType.getType())) {
                 return true;
             }
         }
@@ -61,26 +61,26 @@ class TypeSpokesman {
         return false;
     }
 
-    public boolean match(Type type) {
-        return match(this.type, type);
+    public boolean equals(Type type) {
+        return equals(this.type, type);
     }
 
-    private static boolean match(Type type1, Type type2) {
+    private static boolean equals(Type type1, Type type2) {
         if (type1.equals(type2)) {
             return true;
-        } else if (type2 instanceof ParameterizedType) {
-            return match(type1, (ParameterizedType) type2);
+        } else if (type1 instanceof ParameterizedType) {
+            return equals((ParameterizedType) type1, type2);
         } else {
             return false;
         }
     }
 
-    private static boolean match(Type type1, ParameterizedType type2) {
-        return type1 instanceof ParameterizedType
-            && match((ParameterizedType) type1, type2);
+    private static boolean equals(ParameterizedType type1, Type type2) {
+        return type2 instanceof ParameterizedType
+            && equals(type1, (ParameterizedType) type2);
     }
 
-    private static boolean match(
+    private static boolean equals(
         ParameterizedType type1,
         ParameterizedType type2
     ) {
@@ -88,19 +88,19 @@ class TypeSpokesman {
             return false;
         }
 
-        return match(
+        return equals(
             type1.getActualTypeArguments(),
             type2.getActualTypeArguments()
         );
     }
 
-    private static boolean match(Type[] types1, Type[] types2) {
+    private static boolean equals(Type[] types1, Type[] types2) {
         if (types1.length != types2.length) {
             return false;
         }
 
         for (int i = 0; i < types1.length; i++) {
-            if (match(types1[i], types2[i]) == false) {
+            if (equals(types1[i], types2[i]) == false) {
                 return false;
             }
         }
