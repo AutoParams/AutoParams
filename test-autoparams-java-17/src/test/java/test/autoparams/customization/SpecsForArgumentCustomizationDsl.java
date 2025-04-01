@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import test.autoparams.IterableBag;
 
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgument;
-import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentsOf;
+import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
@@ -69,24 +69,24 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void freezeArgumentsOf_correctly_sets_argument(
+    void freezeArgumentOf_correctly_sets_argument(
         ResolutionContext context,
         UUID id
     ) {
-        context.applyCustomizer(freezeArgumentsOf(UUID.class).to(id));
+        context.applyCustomizer(freezeArgumentOf(UUID.class).to(id));
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
     }
 
     @Test
     @AutoParams
-    void freezeArgumentsOf_accepts_generic_type_correctly(
+    void freezeArgumentOf_accepts_generic_type_correctly(
         ResolutionContext context,
         Iterable<UUID> iterable
     ) {
         Type type = new TypeReference<Iterable<UUID>>() { }.getType();
 
-        context.applyCustomizer(freezeArgumentsOf(type).to(iterable));
+        context.applyCustomizer(freezeArgumentOf(type).to(iterable));
 
         IterableBag<UUID> bag = context.resolve(new TypeReference<>() { });
         assertThat(bag.items()).isSameAs(iterable);
@@ -94,12 +94,12 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void freezeArgumentsOf_accepts_type_reference_correctly(
+    void freezeArgumentOf_accepts_type_reference_correctly(
         ResolutionContext context,
         Iterable<UUID> iterable
     ) {
         context.applyCustomizer(
-            freezeArgumentsOf(new TypeReference<Iterable<UUID>>() { })
+            freezeArgumentOf(new TypeReference<Iterable<UUID>>() { })
                 .to(iterable)
         );
         IterableBag<UUID> bag = context.resolve(new TypeReference<>() { });

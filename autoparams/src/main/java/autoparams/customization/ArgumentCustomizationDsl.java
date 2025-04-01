@@ -9,14 +9,14 @@ public final class ArgumentCustomizationDsl {
     private ArgumentCustomizationDsl() {
     }
 
-    public static FreezeArgument freezeArgumentsOf(Type parameterType) {
+    public static FreezeArgument freezeArgumentOf(Type parameterType) {
         return FreezeArgument.withParameterType(parameterType);
     }
 
-    public static <T> FreezeArgument freezeArgumentsOf(
+    public static <T> FreezeArgument freezeArgumentOf(
         TypeReference<T> parameterTypeReference
     ) {
-        return freezeArgumentsOf(parameterTypeReference.getType());
+        return freezeArgumentOf(parameterTypeReference.getType());
     }
 
     public static FreezeArgument freezeArgument(String parameterName) {
