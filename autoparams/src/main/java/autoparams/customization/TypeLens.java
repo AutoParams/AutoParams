@@ -4,11 +4,11 @@ import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-class TypeSpokesman {
+class TypeLens {
 
     private final Type type;
 
-    public TypeSpokesman(Type type) {
+    public TypeLens(Type type) {
         this.type = type;
     }
 

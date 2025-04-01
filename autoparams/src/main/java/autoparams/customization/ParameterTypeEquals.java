@@ -7,14 +7,14 @@ import autoparams.ParameterQuery;
 
 class ParameterTypeEquals implements Predicate<ParameterQuery> {
 
-    private final TypeSpokesman parameterTypeSpokesman;
+    private final TypeLens parameterTypeLens;
 
     public ParameterTypeEquals(Type parameterType) {
-        this.parameterTypeSpokesman = new TypeSpokesman(parameterType);
+        this.parameterTypeLens = new TypeLens(parameterType);
     }
 
     @Override
     public boolean test(ParameterQuery query) {
-        return parameterTypeSpokesman.equals(query.getType());
+        return parameterTypeLens.equals(query.getType());
     }
 }

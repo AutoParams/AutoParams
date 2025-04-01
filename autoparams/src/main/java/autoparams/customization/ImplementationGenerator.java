@@ -18,7 +18,7 @@ class ImplementationGenerator implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return new TypeSpokesman(type).implementsInterface(query.getType())
+        return new TypeLens(type).implementsInterface(query.getType())
             ? new ObjectContainer(context.resolve(type))
             : ObjectContainer.EMPTY;
     }

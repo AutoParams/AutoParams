@@ -47,7 +47,7 @@ final class FreezingRecycler implements
         }
 
         Type parameterType = parameter.getParameterizedType();
-        return new TypeSpokesman(parameterType).implementsInterface(type);
+        return new TypeLens(parameterType).implementsInterface(type);
     }
 
     @Override
