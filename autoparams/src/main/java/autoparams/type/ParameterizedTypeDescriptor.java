@@ -1,15 +1,15 @@
-package autoparams.generic;
+package autoparams.type;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-final class TupleParameterizedType implements ParameterizedType {
+final class ParameterizedTypeDescriptor implements ParameterizedType {
 
     private final Type[] actualTypeArguments;
     private final Type rawType;
     private final Type ownerType;
 
-    public TupleParameterizedType(
+    public ParameterizedTypeDescriptor(
         Type[] actualTypeArguments,
         Type rawType,
         Type ownerType

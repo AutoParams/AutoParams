@@ -1,4 +1,4 @@
-package autoparams.generic;
+package autoparams.type;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -16,11 +16,6 @@ public final class RuntimeTypeResolver {
 
     private RuntimeTypeResolver(Map<TypeVariable<?>, Type> map) {
         this.map = map;
-    }
-
-    @Deprecated
-    public static RuntimeTypeResolver of(Type rootType) {
-        return create(rootType);
     }
 
     public static RuntimeTypeResolver create(Type rootType) {
@@ -56,7 +51,7 @@ public final class RuntimeTypeResolver {
     }
 
     private Type resolve(ParameterizedType parameterizedType) {
-        return new TupleParameterizedType(
+        return new ParameterizedTypeDescriptor(
             Arrays
                 .stream(parameterizedType.getActualTypeArguments())
                 .map(this::resolve)

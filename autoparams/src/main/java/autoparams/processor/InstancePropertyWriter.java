@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
-import autoparams.generic.RuntimeTypeResolver;
+import autoparams.type.RuntimeTypeResolver;
 
 import static java.beans.Introspector.getBeanInfo;
 
