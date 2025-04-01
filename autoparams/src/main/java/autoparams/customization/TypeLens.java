@@ -13,11 +13,8 @@ class TypeLens {
     }
 
     public boolean implementsInterface(Type type) {
-        if (this.type instanceof Class) {
-            return implementsInterface((Class<?>) this.type, type);
-        } else {
-            return false;
-        }
+        return this.type instanceof Class
+            && implementsInterface((Class<?>) this.type, type);
     }
 
     private static boolean implementsInterface(
@@ -40,11 +37,7 @@ class TypeLens {
         Class<?> implementationType,
         Class<?> type
     ) {
-        if (type.isInterface()) {
-            return type.isAssignableFrom(implementationType);
-        } else {
-            return false;
-        }
+        return type.isInterface() && type.isAssignableFrom(implementationType);
     }
 
     private static boolean implementsInterface(
@@ -53,7 +46,7 @@ class TypeLens {
     ) {
         for (AnnotatedType annotatedType :
             implementationType.getAnnotatedInterfaces()) {
-            if (equals(type, annotatedType.getType())) {
+            if (match(type, annotatedType.getType())) {
                 return true;
             }
         }
@@ -62,25 +55,25 @@ class TypeLens {
     }
 
     public boolean matches(Type type) {
-        return equals(this.type, type);
+        return match(this.type, type);
     }
 
-    private static boolean equals(Type type1, Type type2) {
+    private static boolean match(Type type1, Type type2) {
         if (type1.equals(type2)) {
             return true;
         } else if (type1 instanceof ParameterizedType) {
-            return equals((ParameterizedType) type1, type2);
+            return match((ParameterizedType) type1, type2);
         } else {
             return false;
         }
     }
 
-    private static boolean equals(ParameterizedType type1, Type type2) {
+    private static boolean match(ParameterizedType type1, Type type2) {
         return type2 instanceof ParameterizedType
-            && equals(type1, (ParameterizedType) type2);
+            && match(type1, (ParameterizedType) type2);
     }
 
-    private static boolean equals(
+    private static boolean match(
         ParameterizedType type1,
         ParameterizedType type2
     ) {
@@ -88,19 +81,19 @@ class TypeLens {
             return false;
         }
 
-        return equals(
+        return match(
             type1.getActualTypeArguments(),
             type2.getActualTypeArguments()
         );
     }
 
-    private static boolean equals(Type[] types1, Type[] types2) {
+    private static boolean match(Type[] types1, Type[] types2) {
         if (types1.length != types2.length) {
             return false;
         }
 
         for (int i = 0; i < types1.length; i++) {
-            if (equals(types1[i], types2[i]) == false) {
+            if (match(types1[i], types2[i]) == false) {
                 return false;
             }
         }
