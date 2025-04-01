@@ -7,14 +7,14 @@ import autoparams.ParameterQuery;
 
 class ParameterTypeEquals implements Predicate<ParameterQuery> {
 
-    private final Type parameterType;
+    private final TypeSpokesman parameterTypeSpokesman;
 
     public ParameterTypeEquals(Type parameterType) {
-        this.parameterType = parameterType;
+        this.parameterTypeSpokesman = new TypeSpokesman(parameterType);
     }
 
     @Override
     public boolean test(ParameterQuery query) {
-        return new TypeSpokesman(query.getType()).equals(parameterType);
+        return parameterTypeSpokesman.equals(query.getType());
     }
 }
