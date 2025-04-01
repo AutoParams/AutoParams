@@ -18,16 +18,16 @@ public final class ArgumentCustomizationDsl {
     }
 
     public static FreezeArgument freezeArgument(String parameterName) {
-        return FreezeArgument.withParameterName(parameterName);
+        return new FreezeArgument(new ParameterNameEquals(parameterName));
     }
 
     public static FreezeArgument freezeArgument(
         Type parameterType,
         String parameterName
     ) {
-        return FreezeArgument.withParameterTypeAndParameterName(
-            parameterType,
-            parameterName
+        return new FreezeArgument(
+            new ParameterTypeMatches(parameterType)
+                .and(new ParameterNameEquals(parameterName))
         );
     }
 
@@ -39,7 +39,7 @@ public final class ArgumentCustomizationDsl {
     }
 
     public static FreezeArgument freezeArgumentOf(Type parameterType) {
-        return FreezeArgument.withParameterType(parameterType);
+        return new FreezeArgument(new ParameterTypeMatches(parameterType));
     }
 
     public static <T> FreezeArgument freezeArgumentOf(

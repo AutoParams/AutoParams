@@ -1,6 +1,5 @@
 package autoparams.customization.dsl;
 
-import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
@@ -12,24 +11,6 @@ public final class FreezeArgument {
 
     FreezeArgument(Predicate<ParameterQuery> predicate) {
         this.predicate = predicate;
-    }
-
-    static FreezeArgument withParameterType(Type parameterType) {
-        return new FreezeArgument(new ParameterTypeEquals(parameterType));
-    }
-
-    static FreezeArgument withParameterName(String parameterName) {
-        return new FreezeArgument(new ParameterNameEquals(parameterName));
-    }
-
-    static FreezeArgument withParameterTypeAndParameterName(
-        Type parameterType,
-        String parameterName
-    ) {
-        return new FreezeArgument(
-            new ParameterTypeEquals(parameterType)
-                .and(new ParameterNameEquals(parameterName))
-        );
     }
 
     public FreezeArgument in(Class<?> declaringClass) {
