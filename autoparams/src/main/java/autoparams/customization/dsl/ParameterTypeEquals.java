@@ -1,4 +1,4 @@
-package autoparams.customization;
+package autoparams.customization.dsl;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;

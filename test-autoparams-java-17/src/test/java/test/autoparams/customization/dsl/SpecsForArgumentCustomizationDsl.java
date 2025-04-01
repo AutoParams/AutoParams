@@ -1,4 +1,4 @@
-package test.autoparams.customization;
+package test.autoparams.customization.dsl;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.IterableBag;
 
-import static autoparams.customization.ArgumentCustomizationDsl.freezeArgument;
-import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentOf;
-import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEndsWith;
-import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEndsWithIgnoreCase;
-import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEquals;
-import static autoparams.customization.ArgumentCustomizationDsl.parameterNameEqualsIgnoreCase;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgumentOf;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEndsWith;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEndsWithIgnoreCase;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEquals;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEqualsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
