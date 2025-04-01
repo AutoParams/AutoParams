@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.type.RuntimeTypeResolver;
+import autoparams.internal.type.RuntimeTypeResolver;
 
 import static java.util.Arrays.stream;
 

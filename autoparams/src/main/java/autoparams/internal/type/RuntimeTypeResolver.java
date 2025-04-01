@@ -1,4 +1,4 @@
-package autoparams.type;
+package autoparams.internal.type;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

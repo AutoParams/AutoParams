@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
+import autoparams.internal.type.TypeLens;
 
 class ParameterTypeEquals implements Predicate<ParameterQuery> {
 

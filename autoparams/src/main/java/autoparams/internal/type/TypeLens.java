@@ -1,10 +1,10 @@
-package autoparams.customization;
+package autoparams.internal.type;
 
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-class TypeLens {
+public class TypeLens {
 
     private final Type type;
 

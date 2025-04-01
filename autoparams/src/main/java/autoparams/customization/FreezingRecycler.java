@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.internal.type.TypeLens;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
 final class FreezingRecycler implements

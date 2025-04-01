@@ -4,6 +4,7 @@ import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.internal.type.TypeLens;
 
 class ImplementationGenerator implements ObjectGenerator {
 
