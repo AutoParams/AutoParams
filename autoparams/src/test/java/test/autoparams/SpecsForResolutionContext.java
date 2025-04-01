@@ -1,12 +1,18 @@
 package test.autoparams;
 
+import java.util.UUID;
+
+import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
+import autoparams.customization.Freeze;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.ObjectProcessor;
+import autoparams.type.TypeReference;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +38,20 @@ class SpecsForResolutionContext {
         Object actual = sut.resolve(int.class);
 
         assertThat(actual).isEqualTo(value);
+    }
+
+    @Test
+    @AutoParams
+    void resolve_correctly_processes_TypeReference(
+        @Freeze UUID value,
+        ResolutionContext sut
+    ) {
+        GenericBag<UUID> actual = sut.resolve(
+            new TypeReference<GenericBag<UUID>>() { }
+        );
+
+        assertThat(actual).isNotNull();
+        assertThat(actual.getValue()).isEqualTo(value);
     }
 
     @SuppressWarnings("ConstantConditions")

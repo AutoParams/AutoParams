@@ -6,6 +6,7 @@ import autoparams.customization.Customizer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
+import autoparams.type.TypeReference;
 
 public class ResolutionContext {
 
@@ -27,6 +28,11 @@ public class ResolutionContext {
     @SuppressWarnings("unchecked")
     public <T> T resolve(Class<T> type) {
         return (T) resolve(new TypeQuery(type));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(TypeReference<T> typeReference) {
+        return (T) resolve(new TypeQuery(typeReference.getType()));
     }
 
     public Object resolve(ObjectQuery query) {
