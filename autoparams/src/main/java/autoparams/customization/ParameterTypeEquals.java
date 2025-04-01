@@ -15,6 +15,6 @@ class ParameterTypeEquals implements Predicate<ParameterQuery> {
 
     @Override
     public boolean test(ParameterQuery query) {
-        return parameterTypeLens.equals(query.getType());
+        return parameterTypeLens.matches(query.getType());
     }
 }

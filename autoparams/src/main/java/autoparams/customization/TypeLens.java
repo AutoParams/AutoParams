@@ -61,7 +61,7 @@ class TypeLens {
         return false;
     }
 
-    public boolean equals(Type type) {
+    public boolean matches(Type type) {
         return equals(this.type, type);
     }
 
