@@ -2,11 +2,11 @@ package autoparams;
 
 import java.lang.reflect.Type;
 
-public final class TypeQuery implements ObjectQuery {
+public final class DefaultObjectQuery implements ObjectQuery {
 
     private final Type type;
 
-    public TypeQuery(Type type) {
+    public DefaultObjectQuery(Type type) {
         this.type = type;
     }
 

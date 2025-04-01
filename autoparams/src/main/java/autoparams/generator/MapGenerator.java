@@ -6,9 +6,9 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 
 final class MapGenerator implements ObjectGenerator {
 
@@ -44,10 +44,10 @@ final class MapGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type keyType = mapType.getActualTypeArguments()[0];
-        ObjectQuery keyQuery = new TypeQuery(keyType);
+        ObjectQuery keyQuery = new DefaultObjectQuery(keyType);
 
         Type valueType = mapType.getActualTypeArguments()[1];
-        ObjectQuery valueQuery = new TypeQuery(valueType);
+        ObjectQuery valueQuery = new DefaultObjectQuery(valueType);
 
         HashMap<Object, Object> instance = new HashMap<>();
         for (int i = 0; i < SIZE; i++) {

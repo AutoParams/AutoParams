@@ -4,9 +4,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.stream.Stream;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 
 final class GenericStreamGenerator implements ObjectGenerator {
 
@@ -34,7 +34,7 @@ final class GenericStreamGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = streamType.getActualTypeArguments()[0];
-        ObjectQuery query = new TypeQuery(elementType);
+        ObjectQuery query = new DefaultObjectQuery(elementType);
         return Stream.generate(() -> context.resolve(query)).limit(3);
     }
 }

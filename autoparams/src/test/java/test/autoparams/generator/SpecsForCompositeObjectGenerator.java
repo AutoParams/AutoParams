@@ -1,9 +1,9 @@
 package test.autoparams.generator;
 
 import autoparams.AutoSource;
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 import autoparams.generator.CompositeObjectGenerator;
 import autoparams.generator.ObjectContainer;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +18,7 @@ class SpecsForCompositeObjectGenerator {
     void if_first_generator_succeeds_to_generate_value_sut_returns_its_result(
         Class<?> type, ResolutionContext context, Object value
     ) {
-        ObjectQuery query = new TypeQuery(type);
+        ObjectQuery query = new DefaultObjectQuery(type);
         CompositeObjectGenerator sut = new CompositeObjectGenerator(
             (q, c) -> new ObjectContainer(value),
             (q, c) -> new ObjectContainer(null),
@@ -35,7 +35,7 @@ class SpecsForCompositeObjectGenerator {
     void if_first_generator_not_succeeds_to_generate_value_sut_returns_result_of_second_generator(
         Class<?> type, ResolutionContext context, Object value
     ) {
-        ObjectQuery query = new TypeQuery(type);
+        ObjectQuery query = new DefaultObjectQuery(type);
         CompositeObjectGenerator sut = new CompositeObjectGenerator(
             (q, c) -> ObjectContainer.EMPTY,
             (q, c) -> new ObjectContainer(value),
@@ -52,7 +52,7 @@ class SpecsForCompositeObjectGenerator {
     void if_only_last_generator_succeeds_to_generate_value_sut_returns_its_result(
         Class<?> type, ResolutionContext context, Object value
     ) {
-        ObjectQuery query = new TypeQuery(type);
+        ObjectQuery query = new DefaultObjectQuery(type);
         CompositeObjectGenerator sut = new CompositeObjectGenerator(
             (q, c) -> ObjectContainer.EMPTY,
             (q, c) -> ObjectContainer.EMPTY,
@@ -67,7 +67,7 @@ class SpecsForCompositeObjectGenerator {
     @ParameterizedTest
     @AutoSource
     void sut_correctly_relays_arguments(Class<?> type, ResolutionContext context) {
-        ObjectQuery query = new TypeQuery(type);
+        ObjectQuery query = new DefaultObjectQuery(type);
         CompositeObjectGenerator sut = new CompositeObjectGenerator(
             (q, c) -> {
                 if (q == query && c == context) {

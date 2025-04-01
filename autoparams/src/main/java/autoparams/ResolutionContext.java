@@ -27,12 +27,12 @@ public class ResolutionContext {
 
     @SuppressWarnings("unchecked")
     public <T> T resolve(Class<T> type) {
-        return (T) resolve(new TypeQuery(type));
+        return (T) resolve(new DefaultObjectQuery(type));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T resolve(TypeReference<T> typeReference) {
-        return (T) resolve(new TypeQuery(typeReference.getType()));
+        return (T) resolve(new DefaultObjectQuery(typeReference.getType()));
     }
 
     public Object resolve(ObjectQuery query) {

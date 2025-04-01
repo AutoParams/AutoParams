@@ -6,9 +6,9 @@ import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 
 final class SetGenerator implements ObjectGenerator {
 
@@ -44,7 +44,7 @@ final class SetGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = setType.getActualTypeArguments()[0];
-        ObjectQuery query = new TypeQuery(elementType);
+        ObjectQuery query = new DefaultObjectQuery(elementType);
         HashSet<Object> instance = new HashSet<>();
         for (int i = 0; i < SIZE; i++) {
             instance.add(context.resolve(query));

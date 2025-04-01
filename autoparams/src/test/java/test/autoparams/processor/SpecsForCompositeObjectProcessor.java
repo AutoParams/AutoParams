@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoparams.AutoSource;
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 import autoparams.processor.CompositeObjectProcessor;
 import autoparams.processor.ObjectProcessor;
+import lombok.Getter;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasSetter;
 
@@ -17,6 +18,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SpecsForCompositeObjectProcessor {
 
+    @Getter
     public static class Record {
 
         private final ObjectQuery query;
@@ -31,18 +33,6 @@ public class SpecsForCompositeObjectProcessor {
             this.query = query;
             this.value = value;
             this.context = context;
-        }
-
-        public ObjectQuery getQuery() {
-            return query;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public ResolutionContext getContext() {
-            return context;
         }
     }
 
@@ -81,7 +71,7 @@ public class SpecsForCompositeObjectProcessor {
             processor3
         );
 
-        ObjectQuery query = new TypeQuery(String.class);
+        ObjectQuery query = new DefaultObjectQuery(String.class);
 
         // Act
         sut.process(query, value, context);
@@ -116,7 +106,7 @@ public class SpecsForCompositeObjectProcessor {
         );
 
         // Act
-        sut.process(new TypeQuery(HasSetter.class), value, context);
+        sut.process(new DefaultObjectQuery(HasSetter.class), value, context);
 
         // Assert
         assertThat(value.getValue()).isEqualTo("2");

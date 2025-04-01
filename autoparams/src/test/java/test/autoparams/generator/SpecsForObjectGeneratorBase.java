@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 import autoparams.AutoSource;
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectGeneratorBase;
@@ -46,7 +46,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         String value
     ) {
-        ObjectQuery query = new TypeQuery(String.class);
+        ObjectQuery query = new DefaultObjectQuery(String.class);
         ObjectGenerator sut = new DelegatingStringGenerator(
             (q, c) -> {
                 counter.incrementAndGet();
@@ -66,7 +66,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         String value
     ) {
-        ObjectQuery query = new TypeQuery(Integer.class);
+        ObjectQuery query = new DefaultObjectQuery(Integer.class);
         ObjectGenerator sut = new DelegatingStringGenerator(
             (q, c) -> {
                 counter.incrementAndGet();
@@ -85,7 +85,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         String value
     ) {
-        ObjectQuery query = new TypeQuery(String.class);
+        ObjectQuery query = new DefaultObjectQuery(String.class);
         ObjectGenerator sut = new DelegatingStringGenerator((q, c) -> value);
 
         ObjectContainer actual = sut.generate(query, context);
@@ -100,7 +100,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         String value
     ) {
-        ObjectQuery query = new TypeQuery(Integer.class);
+        ObjectQuery query = new DefaultObjectQuery(Integer.class);
         ObjectGenerator sut = new DelegatingStringGenerator((q, c) -> value);
 
         ObjectContainer actual = sut.generate(query, context);
@@ -116,7 +116,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         String value
     ) {
-        ObjectQuery query = new TypeQuery(String.class);
+        ObjectQuery query = new DefaultObjectQuery(String.class);
         new DelegatingStringGenerator(
             (q, c) -> {
                 assertThat(q).isEqualTo(query);
@@ -150,7 +150,7 @@ public class SpecsForObjectGeneratorBase {
         ResolutionContext context,
         LocalDate value
     ) {
-        ObjectQuery query = new TypeQuery(Temporal.class);
+        ObjectQuery query = new DefaultObjectQuery(Temporal.class);
         ObjectGenerator sut = new LocalDateStubbingProxy(value);
 
         ObjectContainer actual = sut.generate(query, context);

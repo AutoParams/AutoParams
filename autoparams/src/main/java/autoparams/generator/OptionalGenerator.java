@@ -4,9 +4,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 
 final class OptionalGenerator implements ObjectGenerator {
 
@@ -34,6 +34,7 @@ final class OptionalGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = optionalType.getActualTypeArguments()[0];
-        return Optional.of(context.resolve(new TypeQuery(elementType)));
+        ObjectQuery query = new DefaultObjectQuery(elementType);
+        return Optional.of(context.resolve(query));
     }
 }

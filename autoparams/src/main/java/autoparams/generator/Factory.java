@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 import autoparams.customization.Customizer;
 
 import static java.util.Collections.unmodifiableList;
@@ -29,7 +29,7 @@ public final class Factory<T> implements Supplier<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T get() {
-        return (T) context.resolve(new TypeQuery(type));
+        return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
     public Stream<T> stream() {

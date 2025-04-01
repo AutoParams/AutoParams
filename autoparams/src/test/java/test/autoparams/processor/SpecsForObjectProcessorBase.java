@@ -3,9 +3,9 @@ package test.autoparams.processor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.AutoSource;
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 import autoparams.processor.ObjectProcessor;
 import autoparams.processor.ObjectProcessorBase;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class SpecsForObjectProcessorBase {
         ResolutionContext context,
         User value
     ) {
-        ObjectQuery query = new TypeQuery(User.class);
+        ObjectQuery query = new DefaultObjectQuery(User.class);
         ObjectProcessor sut = new DelegatingUserProcessor(
             (q, v, c) -> counter.incrementAndGet()
         );
@@ -81,7 +81,7 @@ public class SpecsForObjectProcessorBase {
         ResolutionContext context,
         Integer value
     ) {
-        ObjectQuery query = new TypeQuery(Integer.class);
+        ObjectQuery query = new DefaultObjectQuery(Integer.class);
         ObjectProcessor sut = new DelegatingUserProcessor(
             (q, v, c) -> counter.incrementAndGet()
         );
@@ -97,7 +97,7 @@ public class SpecsForObjectProcessorBase {
         ResolutionContext context,
         User value
     ) {
-        ObjectQuery query = new TypeQuery(User.class);
+        ObjectQuery query = new DefaultObjectQuery(User.class);
         new DelegatingUserProcessor(
             (q, v, c) -> {
                 assertThat(q).isSameAs(query);
@@ -114,7 +114,7 @@ public class SpecsForObjectProcessorBase {
         ResolutionContext context,
         Employee value
     ) {
-        ObjectQuery query = new TypeQuery(Employee.class);
+        ObjectQuery query = new DefaultObjectQuery(Employee.class);
         ObjectProcessor sut = new DelegatingUserProcessor(
             (q, v, c) -> counter.incrementAndGet()
         );

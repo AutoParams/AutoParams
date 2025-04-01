@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.TypeQuery;
 
 final class SequenceGenerator implements ObjectGenerator {
 
@@ -49,7 +49,7 @@ final class SequenceGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = listType.getActualTypeArguments()[0];
-        ObjectQuery query = new TypeQuery(elementType);
+        ObjectQuery query = new DefaultObjectQuery(elementType);
         ArrayList<Object> instance = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             instance.add(context.resolve(query));
