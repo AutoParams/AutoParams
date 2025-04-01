@@ -15,7 +15,7 @@ public final class FreezeArgument {
 
     private final Predicate<ParameterQuery> predicate;
 
-    private FreezeArgument(Predicate<ParameterQuery> predicate) {
+    FreezeArgument(Predicate<ParameterQuery> predicate) {
         this.predicate = predicate;
     }
 

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import autoparams.AutoParams;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
@@ -139,5 +140,21 @@ public class SpecsForArgumentCustomizationDsl {
         context.applyCustomizer(freezeArgument(UUID.class, "id").to(id));
         Comment comment = context.resolve(Comment.class);
         assertThat(comment.id()).isNotEqualTo(id);
+    }
+
+    @Test
+    @AutoParams
+    void freezeArgument_with_predicate_correctly_sets_argument(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(
+            freezeArgument(query -> query
+                .getRequiredParameterName()
+                .equals("id")
+            ).to(id)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.id()).isEqualTo(id);
     }
 }

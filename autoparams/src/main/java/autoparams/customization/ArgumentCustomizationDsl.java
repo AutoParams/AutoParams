@@ -1,7 +1,9 @@
 package autoparams.customization;
 
 import java.lang.reflect.Type;
+import java.util.function.Predicate;
 
+import autoparams.ParameterQuery;
 import autoparams.type.TypeReference;
 
 public final class ArgumentCustomizationDsl {
@@ -9,14 +11,10 @@ public final class ArgumentCustomizationDsl {
     private ArgumentCustomizationDsl() {
     }
 
-    public static FreezeArgument freezeArgumentOf(Type parameterType) {
-        return FreezeArgument.withParameterType(parameterType);
-    }
-
-    public static <T> FreezeArgument freezeArgumentOf(
-        TypeReference<T> parameterTypeReference
+    public static FreezeArgument freezeArgument(
+        Predicate<ParameterQuery> predicate
     ) {
-        return freezeArgumentOf(parameterTypeReference.getType());
+        return new FreezeArgument(predicate);
     }
 
     public static FreezeArgument freezeArgument(String parameterName) {
@@ -38,5 +36,15 @@ public final class ArgumentCustomizationDsl {
         String parameterName
     ) {
         return freezeArgument(parameterTypeReference.getType(), parameterName);
+    }
+
+    public static FreezeArgument freezeArgumentOf(Type parameterType) {
+        return FreezeArgument.withParameterType(parameterType);
+    }
+
+    public static <T> FreezeArgument freezeArgumentOf(
+        TypeReference<T> parameterTypeReference
+    ) {
+        return freezeArgumentOf(parameterTypeReference.getType());
     }
 }
