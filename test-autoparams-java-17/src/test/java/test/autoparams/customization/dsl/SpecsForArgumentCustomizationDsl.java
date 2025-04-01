@@ -20,6 +20,7 @@ import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNam
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEndsWithIgnoreCase;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEquals;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEqualsIgnoreCase;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterTypeMatches;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
@@ -254,5 +255,23 @@ public class SpecsForArgumentCustomizationDsl {
         );
         Product product = context.resolve(Product.class);
         assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @Test
+    @AutoParams
+    void parameterTypeMatches_creates_predicate_correctly(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(
+            freezeArgument()
+                .where(
+                    parameterNameEquals("id")
+                        .and(parameterTypeMatches(UUID.class))
+                )
+                .to(id)
+        );
+        Product product = context.resolve(Product.class);
+        assertThat(product.id()).isEqualTo(id);
     }
 }

@@ -75,4 +75,10 @@ public final class ArgumentCustomizationDsl {
     ) {
         return new ParameterNameEndsWithIgnoreCase(parameterNameSuffix);
     }
+
+    public static Predicate<ParameterQuery> parameterTypeMatches(
+        Type parameterType
+    ) {
+        return new ParameterTypeMatches(parameterType);
+    }
 }
