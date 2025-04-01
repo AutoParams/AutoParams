@@ -4,7 +4,7 @@ import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class TypeLens {
+public final class TypeLens {
 
     private final Type type;
 
