@@ -14,11 +14,9 @@ public final class FreezeArgument {
     }
 
     public FreezeArgument in(Class<?> declaringClass) {
-        return narrowScope(new DeclaringClassEquals(declaringClass));
-    }
-
-    private FreezeArgument narrowScope(Predicate<ParameterQuery> predicate) {
-        return new FreezeArgument(this.predicate.and(predicate));
+        return new FreezeArgument(
+            predicate.and(new DeclaringClassEquals(declaringClass))
+        );
     }
 
     public Customizer to(Object value) {
