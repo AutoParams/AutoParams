@@ -11,6 +11,10 @@ public final class ArgumentCustomizationDsl {
     private ArgumentCustomizationDsl() {
     }
 
+    public static FreezeArgument freezeArgument() {
+        return new FreezeArgument(new ReturnTrue<>());
+    }
+
     public static FreezeArgument freezeArgument(
         Predicate<ParameterQuery> predicate
     ) {

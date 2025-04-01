@@ -184,12 +184,26 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
+    void freezeArgument_with_no_parameters_correctly_sets_argument(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(freezeArgument().to(null));
+        Seller seller = context.resolve(Seller.class);
+        assertThat(seller.id()).isNull();
+        assertThat(seller.email()).isNull();
+        assertThat(seller.username()).isNull();
+    }
+
+    @Test
+    @AutoParams
     void parameterNameEquals_creates_predicate_correctly(
         ResolutionContext context,
         @Min(0) @Max(1000) int stockQuantity
     ) {
         context.applyCustomizer(
-            freezeArgument(parameterNameEquals("stockQuantity"))
+            freezeArgument()
+                .where(parameterNameEquals("stockQuantity"))
                 .to(stockQuantity)
         );
         Product product = context.resolve(Product.class);
@@ -204,7 +218,8 @@ public class SpecsForArgumentCustomizationDsl {
         @Min(0) @Max(1000) int stockQuantity
     ) {
         context.applyCustomizer(
-            freezeArgument(parameterNameEqualsIgnoreCase(parameterName))
+            freezeArgument()
+                .where(parameterNameEqualsIgnoreCase(parameterName))
                 .to(stockQuantity)
         );
         Product product = context.resolve(Product.class);
@@ -233,7 +248,8 @@ public class SpecsForArgumentCustomizationDsl {
         @Min(0) @Max(1000) int stockQuantity
     ) {
         context.applyCustomizer(
-            freezeArgument(parameterNameEndsWithIgnoreCase(suffix))
+            freezeArgument()
+                .where(parameterNameEndsWithIgnoreCase(suffix))
                 .to(stockQuantity)
         );
         Product product = context.resolve(Product.class);
