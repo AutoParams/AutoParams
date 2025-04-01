@@ -2,6 +2,7 @@ package autoparams.customization;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import autoparams.ObjectQuery;
@@ -18,26 +19,26 @@ public final class FreezeArgument {
         this.predicate = predicate;
     }
 
-    static FreezeArgument withName(String name) {
-        return new FreezeArgument(new NamePredicate(name));
-    }
-
-    static FreezeArgument withParameterType(Class<?> parameterType) {
+    static FreezeArgument withParameterType(Type parameterType) {
         return new FreezeArgument(new ParameterTypePredicate(parameterType));
     }
 
-    static FreezeArgument withParameterTypeAndName(
-        Class<?> parameterType,
-        String name
+    static FreezeArgument withParameterName(String parameterName) {
+        return new FreezeArgument(new ParameterNamePredicate(parameterName));
+    }
+
+    static FreezeArgument withParameterTypeAndParameterName(
+        Type parameterType,
+        String parameterName
     ) {
         return new FreezeArgument(
             new ParameterTypePredicate(parameterType)
-                .and(new NamePredicate(name))
+                .and(new ParameterNamePredicate(parameterName))
         );
     }
 
-    public FreezeArgument in(Class<?> declaringType) {
-        return narrowScope(new DeclaringTypePredicate(declaringType));
+    public FreezeArgument in(Class<?> declaringClass) {
+        return narrowScope(new DeclaringTypePredicate(declaringClass));
     }
 
     private FreezeArgument narrowScope(Predicate<ParameterQuery> predicate) {
@@ -48,63 +49,67 @@ public final class FreezeArgument {
         return new ArgumentGenerator(predicate, value);
     }
 
-    private static class NamePredicate implements Predicate<ParameterQuery> {
+    private static class ParameterTypePredicate
+        implements Predicate<ParameterQuery> {
 
-        private final String name;
+        private final Type parameterType;
 
-        public NamePredicate(String name) {
-            this.name = name;
+        public ParameterTypePredicate(Type parameterType) {
+            this.parameterType = parameterType;
         }
 
         @Override
         public boolean test(ParameterQuery query) {
-            return query.getParameterName().filter(name::equals).isPresent();
+            return new TypeSpokesman(query.getType()).match(parameterType);
+        }
+    }
+
+    private static class ParameterNamePredicate
+        implements Predicate<ParameterQuery> {
+
+        private final String parameterName;
+
+        public ParameterNamePredicate(String parameterName) {
+            this.parameterName = parameterName;
+        }
+
+        @Override
+        public boolean test(ParameterQuery query) {
+            return query
+                .getParameterName()
+                .filter(parameterName::equals)
+                .isPresent();
         }
     }
 
     private static class DeclaringTypePredicate
         implements Predicate<ParameterQuery> {
 
-        private final Class<?> declaringType;
+        private final Class<?> declaringClass;
 
-        public DeclaringTypePredicate(Class<?> declaringType) {
-            this.declaringType = declaringType;
+        public DeclaringTypePredicate(Class<?> declaringClass) {
+            this.declaringClass = declaringClass;
         }
 
         @Override
         public boolean test(ParameterQuery query) {
             Parameter parameter = query.getParameter();
             Executable executable = parameter.getDeclaringExecutable();
-            return executable.getDeclaringClass().equals(declaringType);
-        }
-    }
-
-    private static class ParameterTypePredicate
-        implements Predicate<ParameterQuery> {
-
-        private final Class<?> parameterType;
-
-        public ParameterTypePredicate(Class<?> parameterType) {
-            this.parameterType = parameterType;
-        }
-
-        @Override
-        public boolean test(ParameterQuery query) {
-            return query.getParameter().getType().equals(parameterType);
+            return executable.getDeclaringClass().equals(declaringClass);
         }
     }
 
     private static class ArgumentGenerator implements ObjectGenerator {
 
         private final Predicate<ParameterQuery> predicate;
-        private final Object value;
+        private final Object argument;
 
         public ArgumentGenerator(
             Predicate<ParameterQuery> predicate,
-            Object value
+            Object argument
         ) {
             this.predicate = predicate;
-            this.value = value;
+            this.argument = argument;
         }
 
         @Override
@@ -119,7 +124,7 @@ public final class FreezeArgument {
 
         private ObjectContainer generate(ParameterQuery query) {
             return predicate.test(query)
-                ? new ObjectContainer(value)
+                ? new ObjectContainer(argument)
                 : ObjectContainer.EMPTY;
         }
     }

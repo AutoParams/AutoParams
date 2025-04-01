@@ -1,11 +1,14 @@
 package test.autoparams.customization;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
+import test.autoparams.IterableBag;
 
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgument;
 import static autoparams.customization.ArgumentCustomizationDsl.freezeArgumentsOf;
@@ -44,7 +47,7 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void when_type_specified_freezeArgument_correctly_sets_argument(
+    void when_declaring_class_specified_freezeArgument_correctly_sets_argument(
         ResolutionContext context,
         UUID id
     ) {
@@ -55,7 +58,7 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void when_type_specified_freezeArgument_does_not_set_argument_for_other_type(
+    void when_declaring_class_specified_freezeArgument_does_not_set_argument_for_other_type(
         ResolutionContext context,
         UUID id
     ) {
@@ -77,11 +80,52 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
+    void freezeArgumentsOf_accepts_generic_type_correctly(
+        ResolutionContext context,
+        Iterable<UUID> iterable
+    ) {
+        Type type = new TypeReference<Iterable<UUID>>() { }.getType();
+
+        context.applyCustomizer(freezeArgumentsOf(type).to(iterable));
+
+        IterableBag<UUID> bag = context.resolve(new TypeReference<>() { });
+        assertThat(bag.items()).isSameAs(iterable);
+    }
+
+    @Test
+    @AutoParams
+    void freezeArgumentsOf_accepts_type_reference_correctly(
+        ResolutionContext context,
+        Iterable<UUID> iterable
+    ) {
+        context.applyCustomizer(
+            freezeArgumentsOf(new TypeReference<Iterable<UUID>>() { })
+                .to(iterable)
+        );
+        IterableBag<UUID> bag = context.resolve(new TypeReference<>() { });
+        assertThat(bag.items()).isSameAs(iterable);
+    }
+
+    @Test
+    @AutoParams
     void freezeArgument_with_parameter_type_correctly_sets_argument(
         ResolutionContext context,
         UUID id
     ) {
         context.applyCustomizer(freezeArgument(UUID.class, "id").to(id));
+        Product product = context.resolve(Product.class);
+        assertThat(product.id()).isEqualTo(id);
+    }
+
+    @Test
+    @AutoParams
+    void freezeArgument_with_parameter_type_reference_correctly_sets_argument(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(
+            freezeArgument(new TypeReference<UUID>() { }, "id").to(id)
+        );
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
     }

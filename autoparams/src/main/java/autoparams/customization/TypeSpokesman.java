@@ -61,6 +61,10 @@ class TypeSpokesman {
         return false;
     }
 
+    public boolean match(Type type) {
+        return match(this.type, type);
+    }
+
     private static boolean match(Type type1, Type type2) {
         if (type1.equals(type2)) {
             return true;
@@ -71,7 +75,7 @@ class TypeSpokesman {
         }
     }
 
-    public static boolean match(Type type1, ParameterizedType type2) {
+    private static boolean match(Type type1, ParameterizedType type2) {
         return type1 instanceof ParameterizedType
             && match((ParameterizedType) type1, type2);
     }
