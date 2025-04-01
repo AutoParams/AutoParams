@@ -3,9 +3,10 @@ package test.autoparams.spring;
 import java.net.URI;
 import java.util.Map;
 
-import autoparams.AutoParams;
-import autoparams.spring.UseBeans;
-import org.junit.jupiter.api.Test;
+import autoparams.AutoSource;
+import autoparams.customization.Customization;
+import autoparams.spring.BeanGenerator;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -17,11 +18,11 @@ import test.autoparams.MessageSupplier;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SpecsForUseBeans {
+public class SpecsForBeanGenerator {
 
-    @Test
-    @AutoParams
-    @UseBeans
+    @ParameterizedTest
+    @AutoSource
+    @Customization(BeanGenerator.class)
     void sut_provides_spring_bean_arguments_correctly(
         TestRestTemplate client,
         MessageSupplier messageSupplier,

@@ -12,19 +12,26 @@ import org.springframework.core.ResolvableType;
 
 import static org.springframework.test.context.junit.jupiter.SpringExtension.getApplicationContext;
 
-final class BeanGenerator implements ObjectGenerator {
+public final class BeanGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
         ObjectQuery query,
         ResolutionContext context
     ) {
-        if (query.getType().equals(ExtensionContext.class)) {
+        return generate(context, query.getType());
+    }
+
+    private static ObjectContainer generate(
+        ResolutionContext context,
+        Type type
+    ) {
+        if (type.equals(ExtensionContext.class)) {
             return ObjectContainer.EMPTY;
         }
 
-        BeanFactory beanFactory = getBeanFactory(context);
-        Object bean = tryResolveBean(beanFactory, query.getType());
+        BeanFactory factory = getBeanFactory(context);
+        Object bean = getBeanIfAvailable(factory, type);
         return bean == null ? ObjectContainer.EMPTY : new ObjectContainer(bean);
     }
 
@@ -32,7 +39,7 @@ final class BeanGenerator implements ObjectGenerator {
         return getApplicationContext(context.resolve(ExtensionContext.class));
     }
 
-    private static Object tryResolveBean(BeanFactory factory, Type type) {
+    private static Object getBeanIfAvailable(BeanFactory factory, Type type) {
         ResolvableType resolvableType = ResolvableType.forType(type);
         return factory.getBeanProvider(resolvableType).getIfAvailable();
     }
