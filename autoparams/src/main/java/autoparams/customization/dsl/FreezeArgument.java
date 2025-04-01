@@ -13,10 +13,12 @@ public final class FreezeArgument {
         this.predicate = predicate;
     }
 
+    public FreezeArgument where(Predicate<ParameterQuery> predicate) {
+        return new FreezeArgument(this.predicate.and(predicate));
+    }
+
     public FreezeArgument in(Class<?> declaringClass) {
-        return new FreezeArgument(
-            predicate.and(new DeclaringClassEquals(declaringClass))
-        );
+        return where(new DeclaringClassEquals(declaringClass));
     }
 
     public Customizer to(Object value) {

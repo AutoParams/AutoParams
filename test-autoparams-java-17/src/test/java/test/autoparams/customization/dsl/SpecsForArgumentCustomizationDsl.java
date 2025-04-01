@@ -167,6 +167,23 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
+    void where_applies_predicate_correctly(
+        ResolutionContext context,
+        String username
+    ) {
+        context.applyCustomizer(
+            freezeArgumentOf(String.class)
+                .where(parameterNameEquals("username"))
+                .to(username)
+        );
+        Product product = context.resolve(Product.class);
+        Seller seller = context.resolve(Seller.class);
+        assertThat(product.name()).isNotEqualTo(username);
+        assertThat(seller.username()).isEqualTo(username);
+    }
+
+    @Test
+    @AutoParams
     void parameterNameEquals_creates_predicate_correctly(
         ResolutionContext context,
         @Min(0) @Max(1000) int stockQuantity
