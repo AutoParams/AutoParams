@@ -22,6 +22,13 @@ public final class Factory<T> implements Supplier<T> {
         this.type = type;
     }
 
+    public static <T> Factory<T> create(
+        ResolutionContext context,
+        Class<T> type
+    ) {
+        return new Factory<>(context, type);
+    }
+
     @Override
     public T get() {
         return get(context);

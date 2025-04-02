@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import autoparams.AutoParams;
+import autoparams.ResolutionContext;
 import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Product;
@@ -130,5 +131,15 @@ public class SpecsForFactory {
 
         assertThat(product.id()).isEqualTo(id);
         assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @Test
+    @AutoParams
+    void create_returns_factory_instance(
+        ResolutionContext context
+    ) {
+        Factory<Product> factory = Factory.create(context, Product.class);
+        Product product = factory.get();
+        assertThat(product).isNotNull();
     }
 }
