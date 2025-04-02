@@ -16,10 +16,7 @@ class ParameterNameEndsWithIgnoreCase implements Predicate<ParameterQuery> {
 
     @Override
     public boolean test(ParameterQuery query) {
-        return query
-            .getParameterName()
-            .filter(this::match)
-            .isPresent();
+        return query.getParameterName().filter(this::match).isPresent();
     }
 
     private boolean match(String name) {
