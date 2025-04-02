@@ -18,11 +18,11 @@ import test.autoparams.Seller;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgumentOf;
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEndsWith;
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEndsWithIgnoreCase;
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEquals;
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterNameEqualsIgnoreCase;
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterTypeMatches;
+import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEndsWith;
+import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEndsWithIgnoreCase;
+import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEquals;
+import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEqualsIgnoreCase;
+import static autoparams.customization.dsl.ParameterQueryDsl.parameterTypeMatches;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
