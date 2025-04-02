@@ -12,23 +12,23 @@ import static java.util.stream.Collectors.toMap;
 
 public final class RuntimeTypeResolver {
 
-    private final Map<TypeVariable<?>, Type> map;
+    private final Map<TypeVariable<?>, Type> typeArguments;
 
-    private RuntimeTypeResolver(Map<TypeVariable<?>, Type> map) {
-        this.map = map;
+    private RuntimeTypeResolver(Map<TypeVariable<?>, Type> typeArguments) {
+        this.typeArguments = typeArguments;
     }
 
     public static RuntimeTypeResolver create(Type rootType) {
-        return new RuntimeTypeResolver(buildMap(rootType));
+        return new RuntimeTypeResolver(getTypeArguments(rootType));
     }
 
-    private static Map<TypeVariable<?>, Type> buildMap(Type rootType) {
+    private static Map<TypeVariable<?>, Type> getTypeArguments(Type rootType) {
         return rootType instanceof ParameterizedType
-            ? buildMap((ParameterizedType) rootType)
+            ? getTypeArguments((ParameterizedType) rootType)
             : Collections.emptyMap();
     }
 
-    private static Map<TypeVariable<?>, Type> buildMap(
+    private static Map<TypeVariable<?>, Type> getTypeArguments(
         ParameterizedType rootType
     ) {
         Class<?> rawType = (Class<?>) rootType.getRawType();
@@ -41,8 +41,9 @@ public final class RuntimeTypeResolver {
     }
 
     public Type resolve(Type type) {
-        if (type instanceof TypeVariable<?> && map.containsKey(type)) {
-            return map.get(type);
+        if (type instanceof TypeVariable<?> &&
+            typeArguments.containsKey(type)) {
+            return typeArguments.get(type);
         } else if (type instanceof ParameterizedType) {
             return resolve((ParameterizedType) type);
         } else {
