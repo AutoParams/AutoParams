@@ -85,6 +85,17 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
+    void freezeArgument_with_parameter_type_does_not_set_argument_for_other_type(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(freezeArgument(UUID.class, "id").to(id));
+        Comment comment = context.resolve(Comment.class);
+        assertThat(comment.id()).isNotEqualTo(id);
+    }
+
+    @Test
+    @AutoParams
     void freezeArgument_with_parameter_type_reference_correctly_sets_argument(
         ResolutionContext context,
         UUID id
@@ -94,17 +105,6 @@ public class SpecsForArgumentCustomizationDsl {
         );
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
-    }
-
-    @Test
-    @AutoParams
-    void freezeArgument_with_parameter_type_does_not_set_argument_for_other_type(
-        ResolutionContext context,
-        UUID id
-    ) {
-        context.applyCustomizer(freezeArgument(UUID.class, "id").to(id));
-        Comment comment = context.resolve(Comment.class);
-        assertThat(comment.id()).isNotEqualTo(id);
     }
 
     @Test

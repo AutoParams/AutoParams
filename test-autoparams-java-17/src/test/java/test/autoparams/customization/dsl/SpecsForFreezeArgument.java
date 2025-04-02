@@ -26,6 +26,7 @@ public class SpecsForFreezeArgument {
                 .where(parameterNameEquals("username"))
                 .to(username)
         );
+
         Product product = context.resolve(Product.class);
         Seller seller = context.resolve(Seller.class);
         assertThat(product.name()).isNotEqualTo(username);
@@ -39,9 +40,10 @@ public class SpecsForFreezeArgument {
         UUID id
     ) {
         context.applyCustomizer(freezeArgument("id").in(Product.class).to(id));
+
         Product product = context.resolve(Product.class);
-        assertThat(product.id()).isEqualTo(id);
         Seller seller = context.resolve(Seller.class);
+        assertThat(product.id()).isEqualTo(id);
         assertThat(seller.id()).isNotEqualTo(id);
     }
 }
