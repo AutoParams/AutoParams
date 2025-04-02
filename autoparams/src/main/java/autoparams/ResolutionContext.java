@@ -101,6 +101,12 @@ public class ResolutionContext {
         this.processor = processor.customize(this.processor);
     }
 
+    public void customize(Customizer... customizers) {
+        for (Customizer customizer : customizers) {
+            applyCustomizer(customizer);
+        }
+    }
+
     public ResolutionContext branch() {
         return new ResolutionContext(generator, processor);
     }

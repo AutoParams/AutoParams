@@ -1,7 +1,6 @@
 package test.autoparams.customization.dsl;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.util.UUID;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,7 +11,10 @@ import autoparams.ValueAutoSource;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import test.autoparams.Comment;
 import test.autoparams.IterableBag;
+import test.autoparams.Product;
+import test.autoparams.Seller;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgumentOf;
@@ -24,22 +26,6 @@ import static autoparams.customization.dsl.ArgumentCustomizationDsl.parameterTyp
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForArgumentCustomizationDsl {
-
-    public record Product(
-        UUID id,
-        String name,
-        String imageUri,
-        String description,
-        BigDecimal priceAmount,
-        int stockQuantity
-    ) {
-    }
-
-    public record Comment(long id, String content) {
-    }
-
-    public record Seller(UUID id, String email, String username) {
-    }
 
     @Test
     @AutoParams
