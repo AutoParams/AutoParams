@@ -107,7 +107,9 @@ public class ResolutionContext {
         }
     }
 
-    public ResolutionContext branch() {
-        return new ResolutionContext(generator, processor);
+    public ResolutionContext branch(Customizer... customizers) {
+        ResolutionContext context = new ResolutionContext(generator, processor);
+        context.customize(customizers);
+        return context;
     }
 }
