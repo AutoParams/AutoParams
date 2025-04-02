@@ -1,4 +1,4 @@
-package test.autoparams;
+package test.autoparams.generator;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,6 +6,7 @@ import java.util.UUID;
 import autoparams.AutoParams;
 import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
+import test.autoparams.Product;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
