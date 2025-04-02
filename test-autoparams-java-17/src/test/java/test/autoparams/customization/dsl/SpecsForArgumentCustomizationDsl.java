@@ -35,28 +35,6 @@ public class SpecsForArgumentCustomizationDsl {
 
     @Test
     @AutoParams
-    void when_declaring_class_specified_freezeArgument_correctly_sets_argument(
-        ResolutionContext context,
-        UUID id
-    ) {
-        context.applyCustomizer(freezeArgument("id").in(Product.class).to(id));
-        Product product = context.resolve(Product.class);
-        assertThat(product.id()).isEqualTo(id);
-    }
-
-    @Test
-    @AutoParams
-    void when_declaring_class_specified_freezeArgument_does_not_set_argument_for_other_type(
-        ResolutionContext context,
-        UUID id
-    ) {
-        context.applyCustomizer(freezeArgument("id").in(Product.class).to(id));
-        Seller seller = context.resolve(Seller.class);
-        assertThat(seller.id()).isNotEqualTo(id);
-    }
-
-    @Test
-    @AutoParams
     void freezeArgumentOf_correctly_sets_argument(
         ResolutionContext context,
         UUID id
