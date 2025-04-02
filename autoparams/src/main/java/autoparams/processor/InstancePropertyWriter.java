@@ -36,21 +36,15 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         ResolutionContext context
     ) {
         for (PropertyDescriptor property : getProperties(type)) {
-            Method method = property.getWriteMethod();
-            if (method != null) {
-                Parameter parameter = method.getParameters()[0];
+            Method setter = property.getWriteMethod();
+            if (setter != null) {
+                Parameter parameter = setter.getParameters()[0];
                 ParameterQuery query = new ParameterQuery(
                     parameter,
                     0,
                     parameter.getParameterizedType()
                 );
-                Object propertyValue = context.resolve(query);
-                try {
-                    method.invoke(value, propertyValue);
-                } catch (IllegalAccessException |
-                         InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
+                setProperty(value, setter, context.resolve(query));
             }
         }
     }
@@ -62,16 +56,10 @@ public final class InstancePropertyWriter implements ObjectProcessor {
     ) {
         RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
         for (PropertyDescriptor property : getProperties(type)) {
-            Method method = property.getWriteMethod();
-            if (method != null) {
-                ObjectQuery query = resolvePropertyQuery(method, typeResolver);
-                Object propertyValue = context.resolve(query);
-                try {
-                    method.invoke(value, propertyValue);
-                } catch (IllegalAccessException |
-                         InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
+            Method setter = property.getWriteMethod();
+            if (setter != null) {
+                ObjectQuery query = resolvePropertyQuery(setter, typeResolver);
+                setProperty(value, setter, context.resolve(query));
             }
         }
     }
@@ -83,18 +71,31 @@ public final class InstancePropertyWriter implements ObjectProcessor {
     private static PropertyDescriptor[] getProperties(Class<?> type) {
         try {
             return getBeanInfo(type).getPropertyDescriptors();
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
     private static ObjectQuery resolvePropertyQuery(
-        Method method,
+        Method setter,
         RuntimeTypeResolver runtimeTypeResolver
     ) {
-        Parameter parameter = method.getParameters()[0];
+        Parameter parameter = setter.getParameters()[0];
         Type propertyType = parameter.getParameterizedType();
         Type runtimePropertyType = runtimeTypeResolver.resolve(propertyType);
         return new ParameterQuery(parameter, 0, runtimePropertyType);
+    }
+
+    private static void setProperty(
+        Object instance,
+        Method setter,
+        Object propertyValue
+    ) {
+        try {
+            setter.invoke(instance, propertyValue);
+        } catch (IllegalAccessException |
+                 InvocationTargetException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }
