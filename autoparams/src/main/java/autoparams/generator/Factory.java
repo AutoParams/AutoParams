@@ -26,9 +26,20 @@ public final class Factory<T> implements Supplier<T> {
         return new Factory<>(type, context);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T get() {
+        return get(context);
+    }
+
+    public T get(Customizer... customizers) {
+        ResolutionContext context = customizers.length == 0
+            ? this.context
+            : this.context.branch(customizers);
+        return get(context);
+    }
+
+    @SuppressWarnings("unchecked")
+    private T get(ResolutionContext context) {
         return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
