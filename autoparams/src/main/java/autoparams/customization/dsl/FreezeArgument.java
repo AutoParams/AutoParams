@@ -3,7 +3,7 @@ package autoparams.customization.dsl;
 import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
-import autoparams.customization.Customizer;
+import autoparams.generator.ObjectGenerator;
 
 public final class FreezeArgument {
 
@@ -21,7 +21,7 @@ public final class FreezeArgument {
         return where(new DeclaringClassEquals(declaringClass));
     }
 
-    public Customizer to(Object value) {
+    public ObjectGenerator to(Object value) {
         return new ArgumentGenerator(predicate, value);
     }
 }
