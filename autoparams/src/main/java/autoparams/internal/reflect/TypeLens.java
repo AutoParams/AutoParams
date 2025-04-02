@@ -1,4 +1,4 @@
-package autoparams.internal.type;
+package autoparams.internal.reflect;
 
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;

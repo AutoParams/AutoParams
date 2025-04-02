@@ -10,7 +10,7 @@ import java.util.Arrays;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
-import autoparams.internal.type.RuntimeTypeResolver;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 final class ComplexObjectGenerator implements ObjectGenerator {
 
