@@ -28,7 +28,7 @@ public class SpecsForFactory {
 
     @Test
     @AutoParams
-    void get_applies_customizers_one_time(
+    void get_applies_customizers_only_one_time(
         Factory<Product> sut,
         UUID id,
         int stockQuantity
@@ -39,6 +39,39 @@ public class SpecsForFactory {
         );
 
         Product product = sut.get();
+
+        assertThat(product.id()).isNotEqualTo(id);
+        assertThat(product.stockQuantity()).isNotEqualTo(stockQuantity);
+    }
+
+    @Test
+    @AutoParams
+    void stream_applies_customizers_correctly(
+        Factory<Product> sut,
+        UUID id,
+        int stockQuantity
+    ) {
+        Product product = sut.stream(
+            freezeArgument("id").to(id),
+            freezeArgument("stockQuantity").to(stockQuantity)
+        ).findFirst().orElseThrow();
+        assertThat(product.id()).isEqualTo(id);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @Test
+    @AutoParams
+    void stream_applies_customizers_only_one_time(
+        Factory<Product> sut,
+        UUID id,
+        int stockQuantity
+    ) {
+        sut.stream(
+            freezeArgument("id").to(id),
+            freezeArgument("stockQuantity").to(stockQuantity)
+        ).findFirst().orElseThrow();
+
+        Product product = sut.stream().findFirst().orElseThrow();
 
         assertThat(product.id()).isNotEqualTo(id);
         assertThat(product.stockQuantity()).isNotEqualTo(stockQuantity);

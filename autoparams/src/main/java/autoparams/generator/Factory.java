@@ -43,8 +43,11 @@ public final class Factory<T> implements Supplier<T> {
         return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
-    public Stream<T> stream() {
-        return Stream.generate(this);
+    public Stream<T> stream(Customizer... customizers) {
+        Factory<T> factory = customizers.length == 0
+            ? this
+            : new Factory<>(type, context.branch(customizers));
+        return Stream.generate(factory);
     }
 
     public List<T> getRange(int size) {
