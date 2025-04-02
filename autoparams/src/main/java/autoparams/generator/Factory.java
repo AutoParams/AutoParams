@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import autoparams.DefaultObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Customizer;
+import autoparams.type.TypeReference;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -22,11 +23,26 @@ public final class Factory<T> implements Supplier<T> {
         this.type = type;
     }
 
+    public static <T> Factory<T> create(Class<T> type) {
+        return new Factory<>(new ResolutionContext(), type);
+    }
+
     public static <T> Factory<T> create(
         ResolutionContext context,
         Class<T> type
     ) {
         return new Factory<>(context, type);
+    }
+
+    public static <T> Factory<T> create(TypeReference<T> typeReference) {
+        return new Factory<>(new ResolutionContext(), typeReference.getType());
+    }
+
+    public static <T> Factory<T> create(
+        ResolutionContext context,
+        TypeReference<T> typeReference
+    ) {
+        return new Factory<>(context, typeReference.getType());
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.UUID;
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
 import autoparams.generator.Factory;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Product;
 
@@ -133,12 +134,45 @@ public class SpecsForFactory {
     }
 
     @Test
-    @AutoParams
-    void create_returns_factory_instance(
-        ResolutionContext context
-    ) {
-        Factory<Product> factory = Factory.create(context, Product.class);
+    void create_returns_factory_instance_with_Class() {
+        Factory<Product> factory = Factory.create(Product.class);
         Product product = factory.get();
         assertThat(product).isNotNull();
+    }
+
+    @Test
+    @AutoParams
+    void create_returns_factory_instance_with_ResolutionContext_and_Class(
+        ResolutionContext context,
+        UUID id
+    ) {
+        Factory<Product> factory = Factory.create(context, Product.class);
+        context.customize(freezeArgument("id").to(id));
+        Product product = factory.get();
+        assertThat(product).isNotNull();
+        assertThat(product.id()).isEqualTo(id);
+    }
+
+    @Test
+    void create_returns_factory_instance_with_TypeReference() {
+        Factory<Product> factory = Factory.create(new TypeReference<>() { });
+        Product product = factory.get();
+        assertThat(product).isNotNull();
+    }
+
+    @Test
+    @AutoParams
+    void create_returns_factory_instance_with_ResolutionContext_and_TypeReference(
+        ResolutionContext context,
+        UUID id
+    ) {
+        Factory<Product> factory = Factory.create(
+            context,
+            new TypeReference<>() { }
+        );
+        context.customize(freezeArgument("id").to(id));
+        Product product = factory.get();
+        assertThat(product).isNotNull();
+        assertThat(product.id()).isEqualTo(id);
     }
 }
