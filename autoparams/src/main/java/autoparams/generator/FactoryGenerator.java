@@ -25,7 +25,7 @@ final class FactoryGenerator implements ObjectGenerator {
         if (type.getRawType().equals(Factory.class)) {
             Type targetType = type.getActualTypeArguments()[0];
             ResolutionContext branch = context.branch();
-            return new ObjectContainer(Factory.create(targetType, branch));
+            return new ObjectContainer(new Factory<>(branch, targetType));
         } else {
             return ObjectContainer.EMPTY;
         }

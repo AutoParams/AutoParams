@@ -14,16 +14,12 @@ import static java.util.stream.Collectors.toList;
 
 public final class Factory<T> implements Supplier<T> {
 
-    private final Type type;
     private final ResolutionContext context;
+    private final Type type;
 
-    private Factory(Type type, ResolutionContext context) {
-        this.type = type;
+    Factory(ResolutionContext context, Type type) {
         this.context = context;
-    }
-
-    static <T> Factory<T> create(Type type, ResolutionContext context) {
-        return new Factory<>(type, context);
+        this.type = type;
     }
 
     @Override
@@ -46,7 +42,7 @@ public final class Factory<T> implements Supplier<T> {
     public Stream<T> stream(Customizer... customizers) {
         Factory<T> factory = customizers.length == 0
             ? this
-            : new Factory<>(type, context.branch(customizers));
+            : new Factory<>(context.branch(customizers), type);
         return Stream.generate(factory);
     }
 
