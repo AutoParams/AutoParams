@@ -90,10 +90,7 @@ public class SpecsForParameterQueryDsl {
     ) {
         context.applyCustomizer(
             freezeArgument()
-                .where(
-                    parameterNameEquals("id")
-                        .and(parameterTypeMatches(UUID.class))
-                )
+                .where(parameterTypeMatches(UUID.class))
                 .to(id)
         );
         Product product = context.resolve(Product.class);
