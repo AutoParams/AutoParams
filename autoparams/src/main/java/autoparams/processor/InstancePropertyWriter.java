@@ -42,7 +42,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
                 ParameterQuery query = new ParameterQuery(
                     parameter,
                     0,
-                    parameter.getAnnotatedType().getType()
+                    parameter.getParameterizedType()
                 );
                 Object propertyValue = context.resolve(query);
                 try {
@@ -64,7 +64,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         for (PropertyDescriptor property : getProperties(type)) {
             Method method = property.getWriteMethod();
             if (method != null) {
-                ObjectQuery query = resolveArgumentQuery(method, typeResolver);
+                ObjectQuery query = resolvePropertyQuery(method, typeResolver);
                 Object propertyValue = context.resolve(query);
                 try {
                     method.invoke(value, propertyValue);
@@ -76,10 +76,8 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         }
     }
 
-    private static PropertyDescriptor[] getProperties(
-        ParameterizedType parameterizedType
-    ) {
-        return getProperties((Class<?>) parameterizedType.getRawType());
+    private static PropertyDescriptor[] getProperties(ParameterizedType type) {
+        return getProperties((Class<?>) type.getRawType());
     }
 
     private static PropertyDescriptor[] getProperties(Class<?> type) {
@@ -90,16 +88,13 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         }
     }
 
-    private static ObjectQuery resolveArgumentQuery(
+    private static ObjectQuery resolvePropertyQuery(
         Method method,
         RuntimeTypeResolver runtimeTypeResolver
     ) {
         Parameter parameter = method.getParameters()[0];
-        Type parameterType = parameter.getParameterizedType();
-        return new ParameterQuery(
-            parameter,
-            0,
-            runtimeTypeResolver.resolve(parameterType)
-        );
+        Type propertyType = parameter.getParameterizedType();
+        Type runtimePropertyType = runtimeTypeResolver.resolve(propertyType);
+        return new ParameterQuery(parameter, 0, runtimePropertyType);
     }
 }
