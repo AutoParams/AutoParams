@@ -50,8 +50,9 @@ public final class Factory<T> implements Supplier<T> {
         return Stream.generate(factory);
     }
 
-    public List<T> getRange(int size) {
-        return unmodifiableList(stream().limit(size).collect(toList()));
+    public List<T> getRange(int size, Customizer... customizers) {
+        List<T> results = stream(customizers).limit(size).collect(toList());
+        return unmodifiableList(results);
     }
 
     public void applyCustomizer(Customizer customizer) {
