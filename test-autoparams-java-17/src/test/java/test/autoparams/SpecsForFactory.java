@@ -112,4 +112,22 @@ public class SpecsForFactory {
         assertThat(product.id()).isNotEqualTo(id);
         assertThat(product.stockQuantity()).isNotEqualTo(stockQuantity);
     }
+
+    @Test
+    @AutoParams
+    void customize_applies_customizers_correctly(
+        Factory<Product> sut,
+        UUID id,
+        int stockQuantity
+    ) {
+        sut.customize(
+            freezeArgument("id").to(id),
+            freezeArgument("stockQuantity").to(stockQuantity)
+        );
+
+        Product product = sut.get();
+
+        assertThat(product.id()).isEqualTo(id);
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
 }

@@ -58,4 +58,8 @@ public final class Factory<T> implements Supplier<T> {
     public void applyCustomizer(Customizer customizer) {
         context.applyCustomizer(customizer);
     }
+
+    public void customize(Customizer... customizers) {
+        context.customize(customizers);
+    }
 }
