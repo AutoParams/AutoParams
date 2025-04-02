@@ -1,6 +1,5 @@
 package test.autoparams.generator;
 
-import java.util.List;
 import java.util.UUID;
 
 import autoparams.AutoParams;
@@ -103,7 +102,7 @@ public class SpecsForFactory {
         UUID id,
         int stockQuantity
     ) {
-        List<Product> range = sut.getRange(
+        sut.getRange(
             1,
             freezeArgument("id").to(id),
             freezeArgument("stockQuantity").to(stockQuantity)
