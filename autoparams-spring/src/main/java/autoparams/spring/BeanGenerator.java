@@ -36,10 +36,10 @@ public final class BeanGenerator implements ObjectGenerator {
     }
 
     public BeanGenerator() {
-        this(BeanGenerator::getBeanFactory);
+        this(BeanGenerator::resolveBeanFactory);
     }
 
-    private static BeanFactory getBeanFactory(ResolutionContext context) {
+    private static BeanFactory resolveBeanFactory(ResolutionContext context) {
         return getApplicationContext(context.resolve(ExtensionContext.class));
     }
 
