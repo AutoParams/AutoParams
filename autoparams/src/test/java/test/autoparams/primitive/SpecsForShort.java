@@ -52,8 +52,9 @@ public class SpecsForShort {
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_positive_short_value(short arg) {
-        assertThat(arg).isPositive();
+    void sut_creates_positive_short_value(ResolutionContext context) {
+        short value = context.resolve(short.class);
+        assertThat(value).isPositive();
     }
 
     @AutoParameterizedTest

@@ -5,9 +5,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import autoparams.ObjectQuery;
-import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.MaxAnnotation.findMaxAnnotation;
+import static autoparams.generator.MinAnnotation.findMinAnnotation;
 import static java.lang.Short.MAX_VALUE;
 import static java.lang.Short.MIN_VALUE;
 
@@ -28,15 +29,9 @@ final class ShortGenerator extends PrimitiveTypeGenerator<Short> {
     }
 
     private static short getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMin((ParameterQuery) query)
-            : MIN_VALUE;
-    }
-
-    private static short getMin(ParameterQuery query) {
-        Min min = query.getParameter().getAnnotation(Min.class);
+        Min min = findMinAnnotation(query);
         if (min == null) {
-            Max max = query.getParameter().getAnnotation(Max.class);
+            Max max = findMaxAnnotation(query);
             return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
         } else if (min.value() < MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
@@ -48,13 +43,7 @@ final class ShortGenerator extends PrimitiveTypeGenerator<Short> {
     }
 
     private static short getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMax((ParameterQuery) query)
-            : MAX_VALUE;
-    }
-
-    private static short getMax(ParameterQuery query) {
-        Max max = query.getParameter().getAnnotation(Max.class);
+        Max max = findMaxAnnotation(query);
         if (max == null) {
             return MAX_VALUE;
         } else if (max.value() < MIN_VALUE) {
