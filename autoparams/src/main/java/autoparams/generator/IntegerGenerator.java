@@ -5,7 +5,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import autoparams.ObjectQuery;
-import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static java.lang.Integer.MAX_VALUE;
@@ -38,15 +37,9 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
     }
 
     private static int getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMin((ParameterQuery) query)
-            : MIN_VALUE;
-    }
-
-    private static int getMin(ParameterQuery query) {
-        Min min = query.getParameter().getAnnotation(Min.class);
+        Min min = MinAnnotation.findMinAnnotation(query);
         if (min == null) {
-            Max max = query.getParameter().getAnnotation(Max.class);
+            Max max = MaxAnnotation.findMaxAnnotation(query);
             return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
         } else if (min.value() < MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
@@ -58,13 +51,7 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
     }
 
     private static int getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMax((ParameterQuery) query)
-            : MAX_VALUE;
-    }
-
-    private static int getMax(ParameterQuery query) {
-        Max max = query.getParameter().getAnnotation(Max.class);
+        Max max = MaxAnnotation.findMaxAnnotation(query);
         if (max == null) {
             return MAX_VALUE;
         } else if (max.value() < MIN_VALUE) {

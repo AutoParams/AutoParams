@@ -41,8 +41,9 @@ public class SpecsForInt {
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_positive_int_value(int arg) {
-        assertThat(arg).isPositive();
+    void sut_creates_positive_int_value(ResolutionContext context) {
+        int value = context.resolve(int.class);
+        assertThat(value).isPositive();
     }
 
     @AutoParameterizedTest
