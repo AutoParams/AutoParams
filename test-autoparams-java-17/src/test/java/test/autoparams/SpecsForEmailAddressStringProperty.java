@@ -16,14 +16,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForEmailAddressStringProperty {
 
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+
     public record SignUp(String userEmail, String password) { }
 
     @ParameterizedTest
     @AutoSource
     void sut_generates_email_address_for_email_suffix(SignUp command) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(command.userEmail().matches(emailRegex)).isTrue();
-        assertThat(command.password().matches(emailRegex)).isFalse();
+        assertThat(command.userEmail()).matches(EMAIL_REGEX);
+        assertThat(command.password()).doesNotMatch(EMAIL_REGEX);
     }
 
     public record User(int id, String emailAddress, String encodedPassword) { }
@@ -31,9 +32,8 @@ public class SpecsForEmailAddressStringProperty {
     @ParameterizedTest
     @AutoSource
     void sut_generates_email_address_for_email_address_suffix(User entity) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(entity.emailAddress().matches(emailRegex)).isTrue();
-        assertThat(entity.encodedPassword().matches(emailRegex)).isFalse();
+        assertThat(entity.emailAddress()).matches(EMAIL_REGEX);
+        assertThat(entity.encodedPassword()).doesNotMatch(EMAIL_REGEX);
     }
 
     @SuppressWarnings("RecordComponentName")
@@ -44,8 +44,7 @@ public class SpecsForEmailAddressStringProperty {
     void sut_generates_email_address_for_underscored_email_address_suffix(
         Customer value
     ) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(value.email_address().matches(emailRegex)).isTrue();
+        assertThat(value.email_address()).matches(EMAIL_REGEX);
     }
 
     public static final class OptionsProvider
@@ -90,9 +89,8 @@ public class SpecsForEmailAddressStringProperty {
     void sut_generates_email_address_for_string_properties_of_type_with_emails_suffix(
         UserEmails emails
     ) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(emails.primary().matches(emailRegex)).isTrue();
-        assertThat(emails.secondary().matches(emailRegex)).isTrue();
+        assertThat(emails.primary()).matches(EMAIL_REGEX);
+        assertThat(emails.secondary()).matches(EMAIL_REGEX);
     }
 
     public record UserEmailAddresses(String primary, String secondary) { }
@@ -102,9 +100,8 @@ public class SpecsForEmailAddressStringProperty {
     void sut_generates_email_address_for_string_properties_of_type_with_email_addresses_suffix(
         UserEmailAddresses addresses
     ) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(addresses.primary().matches(emailRegex)).isTrue();
-        assertThat(addresses.secondary().matches(emailRegex)).isTrue();
+        assertThat(addresses.primary()).matches(EMAIL_REGEX);
+        assertThat(addresses.secondary()).matches(EMAIL_REGEX);
     }
 
     @SuppressWarnings("TypeName")
@@ -116,8 +113,7 @@ public class SpecsForEmailAddressStringProperty {
     void sut_generates_email_address_for_string_properties_of_type_with_underscored_email_addresses_suffix(
         User_Email_Addresses addresses
     ) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        assertThat(addresses.primary().matches(emailRegex)).isTrue();
-        assertThat(addresses.secondary().matches(emailRegex)).isTrue();
+        assertThat(addresses.primary()).matches(EMAIL_REGEX);
+        assertThat(addresses.secondary()).matches(EMAIL_REGEX);
     }
 }
