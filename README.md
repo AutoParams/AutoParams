@@ -3,30 +3,31 @@
 [![CI](https://github.com/AutoParams/AutoParams/actions/workflows/ci.yml/badge.svg)](https://github.com/AutoParams/AutoParams/actions/workflows/ci.yml)
 [![Publish](https://github.com/AutoParams/AutoParams/actions/workflows/publish.yml/badge.svg)](https://github.com/AutoParams/AutoParams/actions/workflows/publish.yml)
 
-AutoParams is an arbitrary test data generator designed for parameterized tests in Java, drawing inspiration from AutoFixture.
+**AutoParams** is a JUnit 5 extension for automatic test data generation, inspired by AutoFixture.
 
-Manually configuring test data can be cumbersome, especially when certain data is necessary but not critical to a specific test. AutoParams eliminates this hassle by automatically generating test arguments for your parameterized methods, allowing you to focus more on your domain-specific requirements.
+Manually creating test data is often repetitive and distracts from the core logic of the test. AutoParams eliminates this boilerplate by supplying automatically generated values to your test method parameters, allowing you to write concise and focused tests.
 
-Using AutoParams is straightforward. Simply annotate your parameterized test method with the `@AutoSource` annotation, in the same way you would use the `@ValueSource` or `@CsvSource` annotations. Once this is done, AutoParams takes care of generating appropriate test arguments automatically.
+Getting started is simple: annotate your `@Test` method with `@AutoParams`, and the parameters will be populated with generated data.
 
 ```java
-@ParameterizedTest
-@AutoSource
-void parameterizedTest(int a, int b) {
+@Test
+@AutoParams
+void testMethod(int a, int b) {
     Calculator sut = new Calculator();
     int actual = sut.add(a, b);
     assertEquals(a + b, actual);
 }
 ```
 
-In the example above, the automatic generation of test data by AutoParams can potentially eliminate the need for triangulation in tests, streamlining the testing process.
+In the example above, `a` and `b` are automatically generated, making the test cleaner and reducing the need for manual setup or value triangulation.
 
-AutoParams also simplifies the writing of test setup code. For instance, if you need to generate multiple review entities for a single product, you can effortlessly accomplish this using the `@Freeze` annotation.
+AutoParams also supports more advanced scenarios. When multiple generated values need to share a reference—such as reviews referring to the same product—you can use the `@Freeze` annotation to ensure consistency.
 
 ```java
 @AllArgsConstructor
 @Getter
 public class Product {
+
     private final UUID id;
     private final String name;
     private final BigDecimal priceAmount;
@@ -37,15 +38,17 @@ public class Product {
 @AllArgsConstructor
 @Getter
 public class Review {
-    private final UUId id;
+
+    private final UUID id;
     private final Product product;
+    private final int rating;
     private final String comment;
 }
 ```
 
 ```java
-@ParameterizedTest
-@AutoSource
+@Test
+@AutoParams
 void testMethod(@Freeze Product product, Review[] reviews) {
     for (Review review : reviews) {
         assertSame(product, review.getProduct());
@@ -53,7 +56,7 @@ void testMethod(@Freeze Product product, Review[] reviews) {
 }
 ```
 
-That's cool!
+This ensures that all generated `Review` instances refer to the same frozen `Product`, simplifying test setup in scenarios involving shared dependencies.
 
 ## Requirements
 
@@ -69,7 +72,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>9.0.0</version>
+  <version>10.0.0</version>
 </dependency>
 ```
 
@@ -78,77 +81,439 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:9.0.0'
+testImplementation 'io.github.autoparams:autoparams:10.0.0'
 ```
 
 ## Features
 
-### Support for Primitive Types
+AutoParams provides a set of features designed to make your tests more expressive and reduce repetitive setup. Here are some of its key capabilities:
 
-AutoParams effortlessly generates test arguments for primitive data types, such as booleans, integers, and floats.
+### `@Freeze` Annotation
 
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(boolean x1, byte x2, int x3, long x4, float x5, double x6, char x7) {
-}
-```
+The `@Freeze` annotation allows you to "freeze" a generated value so that it is reused consistently across other parameters of the same type within a single test method.
 
-### Handling Simple Objects
-
-The framework also provides test arguments in the form of simple objects like Strings, UUIDs, and BigIntegers.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(String x1, UUID x2, BigInteger x3) {
-}
-```
-
-### Enum Type Support
-
-Enum types are seamlessly integrated as well. AutoParams will randomly select values from the enum for test arguments.
-
-```java
-public enum Day {
-    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
-    THURSDAY, FRIDAY, SATURDAY
-}
-```
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(Day arg) {
-}
-```
-
-### Generation of Complex Objects
-
-For more complicated objects, AutoParams utilizes the public constructor with arbitrary arguments to generate test data. If the class has multiple public constructors, the framework will select the one with the fewest parameters to initialize the object.
+To apply it, annotate one of your method parameters with `@Freeze`. AutoParams will then propagate that frozen value to all other parameters of the same type—including nested fields in complex objects.
 
 ```java
 @AllArgsConstructor
 @Getter
-public class ComplexObject {
-    private final int value1;
-    private final String value2;
+public class StringContainer {
+
+    private final String value;
 }
 ```
 
 ```java
-@ParameterizedTest
-@AutoSource
-void testMethod(ComplexObject arg) {
+@Test
+@AutoParams
+void testMethodFreeze(String s1, @Freeze String s2, String s3, StringContainer container) {
+    assertNotEquals(s1, s2);
+    assertEquals(s2, s3);
+    assertEquals(s2, container.getValue());
 }
 ```
 
-#### Constructor Selection Policy
+In this example, `s2` is frozen, meaning the same string value is reused for `s3` and for the `value` field inside `container`. Meanwhile, `s1` is independently generated.
 
-When AutoParams generates objects of complex types, it adheres to the following selection criteria for constructors:
+This makes `@Freeze` particularly useful when certain dependencies in your test need to remain consistent, while still allowing variation in the rest of the test data.
 
-1. Priority is given to constructors that are annotated with the `@ConstructorProperties` annotation.
-1. If no such annotation is present, AutoParams will choose the constructor with the fewest parameters.
+### Setting the Range of Values
+
+You can constrain the range of automatically generated values using the `@Min` and `@Max` annotations. These let you define minimum and maximum bounds for numeric parameters, ensuring that generated values fall within a specified range.
+
+To apply a range, annotate the parameter with `@Min` and/or `@Max` as needed.
+
+Here's an example:
+
+```java
+@Test
+@AutoParams
+void testMethod(@Min(1) @Max(10) int value) {
+    assertTrue(value >= 1);
+    assertTrue(value <= 10);
+}
+```
+
+In this test, the `value` parameter will always be an integer between `1` and `10`, inclusive.
+
+The `@Min` and `@Max` annotations are compatible with the following types:
+
+- `byte`
+- `java.lang.Byte`
+- `short`
+- `java.lang.Short`
+- `int`
+- `java.lang.Integer`
+- `long`
+- `java.lang.Long`
+- `float`
+- `java.lang.Float`
+- `double`
+- `java.lang.Double`
+
+By combining `@Min` and `@Max` with `@AutoParams`, you can strike a balance between randomness and control, making your parameterized tests more robust and predictable.
+
+### `ResolutionContext` class
+
+The `ResolutionContext` class provides the core mechanism for generating test data. While it is used internally by AutoParams, you can also instantiate and use it directly in your own test code when needed.
+
+Here's an example:
+
+```java
+@Test
+void testMethod() {
+    ResolutionContext context = new ResolutionContext();
+    Product product = context.resolve();
+    Review review = context.resolve();
+}
+```
+
+In this example, `ResolutionContext` is used to manually generate instances of `Product` and `Review` outside of the `@AutoParams` annotation. This offers more control and flexibility for writing custom test logic or handling special cases.
+
+### `Factory<T>` class
+
+The `Factory<T>` class is useful when you need to generate multiple instances of the same type. It allows you to create single instances or collections of generated objects on demand.
+
+Here's an example:
+
+```java
+@Test
+void testMethod() {
+    Factory<Product> factory = Factory.create(Product.class);
+    Product product = factory.get();
+    List<Product> products = factory.getRange(10);
+}
+```
+
+In this example, a `Factory<Product>` is created to produce `Product` instances. The `get()` method creates a single instance, while `getRange(n)` returns a list of `n` instances. This approach is particularly helpful when you need bulk data generation in your tests.
+
+### Customization
+
+Customization is one of the most powerful features offered by AutoParams. It gives you full control over how test data is generated, allowing you to enforce business rules or tailor the data to meet specific testing needs.
+
+For example, suppose the `Product` entity must follow these business rules:
+
+- `priceAmount` must be greater than or equal to `10`
+- `priceAmount` must be less than or equal to `10000`
+
+You can implement these rules using a custom generator by extending `ObjectGeneratorBase<T>`:
+
+```java
+public class ProductGenerator extends ObjectGeneratorBase<Product> {
+
+    @Override
+    protected Product generateObject(ObjectQuery query, ResolutionContext context) {
+        UUID id = context.resolve();
+        String name = context.resolve();
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        BigDecimal priceAmount = new BigDecimal(random.nextInt(10, 10000 + 1));
+
+        return new Product(id, name, priceAmount);
+    }
+}
+```
+
+This custom generator creates a `Product` instance that adheres to the business constraints. It uses `ResolutionContext` to generate supporting values like `id` and `name`, and applies explicit logic to generate a valid `priceAmount`.
+
+You can apply this custom generator using the `@Customization` annotation:
+
+```java
+@Test
+@AutoParams
+@Customization(ProductGenerator.class)
+void testMethod(Product product) {
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10)) >= 0);
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10000)) <= 0);
+}
+```
+
+In this test, AutoParams uses `ProductGenerator` to ensure that the `Product` instance respects the required pricing constraints.
+
+You can also apply multiple custom generators at once by listing them in the `@Customization` annotation:
+
+```java
+public class ReviewGenerator extends ObjectGeneratorBase<Review> {
+
+    @Override
+    protected Review generateObject(ObjectQuery query, ResolutionContext context) {
+        UUID id = context.resolve();
+        Product product = context.resolve();
+        String comment = context.resolve();
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        int rating = random.nextInt(1, 5 + 1);
+
+        return new Review(id, product, rating, comment);
+    }
+}
+```
+
+```java
+@Test
+@AutoParams
+@Customization({ ProductGenerator.class, ReviewGenerator.class })
+void testMethod(Product product, Review review) {
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10)) >= 0);
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10000)) <= 0);
+    assertTrue(review.getRating() >= 1);
+    assertTrue(review.getRating() <= 5);
+}
+```
+
+Alternatively, if you prefer to encapsulate multiple generators into a single reusable configuration, you can extend `CompositeCustomizer`:
+
+```java
+public class DomainCustomizer extends CompositeCustomizer {
+
+    public DomainCustomizer() {
+        super(
+            new ProductGenerator(),
+            new ReviewGenerator()
+        );
+    }
+}
+```
+
+```java
+@Test
+@AutoParams
+@Customization(DomainCustomizer.class)
+void testMethod(Product product, Review review) {
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10)) >= 0);
+    assertTrue(product.getPriceAmount().compareTo(BigDecimal.valueOf(10000)) <= 0);
+    assertTrue(review.getRating() >= 1);
+    assertTrue(review.getRating() <= 5);
+}
+```
+
+This approach gives you a clean and reusable way to manage related custom generators, improving maintainability and consistency across your test suite.
+
+#### Customization Scoping
+
+The `@Customization` annotation can also be applied to individual parameters within a test method. When used in this way, the specified customization will apply to that parameter and all subsequent parameters of the same type—unless explicitly overridden.
+
+This allows for fine-grained control over how test data is generated, making it easier to set up complex, context-specific scenarios.
+
+Here's an example of a custom generator that creates a free product (with zero prices):
+
+```java
+public class FreeProductGenerator extends ObjectGeneratorBase<Product> {
+
+    @Override
+    protected Product generateObject(ObjectQuery query, ResolutionContext context) {
+        UUID id = context.resolve();
+        String name = context.resolve();
+
+        BigDecimal priceAmount = BigDecimal.ZERO;
+
+        return new Product(id, name, priceAmount);
+    }
+}
+```
+
+And here’s how to apply it to a specific parameter:
+
+```java
+@Test
+@AutoParams
+@Customization(DomainCustomizer.class)
+void testMethod(
+    Product product1,
+    @Customization(FreeProductGenerator.class) Product product2
+) {
+    assertTrue(product1.getPriceAmount().compareTo(BigDecimal.valueOf(10)) >= 0);
+    assertTrue(product1.getPriceAmount().compareTo(BigDecimal.valueOf(10000)) <= 0);
+
+    assertEquals(BigDecimal.ZERO, product2.getPriceAmount());
+}
+```
+
+In this test, `product1` is generated using the default logic from `DomainCustomizer`, while `product2` uses the `FreeProductGenerator` to produce a free product. This demonstrates how per-parameter customization gives you precise control over test data generation.
+
+#### One-time Customizations with DSL(Domain-Specific Language)
+
+AutoParams allows you to define one-time customizations directly within your test method using a domain-specific language(DSL). This is useful when you want to customize test data generation in a highly localized, context-specific way—without having to create separate generator classes.
+
+```java
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+
+public class TestClass {
+
+    @Test
+    @AutoParams
+    void testMethod(Product product, int rating, ResolutionContext context) {
+        context.customize(
+            freezeArgument("product").to(product),
+            freezeArgument("rating").in(Review.class).to(rating)
+        );
+        Review review = context.resolve();
+        assertSame(product, review.getProduct());
+        assertEquals(rating, review.getRating());
+    }
+}
+```
+
+In this example, we use the `freezeArgument` static method from the `ArgumentCustomizationDsl` class to customize the behavior of the `ResolutionContext`. Specifically:
+
+- The `product` property in any `Review` instance created by the context will be set to the `product` parameter of the test.
+- Likewise, the `rating` property will be set to the `rating` parameter.
+
+This approach is especially useful for quickly fixing values without defining a full custom generator or specifying customization at the test method level. It improves the readability and maintainability of localized scenarios by keeping custom logic close to the test logic.
+
+#### Settable Properties
+
+If a class follows the JavaBeans convention—meaning it has a no-arguments constructor and public setter methods—AutoParams can automatically populate its properties using the `InstancePropertyWriter` customizer.
+
+Here's a simple example:
+
+```java
+@Getter
+@Setter
+public class User {
+
+    private Long id;
+    private String name;
+}
+```
+
+By applying the `InstancePropertyWriter` customizer, AutoParams will generate and assign values to the `id` and `name` properties automatically:
+
+```java
+@Test
+@AutoParams
+@Customization(InstancePropertyWriter.class)
+void testMethod(User user) {
+    assertNotNull(user.getId());
+    assertNotNull(user.getName());
+}
+```
+
+In this test, the `User` object is created using its default constructor, and AutoParams sets values on its writable properties via their setters. This is especially useful when working with legacy models or data transfer objects(DTOs) that do not have constructors covering all fields.
+
+### Parameterized Tests
+
+AutoParams also supports **parameterized tests**, allowing you to execute the same test logic with multiple sets of input data. With AutoParams, you can seamlessly combine manually specified values with automatically generated test data—enabling both flexibility and convenience.
+
+Here are some of the features you can use for parameterized tests.
+
+#### `@ValueAutoSource` Annotation
+
+The `@ValueAutoSource` annotation is a simple yet powerful tool for writing parameterized tests with AutoParams.
+
+```java
+@ParameterizedTest
+@ValueAutoSource(strings = { "Camera", "Candle" })
+void testMethod(String name, Factory<Product> factory) {
+    Product product = factory.get(
+        freezeArgument("name").to(name)
+    );
+    assertTrue(product.getName().startsWith("Ca"));
+}
+``` 
+
+In this example, the test method is executed twice—once with `"Camera"` and once with `"Candle"` as the value of the `name` parameter. The `factory` parameter is resolved automatically by AutoParams and can be customized using the DSL, as shown with `freezeArgument`.
+
+This enables the creation of test objects (`Product` in this case) that are partially controlled (e.g., a fixed name) and partially randomized (e.g., all other properties), striking a balance between specificity and variety.
+
+The usage of `@ValueAutoSource` is similar to JUnit 5's `@ValueSource`, and it supports the following types of literal values:
+
+- `short`
+- `byte`
+- `int`
+- `long`
+- `float`
+- `double`
+- `char`
+- `boolean`
+- `java.lang.String`
+- `java.lang.Class`
+
+#### `@CsvAutoSource` Annotation
+
+The `@CsvAutoSource` annotation lets you define repeated test inputs in CSV format, similar to JUnit 5’s @CsvSource. Any parameters not explicitly provided in the CSV rows will be automatically generated by AutoParams.
+
+```java
+@ParameterizedTest
+@CsvAutoSource({
+    "Product 1, 500",
+    "Product 2, 10000"
+})
+void testMethod(String name, BigDecimal priceAmount, UUID id) {
+    Product product = new Product(id, name, priceAmount);
+    assertTrue(product.getName().startsWith("Product"));
+}
+```
+
+In this example, the `@CsvAutoSource` annotation provides values for the `name` and `priceAmount` parameters. The remaining parameter(`id`) is resolved automatically by AutoParams.
+
+The test will run once for each line in the CSV input array—twice in this case—allowing you to repeat the same test logic with multiple fixed inputs while still benefiting from automatic value generation for the rest.
+
+This approach makes it easy to test combinations of fixed and dynamic values in a concise and expressive way.
+
+#### `@MethodAutoSource` Annotation
+
+The `@MethodAutoSource` annotation combines the features of JUnit 5’s `@MethodSource` and AutoParams’s `@AutoSource`. You can specify a method that provides test data, and AutoParams will fill in any remaining parameters automatically.
+
+```java
+@ParameterizedTest
+@MethodAutoSource("testDataSource")
+void testMethod(String name, BigDecimal priceAmount, UUID id) {
+    Product product = new Product(id, name, priceAmount);
+    assertTrue(product.getName().startsWith("Product"));
+}
+
+static Stream<Arguments> testDataSource() {
+    return Stream.of(
+        arguments("Product 1", new BigDecimal(500)),
+        arguments("Product 2", new BigDecimal(10000))
+    );
+}
+```
+
+In this example, the `testDataSource` method provides values for the `name` and `priceAmount` parameters. The remaining parameter(`id`) is automatically resolved by AutoParams and provided as an argument to the test method.
+
+This setup allows you to blend manually specified values with automatically generated ones, giving you both precision and variability in your parameterized tests.
+
+#### @Repeat Annotation
+
+The `@Repeat` annotation allows you to run a test multiple times, generating fresh random values for unspecified parameters on each run.
+
+```java
+@ParameterizedTest
+@ValueAutoSource(ints = { 1, 2, 3 })
+@Repeat(5)
+void testMethod(int a, int b) {
+    Calculator sut = new Calculator();
+    int actual = sut.add(a, b);
+    assertEquals(a + b, actual);
+}
+```
+In this example, the test is executed 15 times in total—five times for each of the values `1`, `2`, and `3` assigned to the parameter `a`. For each run, the value of `b` is automatically generated by AutoParams.
+
+If you want AutoParams to generate values for **all** parameters and still repeat the test multiple times, you can combine `@AutoSource` with `@Repeat`.
+
+```java
+@ParameterizedTest
+@AutoSource
+@Repeat(10)
+void testMethod(int a, int b) {
+    Calculator sut = new Calculator();
+    int actual = sut.add(a, b);
+    assertEquals(a + b, actual);
+}
+```
+
+This combination is useful when you want to explore a wider range of inputs and increase test coverage with minimal setup.
+
+### Constructor Selection Policy
+
+When AutoParams generates instances of complex types that have multiple constructors, it follows a specific policy to determine which constructor to use:
+
+1. Constructors annotated with `@ConstructorProperties` are prioritized.
+1. If no such annotation is present, AutoParams chooses the constructor with the **fewest** parameters.
+
+Here's an example:
 
 ```java
 @Getter
@@ -158,14 +523,14 @@ public class ComplexObject {
     private final String value2;
     private final UUID value3;
 
-    @ConstructorProperties({"value1", "value2, value3"})
+    @ConstructorProperties({ "value1", "value2", "value3" })
     public ComplexObject(int value1, String value2, UUID value3) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
     }
 
-    @ConstructorProperties({"value1", "value2"})
+    @ConstructorProperties({ "value1", "value2" })
     public ComplexObject(int value1, String value2) {
         this(value1, value2, null);
     }
@@ -177,508 +542,95 @@ public class ComplexObject {
 ```
 
 ```java
-@ParameterizedTest
-@AutoSource
-void testMethod(ComplexObject arg) {
+@Test
+@AutoParams
+void testMethod(ComplexObject object) {
     assertNotNull(object.getValue2());
     assertNull(object.getValue3());
 }
 ```
 
-### Support for Generic Types
+In this example, AutoParams selects the constructor with the `@ConstructorProperties` annotation that has the fewest parameters—(`int`, `String`)—and assigns null to the `value3` field. This shows how constructor selection can affect the structure of the generated object.
 
-AutoParams is capable of generating objects of generic types, adhering to its constructor selection policy. When dealing with generic types, AutoParams employs a public constructor with arbitrary arguments for object creation. If multiple public constructors are available, the framework opts for the one with the fewest parameters.
+## `autoparams-spring`
+
+When testing a Spring application, you often need both of the following:
+
+- Beans provided by the **Spring IoC container**
+- Arbitrary test data automatically generated by **AutoParams**
+
+The `autoparams-spring` extension bridges these two needs, allowing you to write test methods that receive **Spring-managed beans** and **AutoParams-generated arguments** side by side.
+
+This means you can write tests that automatically inject service components from your application context and use auto-generated test data at the same time, with minimal setup.
+
+### Install
+
+#### Maven
+
+For Maven, you can add the following dependency to your pom.xml:
+
+```xml
+<dependency>
+  <groupId>io.github.autoparams</groupId>
+  <artifactId>autoparams-spring</artifactId>
+  <version>10.0.0</version>
+</dependency>
+```
+
+#### Gradle
+
+For Gradle, use:
+
+```groovy
+testImplementation 'io.github.autoparams:autoparams-spring:10.0.0'
+```
+
+### `@UseBeans` Annotation
+
+Suppose your Spring application has a `HelloSupplier` bean that implements the `MessageSupplier` interface:
 
 ```java
-@AllArgsConstructor
-@Getter
-public class GenericObject<T1, T2> {
-    private final T1 value1;
-    private final T2 value2;
+public interface MessageSupplier {
+
+    String getMessage(String name);
 }
 ```
 
 ```java
-@ParameterizedTest
-@AutoSource
-void testMethod(
-    GenericObject<String, ComplexObject> arg1,
-    GenericObject<UUID, GenericObject<String, ComplexObject>> arg2) {
-}
-```
-
-### Support for Collection Types
-
-AutoParams offers extensive support for various collection types, enhancing its utility for more complex testing scenarios.
-
-#### Arrays
-
-AutoParams automatically generates array instances, each containing three elements by default.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(int[] array1, String[] array2) {
-}
-```
-
-#### List Types
-
-Both the `List<E>` interface and the `ArrayList<E>` class are supported. AutoParams generates list objects that contain a few elements.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(List<String> list, ArrayList<UUID> arrayList) {
-}
-```
-
-#### Set Types
-
-AutoParams also supports the `Set<E>` interface and the `HashSet<E>` class, generating set objects that contain a few elements.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(Set<String> set, HashSet<UUID> hashSet) {
-}
-```
-
-#### Map Interface
-
-Support extends to the `Map<K, V>` interface and the `HashMap<K, V>` class as well. AutoParams generates map objects containing a few key-value pairs.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(Map<String, ComplexObject> map, HashMap<UUID, ComplexObject> hashMap) {
-}
-```
-
-This comprehensive support for collection types makes AutoParams an exceptionally versatile tool for generating test data, accommodating a wide variety of data structures to ensure thorough testing.
-
-### Support for Stream Types
-
-AutoParams extends its versatility by offering support for various types of stream interfaces, further broadening your testing capabilities.
-
-#### Generic Stream Interface
-
-AutoParams supports the generic `Stream<T>` interface and generates stream objects containing a few elements.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(Stream<ComplexObject> stream) {
-}
-```
-
-#### Stream Interfaces of Primitive Types
-
-AutoParams also accommodates stream interfaces that are specific to primitive types, such as IntStream, LongStream, and DoubleStream.
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(IntStream arg1, LongStream arg2, DoubleStream arg3) {
-}
-```
-
-This added layer of support for stream types allows AutoParams to be a comprehensive solution for generating test data across a wide range of data structures and types, making your testing more robust and efficient.
-
-### Repeat Feature
-
-The `@Repeat` annotation in AutoParams provides you with a straightforward way to repeat a unit test multiple times, each time with newly generated, arbitrary test data. This can be particularly useful when you want to ensure that a piece of code functions as expected across a variety of input conditions.
-
-#### How to Use
-
-To use the `@Repeat` feature, you'll need to attach the `@Repeat` annotation alongside the `@AutoSource` annotation on your parameterized test method. The repeat property of the `@Repeat` annotation takes an integer value, specifying the number of times the test should be repeated.
-
-Here's an example:
-
-```java
-@ParameterizedTest
-@AutoSource
-@Repeat(10)
-void testMethod(int a, int b) {
-    // This test method will be executed ten times with different sets of 'a' and 'b' each time.
-    Calculator sut = new Calculator();
-    int actual = sut.add(a, b);
-    assertEquals(a + b, actual);
-}
-```
-
-In the example above, the test method testMethod will run ten times. Each run will have a new set of randomly generated values for a and b, thanks to the `@AutoSource` annotation. The `@Repeat(10)` ensures that this cycle happens ten times, enhancing the test coverage.
-
-#### Benefits
-
-1. **Diverse Test Data**: The `@Repeat` feature allows you to test your methods across a wider range of automatically generated input values.
-1. **Reduced Manual Effort**: There's no need to manually specify multiple sets of test data or create loops within your tests.
-1. **Increased Test Robustness**: Repeating tests multiple times with varying data can uncover edge cases and improve the reliability of your software.
-
-By using the `@Repeat` feature, you can increase the comprehensiveness and reliability of your test suite with minimal additional effort.
-
-### `@Freeze` Annotation
-
-AutoParams provides a `@Freeze` annotation to let you fix the value of a generated argument. Once an argument is fixed using the `@Freeze` annotation, `@AutoSource` will reuse this fixed value for any subsequent parameters of the same type within the same test method.
-
-#### How to Use
-
-Simply decorate the parameter in your test method with the `@Freeze` annotation. This will instruct AutoParams to keep that parameter's value constant while generating new values for other parameters.
-
-Here's an example:
-
-```java
-@AllArgsConstructor
-@Getter
-public class ValueContainer {
-    private final String value;
-}
-```
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(@Freeze String arg1, String arg2, ValueContainer arg3) {
-    assertEquals(arg1, arg2);
-    assertEquals(arg1, arg3.getValue());
-}
-```
-
-In the above example, the value of `arg1` is fixed by the `@Freeze` annotation. The test verifies that `arg1` is equal to `arg2` and also equal to the value property of `arg3`. As a result, `arg1`, `arg2`, and `arg3.getValue()` will all contain the same string value, thanks to the `@Freeze` annotation.
-
-#### Benefits
-
-1. **Consistency**: `@Freeze` ensures that certain values stay constant, making it easier to verify relations between different parameters in your tests.
-1. **Simpler Test Logic**: Reusing a fixed value across multiple parameters simplifies your test logic and makes your tests easier to read and maintain.
-1. **Control Over Randomness**: While `@AutoSource` provides the benefit of random value generation, `@Freeze` gives you control when you need specific values to be consistent throughout a test.
-
-The `@Freeze` annotation is a powerful feature for scenarios where you need to maintain the consistency of certain test parameters while still benefiting from the randomness and coverage offered by AutoParams.
-
-### `@ValueAutoSource` Annotation
-
-The `@ValueAutoSource` annotation combines the capabilities of `@ValueSource` and `@AutoSource`, providing a more flexible way to generate test arguments. Specifically, it assigns a predefined value to the first parameter and then generates arbitrary values for the remaining parameters.
-
-#### How to Use
-
-To employ the `@ValueAutoSource` annotation, add it above your test method and specify the values for the first parameter using the attributes like `strings`, `ints`, etc., just as you would with `@ValueSource`.
-
-Here's an example:
-
-```java
-@ParameterizedTest
-@ValueAutoSource(strings = {"foo"})
-void testMethod(String arg1, String arg2) {
-    assertEquals("foo", arg1);
-    assertNotEquals(arg1, arg2);
-}
-```
-
-In this case, `arg1` is set to `"foo"`, while `arg2` will receive an automatically generated value. The test confirms that `arg1` is exactly `"foo"` and that `arg2` is different from `arg1`.
-
-#### Compatibility with `@Freeze`
-
-The `@ValueAutoSource` annotation is fully compatible with the `@Freeze` annotation, allowing you to fix certain parameter values while also providing predefined values for others.
-
-Here is how they can work together:
-
-```java
-@AllArgsConstructor
-@Getter
-public class ValueContainer {
-    private final String value;
-}
-```
-
-```java
-@ParameterizedTest
-@ValueAutoSource(strings = {"foo"})
-void testMethod(@Freeze String arg1, String arg2, ValueContainer arg3) {
-    assertEquals("foo", arg2);
-    assertEquals("foo", arg3.getValue());
-}
-```
-
-#### Benefits
-
-1. **Combining Fixed and Random Values**: `@ValueAutoSource` allows you to specify certain parameter values while letting AutoParams generate random values for others, offering the best of both worlds.
-1. **Enhanced Flexibility**: This feature grants you more control over test data, making it easier to cover a wide range of scenarios.
-1. **Reduced Test Complexity**: By combining the functionalities of `@ValueSource` and `@AutoSource`, you can simplify your test setup, making it easier to read and maintain.
-
-The `@ValueAutoSource` annotation is a versatile addition to your testing toolkit, giving you greater control over test data while maintaining the benefits of automated random data generation.
-
-### `@CsvAutoSource` Annotation
-
-The `@CsvAutoSource` annotation merges the features of `@CsvSource` and `@AutoSource`, providing you with the flexibility to specify CSV-formatted arguments for some parameters while generating random values for the remaining ones.
-
-#### How to Use
-
-To use `@CsvAutoSource`, annotate your test method with it and provide CSV-formatted input values for the initial set of parameters. The remaining parameters will be populated with automatically generated values.
-
-Here's a simple example:
-
-```java
-@ParameterizedTest
-@CsvAutoSource({"16, foo"})
-void testMethod(int arg1, String arg2, String arg3) {
-    assertEquals(16, arg1);
-    assertEquals("foo", arg2);
-    assertNotEquals(arg2, arg3);
-}
-```
-
-In this example, `arg1` is set to `16` and `arg2` is set to `"foo"` based on the provided CSV input. Meanwhile, `arg3` will be assigned a randomly generated value. The test verifies that `arg3` is different from `arg2`.
-
-#### Compatibility with `@Freeze`
-
-Just like `@ValueAutoSource`, `@CsvAutoSource` is fully compatible with the `@Freeze` annotation, allowing you to lock in values for specific parameters while also defining others via CSV.
-
-Here's how they can work together:
-
-```java
-@AllArgsConstructor
-@Getter
-public class ValueContainer {
-    private final String value;
-}
-```
-
-```java
-@ParameterizedTest
-@CsvAutoSource({"16, foo"})
-void testMethod(int arg1, @Freeze String arg2, ValueContainer arg3) {
-    assertEquals("foo", arg3.getValue());
-}
-```
-
-#### Benefits
-
-1. **Dual Control**: The ability to specify values via CSV for some parameters while allowing automatic random generation for others provides a high level of control over your test data.
-1. **Streamlined Testing**: By allowing both manual and automated data input, `@CsvAutoSource` simplifies the setup of complex tests.
-1. **Flexible and Comprehensive**: This feature offers you the flexibility to cover a broader range of test scenarios by mixing pre-defined and random values.
-
-The `@CsvAutoSource` annotation is another versatile tool in your testing suite, adding both precision and coverage to your parameterized tests.
-
-### `@MethodAutoSource` Annotation
-
-The `@MethodAutoSource` annotation blends the capabilities of `@MethodSource` and `@AutoSource`. This allows you to specify the names of factory methods for the initial set of parameters, while the remaining parameters are automatically populated with arbitrary values.
-
-#### How to Use
-
-To employ `@MethodAutoSource`, annotate your test method with it and specify the factory method that provides the argument values for the initial parameters. AutoParams will generate values for the remaining parameters.
-
-Here's a straightforward example:
-
-```java
-@ParameterizedTest
-@MethodAutoSource("factoryMethod")
-void testMethod(int arg1, String arg2, String arg3) {
-    assertEquals(16, arg1);
-    assertEquals("foo", arg2);
-    assertNotEquals(arg2, arg3);
-}
-
-static Stream<Arguments> factoryMethod() {
-    return Stream.of(Arguments.of(16, "foo"));
-}
-```
-
-In this instance, `arg1` and `arg2` are set based on the values provided by the `factoryMethod`. `arg3` will be assigned a randomly generated value, and the test confirms that `arg3` is not equal to `arg2`.
-
-#### Compatibility with `@Freeze`
-
-The `@MethodAutoSource` annotation is also fully compatible with the `@Freeze` annotation. This lets you lock in values for particular parameters while dynamically populating others through a factory method.
-
-Here's how it works together:
-
-```java
-@AllArgsConstructor
-@Getter
-public class ValueContainer {
-    private final String value;
-}
-```
-
-```java
-@ParameterizedTest
-@MethodAutoSource("factoryMethod")
-void testMethod(int arg1, @Freeze String arg2, ValueContainer arg3) {
-    assertEquals("foo", arg3.getValue());
-}
-
-static Stream<Arguments> factoryMethod() {
-    return Stream.of(Arguments.of(16, "foo"));
-}
-```
-
-#### Benefits
-
-1. **Customizability**: The ability to specify factory methods for some parameters allows for highly tailored test setups.
-1. **Simplicity**: With automatic value generation for remaining parameters, @MethodAutoSource alleviates the need for extensive manual data preparation.
-1. **Flexibility**: This feature allows you to test a wider range of scenarios by combining pre-defined and random values.
-
-The `@MethodAutoSource` annotation enriches your testing toolkit, offering a balanced blend of control and randomness in your parameterized tests.
-
-### Setting the Range of Values
-
-You can constrain the range of generated arbitrary values for certain parameters using the `@Min` and `@Max` annotations. These annotations allow you to set minimum and maximum bounds, respectively, ensuring that the generated values fall within the specified range.
-
-#### How to Use
-
-To set the range for a parameter, simply annotate it with `@Min` to define the minimum value and `@Max` to define the maximum value.
-
-Here's an example:
-
-```java
-@ParameterizedTest
-@AutoSource
-void testMethod(@Min(1) @Max(10) int value) {
-    assertTrue(value >= 1);
-    assertTrue(value <= 10);
-}
-```
-
-In this test, the value parameter will always be an integer between `1` and `10`, inclusive.
-
-#### Supported types
-
-The `@Min` and `@Max` annotations are compatible with the following types:
-
-- `byte`
-- `Byte`
-- `short`
-- `Short`
-- `int`
-- `Integer`
-- `long`
-- `Long`
-- `float`
-- `Float`
-- `double`
-- `Double`
-
-#### Benefits
-
-1. **Controlled Randomness**: These annotations help you fine-tune the scope of randomness, allowing for more targeted and meaningful tests.
-1. **Reduced Test Flakiness**: By constraining the range of values, you reduce the risk of encountering edge cases that could make your tests flaky.
-1. **Enhanced Readability**: Using `@Min` and `@Max` makes it clear to readers what range of values are being tested, thereby improving the readability and maintainability of your test code.
-
-By using the `@Min` and `@Max` annotations in conjunction with `@AutoSource`, you can achieve a balanced mix of randomness and predictability, making your parameterized tests both versatile and reliable.
-
-### `@Customization` Annotation
-
-The `@Customization` annotation allows you to tailor the generation of test data according to specific business rules or requirements. This powerful feature integrates seamlessly with the AutoParams framework, offering the flexibility to apply custom logic to your parameterized tests.
-
-#### Business Rule Example
-
-Let's consider a Product entity, which has some business rules to follow:
-
-- The listPriceAmount must be greater than or equal to 100
-- The listPriceAmount must be less than or equal to 1000
-- A 10% discount should be offered, reflected in sellingPriceAmount
-
-```java
-@AllArgsConstructor
-@Getter
-public class Product {
-    private final UUID id;
-    private final String name;
-    private final BigDecimal listPriceAmount;
-    private final BigDecimal sellingPriceAmount;
-}
-```
-
-#### Customizing Object Generation
-
-You can implement these rules using the `Customizer` interface:
-
-```java
-public class ProductGenerator extends ObjectGeneratorBase<Product> {
+public class HelloSupplier implements MessageSupplier {
 
     @Override
-    protected Product generateObject(ObjectQuery query, ResolutionContext context) {
-        UUID id = context.resolve(UUID.class);
-        String name = context.resolve(String.class);
-
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        BigDecimal listPriceAmount = new BigDecimal(random.nextInt(100, 1000 + 1));
-        BigDecimal sellingPriceAmount = listPriceAmount.multiply(new BigDecimal(0.9));
-
-        return new Product(id, name, listPriceAmount, sellingPriceAmount);
-    }
-}
-```
-#### Applying Customization to Test Method
-
-Annotate your test method to apply the customization:
-
-```java
-@ParameterizedTest
-@AutoSource
-@Customization(ProductGenerator.class)
-void testMethod(Product arg) {
-    assertTrue(arg.getSellingPriceAmount().compareTo(arg.getListPriceAmount()) < 0);
-}
-```
-
-#### Composite Customizer
-
-You can also create a composite customizer to apply multiple custom rules:
-
-```java
-public class DomainCustomizer extends CompositeCustomzer {
-    public DomainCustomizer() {
-        super(
-            new EmailGenerator(),
-            new UserGenerator(),
-            new SupplierGenerator(),
-            new ProductGenerator()
-        );
+    public String getMessage(String name) {
+        return "Hello, " + name + "!";
     }
 }
 ```
 
-And use it like this:
+If you want to test how your `MessageSupplier` bean behaves, you can use the `@UseBeans` annotation like this:
 
 ```java
-@ParameterizedTest
-@AutoSource
-@Customization(DomainCustomizer.class)
-void testMethod(Email email, User user, Supplier supplier, Product product) {
+@Test
+@AutoParams
+@UseBeans
+void testMethod(MessageSupplier service, String name) {
+    String message = service.getMessage(name);
+    assertTrue(message.startsWith("Hello"));
+    assertTrue(message.contains(name));
 }
 ```
 
-#### Settable Properties
+In this test:
 
-If your object follows the JavaBeans spec and has settable properties, you can use `InstancePropertyCustomizer`:
+- The `service` parameter is automatically resolved as a Spring bean.
+- The `name` parameter is randomly generated by AutoParams.
 
-```java
-@Getter
-@Setter
-public class User {
-    private Long id;
-    private String name;
-}
-```
+This allows you to seamlessly combine real Spring components with generated test data, making your tests both concise and expressive.
 
-```java
-@ParameterizedTest
-@AutoSource
-@Customization(InstancePropertyWriter.class)
-void testMethod(User user) {
-    assertNotNull(user.getId());
-    assertNotNull(user.getName());
-}
-```
+## `autoparams-mockito`
 
-#### Customization Scoping
+`autoparams-mockito` is an extension of AutoParams that enables the creation of test doubles for interfaces and abstract classes using Mockito, a widely used mocking framework for Java. It allows AutoParams to generate test doubles without requiring manual setup.
 
-The `@Customization` annotation can also be applied to individual parameters within a test method. Once applied, the customization will affect all following parameters, unless overridden.
-
-This feature provides a nuanced approach to data generation, enabling highly specialized and context-sensitive test scenarios.
-
-## autoparams-mockito
-
-autoparams-mockito is an extension of the AutoParams library that facilitates the creation of mocks for interfaces and abstract classes using Mockito, a popular mocking framework in Java. By integrating these two libraries, you can seamlessly generate mock objects for your tests.
+`autoparams-mockito` is an extension of AutoParams that enables the automatic creation of test doubles for interfaces and abstract classes using Mockito, a widely used mocking framework for Java. With this extension, AutoParams can generate test doubles seamlessly—with minimal setup.
 
 ### Install
 
@@ -690,7 +642,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>9.0.0</version>
+  <version>10.0.0</version>
 </dependency>
 ```
 
@@ -699,12 +651,12 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:9.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:10.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
 
-Consider a situation where you have an interface that abstracts certain services:
+Suppose you have an interface that represents a dependency:
 
 ```java
 public interface Dependency {
@@ -713,7 +665,7 @@ public interface Dependency {
 }
 ```
 
-You also have a system that relies on this `Dependency` interface:
+And a system under test that relies on this dependency:
 
 ```java
 public class SystemUnderTest {
@@ -730,30 +682,31 @@ public class SystemUnderTest {
 }
 ```
 
-To generate mock objects for interfaces or abstract classes, the autoparams-mockito extension provides the `MockitoCustomizer`. When you decorate your test method with `@Customization(MockitoCustomizer.class)`, the `@AutoSource` annotation will employ Mockito to create mock values for the specified parameters.
+By using the `@Customization(MockitoCustomizer.class`) annotation, AutoParams will automatically generate Mockito-based test doubles for eligible parameters (such as interfaces and abstract classes).
 
-Here's how you can apply this in practice:
+Here’s an example:
 
 ```java
-@ParameterizedTest
-@AutoSource
+@Test
+@AutoParams
 @Customization(MockitoCustomizer.class)
-void testUsingMockito(@Freeze Dependency stub, SystemUnderTest sut) {
+void testMethod(@Freeze Dependency stub, SystemUnderTest sut) {
     when(stub.getName()).thenReturn("World");
     assertEquals("Hello World", sut.getMessage());
 }
 ```
 
-In the above example:
+In this test:
 
-- The `stub` argument is a mock generated by Mockito, thanks to the `MockitoCustomizer`.
-- The `@Freeze` annotation ensures that this mock object (`stub`) is reused as a parameter for the construction of the `SystemUnderTest` object (`sut`).
+- `stub` is a test double automatically generated by Mockito.
+- The `@Freeze` annotation ensures that the same `stub` instance is injected into the `SystemUnderTest`.
+- You can configure the test double using standard Mockito syntax.
 
-This integration simplifies the creation of mock objects for parameterized tests, making testing more efficient and straightforward.
+This integration streamlines test setup, enabling you to focus on verifying behavior rather than wiring dependencies manually.
 
-## autoparams-lombok
+## `autoparams-lombok`
 
-autoparams-lombok is an extension for the AutoParams library that makes it easier to work with [Project Lombok](https://projectlombok.org/), a library that reduces boilerplate code in Java applications.
+`autoparams-lombok` is an extension for AutoParams that enhances compatibility with [Project Lombok](https://projectlombok.org/), a popular Java library for reducing boilerplate code.
 
 ### Install
 
@@ -765,7 +718,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>9.0.0</version>
+  <version>10.0.0</version>
 </dependency>
 ```
 
@@ -774,87 +727,98 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:9.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:10.0.0'
 ```
 
-### `BuilderCustomizer`
+### `BuilderCustomizer` Class
 
-When working with `@Builder` annotation, you can use the `BuilderCustomizer` to facilitate generating arbitrary objects for your tests. Here's an example:
+If you're using Lombok's `@Builder` annotation, the `BuilderCustomizer` allows AutoParams to generate arbitrary objects via the builder, making it easier to write tests without manually constructing instances.
 
-Suppose you have a `User` class like so:
+Suppose you have an `Order` class like this:
 
 ```java
-import lombok.Builder;
-import lombok.Getter;
-
 @Builder
 @Getter
-public class User {
-    private Long id;
-    private String name;
-    private String email;
+public class Order {
+
+    private final UUID id;
+    private final UUID productId;
+    private final Integer quantity;
+    private final UUID customerId;
+    private final BigDecimal orderedPriceAmount;
+    private final String comment;
 }
 ```
 
-You can use BuilderCustomizer to create objects of type User for your tests:
+To automatically generate `Order` instances, apply `BuilderCustomizer` in your test:
 
 ```java
 @ParameterizedTest
 @AutoSource
 @Customization(BuilderCustomizer.class)
-void testMethod(User user) {
-    assertThat(arg.getId()).isNotNull();
-    assertThat(arg.getName()).isNotNull();
-    assertThat(arg.getEmail()).isNotNull();
+void testMethod(Order order) {
+    assertThat(order.getId()).isNotNull();
+    assertThat(order.getProductId()).isNotNull();
+    assertThat(order.getQuantity()).isNotNull();
+    assertThat(order.getQuantity()).isPositive();
+    assertThat(order.getCustomerId()).isNotNull();
+    assertThat(order.getOrderedPriceAmount()).isNotNull();
+    assertThat(order.getComment()).isNotNull();
 }
 ```
+
+This eliminates the need to manually configure builder calls, helping you write cleaner and more maintainable tests.
 
 #### Custom Method Names
 
-If you've customized the builder method names using `builderMethodName` and `buildMethodName` in your Lombok `@Builder`, you'll need to create a subclass of `BuilderCustomizer` to handle the custom names:
+If your class uses custom builder method names via Lombok's `builderMethodName` and `buildMethodName` attributes, you can still use `BuilderCustomizer` by extending it to specify those method names.
+
+For example, consider the following `Shipment` class:
 
 ```java
-import lombok.Builder;
-import lombok.Getter;
-
-@Builder(builderMethodName = "getBuilder", buildMethodName = "createUser")
+@Builder(builderMethodName = "getBuilder", buildMethodName = "create")
 @Getter
-public class User {
-    private Long id;
-    private String name;
-    private String email;
+public class Shipment {
+
+    private final UUID id;
+    private final UUID orderId;
+    private final String postalCode;
+    private final String address;
+    private final Boolean shipped;
 }
 ```
 
-Here's how you can extend `BuilderCustomizer`:
+To make this compatible with AutoParams, define a custom subclass:
 
 ```java
-public class UserBuilderCustomizer extends BuilderCustomizer {
+public class ShipmentBuilderCustomizer extends BuilderCustomizer {
 
-    public UserBuilderCustomizer() {
-        super("getBuilder", "createUser");
+    public ShipmentBuilderCustomizer() {
+        super("getBuilder", "create");
     }
 }
 ```
 
-Now, you can use your customized `UserBuilderCustomizer` in your tests:
+Then apply it in your test:
 
 ```java
 @ParameterizedTest
 @AutoSource
-@Customization(UserBuilderCustomizer.class)
-void testMethod(User user) {
-    assertThat(arg.getId()).isNotNull();
-    assertThat(arg.getName()).isNotNull();
-    assertThat(arg.getEmail()).isNotNull();
+@Customization(ShipmentBuilderCustomizer.class)
+void testMethod(Shipment shipment) {
+    assertThat(shipment.getId()).isNotNull();
+    assertThat(shipment.getOrderId()).isNotNull();
+    assertThat(shipment.getPostalCode()).isNotNull();
+    assertThat(shipment.getAddress()).isNotNull();
+    assertThat(shipment.getShipped()).isNotNull();
 }
 ```
 
-This allows you to keep the benefits of using `@Builder` annotation while gaining the automatic generation capabilities provided by AutoParams.
+This allows you to use custom builder patterns while still benefiting from automatic object generation.
 
 ## autoparams-kotlin
 
-autoparams-kotlin is an extension designed to simplify and enhance the experience when working with Kotlin. 
+`autoparams-kotlin` is an extension of AutoParams that adds Kotlin-specific support for test data generation. It helps reduce boilerplate in Kotlin tests by generating values in a way that aligns with Kotlin’s language features.
 
 ### Install
 
@@ -866,7 +830,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>9.0.0</version>
+  <version>10.0.0</version>
 </dependency>
 ```
 
@@ -875,7 +839,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:9.0.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:10.0.0'
 ```
 
 #### Gradle (Kotlin)
@@ -883,28 +847,28 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:9.0.0'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:9.0.0")
+testImplementation("io.github.autoparams:autoparams-kotlin:10.0.0")
 ```
 
-### `@AutoKotlinSource` Annotation
+### `@AutoKotlinParams` Annotation
 
-Consider the example of a Point data class in Kotlin:
+Consider the following Kotlin data class:
 
 ```kotlin
 data class Point(val x: Int = 0, val y: Int = 0)
 ```
 
-In typical test scenarios, you might want to ensure the parameters passed to your test methods aren't just default or predictable values. The autoparams-kotlin extension can assist in such cases.
+Using default values in tests can result in limited test coverage. The `@AutoKotlinParams` annotation enables AutoParams to provide randomized arguments for Kotlin test methods, ensuring more varied and meaningful input.
 
-Below is a demonstration using the `@AutoKotlinSource` annotation provided by autoparams-kotlin. This annotation automatically generates random parameters for your test methods:
+Here's an example:
 
 ```kotlin
-@ParameterizedTest
-@AutoKotlinSource
+@Test
+@AutoKotlinParams
 fun testMethod(point: Point) {
     assertThat(point.x).isNotEqualTo(0)
     assertThat(point.y).isNotEqualTo(0)
 }
 ```
 
-In this example, the `testMethod` doesn't receive a hardcoded `Point` object. Instead, thanks to the `@AutoKotlinSource` annotation, a randomized `Point` object is passed in, making the test more robust by ensuring it isn't biased by predetermined values.
+In this test, the `point` parameter is automatically initialized with non-default, randomly generated values—allowing the test to cover a broader range of scenarios without requiring manual setup.

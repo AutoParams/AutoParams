@@ -7,8 +7,12 @@ plugins {
 dependencies {
   testImplementation(project(":autoparams"))
   testImplementation(project(":autoparams-spring"))
+  testImplementation(project(":autoparams-lombok"))
+  testImplementation(project(":autoparams-mockito"))
   implementation "org.springframework.boot:spring-boot-starter-web"
   testImplementation "org.springframework.boot:spring-boot-starter-test"
+  testCompileOnly("org.projectlombok:lombok")
+  testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 java {

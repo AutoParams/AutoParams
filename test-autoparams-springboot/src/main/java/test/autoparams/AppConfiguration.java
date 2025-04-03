@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfiguration {
 
     @Bean
-    public MessageSupplier messageSupplier() {
+    public HelloSupplier helloSupplier() {
         return new HelloSupplier();
     }
 }
