@@ -8,12 +8,12 @@ import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 
-class ArgumentGenerator implements ObjectGenerator {
+class FrozenArgumentGenerator implements ObjectGenerator {
 
     private final Predicate<ParameterQuery> predicate;
     private final Object argument;
 
-    public ArgumentGenerator(
+    public FrozenArgumentGenerator(
         Predicate<ParameterQuery> predicate,
         Object argument
     ) {

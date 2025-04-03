@@ -22,6 +22,6 @@ public final class FreezeArgument {
     }
 
     public ObjectGenerator to(Object value) {
-        return new ArgumentGenerator(predicate, value);
+        return new FrozenArgumentGenerator(predicate, value);
     }
 }
