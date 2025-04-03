@@ -34,6 +34,7 @@ public class SpecsForBuilderCustomizer {
         assertThat(order.getId()).isNotNull();
         assertThat(order.getProductId()).isNotNull();
         assertThat(order.getQuantity()).isNotNull();
+        assertThat(order.getQuantity()).isPositive();
         assertThat(order.getCustomerId()).isNotNull();
         assertThat(order.getOrderedPriceAmount()).isNotNull();
         assertThat(order.getComment()).isNotNull();

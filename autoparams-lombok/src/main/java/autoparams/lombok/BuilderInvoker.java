@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
@@ -67,7 +68,11 @@ class BuilderInvoker implements ObjectGenerator {
         Method setter,
         ResolutionContext context
     ) {
-        ObjectQuery query = () -> setter.getGenericParameterTypes()[0];
+        ParameterQuery query = new ParameterQuery(
+            setter.getParameters()[0],
+            0,
+            setter.getGenericParameterTypes()[0]
+        );
         Object argument = context.resolve(query);
         invoke(builder, setter, argument);
     }
