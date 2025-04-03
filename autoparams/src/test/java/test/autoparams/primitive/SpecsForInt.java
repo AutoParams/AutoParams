@@ -11,6 +11,7 @@ import autoparams.ResolutionContext;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -121,10 +122,9 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThatThrownBy(() -> context.resolve(query))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("min");
     }
 
     void excessivelyLargeMinConstraint(@Min(Integer.MAX_VALUE + 1L) int arg) {
@@ -141,10 +141,9 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThatThrownBy(() -> context.resolve(query))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("min");
     }
 
     void excessivelySmallMinConstraint(@Min(Integer.MIN_VALUE - 1L) int arg) {

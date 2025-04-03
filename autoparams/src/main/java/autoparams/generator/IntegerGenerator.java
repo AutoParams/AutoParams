@@ -33,7 +33,7 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
 
         int offset = max == MAX_VALUE ? -1 : 0;
         int origin = min + offset;
-        int bound = max + 1 + offset;
+        int bound = max + offset + 1;
         return random.nextInt(origin, bound) - offset;
     }
 
@@ -49,9 +49,9 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
             Max max = query.getParameter().getAnnotation(Max.class);
             return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
         } else if (min.value() < MIN_VALUE) {
-            throw new IllegalArgumentException("The max constraint underflowed.");
+            throw new IllegalArgumentException("The min constraint underflowed.");
         } else if (min.value() > MAX_VALUE) {
-            throw new IllegalArgumentException("The max constraint overflowed.");
+            throw new IllegalArgumentException("The min constraint overflowed.");
         } else {
             return (int) min.value();
         }

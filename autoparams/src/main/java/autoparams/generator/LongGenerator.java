@@ -30,7 +30,7 @@ final class LongGenerator extends PrimitiveTypeGenerator<Long> {
 
         long offset = max == MAX_VALUE ? -1 : 0;
         long origin = min + offset;
-        long bound = max + 1 + offset;
+        long bound = max + offset + 1;
         return random.nextLong(origin, bound) - offset;
     }
 
