@@ -18,7 +18,9 @@ import java.time.temporal.TemporalAmount;
 import java.util.HashSet;
 import java.util.UUID;
 
+import autoparams.AutoSource;
 import autoparams.Repeat;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -83,6 +85,24 @@ class SpecsForSimpleTypes {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(10)
+    void sut_creates_big_decimal_value_greater_than_or_equal_to_one(
+        BigDecimal value
+    ) {
+        assertThat(value).isGreaterThanOrEqualTo(BigDecimal.ONE);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(10)
+    void sut_creates_big_decimal_value_less_than_or_equal_to_one_million(
+        BigDecimal value
+    ) {
+        assertThat(value).isLessThanOrEqualTo(new BigDecimal("1000000"));
     }
 
     @AutoParameterizedTest
