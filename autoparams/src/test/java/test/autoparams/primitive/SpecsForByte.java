@@ -72,8 +72,9 @@ public class SpecsForByte {
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_positive_byte_value(byte arg) {
-        assertThat(arg).isPositive();
+    void sut_creates_positive_byte_value(ResolutionContext context) {
+        byte value = context.resolve(byte.class);
+        assertThat(value).isPositive();
     }
 
     @AutoParameterizedTest

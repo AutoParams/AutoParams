@@ -5,9 +5,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import autoparams.ObjectQuery;
-import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.MaxAnnotation.findMaxAnnotation;
+import static autoparams.generator.MinAnnotation.findMinAnnotation;
 import static java.lang.Byte.MAX_VALUE;
 import static java.lang.Byte.MIN_VALUE;
 
@@ -25,15 +26,9 @@ final class ByteGenerator extends PrimitiveTypeGenerator<Byte> {
     }
 
     private static byte getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMin((ParameterQuery) query)
-            : MIN_VALUE;
-    }
-
-    private static byte getMin(ParameterQuery query) {
-        Min min = query.getParameter().getAnnotation(Min.class);
+        Min min = findMinAnnotation(query);
         if (min == null) {
-            Max max = query.getParameter().getAnnotation(Max.class);
+            Max max = findMaxAnnotation(query);
             return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
         } else if (min.value() < MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
@@ -45,13 +40,7 @@ final class ByteGenerator extends PrimitiveTypeGenerator<Byte> {
     }
 
     private static byte getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getMax((ParameterQuery) query)
-            : MAX_VALUE;
-    }
-
-    private static byte getMax(ParameterQuery query) {
-        Max max = query.getParameter().getAnnotation(Max.class);
+        Max max = findMaxAnnotation(query);
         if (max == null) {
             return MAX_VALUE;
         } else if (max.value() < MIN_VALUE) {
