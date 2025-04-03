@@ -10,8 +10,10 @@ import autoparams.ValueAutoSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.Product;
+import test.autoparams.Seller;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+import static autoparams.customization.dsl.ParameterQueryDsl.declaringClassEquals;
 import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEndsWith;
 import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEndsWithIgnoreCase;
 import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEquals;
@@ -95,5 +97,22 @@ public class SpecsForParameterQueryDsl {
         );
         Product product = context.resolve(Product.class);
         assertThat(product.id()).isEqualTo(id);
+    }
+
+    @Test
+    @AutoParams
+    void declaringClassEquals_creates_predicate_correctly(
+        ResolutionContext context,
+        UUID id
+    ) {
+        context.applyCustomizer(
+            freezeArgument("id")
+                .where(declaringClassEquals(Product.class))
+                .to(id)
+        );
+        Product product = context.resolve(Product.class);
+        Seller seller = context.resolve(Seller.class);
+        assertThat(product.id()).isEqualTo(id);
+        assertThat(seller.id()).isNotEqualTo(id);
     }
 }

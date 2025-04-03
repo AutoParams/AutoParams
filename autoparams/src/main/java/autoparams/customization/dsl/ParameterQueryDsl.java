@@ -36,4 +36,10 @@ public class ParameterQueryDsl {
     ) {
         return new ParameterTypeMatches(parameterType);
     }
+
+    public static Predicate<ParameterQuery> declaringClassEquals(
+        Class<?> declaringClass
+    ) {
+        return new DeclaringClassEquals(declaringClass);
+    }
 }
