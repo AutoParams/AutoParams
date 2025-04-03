@@ -7,6 +7,9 @@ import autoparams.ParameterQuery;
 
 public class ParameterQueryDsl {
 
+    private ParameterQueryDsl() {
+    }
+
     public static Predicate<ParameterQuery> parameterNameEquals(
         String parameterName
     ) {
