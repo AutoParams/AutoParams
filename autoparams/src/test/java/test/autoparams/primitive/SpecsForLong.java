@@ -40,8 +40,9 @@ public class SpecsForLong {
 
     @AutoParameterizedTest
     @Repeat(10)
-    void sut_creates_positive_long_value(long arg) {
-        assertThat(arg).isPositive();
+    void sut_creates_positive_long_value(ResolutionContext context) {
+        long value = context.resolve(long.class);
+        assertThat(value).isPositive();
     }
 
     @AutoParameterizedTest
