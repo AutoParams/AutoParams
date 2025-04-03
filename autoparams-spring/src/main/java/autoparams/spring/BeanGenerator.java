@@ -1,6 +1,7 @@
 package autoparams.spring;
 
 import java.lang.reflect.Type;
+import java.util.function.Function;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
@@ -14,6 +15,34 @@ import static org.springframework.test.context.junit.jupiter.SpringExtension.get
 
 public final class BeanGenerator implements ObjectGenerator {
 
+    private record ConstantFunction<T, R>(R value) implements Function<T, R> {
+
+        @Override
+        public R apply(T t) {
+            return value;
+        }
+    }
+
+    private final Function<ResolutionContext, BeanFactory> beanFactoryResolver;
+
+    private BeanGenerator(
+        Function<ResolutionContext, BeanFactory> beanFactoryResolver
+    ) {
+        this.beanFactoryResolver = beanFactoryResolver;
+    }
+
+    public BeanGenerator(BeanFactory beanFactory) {
+        this(new ConstantFunction<>(beanFactory));
+    }
+
+    public BeanGenerator() {
+        this(BeanGenerator::getBeanFactory);
+    }
+
+    private static BeanFactory getBeanFactory(ResolutionContext context) {
+        return getApplicationContext(context.resolve(ExtensionContext.class));
+    }
+
     @Override
     public ObjectContainer generate(
         ObjectQuery query,
@@ -22,21 +51,14 @@ public final class BeanGenerator implements ObjectGenerator {
         return generate(context, query.getType());
     }
 
-    private static ObjectContainer generate(
-        ResolutionContext context,
-        Type type
-    ) {
+    private ObjectContainer generate(ResolutionContext context, Type type) {
         if (type.equals(ExtensionContext.class)) {
             return ObjectContainer.EMPTY;
         }
 
-        BeanFactory factory = getBeanFactory(context);
+        BeanFactory factory = beanFactoryResolver.apply(context);
         Object bean = getBeanIfAvailable(factory, type);
         return bean == null ? ObjectContainer.EMPTY : new ObjectContainer(bean);
-    }
-
-    private static BeanFactory getBeanFactory(ResolutionContext context) {
-        return getApplicationContext(context.resolve(ExtensionContext.class));
     }
 
     private static Object getBeanIfAvailable(BeanFactory factory, Type type) {
