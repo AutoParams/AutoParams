@@ -1,16 +1,20 @@
 package test.autoparams.generator;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import autoparams.AutoParams;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.generator.Factory;
+import autoparams.generator.ObjectGeneratorBase;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Product;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SpecsForFactory {
 
@@ -174,5 +178,108 @@ public class SpecsForFactory {
         Product product = factory.get();
         assertThat(product).isNotNull();
         assertThat(product.id()).isEqualTo(id);
+    }
+
+    @Test
+    void create_with_varargs_infers_class_correctly() {
+        Factory<Product> factory = Factory.create();
+        Product product = factory.get();
+        assertThat(product).isNotNull();
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    void create_with_varargs_has_null_guard() {
+        assertThatThrownBy(() -> Factory.create((Object[]) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    void create_with_varargs_has_guard_against_non_empty_array() {
+        assertThatThrownBy(() -> Factory.create(new String[1]))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    void create_with_varargs_has_guard_against_generic_class() {
+        assertThatThrownBy(() -> Factory.create(new ArrayList[0]))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    public static class StringFreezer extends ObjectGeneratorBase<String> {
+
+        private final String value;
+
+        public StringFreezer(String value) {
+            this.value = value;
+        }
+
+        @Override
+        protected String generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return value;
+        }
+    }
+
+    @Test
+    @AutoParams
+    void create_with_ResolutionContext_and_varargs_infers_class_correctly(
+        String value
+    ) {
+        ResolutionContext context = new ResolutionContext();
+        context.customize(new StringFreezer(value));
+
+        Factory<String> factory = Factory.create(context);
+
+        String actual = factory.get();
+        assertThat(actual).isEqualTo(value);
+    }
+
+    @Test
+    void create_with_ResolutionContext_and_varargs_has_guard_against_null_context() {
+        assertThatThrownBy(() -> Factory.create((ResolutionContext) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("context");
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    @AutoParams
+    void create_with_ResolutionContext_and_varargs_has_guard_against_null_typeHint(
+        ResolutionContext context
+    ) {
+        assertThatThrownBy(() -> Factory.create(context, (Object[]) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    @AutoParams
+    void create_with_ResolutionContext_and_varargs_has_guard_against_non_empty_array(
+        ResolutionContext context
+    ) {
+        assertThatThrownBy(() -> Factory.create(context, new String[1]))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    @AutoParams
+    void create_with_ResolutionContext_and_varargs_has_guard_against_generic_class(
+        ResolutionContext context
+    ) {
+        assertThatThrownBy(() -> Factory.create(context, new ArrayList[0]))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void create_has_guard_against_null_type() {
+        assertThatThrownBy(() -> Factory.create((Class<?>) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("type");
     }
 }

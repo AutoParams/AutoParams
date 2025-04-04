@@ -19,8 +19,51 @@ public final class Factory<T> implements Supplier<T> {
     private final Type type;
 
     Factory(ResolutionContext context, Type type) {
+        if (context == null) {
+            throw new IllegalArgumentException("The argument 'context' is null.");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("The argument 'type' is null.");
+        }
+
         this.context = context;
         this.type = type;
+    }
+
+    private static <T> Class<?> inferType(T[] typeHint) {
+        if (typeHint == null) {
+            throw new IllegalArgumentException("The argument 'typeHint' is null.");
+        } else if (typeHint.length > 0) {
+            String message = "The argument 'typeHint' must be empty."
+                + " It is used only to determine"
+                + " the type of the object to be created.";
+            throw new IllegalArgumentException(message);
+        }
+
+        Class<?> type = typeHint.getClass().getComponentType();
+        boolean isGeneric = type.getTypeParameters().length > 0;
+        if (isGeneric) {
+            String message = "To resolve an object of a generic class,"
+                + " use the method"
+                + " 'create(ResolutionContext, TypeReference<T>)' instead.";
+            throw new IllegalArgumentException(message);
+        }
+
+        return type;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Factory<T> create(T... typeHint) {
+        return (Factory<T>) create(inferType(typeHint));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Factory<T> create(
+        ResolutionContext context,
+        T... typeHint
+    ) {
+        return (Factory<T>) create(context, inferType(typeHint));
     }
 
     public static <T> Factory<T> create(Class<T> type) {
