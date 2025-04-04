@@ -22,6 +22,7 @@ jobs:
         :autoparams-kotlin:publish
         :autoparams-lombok:publish
         :autoparams-mockito:publish
+        :autoparams-spring:publish
         --info
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
