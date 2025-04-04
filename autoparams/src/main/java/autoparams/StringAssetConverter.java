@@ -35,10 +35,10 @@ import java.util.function.Function;
 
 import static java.util.Optional.empty;
 
-class DefaultStringConverter implements StringConverter {
+class StringAssetConverter implements AssetConverter {
 
-    private interface Converter extends
-        BiFunction<String, Type, Optional<Object>> {
+    private interface Converter
+        extends BiFunction<String, Type, Optional<Object>> {
 
         static Converter with(Converter function) {
             return function;
@@ -79,8 +79,8 @@ class DefaultStringConverter implements StringConverter {
         .and(Double.class, Double::parseDouble)
         .and(boolean.class, Boolean::parseBoolean)
         .and(Boolean.class, Boolean::parseBoolean)
-        .and(char.class, DefaultStringConverter::convertToCharacter)
-        .and(Character.class, DefaultStringConverter::convertToCharacter);
+        .and(char.class, StringAssetConverter::convertToCharacter)
+        .and(Character.class, StringAssetConverter::convertToCharacter);
 
     private static final Converter TIME_OBJECT_CONVERTER = Converter
         .with(Duration.class, Duration::parse)
@@ -99,29 +99,24 @@ class DefaultStringConverter implements StringConverter {
         .and(ZoneOffset.class, ZoneOffset::of);
 
     private static final Converter OTHER_BCL_OBJECT_CONVERTER = Converter
-        .with(DefaultStringConverter::convertToString)
-        .and(DefaultStringConverter::convertToEnum)
+        .with(StringAssetConverter::convertToString)
+        .and(StringAssetConverter::convertToEnum)
         .and(UUID.class, UUID::fromString)
         .and(Locale.class, Locale::new)
         .and(Currency.class, Currency::getInstance)
         .and(URI.class, URI::create)
-        .and(DefaultStringConverter::convertToURL)
+        .and(StringAssetConverter::convertToURL)
         .and(Path.class, Paths::get)
         .and(Charset.class, Charset::forName)
         .and(BigDecimal.class, BigDecimal::new)
         .and(BigInteger.class, BigInteger::new)
         .and(File.class, File::new)
-        .and(DefaultStringConverter::convertToClass);
+        .and(StringAssetConverter::convertToClass);
 
     private static final Converter CONVERTER = Converter
         .with(PRIMITIVE_CONVERTER)
         .and(TIME_OBJECT_CONVERTER)
         .and(OTHER_BCL_OBJECT_CONVERTER);
-
-    @Override
-    public Optional<Object> convert(String source, ObjectQuery query) {
-        return CONVERTER.apply(source, query.getType());
-    }
 
     private static Optional<Object> convertToString(String source, Type type) {
         return type.equals(String.class) ? Optional.of(source) : empty();
@@ -191,5 +186,18 @@ class DefaultStringConverter implements StringConverter {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Object convert(ParameterQuery query, Object asset) {
+        return asset instanceof String ? convert(query, (String) asset) : asset;
+    }
+
+    private static Object convert(ParameterQuery query, String asset) {
+        return CONVERTER.apply(asset, query.getType()).orElseThrow(() -> {
+            String message = "Cannot convert \"" + asset
+                + "\" to an argument for " + query + ".";
+            return new IllegalArgumentException(message);
+        });
     }
 }

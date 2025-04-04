@@ -6,7 +6,7 @@ final class ServiceGenerator extends CompositeObjectGenerator {
         super(
             new ConstructorExtractorGenerator(),
             new ConstructorResolverGenerator(),
-            new StringConverterGenerator(),
+            new AssetConverterGenerator(),
             new SupportedParameterPredicateGenerator()
         );
     }

@@ -110,7 +110,7 @@ class TestResolutionContext extends ResolutionContext {
     private Object resolveArgument(ParameterQuery query, Object[] asset) {
         applyAnnotatedCustomizers(query.getParameter());
         Object argument = query.getIndex() < asset.length
-            ? convertArgument(asset[query.getIndex()], query)
+            ? convertAsset(query, asset[query.getIndex()])
             : resolve(query);
         recycleArgument(argument, query);
         return argument;
@@ -143,27 +143,14 @@ class TestResolutionContext extends ResolutionContext {
         applyCustomizer(recycler.recycle(argument, query.getParameter()));
     }
 
-    private Object convertArgument(Object source, ParameterQuery query) {
-        if (source instanceof Named<?>) {
-            return convertArgument((Named<?>) source, query);
-        } else if (source instanceof String) {
-            return convertArgument((String) source, query);
-        } else {
-            return source;
-        }
+    private Object convertAsset(ParameterQuery query, Object asset) {
+        return asset instanceof Named<?>
+            ? convertAsset(query, (Named<?>) asset)
+            : resolve(AssetConverter.class).convert(query, asset);
     }
 
-    private Object convertArgument(Named<?> source, ParameterQuery query) {
-        Object payload = convertArgument(source.getPayload(), query);
-        return Named.of(source.getName(), payload);
-    }
-
-    private Object convertArgument(String source, ParameterQuery query) {
-        StringConverter converter = resolve(StringConverter.class);
-        return converter.convert(source, query).orElseThrow(() -> {
-            String message = "Cannot convert \"" + source
-                + "\" to an argument for " + query.getParameter() + ".";
-            return new IllegalArgumentException(message);
-        });
+    private Object convertAsset(ParameterQuery query, Named<?> namedAsset) {
+        Object asset = convertAsset(query, namedAsset.getPayload());
+        return Named.of(namedAsset.getName(), asset);
     }
 }
