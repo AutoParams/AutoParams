@@ -20,6 +20,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SpecsForResolutionContext {
 
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    void constructor_has_guard_clause_for_generator() {
+        ObjectProcessor processor = ObjectProcessor.DEFAULT;
+        assertThatThrownBy(() -> new ResolutionContext(null, processor))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("generator");
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    void constructor_has_guard_clause_for_processor() {
+        ObjectGenerator generator = ObjectGenerator.DEFAULT;
+        assertThatThrownBy(() -> new ResolutionContext(generator, null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("processor");
+    }
+
     @ParameterizedTest
     @AutoSource
     void resolve_has_guard_clause(ResolutionContext sut) {

@@ -17,6 +17,14 @@ public class ResolutionContext {
         ObjectGenerator generator,
         ObjectProcessor processor
     ) {
+        if (generator == null) {
+            throw new IllegalArgumentException("The argument 'generator' is null.");
+        }
+
+        if (processor == null) {
+            throw new IllegalArgumentException("The argument 'processor' is null.");
+        }
+
         this.generator = generator;
         this.processor = processor;
     }
