@@ -6,9 +6,9 @@ plugins {
 
 dependencies {
   api "io.github.autoparams:autoparams:[10.0.0, 11.0.0)"
-  api "io.github.autoparams:autoparams-kotlin:[8.3.0, 9.0.0)"
-  api "io.github.autoparams:autoparams-lombok:[8.3.0, 9.0.0)"
-  api "io.github.autoparams:autoparams-mockito:[8.3.0, 9.0.0)"
+  api "io.github.autoparams:autoparams-kotlin:[10.0.0, 11.0.0)"
+  api "io.github.autoparams:autoparams-lombok:[10.0.0, 11.0.0)"
+  api "io.github.autoparams:autoparams-mockito:[10.0.0, 11.0.0)"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
 }
 
