@@ -54,6 +54,37 @@ class SpecsForResolutionContext {
         assertThat(actual.getValue()).isEqualTo(value);
     }
 
+    @Test
+    void resolve_with_varargs_infers_class_correctly() {
+        ResolutionContext sut = new ResolutionContext();
+        ComplexObject value = sut.resolve();
+        assertThat(value).isNotNull().isInstanceOf(ComplexObject.class);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    void resolve_with_varargs_has_null_guard() {
+        ResolutionContext sut = new ResolutionContext();
+        assertThatThrownBy(() -> sut.resolve((Object[]) null))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    void resolve_with_varargs_has_guard_against_non_empty_array() {
+        ResolutionContext sut = new ResolutionContext();
+        assertThatThrownBy(() -> sut.resolve(new String[1]))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("typeHint");
+    }
+
+    @Test
+    void resolve_with_varargs_has_guard_against_generic_class() {
+        ResolutionContext sut = new ResolutionContext();
+        assertThatThrownBy(() -> sut.resolve(new GenericBag[0]))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
     @SuppressWarnings("ConstantConditions")
     @ParameterizedTest
     @AutoSource

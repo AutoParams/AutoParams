@@ -26,6 +26,29 @@ public class ResolutionContext {
     }
 
     @SuppressWarnings("unchecked")
+    @SafeVarargs
+    public final <T> T resolve(T... typeHint) {
+        if (typeHint == null) {
+            throw new IllegalArgumentException("The argument 'typeHint' is null.");
+        } else if (typeHint.length > 0) {
+            String message = "The argument 'typeHint' must be empty."
+                + " It is used only to determine"
+                + " the type of the object to be created.";
+            throw new IllegalArgumentException(message);
+        }
+
+        Class<?> type = typeHint.getClass().getComponentType();
+        boolean isGeneric = type.getTypeParameters().length > 0;
+        if (isGeneric) {
+            String message = "To resolve an object of a generic class,"
+                + " use the method 'resolve(TypeReference<T>)' instead.";
+            throw new IllegalArgumentException(message);
+        }
+
+        return (T) resolve(type);
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> T resolve(Class<T> type) {
         return (T) resolve(new DefaultObjectQuery(type));
     }
