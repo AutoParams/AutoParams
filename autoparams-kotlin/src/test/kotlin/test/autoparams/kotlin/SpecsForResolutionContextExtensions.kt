@@ -2,44 +2,29 @@ package test.autoparams.kotlin
 
 import autoparams.ResolutionContext
 import autoparams.generator.ObjectContainer
-import autoparams.kotlin.AutoKotlinSource
-import autoparams.kotlin.generate
+import autoparams.kotlin.AutoKotlinParams
 import autoparams.kotlin.resolve
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.extension.ExtensionContext
-import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.api.Test
 
 class SpecsForResolutionContextExtensions {
 
-    @Suppress("DEPRECATION")
-    @ParameterizedTest
-    @AutoKotlinSource
-    fun `generate correctly returns value of reified type`(
-        extensionContext: ExtensionContext,
-        value: Int,
-    ) {
-        val sut = ResolutionContext(
-            extensionContext,
-            { _, _ -> ObjectContainer(value) },
-            { _, _, _ -> }
-        )
+    @Test
+    @AutoKotlinParams
+    fun `generate correctly returns value of reified type`(value: Int) {
+        val sut = ResolutionContext()
+        sut.applyCustomizer { _, _ -> ObjectContainer(value) }
 
-        val actual: Int = sut.generate()
+        val actual: Int = sut.resolve()
 
         assertThat(actual).isEqualTo(value)
     }
 
-    @ParameterizedTest
-    @AutoKotlinSource
-    fun `resolve correctly returns value of reified type`(
-        extensionContext: ExtensionContext,
-        value: Int,
-    ) {
-        val sut = ResolutionContext(
-            extensionContext,
-            { _, _ -> ObjectContainer(value) },
-            { _, _, _ -> }
-        )
+    @Test
+    @AutoKotlinParams
+    fun `resolve correctly returns value of reified type`(value: Int) {
+        val sut = ResolutionContext()
+        sut.applyCustomizer { _, _ -> ObjectContainer(value) }
 
         val actual: Int = sut.resolve()
 

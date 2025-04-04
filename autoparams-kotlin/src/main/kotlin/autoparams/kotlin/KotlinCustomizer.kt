@@ -4,5 +4,6 @@ import autoparams.customization.CompositeCustomizer
 
 class KotlinCustomizer : CompositeCustomizer(
     KotlinConstructorExtractorGenerator(),
-    KotlinClassCustomizer()
+    KotlinClassGenerator(),
+    KotlinClassAssetCustomizer()
 )
