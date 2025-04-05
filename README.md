@@ -597,6 +597,7 @@ public interface MessageSupplier {
 ```
 
 ```java
+@Component
 public class HelloSupplier implements MessageSupplier {
 
     @Override
