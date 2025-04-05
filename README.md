@@ -610,13 +610,17 @@ public class HelloSupplier implements MessageSupplier {
 If you want to test how your `MessageSupplier` bean behaves, you can use the `@UseBeans` annotation like this:
 
 ```java
-@Test
-@AutoParams
-@UseBeans
-void testMethod(MessageSupplier service, String name) {
-    String message = service.getMessage(name);
-    assertTrue(message.startsWith("Hello"));
-    assertTrue(message.contains(name));
+@SpringBootTest
+public class TestClass {
+
+    @Test
+    @AutoParams
+    @UseBeans
+    void testMethod(MessageSupplier service, String name) {
+        String message = service.getMessage(name);
+        assertTrue(message.startsWith("Hello"));
+        assertTrue(message.contains(name));
+    }
 }
 ```
 
