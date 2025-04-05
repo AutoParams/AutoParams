@@ -816,7 +816,7 @@ void testMethod(Shipment shipment) {
 
 This allows you to use custom builder patterns while still benefiting from automatic object generation.
 
-## autoparams-kotlin
+## `autoparams-kotlin`
 
 `autoparams-kotlin` is an extension of AutoParams that adds Kotlin-specific support for test data generation. It helps reduce boilerplate in Kotlin tests by generating values in a way that aligns with Kotlin’s language features.
 
