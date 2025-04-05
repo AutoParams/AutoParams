@@ -1,5 +1,7 @@
 package test.autoparams.customization;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -87,5 +89,17 @@ public class SpecsForUseImplementation {
     ) {
         assertThat(intSupplier.getAsInt()).isEqualTo(1024);
         assertThat(integerSupplier.get()).isEqualTo(2048);
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @AutoParams
+    @UseImplementation(IntegerFactory.class)
+    public @interface AutoParamsWithUseImplementation {
+    }
+
+    @Test
+    @AutoParamsWithUseImplementation
+    void sut_can_be_used_on_annotation(Supplier<Integer> supplier) {
+        assertThat(supplier.get()).isEqualTo(2048);
     }
 }
