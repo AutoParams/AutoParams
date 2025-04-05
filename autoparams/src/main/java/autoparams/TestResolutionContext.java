@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoparams.AnnotationScanner.Edge;
+import autoparams.customization.AnnotatedElementConsumer;
 import autoparams.customization.ArgumentRecycler;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
@@ -46,7 +47,7 @@ class TestResolutionContext extends ResolutionContext {
             if (edge.getCurrent() instanceof Customization) {
                 useCustomization(edge);
             } else if (edge.getCurrent() instanceof CustomizerSource) {
-                useCustomizerSource(edge);
+                useCustomizerSource(element, edge);
             }
         }
     }
@@ -58,11 +59,24 @@ class TestResolutionContext extends ResolutionContext {
         }
     }
 
-    private void useCustomizerSource(Edge<Annotation> edge) {
+    private void useCustomizerSource(
+        AnnotatedElement element,
+        Edge<Annotation> edge
+    ) {
         CustomizerSource source = (CustomizerSource) edge.getCurrent();
         CustomizerFactory factory = instantiate(source.value());
         edge.useParent(parent -> consumeAnnotationIfMatch(factory, parent));
+        consumeAnnotatedElementIfMatch(factory, element);
         applyCustomizer(factory.createCustomizer());
+    }
+
+    private static void consumeAnnotatedElementIfMatch(
+        CustomizerFactory factory,
+        AnnotatedElement element
+    ) {
+        if (factory instanceof AnnotatedElementConsumer) {
+            ((AnnotatedElementConsumer) factory).accept(element);
+        }
     }
 
     public Arguments getTestCase(Arguments asset) {

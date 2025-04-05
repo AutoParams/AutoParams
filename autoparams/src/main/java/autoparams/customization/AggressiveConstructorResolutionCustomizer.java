@@ -16,7 +16,7 @@ final class AggressiveConstructorResolutionCustomizer implements Customizer {
 
     private final List<Class<?>> types;
 
-    public AggressiveConstructorResolutionCustomizer(Class<?>[] types) {
+    public AggressiveConstructorResolutionCustomizer(Class<?>... types) {
         this.types = asList(types);
     }
 
