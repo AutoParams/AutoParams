@@ -1,6 +1,7 @@
 package test.autoparams;
 
 import java.beans.ConstructorProperties;
+import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import autoparams.AutoSource;
 import autoparams.CsvAutoSource;
 import autoparams.MethodAutoSource;
 import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.Repeat;
 import autoparams.ResolutionContext;
 import autoparams.ValueAutoSource;
@@ -21,6 +23,8 @@ import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
 import autoparams.customization.Freeze;
 import autoparams.generator.Factory;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectGeneratorBase;
 import autoparams.lombok.BuilderCustomizer;
 import autoparams.mockito.MockitoCustomizer;
@@ -221,9 +225,49 @@ public class Examples {
         assertEquals(BigDecimal.ZERO, product2.getPriceAmount());
     }
 
+    public record ProductArgumentFreezer(Product product) implements ObjectGenerator {
+
+        @Override
+        public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+            if (query instanceof ParameterQuery parameterQuery) {
+                Parameter parameter = parameterQuery.getParameter();
+                if (parameter.isNamePresent() && parameter.getName().equals("product")) {
+                    return new ObjectContainer(product);
+                }
+            }
+
+            return ObjectContainer.EMPTY;
+        }
+    }
+
+    public record RatingArgumentFreezer(int rating) implements ObjectGenerator {
+
+        @Override
+        public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
+            if (query instanceof ParameterQuery parameterQuery) {
+                Parameter parameter = parameterQuery.getParameter();
+                if (parameter.isNamePresent() && parameter.getName().equals("rating")) {
+                    return new ObjectContainer(rating);
+                }
+            }
+
+            return ObjectContainer.EMPTY;
+        }
+    }
+
     @Test
     @AutoParams
-    void testMethodDsl(Product product, int rating, ResolutionContext context) {
+    void testMethodFreezers(Product product, @Max(5) int rating, ResolutionContext context) {
+        context.applyCustomizer(new ProductArgumentFreezer(product));
+        context.applyCustomizer(new RatingArgumentFreezer(rating));
+        Review review = context.resolve();
+        assertSame(product, review.getProduct());
+        assertEquals(rating, review.getRating());
+    }
+
+    @Test
+    @AutoParams
+    void testMethodDsl(Product product, @Max(5) int rating, ResolutionContext context) {
         context.customize(
             freezeArgument("product").to(product),
             freezeArgument("rating").in(Review.class).to(rating)

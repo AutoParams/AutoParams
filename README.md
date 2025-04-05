@@ -342,7 +342,7 @@ public class TestClass {
 
     @Test
     @AutoParams
-    void testMethod(Product product, int rating, ResolutionContext context) {
+    void testMethod(Product product, @Max(5) int rating, ResolutionContext context) {
         context.customize(
             freezeArgument("product").to(product),
             freezeArgument("rating").in(Review.class).to(rating)
