@@ -40,6 +40,7 @@ public class Product {
 public class Review {
 
     private final UUID id;
+    private final UUID reviewerId;
     private final Product product;
     private final int rating;
     private final String comment;
@@ -238,13 +239,14 @@ public class ReviewGenerator extends ObjectGeneratorBase<Review> {
     @Override
     protected Review generateObject(ObjectQuery query, ResolutionContext context) {
         UUID id = context.resolve();
+        UUID reviewerId = context.resolve();
         Product product = context.resolve();
         String comment = context.resolve();
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
         int rating = random.nextInt(1, 5 + 1);
 
-        return new Review(id, product, rating, comment);
+        return new Review(id, reviewerId, product, rating, comment);
     }
 }
 ```
@@ -342,7 +344,7 @@ public class TestClass {
 
     @Test
     @AutoParams
-    void testMethod(Product product, int rating, ResolutionContext context) {
+    void testMethod(Product product, @Max(5) int rating, ResolutionContext context) {
         context.customize(
             freezeArgument("product").to(product),
             freezeArgument("rating").in(Review.class).to(rating)
