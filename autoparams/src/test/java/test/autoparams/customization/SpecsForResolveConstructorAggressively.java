@@ -1,7 +1,12 @@
 package test.autoparams.customization;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import autoparams.AutoParams;
 import autoparams.customization.ResolveConstructorAggressively;
 import lombok.Getter;
+import org.junit.jupiter.api.Test;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,5 +51,17 @@ public class SpecsForResolveConstructorAggressively {
     @ResolveConstructorAggressively(StringContainer1.class)
     void sut_applies_strategy_to_only_specified_type(StringContainer2 actual) {
         assertThat(actual.getValue()).isNull();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @AutoParams
+    @ResolveConstructorAggressively(StringContainer1.class)
+    public @interface AutoParamsWithResolveConstructorAggressively {
+    }
+
+    @Test
+    @AutoParamsWithResolveConstructorAggressively
+    void sut_can_be_used_on_annotation(StringContainer1 actual) {
+        assertThat(actual.getValue()).isNotNull();
     }
 }
