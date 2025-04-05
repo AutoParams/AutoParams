@@ -77,4 +77,15 @@ public class SpecsForUseImplementation {
         Integer actual = supplier.get();
         assertThat(actual).isEqualTo(2048);
     }
+
+    @Test
+    @AutoParams
+    @UseImplementation({ IntFactory.class, IntegerFactory.class })
+    void sut_provides_implementation_for_multiple_interfaces_correctly(
+        IntSupplier intSupplier,
+        Supplier<Integer> integerSupplier
+    ) {
+        assertThat(intSupplier.getAsInt()).isEqualTo(1024);
+        assertThat(integerSupplier.get()).isEqualTo(2048);
+    }
 }

@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@CustomizerSource(ImplementationGeneratorFactory.class)
+@CustomizerSource(ImplementationGeneratorCompositeFactory.class)
 public @interface UseImplementation {
 
-    Class<?> value();
+    Class<?>[] value();
 }
