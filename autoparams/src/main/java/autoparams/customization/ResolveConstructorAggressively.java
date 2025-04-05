@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @CustomizerSource(AggressiveConstructorResolutionCustomizerFactory.class)
 public @interface ResolveConstructorAggressively {
 
-    Class<?> value();
+    Class<?>[] value();
 }

@@ -1,5 +1,6 @@
 package autoparams.customization;
 
+import java.util.List;
 import java.util.Optional;
 
 import autoparams.ResolutionContext;
@@ -9,12 +10,14 @@ import autoparams.generator.ConstructorResolver;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 
+import static java.util.Arrays.asList;
+
 final class AggressiveConstructorResolutionCustomizer implements Customizer {
 
-    private final Class<?> target;
+    private final List<Class<?>> types;
 
-    public AggressiveConstructorResolutionCustomizer(Class<?> target) {
-        this.target = target;
+    public AggressiveConstructorResolutionCustomizer(Class<?>[] types) {
+        this.types = asList(types);
     }
 
     @Override
@@ -29,6 +32,7 @@ final class AggressiveConstructorResolutionCustomizer implements Customizer {
                     new CompositeConstructorResolver(head, next)
                 );
             }
+
             return generator.generate(query, context);
         };
     }
@@ -46,7 +50,7 @@ final class AggressiveConstructorResolutionCustomizer implements Customizer {
     }
 
     private ConstructorResolver bindResolver(ConstructorResolver resolver) {
-        return type -> type.equals(target)
+        return type -> types.contains(type)
             ? resolver.resolve(type)
             : Optional.empty();
     }

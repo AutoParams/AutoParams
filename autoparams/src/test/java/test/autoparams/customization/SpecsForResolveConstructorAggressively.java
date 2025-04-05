@@ -74,4 +74,18 @@ public class SpecsForResolveConstructorAggressively {
         assertThat(container1.getValue()).isNull();
         assertThat(container2.getValue()).isNotNull();
     }
+
+    @Test
+    @AutoParams
+    @ResolveConstructorAggressively({
+        StringContainer1.class,
+        StringContainer2.class
+    })
+    void sut_provides_implementation_for_multiple_types_correctly(
+        StringContainer1 container1,
+        StringContainer2 container2
+    ) {
+        assertThat(container1.getValue()).isNotNull();
+        assertThat(container2.getValue()).isNotNull();
+    }
 }
