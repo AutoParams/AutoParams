@@ -64,4 +64,14 @@ public class SpecsForResolveConstructorAggressively {
     void sut_can_be_used_on_annotation(StringContainer1 actual) {
         assertThat(actual.getValue()).isNotNull();
     }
+
+    @Test
+    @AutoParams
+    void sut_can_be_used_on_parameter(
+        StringContainer1 container1,
+        @ResolveConstructorAggressively(StringContainer1.class) StringContainer1 container2
+    ) {
+        assertThat(container1.getValue()).isNull();
+        assertThat(container2.getValue()).isNotNull();
+    }
 }
