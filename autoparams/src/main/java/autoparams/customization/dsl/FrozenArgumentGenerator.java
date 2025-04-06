@@ -2,13 +2,12 @@ package autoparams.customization.dsl;
 
 import java.util.function.Predicate;
 
-import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
+import autoparams.generator.ArgumentGenerator;
 import autoparams.generator.ObjectContainer;
-import autoparams.generator.ObjectGenerator;
 
-class FrozenArgumentGenerator implements ObjectGenerator {
+class FrozenArgumentGenerator implements ArgumentGenerator {
 
     private final Predicate<ParameterQuery> predicate;
     private final Object argument;
@@ -23,15 +22,9 @@ class FrozenArgumentGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
-        ObjectQuery query,
+        ParameterQuery query,
         ResolutionContext context
     ) {
-        return query instanceof ParameterQuery
-            ? generate((ParameterQuery) query)
-            : ObjectContainer.EMPTY;
-    }
-
-    private ObjectContainer generate(ParameterQuery query) {
         return predicate.test(query)
             ? new ObjectContainer(argument)
             : ObjectContainer.EMPTY;
