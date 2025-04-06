@@ -5,14 +5,13 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.UUID;
 
-import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static autoparams.generator.Sampling.sample;
 import static java.util.Arrays.stream;
 
-final class EmailAddressStringGenerator implements ObjectGenerator {
+final class EmailAddressStringGenerator implements ArgumentGenerator {
 
     private static final String[] SINGULAR_SUFFIXES = {
         "email",
@@ -28,23 +27,21 @@ final class EmailAddressStringGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
-        ObjectQuery query,
-        ResolutionContext context
-    ) {
-        return query.getType().equals(String.class)
-            && query instanceof ParameterQuery
-            ? generate((ParameterQuery) query, context)
-            : ObjectContainer.EMPTY;
-    }
-
-    private ObjectContainer generate(
         ParameterQuery query,
         ResolutionContext context
     ) {
-        return isEmailAddressParameter(query)
-            || isPropertyOfEmailAddressContainer(query)
+        return typeMatches(query) && nameMatches(query)
             ? generateEmailAddress(context)
             : ObjectContainer.EMPTY;
+    }
+
+    private static boolean typeMatches(ParameterQuery query) {
+        return query.getType().equals(String.class);
+    }
+
+    private boolean nameMatches(ParameterQuery query) {
+        return isEmailAddressParameter(query)
+            || isPropertyOfEmailAddressContainer(query);
     }
 
     private boolean isEmailAddressParameter(ParameterQuery query) {

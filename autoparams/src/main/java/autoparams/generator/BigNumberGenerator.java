@@ -1,8 +1,8 @@
 package autoparams.generator;
 
-final class NumberGenerator extends CompositeObjectGenerator {
+final class BigNumberGenerator extends CompositeObjectGenerator {
 
-    public NumberGenerator() {
+    public BigNumberGenerator() {
         super(
             new BigIntegerGenerator(),
             new BigDecimalGenerator()

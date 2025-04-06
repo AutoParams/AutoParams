@@ -5,35 +5,32 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.net.URI;
 
-import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static java.util.Arrays.stream;
 
-final class URIStringGenerator implements ObjectGenerator {
+final class URIStringGenerator implements ArgumentGenerator {
 
     private static final String[] SINGULAR_SUFFIXES = { "uri", "url" };
     private static final String[] PLURAL_SUFFIXES = { "uris", "urls" };
 
     @Override
     public ObjectContainer generate(
-        ObjectQuery query,
-        ResolutionContext context
-    ) {
-        return query.getType().equals(String.class)
-            && query instanceof ParameterQuery
-            ? generate((ParameterQuery) query, context)
-            : ObjectContainer.EMPTY;
-    }
-
-    private ObjectContainer generate(
         ParameterQuery query,
         ResolutionContext context
     ) {
-        return isUriParameter(query) || isPropertyOfUriContainer(query)
+        return typeMatches(query) && nameMatches(query)
             ? new ObjectContainer(context.resolve(URI.class).toString())
             : ObjectContainer.EMPTY;
+    }
+
+    private static boolean typeMatches(ParameterQuery query) {
+        return query.getType().equals(String.class);
+    }
+
+    private boolean nameMatches(ParameterQuery query) {
+        return isUriParameter(query) || isPropertyOfUriContainer(query);
     }
 
     private boolean isUriParameter(ParameterQuery query) {

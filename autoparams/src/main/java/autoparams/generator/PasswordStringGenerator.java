@@ -3,23 +3,16 @@ package autoparams.generator;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
-final class PasswordStringGenerator implements ObjectGenerator {
+final class PasswordStringGenerator implements ArgumentGenerator {
 
     @Override
     public ObjectContainer generate(
-        ObjectQuery query,
+        ParameterQuery query,
         ResolutionContext context
     ) {
-        return query instanceof ParameterQuery
-            ? generate((ParameterQuery) query)
-            : ObjectContainer.EMPTY;
-    }
-
-    private ObjectContainer generate(ParameterQuery query) {
         return query
             .getParameterName()
             .filter(PasswordStringGenerator::parameterNameMatch)
