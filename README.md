@@ -477,7 +477,7 @@ In this example, the `testDataSource` method provides values for the `name` and 
 
 This setup allows you to blend manually specified values with automatically generated ones, giving you both precision and variability in your parameterized tests.
 
-#### @Repeat Annotation
+#### `@Repeat` Annotation
 
 The `@Repeat` annotation allows you to run a test multiple times, generating fresh random values for unspecified parameters on each run.
 
