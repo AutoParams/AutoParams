@@ -273,8 +273,8 @@ public class Examples {
     @AutoParams
     void testMethodDsl(Product product, @Max(5) int rating, ResolutionContext context) {
         context.customize(
-            freezeArgument("product").to(product),
-            freezeArgument("rating").in(Review.class).to(rating)
+            freezeArgument("product").in(Review.class).to(product),
+            freezeArgument("rating").to(rating)
         );
         Review review = context.resolve();
         assertSame(product, review.getProduct());
