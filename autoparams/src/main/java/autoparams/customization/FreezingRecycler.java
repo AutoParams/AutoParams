@@ -4,6 +4,8 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.TypeLens;
@@ -13,42 +15,42 @@ final class FreezingRecycler implements
     ArgumentRecycler,
     AnnotationConsumer<Freeze> {
 
-    private static final Predicate<Type> NEGATIVE = type -> false;
+    private static final Predicate<ObjectQuery> NEGATIVE = new Negative<>();
 
     private boolean byExactType = true;
     private boolean byImplementedInterfaces = false;
 
     @Override
     public Customizer recycle(Object argument, Parameter parameter) {
-        return getGenerator(parameter, argument);
+        return getGenerator(argument, parameter);
     }
 
-    private ObjectGenerator getGenerator(Parameter parameter, Object argument) {
-        Predicate<Type> predicate = NEGATIVE
-            .or(type -> matchExactType(parameter, type))
-            .or(type -> matchInterfaces(parameter, type));
+    private ObjectGenerator getGenerator(Object argument, Parameter parameter) {
+        Predicate<ObjectQuery> predicate = NEGATIVE
+            .or(query -> matchExactType(parameter, query))
+            .or(query -> matchInterface(parameter, query));
 
-        return (query, context) -> predicate.test(query.getType())
+        return (query, context) -> predicate.test(query)
             ? new ObjectContainer(argument)
             : ObjectContainer.EMPTY;
     }
 
-    private boolean matchExactType(Parameter parameter, Type requestedType) {
+    private boolean matchExactType(Parameter parameter, ObjectQuery query) {
         if (byExactType == false) {
             return false;
         }
 
         Type parameterType = parameter.getParameterizedType();
-        return requestedType.equals(parameterType);
+        return query.getType().equals(parameterType);
     }
 
-    private boolean matchInterfaces(Parameter parameter, Type type) {
+    private boolean matchInterface(Parameter parameter, ObjectQuery query) {
         if (byImplementedInterfaces == false) {
             return false;
         }
 
         Type parameterType = parameter.getParameterizedType();
-        return new TypeLens(parameterType).implementsInterface(type);
+        return new TypeLens(parameterType).implementsInterface(query.getType());
     }
 
     @Override
