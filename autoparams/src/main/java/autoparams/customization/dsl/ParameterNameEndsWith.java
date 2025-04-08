@@ -14,9 +14,7 @@ class ParameterNameEndsWith implements Predicate<ParameterQuery> {
 
     @Override
     public boolean test(ParameterQuery query) {
-        return query
-            .getParameterName()
-            .filter(name -> name.endsWith(parameterNameSuffix))
-            .isPresent();
+        String name = query.getRequiredParameterName();
+        return name.endsWith(parameterNameSuffix);
     }
 }

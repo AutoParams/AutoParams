@@ -21,7 +21,7 @@ import static autoparams.customization.dsl.ParameterQueryDsl.parameterNameEquals
 import static autoparams.customization.dsl.ParameterQueryDsl.parameterTypeMatches;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpecsForParameterQueryDsl {
+public class SpecsForParameterQueryDslUsingRecords {
 
     @Test
     @AutoParams

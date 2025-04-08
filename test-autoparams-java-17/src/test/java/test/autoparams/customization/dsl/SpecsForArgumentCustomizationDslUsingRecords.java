@@ -18,7 +18,7 @@ import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgume
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgumentOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpecsForArgumentCustomizationDsl {
+public class SpecsForArgumentCustomizationDslUsingRecords {
 
     @Test
     @AutoParams

@@ -14,9 +14,7 @@ class ParameterNameEquals implements Predicate<ParameterQuery> {
 
     @Override
     public boolean test(ParameterQuery query) {
-        return query
-            .getParameterName()
-            .filter(parameterName::equals)
-            .isPresent();
+        String name = query.getRequiredParameterName();
+        return name.equals(parameterName);
     }
 }
