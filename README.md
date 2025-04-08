@@ -364,7 +364,7 @@ In this example, we use the `freezeArgument` static method from the `ArgumentCus
 This approach is especially useful for quickly fixing values without defining a full custom generator or specifying customization at the test method level. It improves the readability and maintainability of localized scenarios by keeping custom logic close to the test logic.
 
 > **Note**  
-> The `freezeArgument("name")` method relies on the availability of parameter names at runtime. However, Java does not include parameter names in bytecode by default. To ensure this works correctly, you can:
+> The `freezeArgument(String parameterName)` method relies on the availability of parameter names at runtime. However, Java does not include parameter names in bytecode by default. To ensure this works correctly, you can:
 >
 > 1. Use a **record class**, which preserves parameter names by design.
 > 2. **Compile with the `-parameters` option** using `javac`.  
