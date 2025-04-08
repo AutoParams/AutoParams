@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import autoparams.ObjectQuery;
-import autoparams.ParameterQuery;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.TypeLens;
