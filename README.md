@@ -648,8 +648,6 @@ This allows you to seamlessly combine real Spring components with generated test
 
 ## `autoparams-mockito`
 
-`autoparams-mockito` is an extension of AutoParams that enables the creation of test doubles for interfaces and abstract classes using Mockito, a widely used mocking framework for Java. It allows AutoParams to generate test doubles without requiring manual setup.
-
 `autoparams-mockito` is an extension of AutoParams that enables the automatic creation of test doubles for interfaces and abstract classes using Mockito, a widely used mocking framework for Java. With this extension, AutoParams can generate test doubles seamlessly—with minimal setup.
 
 ### Install
@@ -702,7 +700,7 @@ public class SystemUnderTest {
 }
 ```
 
-By using the `@Customization(MockitoCustomizer.class`) annotation, AutoParams will automatically generate Mockito-based test doubles for eligible parameters (such as interfaces and abstract classes).
+By using the `@Customization(MockitoCustomizer.class)` annotation, AutoParams will automatically generate Mockito-based test doubles for eligible parameters (such as interfaces and abstract classes).
 
 Here’s an example:
 
