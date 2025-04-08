@@ -3,6 +3,8 @@ package autoparams.generator;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
+import autoparams.internal.Folder;
+
 import static java.util.Arrays.stream;
 
 public class CompositeConstructorResolver implements ConstructorResolver {

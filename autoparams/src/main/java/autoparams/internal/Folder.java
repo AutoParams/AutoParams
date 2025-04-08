@@ -1,10 +1,10 @@
-package autoparams.generator;
+package autoparams.internal;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-final class Folder {
+public final class Folder {
 
     public static <T, U> U foldl(BiFunction<U, T, U> f, U z, Stream<T> xs) {
         Iterator<T> i = xs.iterator();

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.Folder;
 
 public class CompositeObjectGenerator implements ObjectGenerator {
 
