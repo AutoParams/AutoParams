@@ -10,7 +10,7 @@ import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.TypeLens;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
-final class FreezingRecycler implements
+final class LimitedFreezingRecycler implements
     ArgumentRecycler,
     AnnotationConsumer<Freeze> {
 

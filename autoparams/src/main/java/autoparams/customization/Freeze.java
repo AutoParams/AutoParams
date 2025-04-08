@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@RecycleArgument(FreezingRecycler.class)
+@RecycleArgument(LimitedFreezingRecycler.class)
 public @interface Freeze {
 
     boolean byExactType() default true;
