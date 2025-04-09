@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-import autoparams.DefaultObjectQuery;
+import autoparams.FieldQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.internal.reflect.RuntimeTypeResolver;
@@ -73,7 +73,7 @@ public class InstanceFieldWriter implements ObjectProcessor {
     ) {
         field.setAccessible(true);
         Type type = typeResolver.resolve(field.getGenericType());
-        Object argument = context.resolve(new DefaultObjectQuery(type));
+        Object argument = context.resolve(new FieldQuery(field, type));
         try {
             field.set(target, argument);
         } catch (IllegalArgumentException |
