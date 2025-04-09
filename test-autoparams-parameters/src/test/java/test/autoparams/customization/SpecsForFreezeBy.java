@@ -2,10 +2,14 @@ package test.autoparams.customization;
 
 import autoparams.AutoParams;
 import autoparams.customization.FreezeBy;
+import autoparams.customization.WriteInstanceFields;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Product;
 
 import static autoparams.customization.Matching.EXACT_TYPE;
+import static autoparams.customization.Matching.FIELD_NAME;
 import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
 import static autoparams.customization.Matching.PARAMETER_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,5 +43,24 @@ public class SpecsForFreezeBy {
         assertThat(product.name()).isEqualTo(name);
         assertThat(product.imageUri()).isNotEqualTo(name);
         assertThat(product.description()).isNotEqualTo(name);
+    }
+
+    @Getter
+    @Setter
+    public static class StringsContainer {
+
+        private String value1;
+        private String value2;
+    }
+
+    @Test
+    @AutoParams
+    @WriteInstanceFields(StringsContainer.class)
+    void sut_freezes_value_by_field_name(
+        @FreezeBy(FIELD_NAME) String value1,
+        StringsContainer container
+    ) {
+        assertThat(container.getValue1()).isEqualTo(value1);
+        assertThat(container.getValue2()).isNotEqualTo(value1);
     }
 }

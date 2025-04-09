@@ -4,6 +4,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.function.BiPredicate;
 
+import autoparams.FieldQuery;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.internal.reflect.TypeLens;
@@ -37,6 +38,19 @@ public enum Matching implements BiPredicate<Parameter, ObjectQuery> {
         private boolean test(Parameter parameter, ParameterQuery query) {
             String parameterName = query.getRequiredParameterName();
             return parameter.getName().equals(parameterName);
+        }
+    },
+
+    FIELD_NAME {
+        @Override
+        public boolean test(Parameter parameter, ObjectQuery query) {
+            return query instanceof FieldQuery
+                && test(parameter, (FieldQuery) query);
+        }
+
+        private boolean test(Parameter parameter, FieldQuery query) {
+            String fieldName = query.getField().getName();
+            return parameter.getName().equals(fieldName);
         }
     }
 }
