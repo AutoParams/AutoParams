@@ -16,7 +16,7 @@ class FreezingRecycler implements
     ArgumentRecycler,
     AnnotationConsumer<FreezeBy> {
 
-    static class Negative<T, U> implements BiPredicate<T, U> {
+    private static class Negative<T, U> implements BiPredicate<T, U> {
 
         @Override
         public boolean test(T t, U u) {
