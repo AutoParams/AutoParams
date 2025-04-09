@@ -23,6 +23,7 @@ import autoparams.ValueAutoSource;
 import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
 import autoparams.customization.Freeze;
+import autoparams.customization.FreezeBy;
 import autoparams.generator.Factory;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
@@ -41,11 +42,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static autoparams.customization.Matching.EXACT_TYPE;
+import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
+import static autoparams.customization.Matching.PARAMETER_NAME;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -108,10 +112,56 @@ public class Examples {
 
     @Test
     @AutoParams
-    void testMethodFreeze(String s1, @Freeze String s2, String s3, StringContainer container) {
-        assertNotEquals(s1, s2);
-        assertEquals(s2, s3);
-        assertEquals(s2, container.getValue());
+    void testMethodFreezeByExactType(
+        @FreezeBy(EXACT_TYPE) String s1,
+        String s2,
+        StringContainer container
+    ) {
+        assertSame(s1, s2);
+        assertSame(s1, container.getValue());
+    }
+
+    @Test
+    @AutoParams
+    void testMethodFreezeByImplementedInterfaces(
+        @FreezeBy(IMPLEMENTED_INTERFACES) String s1,
+        CharSequence chars,
+        StringContainer container
+    ) {
+        assertSame(s1, chars);
+        assertNotSame(s1, container.getValue());
+    }
+
+    @Test
+    @AutoParams
+    void testMethodFreezeByParameterName(
+        @FreezeBy(PARAMETER_NAME) UUID reviewerId,
+        Review review
+    ) {
+        assertNotSame(reviewerId, review.getId());
+        assertSame(reviewerId, review.getReviewerId());
+    }
+
+    @Test
+    @AutoParams
+    void testMethodFreezeByExactTypeOrImplementedInterfaces(
+        @FreezeBy({ EXACT_TYPE, IMPLEMENTED_INTERFACES }) String s1,
+        String s2,
+        CharSequence chars
+    ) {
+        assertSame(s1, s2);
+        assertSame(s1, chars);
+    }
+
+    @Test
+    @AutoParams
+    void testMethodFreeze(
+        @Freeze String s1,
+        String s2,
+        StringContainer container
+    ) {
+        assertSame(s1, s2);
+        assertSame(s1, container.getValue());
     }
 
     @Test
