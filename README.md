@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 </dependency>
 ```
 
@@ -82,41 +82,135 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:10.0.0'
+testImplementation 'io.github.autoparams:autoparams:10.1.0'
 ```
 
 ## Features
 
 AutoParams provides a set of features designed to make your tests more expressive and reduce repetitive setup. Here are some of its key capabilities:
 
-### `@Freeze` Annotation
+### `@FreezeBy` Annotation
 
-The `@Freeze` annotation allows you to "freeze" a generated value so that it is reused consistently across other parameters of the same type within a single test method.
+The `@FreezeBy` annotation enables fine-grained control over value freezing in tests. It allows you to freeze a single value and reuse it across multiple generation targets that match specific conditions, such as type or name. This helps improve test readability and ensures consistency among generated values.
 
-To apply it, annotate one of your method parameters with `@Freeze`. AutoParams will then propagate that frozen value to all other parameters of the same type—including nested fields in complex objects.
+#### Matching Strategies
+
+AutoParams provides several matching strategies that determine which targets should receive the frozen value during object generation. The following examples illustrate some strategies:
+
+- `EXACT_TYPE`
+
+  Reuses the frozen value for all targets with the exact same type.
+
+  ```java
+  @AllArgsConstructor
+  @Getter
+  public class StringContainer {
+
+      private final String value;
+  }
+  ```
+
+  ```java
+  import static autoparams.customization.Matching.EXACT_TYPE;
+
+  public class TestClass {
+
+      @Test
+      @AutoParams
+      void testMethod(
+          @FreezeBy(EXACT_TYPE) String s1,
+          String s2,
+          StringContainer container
+      ) {
+          assertSame(s1, s2);
+          assertSame(s1, container.getValue());
+      }
+  }
+  ```
+
+  In this example, all `String` targets—including the `String` field inside `StringContainer`—are generated with the same frozen value.
+
+- `IMPLEMENTED_INTERFACES`
+
+  Reuses the frozen value for targets whose types are interfaces that the frozen value's type implements.
+
+  ```java
+  import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
+
+  public class TestClass {
+
+      @Test
+      @AutoParams
+      void testMethod(
+          @FreezeBy(IMPLEMENTED_INTERFACES) String s1,
+          CharSequence chars,
+          StringContainer container
+      ) {
+          assertSame(s1, chars);
+          assertNotSame(s1, container.getValue());
+      }
+  }
+  ```
+
+  In this example, `String` implements `CharSequence`, so the same value is reused for both `s1` and `chars`. `StringContainer` is not affected because its type is not an interface.
+
+- `PARAMETER_NAME`
+
+  Reuses the frozen value for other targets with matching names.
+
+  ```java
+  import static autoparams.customization.Matching.PARAMETER_NAME;
+
+  public class TestClass {
+
+      @Test
+      @AutoParams
+      void testMethod(
+          @FreezeBy(PARAMETER_NAME) UUID reviewerId,
+          Review review
+      ) {
+          assertNotSame(reviewerId, review.getId());
+          assertSame(reviewerId, review.getReviewerId());
+      }
+  }
+  ```
+
+  This strategy is useful when names follow a consistent convention that reflects their role.
+
+You can also combine multiple matching strategies to broaden the scope of freezing.
 
 ```java
-@AllArgsConstructor
-@Getter
-public class StringContainer {
+import static autoparams.customization.Matching.EXACT_TYPE;
+import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
 
-    private final String value;
+public class TestClass {
+
+    @Test
+    @AutoParams
+    void testMethod(
+        @FreezeBy({ EXACT_TYPE, IMPLEMENTED_INTERFACES }) String s1,
+        String s2,
+        CharSequence chars
+    ) {
+        assertSame(s1, s2);
+        assertSame(s1, chars);
+    }
 }
 ```
+
+In this example, the frozen value `s1` is reused for both `s2` (same type) and `chars` (interface implemented by `String`).
+
+#### Shorthand for `EXACT_TYPE`
+
+Using `@Freeze` is equivalent to `@FreezeBy(EXACT_TYPE)`. It's a convenient shorthand for the most common matching strategy.
 
 ```java
 @Test
 @AutoParams
-void testMethodFreeze(String s1, @Freeze String s2, String s3, StringContainer container) {
-    assertNotEquals(s1, s2);
-    assertEquals(s2, s3);
-    assertEquals(s2, container.getValue());
+void testMethod(@Freeze String s1, String s2) {
+    assertSame(s1, s2);
 }
 ```
-
-In this example, `s2` is frozen, meaning the same string value is reused for `s3` and for the `value` field inside `container`. Meanwhile, `s1` is independently generated.
-
-This makes `@Freeze` particularly useful when certain dependencies in your test need to remain consistent, while still allowing variation in the rest of the test data.
 
 ### Setting the Range of Values
 
@@ -504,6 +598,7 @@ void testMethod(int a, int b) {
     assertEquals(a + b, actual);
 }
 ```
+
 In this example, the test is executed 15 times in total—five times for each of the values `1`, `2`, and `3` assigned to the parameter `a`. For each run, the value of `b` is automatically generated by AutoParams.
 
 If you want AutoParams to generate values for **all** parameters and still repeat the test multiple times, you can combine `@AutoSource` with `@Repeat`.
@@ -588,7 +683,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 </dependency>
 ```
 
@@ -597,7 +692,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:10.0.0'
+testImplementation 'io.github.autoparams:autoparams-spring:10.1.0'
 ```
 
 ### `@UseBeans` Annotation
@@ -660,7 +755,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 </dependency>
 ```
 
@@ -669,7 +764,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:10.0.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:10.1.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -736,7 +831,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 </dependency>
 ```
 
@@ -745,7 +840,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:10.0.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:10.1.0'
 ```
 
 ### `BuilderCustomizer` Class
@@ -848,7 +943,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>10.0.0</version>
+  <version>10.1.0</version>
 </dependency>
 ```
 
@@ -857,7 +952,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:10.0.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:10.1.0'
 ```
 
 #### Gradle (Kotlin)
@@ -865,7 +960,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:10.0.0'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:10.0.0")
+testImplementation("io.github.autoparams:autoparams-kotlin:10.1.0")
 ```
 
 ### `@AutoKotlinParams` Annotation
