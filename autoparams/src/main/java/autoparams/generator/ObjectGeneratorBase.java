@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.processor.ObjectProcessor;
 
 public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
 
@@ -52,14 +51,4 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     );
-
-    @Override
-    public final ObjectGenerator customize(ObjectGenerator generator) {
-        return ObjectGenerator.super.customize(generator);
-    }
-
-    @Override
-    public final ObjectProcessor customize(ObjectProcessor processor) {
-        return ObjectGenerator.super.customize(processor);
-    }
 }
