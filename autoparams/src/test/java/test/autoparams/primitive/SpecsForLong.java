@@ -4,10 +4,12 @@ import java.lang.reflect.Parameter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import autoparams.AutoSource;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.Repeat;
 import autoparams.ResolutionContext;
+import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.AutoParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,15 @@ public class SpecsForLong {
         assertNotEquals(value1, value2);
         assertNotEquals(value2, value3);
         assertNotEquals(value3, value1);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @Repeat(100)
+    void sut_creates_long_value_in_default_range(
+        long value
+    ) {
+        assertThat(value).isBetween(0L, (long) Short.MAX_VALUE + 1);
     }
 
     @AutoParameterizedTest

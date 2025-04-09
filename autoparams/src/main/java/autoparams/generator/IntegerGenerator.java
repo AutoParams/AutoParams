@@ -7,9 +7,6 @@ import javax.validation.constraints.Min;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-import static java.lang.Integer.MAX_VALUE;
-import static java.lang.Integer.MIN_VALUE;
-
 final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
 
     IntegerGenerator() {
@@ -26,11 +23,11 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
-        if (min == MIN_VALUE && max == MAX_VALUE) {
+        if (min == Integer.MIN_VALUE && max == Integer.MAX_VALUE) {
             return random.nextInt();
         }
 
-        int offset = max == MAX_VALUE ? -1 : 0;
+        int offset = max == Integer.MAX_VALUE ? -1 : 0;
         int origin = min + offset;
         int bound = max + offset + 1;
         return random.nextInt(origin, bound) - offset;
@@ -40,10 +37,10 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
         Min min = MinAnnotation.findMinAnnotation(query);
         if (min == null) {
             Max max = MaxAnnotation.findMaxAnnotation(query);
-            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
-        } else if (min.value() < MIN_VALUE) {
+            return max == null || max.value() >= 1 ? 1 : Integer.MIN_VALUE;
+        } else if (min.value() < Integer.MIN_VALUE) {
             throw new IllegalArgumentException("The min constraint underflowed.");
-        } else if (min.value() > MAX_VALUE) {
+        } else if (min.value() > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("The min constraint overflowed.");
         } else {
             return (int) min.value();
@@ -53,10 +50,10 @@ final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
     private static int getMax(ObjectQuery query) {
         Max max = MaxAnnotation.findMaxAnnotation(query);
         if (max == null) {
-            return MAX_VALUE;
-        } else if (max.value() < MIN_VALUE) {
+            return Short.MAX_VALUE + 1;
+        } else if (max.value() < Integer.MIN_VALUE) {
             throw new IllegalArgumentException("The max constraint underflowed.");
-        } else if (max.value() > MAX_VALUE) {
+        } else if (max.value() > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("The max constraint overflowed.");
         } else {
             return (int) max.value();

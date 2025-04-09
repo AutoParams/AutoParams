@@ -9,8 +9,6 @@ import autoparams.ResolutionContext;
 
 import static autoparams.generator.MaxAnnotation.findMaxAnnotation;
 import static autoparams.generator.MinAnnotation.findMinAnnotation;
-import static java.lang.Long.MAX_VALUE;
-import static java.lang.Long.MIN_VALUE;
 
 final class LongGenerator extends PrimitiveTypeGenerator<Long> {
 
@@ -25,11 +23,11 @@ final class LongGenerator extends PrimitiveTypeGenerator<Long> {
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
-        if (min == MIN_VALUE && max == MAX_VALUE) {
+        if (min == Long.MIN_VALUE && max == Long.MAX_VALUE) {
             return random.nextLong();
         }
 
-        long offset = max == MAX_VALUE ? -1 : 0;
+        long offset = max == Long.MAX_VALUE ? -1 : 0;
         long origin = min + offset;
         long bound = max + offset + 1;
         return random.nextLong(origin, bound) - offset;
@@ -39,7 +37,7 @@ final class LongGenerator extends PrimitiveTypeGenerator<Long> {
         Min min = findMinAnnotation(query);
         if (min == null) {
             Max max = findMaxAnnotation(query);
-            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
+            return max == null || max.value() >= 1 ? 1 : Long.MIN_VALUE;
         } else {
             return min.value();
         }
@@ -47,6 +45,6 @@ final class LongGenerator extends PrimitiveTypeGenerator<Long> {
 
     private static long getMax(ObjectQuery query) {
         Max max = findMaxAnnotation(query);
-        return max == null ? MAX_VALUE : max.value();
+        return max == null ? Short.MAX_VALUE + 1 : max.value();
     }
 }
