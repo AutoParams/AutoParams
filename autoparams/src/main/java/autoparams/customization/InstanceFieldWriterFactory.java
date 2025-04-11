@@ -1,9 +1,9 @@
 package autoparams.customization;
 
-import java.util.Arrays;
-
 import autoparams.processor.InstanceFieldWriter;
 import org.junit.jupiter.params.support.AnnotationConsumer;
+
+import static java.util.Arrays.stream;
 
 public class InstanceFieldWriterFactory implements
     AnnotationConsumer<WriteInstanceFields>,
@@ -14,7 +14,7 @@ public class InstanceFieldWriterFactory implements
     @Override
     public Customizer createCustomizer() {
         return new CompositeCustomizer(
-            Arrays.stream(target)
+            stream(target)
                 .map(InstanceFieldWriter::new)
                 .toArray(Customizer[]::new)
         );
