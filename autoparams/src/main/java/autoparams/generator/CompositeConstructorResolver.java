@@ -3,8 +3,7 @@ package autoparams.generator;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
-import autoparams.internal.Folder;
-
+import static autoparams.internal.Folder.foldl;
 import static java.util.Arrays.stream;
 
 public class CompositeConstructorResolver implements ConstructorResolver {
@@ -17,7 +16,7 @@ public class CompositeConstructorResolver implements ConstructorResolver {
 
     @Override
     public final Optional<Constructor<?>> resolve(Class<?> type) {
-        return Folder.foldl(
+        return foldl(
             (resolved, resolver) -> resolved.isPresent()
                 ? resolved
                 : resolver.resolve(type),

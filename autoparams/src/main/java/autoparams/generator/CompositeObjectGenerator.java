@@ -1,10 +1,10 @@
 package autoparams.generator;
 
-import java.util.Arrays;
-
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.internal.Folder;
+
+import static autoparams.internal.Folder.foldl;
+import static java.util.Arrays.stream;
 
 public class CompositeObjectGenerator implements ObjectGenerator {
 
@@ -19,11 +19,11 @@ public class CompositeObjectGenerator implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return Folder.foldl(
+        return foldl(
             (result, generator) -> result
                 .yieldIfEmpty(() -> generator.generate(query, context)),
             ObjectContainer.EMPTY,
-            Arrays.stream(generators)
+            stream(generators)
         );
     }
 }
