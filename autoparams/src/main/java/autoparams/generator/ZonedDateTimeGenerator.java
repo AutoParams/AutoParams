@@ -1,8 +1,8 @@
 package autoparams.generator;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
@@ -14,8 +14,10 @@ final class ZonedDateTimeGenerator extends ObjectGeneratorBase<ZonedDateTime> {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        LocalDateTime localDateTime = context.resolve(LocalDateTime.class);
-        ZoneId zoneId = context.resolve(ZoneId.class);
-        return localDateTime.atZone(zoneId);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        return ZonedDateTime
+            .now(context.resolve(ZoneId.class))
+            .minusDays(random.nextInt(0, 365))
+            .minusNanos(random.nextLong(0, 24 * 60 * 60 * 1_000_000_000L));
     }
 }
