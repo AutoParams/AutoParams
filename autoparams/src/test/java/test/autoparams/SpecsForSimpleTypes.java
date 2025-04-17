@@ -303,20 +303,14 @@ class SpecsForSimpleTypes {
     }
 
     @AutoParameterizedTest
-    void sut_creates_arbitrary_zone_offset_values(
+    void sut_creates_UTC_zone_offset_values(
         ZoneOffset value1,
         ZoneOffset value2,
-        ZoneOffset value3,
-        ZoneOffset value4,
-        ZoneOffset value5
+        ZoneOffset value3
     ) {
-        final HashSet<ZoneOffset> set = new HashSet<>();
-        set.add(value1);
-        set.add(value2);
-        set.add(value3);
-        set.add(value4);
-        set.add(value5);
-        assertThat(set.size()).isGreaterThan(1);
+        assertThat(value1).isEqualTo(ZoneOffset.UTC);
+        assertThat(value2).isEqualTo(ZoneOffset.UTC);
+        assertThat(value3).isEqualTo(ZoneOffset.UTC);
     }
 
     @AutoParameterizedTest
