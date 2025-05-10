@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.validation.constraints.Size;
 
+import autoparams.AutoParams;
 import autoparams.AutoSource;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +84,7 @@ class SpecsForCollections {
     void sut_correctly_fills_hash_map(HashMap<Integer, String> map) {
         assertThat(map).hasSize(3);
         HashSet<String> set = new HashSet<>(map.values());
-        assertThat(set).hasSize(map.keySet().size());
+        assertThat(set).hasSize(map.size());
     }
 
     @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
@@ -136,5 +139,13 @@ class SpecsForCollections {
     @AutoSource
     void sut_creates_abstract_set(AbstractSet<String> set) {
         assertThat(set).isNotNull();
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_array_list_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) ArrayList<ComplexObject> arrayList
+    ) {
+        assertThat(arrayList).hasSize(5);
     }
 }
