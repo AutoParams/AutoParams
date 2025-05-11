@@ -5,31 +5,36 @@ import java.lang.reflect.Type;
 import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.IntSupplier;
 
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-final class SetGenerator implements ObjectGenerator {
+import static autoparams.generator.CollectionGenerator.getSizeSupplier;
 
-    private static final int SIZE = 3;
+final class SetGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
-            : ObjectContainer.EMPTY;
+        if (query.getType() instanceof ParameterizedType) {
+            ParameterizedType type = (ParameterizedType) query.getType();
+            return generate(type, getSizeSupplier(query), context);
+        } else {
+            return ObjectContainer.EMPTY;
+        }
     }
 
     private ObjectContainer generate(
         ParameterizedType type,
+        IntSupplier sizeSupplier,
         ResolutionContext context
     ) {
         return isSet((Class<?>) type.getRawType())
-            ? new ObjectContainer(generateSet(type, context))
+            ? new ObjectContainer(generateSet(type, sizeSupplier, context))
             : ObjectContainer.EMPTY;
     }
 
@@ -41,14 +46,17 @@ final class SetGenerator implements ObjectGenerator {
 
     public static HashSet<Object> generateSet(
         ParameterizedType setType,
+        IntSupplier sizeSupplier,
         ResolutionContext context
     ) {
         Type elementType = setType.getActualTypeArguments()[0];
         ObjectQuery query = new DefaultObjectQuery(elementType);
         HashSet<Object> instance = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
+        int size = sizeSupplier.getAsInt();
+        for (int i = 0; i < size; i++) {
             instance.add(context.resolve(query));
         }
+
         return instance;
     }
 }

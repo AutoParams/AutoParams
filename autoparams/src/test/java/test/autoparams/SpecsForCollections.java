@@ -156,4 +156,12 @@ class SpecsForCollections {
     ) {
         assertThat(map).hasSize(5);
     }
+
+    @Test
+    @AutoParams
+    void sut_creates_hash_set_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) HashSet<String> set
+    ) {
+        assertThat(set).hasSize(5);
+    }
 }
