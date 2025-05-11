@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>10.1.0</version>
+  <version>10.1.1</version>
 </dependency>
 ```
 
@@ -82,7 +82,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:10.1.0'
+testImplementation 'io.github.autoparams:autoparams:10.1.1'
 ```
 
 ## Features
@@ -281,6 +281,30 @@ void testMethod() {
 ```
 
 In this example, a `Factory<Product>` is created to produce `Product` instances. The `get()` method creates a single instance, while `getRange(n)` returns a list of `n` instances. This approach is particularly helpful when you need bulk data generation in your tests.
+
+### Collections and Arrays
+
+AutoParams can generate collections and arrays automatically. By default, the size of generated collections and arrays is 3, but you can override this using annotations such as `@Size`.
+
+For example, the following tests verify that AutoParams generates an `ArrayList<String>` and a `String[]` with exactly 5 elements when the `@Size(min = 5)` constraint is applied:
+
+```java
+@Test
+@AutoParams
+void testMethod(@Size(min = 5) ArrayList<String> arrayList) {
+    assertThat(arrayList).hasSize(5);
+}
+```
+
+```java
+@Test
+@AutoParams
+void testMethod(@Size(min = 5) String[] array) {
+    assertThat(array).hasSize(5);
+}
+```
+
+This allows you to work with realistic data sizes while keeping your test code clean and concise.
 
 ### Customization
 
@@ -683,7 +707,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>10.1.0</version>
+  <version>10.1.1</version>
 </dependency>
 ```
 
@@ -692,7 +716,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:10.1.0'
+testImplementation 'io.github.autoparams:autoparams-spring:10.1.1'
 ```
 
 ### `@UseBeans` Annotation
@@ -755,7 +779,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>10.1.0</version>
+  <version>10.1.1</version>
 </dependency>
 ```
 
@@ -764,7 +788,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:10.1.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:10.1.1'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -831,7 +855,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>10.1.0</version>
+  <version>10.1.1</version>
 </dependency>
 ```
 
@@ -840,7 +864,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:10.1.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:10.1.1'
 ```
 
 ### `BuilderCustomizer` Class
@@ -866,8 +890,8 @@ public class Order {
 To automatically generate `Order` instances, apply `BuilderCustomizer` in your test:
 
 ```java
-@ParameterizedTest
-@AutoSource
+@Test
+@AutoParams
 @Customization(BuilderCustomizer.class)
 void testMethod(Order order) {
     assertThat(order.getId()).isNotNull();
@@ -915,8 +939,8 @@ public class ShipmentBuilderCustomizer extends BuilderCustomizer {
 Then apply it in your test:
 
 ```java
-@ParameterizedTest
-@AutoSource
+@Test
+@AutoParams
 @Customization(ShipmentBuilderCustomizer.class)
 void testMethod(Shipment shipment) {
     assertThat(shipment.getId()).isNotNull();
@@ -943,7 +967,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>10.1.0</version>
+  <version>10.1.1</version>
 </dependency>
 ```
 
@@ -952,7 +976,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:10.1.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:10.1.1'
 ```
 
 #### Gradle (Kotlin)
@@ -960,7 +984,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:10.1.0'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:10.1.0")
+testImplementation("io.github.autoparams:autoparams-kotlin:10.1.1")
 ```
 
 ### `@AutoKotlinParams` Annotation

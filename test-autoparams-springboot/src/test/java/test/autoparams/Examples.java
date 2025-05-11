@@ -3,12 +3,14 @@ package test.autoparams;
 import java.beans.ConstructorProperties;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import autoparams.AutoParams;
 import autoparams.AutoSource;
@@ -485,8 +487,8 @@ public class Examples {
         private final String comment;
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @Test
+    @AutoParams
     @Customization(BuilderCustomizer.class)
     void testMethodBuilder(Order order) {
         assertThat(order.getId()).isNotNull();
@@ -516,8 +518,8 @@ public class Examples {
         }
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @Test
+    @AutoParams
     @Customization(ShipmentBuilderCustomizer.class)
     void testMethodConfiguredBuilder(Shipment shipment) {
         assertThat(shipment.getId()).isNotNull();
@@ -525,5 +527,17 @@ public class Examples {
         assertThat(shipment.getPostalCode()).isNotNull();
         assertThat(shipment.getAddress()).isNotNull();
         assertThat(shipment.getShipped()).isNotNull();
+    }
+
+    @Test
+    @AutoParams
+    void testMethodCollectionSize(@Size(min = 5) ArrayList<String> arrayList) {
+        assertThat(arrayList).hasSize(5);
+    }
+
+    @Test
+    @AutoParams
+    void testMethodArraySize(@Size(min = 5) String[] array) {
+        assertThat(array).hasSize(5);
     }
 }
