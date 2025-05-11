@@ -17,15 +17,31 @@ jobs:
         java-version: 17
     - name: Publish package
       run: >
-        ./gradlew
-        :autoparams:publish
-        :autoparams-kotlin:publish
-        :autoparams-lombok:publish
-        :autoparams-mockito:publish
-        :autoparams-spring:publish
-        --info
+        ./gradlew \
+          :autoparams:publish \
+          :autoparams-kotlin:publish \
+          :autoparams-lombok:publish \
+          :autoparams-mockito:publish \
+          :autoparams-spring:publish \
+          --info
+
+        mkdir -p build/publish
+
+        cp -r autoparams/build/publish/. build/publish/
+
+        cp -r autoparams-kotlin/build/publish/. build/publish/
+
+        cp -r autoparams-lombok/build/publish/. build/publish/
+
+        cp -r autoparams-mockito/build/publish/. build/publish/
+
+        cp -r autoparams-spring/build/publish/. build/publish/
       env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish
+        path: build/publish/

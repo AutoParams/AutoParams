@@ -53,12 +53,7 @@ subprojects {
     publishing {
         repositories {
             maven {
-                name = "OSSRH"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
+                url = layout.buildDirectory.dir("publish").get().asFile.toURI()
             }
         }
 
@@ -104,8 +99,8 @@ subprojects {
     }
 
     signing {
-        val signingKey: String? = System.getenv("SIGNING_KEY")
-        val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+        val signingKey = System.getenv("SIGNING_KEY")
+        val signingPassword = System.getenv("SIGNING_PASSWORD")
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign(publishing.publications["maven"])
     }
