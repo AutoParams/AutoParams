@@ -4,10 +4,13 @@ import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.function.IntSupplier;
 
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+
+import static autoparams.generator.CollectionGenerator.getSizeSupplier;
 
 final class ArrayGenerator implements ObjectGenerator {
 
@@ -17,11 +20,23 @@ final class ArrayGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type type = query.getType();
-        return isArrayType(type)
-            ? generateArray((Class<?>) query.getType(), context)
-            : isGenericArrayType(type)
-            ? generateArray((GenericArrayType) query.getType(), context)
-            : ObjectContainer.EMPTY;
+        if (isArrayType(type)) {
+            Class<?> arrayType = (Class<?>) query.getType();
+            return generateArray(
+                arrayType.getComponentType(),
+                getSizeSupplier(query),
+                context
+            );
+        } else if (isGenericArrayType(type)) {
+            GenericArrayType arrayType = (GenericArrayType) query.getType();
+            return generateArray(
+                (ParameterizedType) arrayType.getGenericComponentType(),
+                getSizeSupplier(query),
+                context
+            );
+        } else {
+            return ObjectContainer.EMPTY;
+        }
     }
 
     private boolean isArrayType(Type type) {
@@ -32,39 +47,34 @@ final class ArrayGenerator implements ObjectGenerator {
         return type instanceof GenericArrayType;
     }
 
-    private ObjectContainer generateArray(
-        Class<?> arrayType,
+    private static ObjectContainer generateArray(
+        Class<?> elementType,
+        IntSupplier sizeSupplier,
         ResolutionContext context
     ) {
-        Class<?> elementType = arrayType.getComponentType();
-        Object array = Array.newInstance(elementType, 3);
+        int size = sizeSupplier.getAsInt();
+        Object array = Array.newInstance(elementType, size);
+        ObjectQuery query = new DefaultObjectQuery(elementType);
         for (int i = 0; i < Array.getLength(array); i++) {
-            ObjectQuery query = new DefaultObjectQuery(elementType);
             Array.set(array, i, context.resolve(query));
         }
+
         return new ObjectContainer(array);
     }
 
-    private ObjectContainer generateArray(
-        GenericArrayType type,
-        ResolutionContext context
-    ) {
-        return generateArray(
-            (ParameterizedType) type.getGenericComponentType(),
-            context
-        );
-    }
-
-    private ObjectContainer generateArray(
+    private static ObjectContainer generateArray(
         ParameterizedType elementType,
+        IntSupplier sizeSupplier,
         ResolutionContext context
     ) {
+        int size = sizeSupplier.getAsInt();
         Class<?> rawElementType = (Class<?>) elementType.getRawType();
+        Object array = Array.newInstance(rawElementType, size);
         ObjectQuery query = new DefaultObjectQuery(elementType);
-        Object array = Array.newInstance(rawElementType, 3);
         for (int i = 0; i < Array.getLength(array); i++) {
             Array.set(array, i, context.resolve(query));
         }
+
         return new ObjectContainer(array);
     }
 }

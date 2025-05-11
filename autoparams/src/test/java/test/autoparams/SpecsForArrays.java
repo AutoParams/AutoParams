@@ -2,9 +2,12 @@ package test.autoparams;
 
 import java.util.Collections;
 import java.util.HashSet;
+import javax.validation.constraints.Size;
 
+import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.Repeat;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,5 +64,21 @@ class SpecsForArrays {
     @AutoSource
     void sut_fills_array_of_generic_element_type(Iterable<String>[] array) {
         assertThat(array).doesNotContainNull();
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_array_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) int[] array
+    ) {
+        assertThat(array).hasSize(5);
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_generic_array_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) Iterable<String>[] array
+    ) {
+        assertThat(array).hasSize(5);
     }
 }

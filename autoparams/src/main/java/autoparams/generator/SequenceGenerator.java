@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.IntSupplier;
-import javax.validation.constraints.Size;
 
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
-import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
-final class SequenceGenerator implements ObjectGenerator {
+import static autoparams.generator.CollectionGenerator.getSizeSupplier;
 
-    private static final int DEFAULT_SIZE = 3;
+final class SequenceGenerator implements ObjectGenerator {
 
     @Override
     public ObjectContainer generate(
@@ -43,21 +41,6 @@ final class SequenceGenerator implements ObjectGenerator {
         return isCollection((Class<?>) type.getRawType())
             ? new ObjectContainer(generateList(type, sizeSupplier, context))
             : ObjectContainer.EMPTY;
-    }
-
-    private static IntSupplier getSizeSupplier(ObjectQuery query) {
-        return query instanceof ParameterQuery
-            ? getSizeSupplier((ParameterQuery) query)
-            : SequenceGenerator::getDefaultSize;
-    }
-
-    private static IntSupplier getSizeSupplier(ParameterQuery query) {
-        Size size = query.getParameter().getAnnotation(Size.class);
-        return size == null ? SequenceGenerator::getDefaultSize : size::min;
-    }
-
-    private static int getDefaultSize() {
-        return DEFAULT_SIZE;
     }
 
     private static boolean isCollection(Class<?> type) {
