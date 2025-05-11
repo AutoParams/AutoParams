@@ -148,4 +148,12 @@ class SpecsForCollections {
     ) {
         assertThat(arrayList).hasSize(5);
     }
+
+    @Test
+    @AutoParams
+    void sut_creates_hash_map_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) HashMap<Integer, String> map
+    ) {
+        assertThat(map).hasSize(5);
+    }
 }
