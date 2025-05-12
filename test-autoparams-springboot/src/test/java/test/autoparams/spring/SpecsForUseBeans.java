@@ -6,6 +6,7 @@ import java.util.Map;
 import autoparams.AutoParams;
 import autoparams.spring.UseBeans;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,6 +26,31 @@ public class SpecsForUseBeans {
     void sut_provides_spring_bean_arguments_correctly(
         TestRestTemplate client,
         MessageSupplier messageSupplier,
+        String name
+    ) {
+        // Arrange
+        URI path = URI.create("/?name=" + name);
+
+        // Act
+        ResponseEntity<Map<String, Object>> response = client.exchange(
+            new RequestEntity<>(HttpMethod.GET, path),
+            new ParameterizedTypeReference<>() { }
+        );
+        Map<String, Object> actual = response.getBody();
+
+        // Assert
+        assertThat(actual).isNotNull();
+        assertThat(actual).containsKey("message");
+        assertThat(actual.get("message"))
+            .isEqualTo(messageSupplier.getMessage(name));
+    }
+
+    @Test
+    @AutoParams
+    @UseBeans
+    void sut_excludes_parameter_decorated_with_Autowired(
+        TestRestTemplate client,
+        @Autowired MessageSupplier messageSupplier,
         String name
     ) {
         // Arrange

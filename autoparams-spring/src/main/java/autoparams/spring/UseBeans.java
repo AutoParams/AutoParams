@@ -13,6 +13,6 @@ import autoparams.customization.CustomizerSource;
     ElementType.PARAMETER
 })
 @Retention(RetentionPolicy.RUNTIME)
-@CustomizerSource(BeanGeneratorFactory.class)
+@CustomizerSource(SpringCustomizerFactory.class)
 public @interface UseBeans {
 }
