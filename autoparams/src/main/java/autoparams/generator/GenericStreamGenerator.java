@@ -8,6 +8,8 @@ import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.CollectionGenerator.getSize;
+
 final class GenericStreamGenerator implements ObjectGenerator {
 
     @Override
@@ -15,26 +17,24 @@ final class GenericStreamGenerator implements ObjectGenerator {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return query.getType() instanceof ParameterizedType
-            ? generate((ParameterizedType) query.getType(), context)
-            : ObjectContainer.EMPTY;
+        if (query.getType() instanceof ParameterizedType) {
+            ParameterizedType type = (ParameterizedType) query.getType();
+            if (type.getRawType().equals(Stream.class)) {
+                int size = getSize(query);
+                return new ObjectContainer(generateStream(type, size, context));
+            }
+        }
+
+        return ObjectContainer.EMPTY;
     }
 
-    private ObjectContainer generate(
-        ParameterizedType type,
-        ResolutionContext context
-    ) {
-        return type.getRawType().equals(Stream.class)
-            ? new ObjectContainer(generateStream(type, context))
-            : ObjectContainer.EMPTY;
-    }
-
-    private Stream<?> generateStream(
+    private static Stream<Object> generateStream(
         ParameterizedType streamType,
+        int size,
         ResolutionContext context
     ) {
         Type elementType = streamType.getActualTypeArguments()[0];
         ObjectQuery query = new DefaultObjectQuery(elementType);
-        return Stream.generate(() -> context.resolve(query)).limit(3);
+        return Stream.generate(() -> context.resolve(query)).limit(size);
     }
 }

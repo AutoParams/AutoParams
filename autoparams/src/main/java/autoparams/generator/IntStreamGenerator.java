@@ -5,6 +5,8 @@ import java.util.stream.IntStream;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.CollectionGenerator.getSize;
+
 final class IntStreamGenerator extends ObjectGeneratorBase<IntStream> {
 
     @Override
@@ -12,6 +14,7 @@ final class IntStreamGenerator extends ObjectGeneratorBase<IntStream> {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return IntStream.generate(() -> context.resolve(int.class)).limit(3);
+        int size = getSize(query);
+        return IntStream.generate(() -> context.resolve(int.class)).limit(size);
     }
 }

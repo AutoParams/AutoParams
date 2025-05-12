@@ -1,6 +1,5 @@
 package test.autoparams;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -8,12 +7,16 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import javax.validation.constraints.Size;
 
+import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SpecsForStreams {
@@ -91,8 +94,40 @@ class SpecsForStreams {
     @AutoSource
     void sut_creates_generic_stream(Stream<UUID> stream) {
         Object[] array = stream.toArray();
-        Set<Object> set = Arrays.stream(array).collect(Collectors.toSet());
+        Set<Object> set = stream(array).collect(Collectors.toSet());
         assertThat(array).hasSize(3);
         assertThat(set).hasSize(array.length);
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_generic_stream_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) Stream<String> stream
+    ) {
+        assertThat(stream).hasSize(5);
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_IntStream_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) IntStream stream
+    ) {
+        assertThat(stream).hasSize(5);
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_LongStream_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) LongStream stream
+    ) {
+        assertThat(stream).hasSize(5);
+    }
+
+    @Test
+    @AutoParams
+    void sut_creates_DoubleStream_with_elements_as_many_as_min_of_size_annotation(
+        @Size(min = 5) DoubleStream stream
+    ) {
+        assertThat(stream).hasSize(5);
     }
 }

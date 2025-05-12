@@ -5,6 +5,8 @@ import java.util.stream.LongStream;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
+import static autoparams.generator.CollectionGenerator.getSize;
+
 final class LongStreamGenerator extends ObjectGeneratorBase<LongStream> {
 
     @Override
@@ -12,6 +14,8 @@ final class LongStreamGenerator extends ObjectGeneratorBase<LongStream> {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        return LongStream.generate(() -> context.resolve(long.class)).limit(3);
+        return LongStream
+            .generate(() -> context.resolve(long.class))
+            .limit(getSize(query));
     }
 }
