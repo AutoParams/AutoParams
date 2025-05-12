@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.util.function.IntSupplier;
 import javax.validation.constraints.Size;
 
 import autoparams.ObjectQuery;
@@ -15,22 +14,19 @@ final class CollectionGenerator extends CompositeObjectGenerator {
             new ArrayGenerator(),
             new SequenceGenerator(),
             new MapGenerator(),
-            new SetGenerator()
+            new SetGenerator(),
+            new StreamGenerator()
         );
     }
 
-    static IntSupplier getSizeSupplier(ObjectQuery query) {
+    static int getSize(ObjectQuery query) {
         return query instanceof ParameterQuery
-            ? getSizeSupplier((ParameterQuery) query)
-            : CollectionGenerator::getDefaultSize;
+            ? getSize((ParameterQuery) query)
+            : DEFAULT_SIZE;
     }
 
-    private static IntSupplier getSizeSupplier(ParameterQuery query) {
+    private static int getSize(ParameterQuery query) {
         Size size = query.getParameter().getAnnotation(Size.class);
-        return size == null ? CollectionGenerator::getDefaultSize : size::min;
-    }
-
-    private static int getDefaultSize() {
-        return DEFAULT_SIZE;
+        return size == null ? DEFAULT_SIZE : size.min();
     }
 }

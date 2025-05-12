@@ -7,13 +7,12 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.IntSupplier;
 
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 
-import static autoparams.generator.CollectionGenerator.getSizeSupplier;
+import static autoparams.generator.CollectionGenerator.getSize;
 
 final class SequenceGenerator implements ObjectGenerator {
 
@@ -23,24 +22,14 @@ final class SequenceGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         if (query.getType() instanceof ParameterizedType) {
-            return generate(
-                (ParameterizedType) query.getType(),
-                getSizeSupplier(query),
-                context
-            );
-        } else {
-            return ObjectContainer.EMPTY;
+            ParameterizedType type = (ParameterizedType) query.getType();
+            if (isCollection((Class<?>) type.getRawType())) {
+                int size = getSize(query);
+                return new ObjectContainer(generateList(type, size, context));
+            }
         }
-    }
 
-    private static ObjectContainer generate(
-        ParameterizedType type,
-        IntSupplier sizeSupplier,
-        ResolutionContext context
-    ) {
-        return isCollection((Class<?>) type.getRawType())
-            ? new ObjectContainer(generateList(type, sizeSupplier, context))
-            : ObjectContainer.EMPTY;
+        return ObjectContainer.EMPTY;
     }
 
     private static boolean isCollection(Class<?> type) {
@@ -54,13 +43,12 @@ final class SequenceGenerator implements ObjectGenerator {
 
     private static ArrayList<Object> generateList(
         ParameterizedType collectionType,
-        IntSupplier sizeSupplier,
+        int size,
         ResolutionContext context
     ) {
         Type elementType = collectionType.getActualTypeArguments()[0];
         ObjectQuery query = new DefaultObjectQuery(elementType);
         ArrayList<Object> instance = new ArrayList<>();
-        int size = sizeSupplier.getAsInt();
         for (int i = 0; i < size; i++) {
             instance.add(context.resolve(query));
         }
