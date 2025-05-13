@@ -3,6 +3,7 @@ package autoparams.spring;
 import java.lang.reflect.Parameter;
 
 import autoparams.SupportedParameterPredicate;
+import autoparams.customization.Decorator;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.springframework.beans.factory.annotation.Autowired;
