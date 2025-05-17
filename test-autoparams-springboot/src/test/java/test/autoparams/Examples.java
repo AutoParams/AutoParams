@@ -48,6 +48,7 @@ import static autoparams.customization.Matching.EXACT_TYPE;
 import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
 import static autoparams.customization.Matching.PARAMETER_NAME;
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -559,5 +560,17 @@ public class Examples {
     ) {
         assertThat(book.getAuthors()).hasSize(5);
         assertThat(book.getQuotes()).hasSize(7);
+    }
+
+    @Test
+    @AutoParams
+    void testMethodDslSet(Product product, @Max(5) int rating, ResolutionContext context) {
+        context.customize(
+            set(Review::getProduct).to(product),
+            set(Review::getRating).to(rating)
+        );
+        Review review = context.resolve();
+        assertSame(product, review.getProduct());
+        assertEquals(rating, review.getRating());
     }
 }
