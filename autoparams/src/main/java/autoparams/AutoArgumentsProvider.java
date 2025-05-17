@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import static autoparams.AnnotationScanner.scanAnnotations;
 import static java.util.stream.Collectors.toList;
 
-class AutoArgumentsProvider implements ArgumentsProvider {
+public class AutoArgumentsProvider implements ArgumentsProvider {
 
     private final ArgumentsProvider assetProvider;
 
