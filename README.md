@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>10.2.0</version>
+  <version>11.0.0</version>
 </dependency>
 ```
 
@@ -82,7 +82,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:10.2.0'
+testImplementation 'io.github.autoparams:autoparams:11.0.0'
 ```
 
 ## Features
@@ -456,7 +456,7 @@ In this test, `product1` is generated using the default logic from `DomainCustom
 AutoParams allows you to define one-time customizations directly within your test method using a domain-specific language(DSL). This is useful when you want to customize test data generation in a highly localized, context-specific way—without having to create separate generator classes.
 
 ```java
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
 
 public class TestClass {
 
@@ -464,8 +464,8 @@ public class TestClass {
     @AutoParams
     void testMethod(Product product, @Max(5) int rating, ResolutionContext context) {
         context.customize(
-            freezeArgument("product").in(Review.class).to(product),
-            freezeArgument("rating").to(rating)
+            set(Review::getProduct).to(product),
+            set(Review::getRating).to(rating)
         );
         Review review = context.resolve();
         assertSame(product, review.getProduct());
@@ -474,15 +474,37 @@ public class TestClass {
 }
 ```
 
-In this example, we use the `freezeArgument` static method from the `ArgumentCustomizationDsl` class to customize the behavior of the `ResolutionContext`. Specifically:
+In this example, we use the `set` static method from the `ArgumentCustomizationDsl` class to customize the behavior of the `ResolutionContext`. Specifically:
 
 - The `product` property in any `Review` instance created by the context will be set to the `product` parameter of the test.
 - Likewise, the `rating` property will be set to the `rating` parameter.
 
 This approach is especially useful for quickly fixing values without defining a full custom generator or specifying customization at the test method level. It improves the readability and maintainability of localized scenarios by keeping custom logic close to the test logic.
 
+You can also apply the same DSL customizations using `Factory<T>`.
+
+```java
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
+
+public class TestClass {
+
+    @Test
+    @AutoParams
+    void testMethod(Product product, @Max(5) int rating, Factory<Review> factory) {
+        Review review = factory.get(
+            set(Review::getProduct).to(product),
+            set(Review::getRating).to(rating)
+        );
+        assertSame(product, review.getProduct());
+        assertEquals(rating, review.getRating());
+    }
+}
+```
+
+The `Factory<T>` class provides a convenient way to create customized objects when working with a single type. It avoids managing an explicit resolution context and keeps the test focused on the instances under test.
+
 > **Note**  
-> The `freezeArgument(String parameterName)` method relies on the availability of parameter names at runtime. However, Java does not include parameter names in bytecode by default. To ensure this works correctly, you can:
+> The `set` method relies on the availability of parameter names at runtime. However, Java does not include parameter names in bytecode by default. To ensure this works correctly, you can:
 >
 > 1. Use a record class, which preserves parameter names by design.
 > 1. Compile with the `-parameters` option when using `javac`, or `-java-parameters` when using `kotlinc`.  
@@ -707,7 +729,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>10.2.0</version>
+  <version>11.0.0</version>
 </dependency>
 ```
 
@@ -716,7 +738,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:10.2.0'
+testImplementation 'io.github.autoparams:autoparams-spring:11.0.0'
 ```
 
 ### `@UseBeans` Annotation
@@ -779,7 +801,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>10.2.0</version>
+  <version>11.0.0</version>
 </dependency>
 ```
 
@@ -788,7 +810,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:10.2.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:11.0.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -855,7 +877,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>10.2.0</version>
+  <version>11.0.0</version>
 </dependency>
 ```
 
@@ -864,7 +886,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:10.2.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:11.0.0'
 ```
 
 ### `BuilderCustomizer` Class
@@ -967,7 +989,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>10.2.0</version>
+  <version>11.0.0</version>
 </dependency>
 ```
 
@@ -976,7 +998,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:10.2.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:11.0.0'
 ```
 
 #### Gradle (Kotlin)
@@ -984,7 +1006,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:10.2.0'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:10.2.0")
+testImplementation("io.github.autoparams:autoparams-kotlin:11.0.0")
 ```
 
 ### `@AutoKotlinParams` Annotation
