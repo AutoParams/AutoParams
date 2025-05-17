@@ -1,32 +1,32 @@
 package test.autoparams
 
-import autoparams.AutoSource
+import autoparams.AutoParams
 import autoparams.customization.Customization
-import autoparams.kotlin.AutoKotlinSource
+import autoparams.kotlin.AutoKotlinParams
 import autoparams.lombok.BuilderCustomizer
 import autoparams.mockito.MockitoCustomizer
-import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.api.Test
 
 class DependencyTests {
 
-    @ParameterizedTest
-    @AutoSource
-    fun `AutoSource installed`(x: Int) {
+    @Test
+    @AutoParams
+    fun `AutoParams installed`(x: Int) {
     }
 
-    @ParameterizedTest
-    @AutoKotlinSource
-    fun `AutoKotlinSource installed`(x: Int) {
+    @Test
+    @AutoKotlinParams
+    fun `AutoKotlinParams installed`(x: Int) {
     }
 
-    @ParameterizedTest
-    @AutoSource
+    @Test
+    @AutoParams
     @Customization(BuilderCustomizer::class)
     fun `BuilderCustomizer installed`(x: Int) {
     }
-    
-    @ParameterizedTest
-    @AutoSource
+
+    @Test
+    @AutoParams
     @Customization(MockitoCustomizer::class)
     fun `MockitoCustomizer installed`(x: Int) {
     }

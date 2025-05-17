@@ -5,16 +5,18 @@ plugins {
 }
 
 dependencies {
-    api("io.github.autoparams:autoparams:[10.1.2, 11.0.0)")
-    api("io.github.autoparams:autoparams-kotlin:[10.1.2, 11.0.0)")
-    api("io.github.autoparams:autoparams-lombok:[10.1.2, 11.0.0)")
-    api("io.github.autoparams:autoparams-mockito:[10.1.2, 11.0.0)")
+    api("io.github.autoparams:autoparams:[11.0.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-kotlin:[11.0.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-lombok:[11.0.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-mockito:[11.0.0, 12.0.0)")
+    testImplementation("org.assertj:assertj-core:3.8.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-java-parameters"
     }
 }
 
