@@ -540,4 +540,24 @@ public class Examples {
     void testMethodArraySize(@Size(min = 5) String[] array) {
         assertThat(array).hasSize(5);
     }
+
+    @AllArgsConstructor
+    @Getter
+    public static class Book {
+
+        private final String title;
+        private final List<String> authors;
+        private final List<String> quotes;
+    }
+
+    @Test
+    @AutoParams
+    void testMethodCollectionSizeFreezeBy(
+        @Size(min = 5) @FreezeBy(PARAMETER_NAME) List<String> authors,
+        @Size(min = 7) @FreezeBy(PARAMETER_NAME) List<String> quotes,
+        Book book
+    ) {
+        assertThat(book.getAuthors()).hasSize(5);
+        assertThat(book.getQuotes()).hasSize(7);
+    }
 }
