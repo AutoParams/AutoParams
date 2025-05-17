@@ -40,9 +40,9 @@ public class SpecsForFreezeBy {
         @FreezeBy(PARAMETER_NAME) String name,
         Product product
     ) {
-        assertThat(product.name()).isEqualTo(name);
-        assertThat(product.imageUri()).isNotEqualTo(name);
-        assertThat(product.description()).isNotEqualTo(name);
+        assertThat(product.getName()).isEqualTo(name);
+        assertThat(product.getImageUri()).isNotEqualTo(name);
+        assertThat(product.getDescription()).isNotEqualTo(name);
     }
 
     @Getter
