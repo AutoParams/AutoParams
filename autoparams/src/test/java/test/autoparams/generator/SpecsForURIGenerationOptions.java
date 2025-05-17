@@ -1,10 +1,10 @@
 package test.autoparams.generator;
 
 import java.util.stream.Stream;
-import javax.validation.constraints.Max;
 
 import autoparams.AutoSource;
 import autoparams.generator.URIGenerationOptions;
+import jakarta.validation.constraints.Max;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

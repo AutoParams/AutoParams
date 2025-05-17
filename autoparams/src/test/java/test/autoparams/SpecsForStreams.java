@@ -7,12 +7,12 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-import javax.validation.constraints.Size;
 
 import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
+import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 

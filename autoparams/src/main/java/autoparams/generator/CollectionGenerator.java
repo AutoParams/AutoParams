@@ -1,9 +1,8 @@
 package autoparams.generator;
 
-import javax.validation.constraints.Size;
-
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
+import jakarta.validation.constraints.Size;
 
 final class CollectionGenerator extends CompositeObjectGenerator {
 

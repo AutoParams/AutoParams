@@ -1,12 +1,12 @@
 package test.autoparams.customization.dsl;
 
 import java.util.UUID;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
 import autoparams.ValueAutoSource;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.Product;

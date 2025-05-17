@@ -1,11 +1,11 @@
 package autoparams.generator;
 
 import java.util.concurrent.ThreadLocalRandom;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 final class IntegerGenerator extends PrimitiveTypeGenerator<Integer> {
 

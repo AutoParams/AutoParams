@@ -2,11 +2,11 @@ package test.autoparams;
 
 import java.util.Collections;
 import java.util.HashSet;
-import javax.validation.constraints.Size;
 
 import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.Repeat;
+import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 

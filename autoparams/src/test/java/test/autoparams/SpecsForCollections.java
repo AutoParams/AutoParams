@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.constraints.Size;
 
 import autoparams.AutoParams;
 import autoparams.AutoSource;
+import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 

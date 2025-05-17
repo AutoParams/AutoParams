@@ -1,9 +1,8 @@
 package autoparams.generator;
 
-import javax.validation.constraints.Min;
-
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
+import jakarta.validation.constraints.Min;
 
 class MinAnnotation {
 
