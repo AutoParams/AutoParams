@@ -1,15 +1,17 @@
 package autoparams.customization.dsl;
 
+import java.lang.reflect.Method;
+
 import static java.lang.Character.isUpperCase;
 import static java.lang.Character.toLowerCase;
 
 class ParameterNameInferencer {
 
-    public static String inferParameterName(String getterName) {
-        return decapitalizeFirstCharacter(removePrefix(getterName));
+    public static String inferParameterNameFromGetter(Method getter) {
+        return decapitalizeHead(removeGetterPrefix(getter.getName()));
     }
 
-    private static String removePrefix(String getterName) {
+    private static String removeGetterPrefix(String getterName) {
         if (hasIsPrefix(getterName)) {
             return getterName.substring(2);
         } else if (hasGetPrefix(getterName)) {
@@ -19,21 +21,20 @@ class ParameterNameInferencer {
         }
     }
 
-    private static boolean hasIsPrefix(String getterName) {
-        return getterName.startsWith("is")
-            && getterName.length() > 2
-            && isUpperCase(getterName.charAt(2));
+    private static boolean hasIsPrefix(String methodName) {
+        return methodName.startsWith("is")
+            && methodName.length() > 2
+            && isUpperCase(methodName.charAt(2));
     }
 
-    private static boolean hasGetPrefix(String getterName) {
-        return getterName.startsWith("get")
-            && getterName.length() > 3
-            && isUpperCase(getterName.charAt(3));
+    private static boolean hasGetPrefix(String methodName) {
+        return methodName.startsWith("get")
+            && methodName.length() > 3
+            && isUpperCase(methodName.charAt(3));
     }
 
-    private static String decapitalizeFirstCharacter(String name) {
-        return isUpperCase(name.charAt(0))
-            ? toLowerCase(name.charAt(0)) + name.substring(1)
-            : name;
+    private static String decapitalizeHead(String s) {
+        char head = s.charAt(0);
+        return isUpperCase(head) ? toLowerCase(head) + s.substring(1) : s;
     }
 }
