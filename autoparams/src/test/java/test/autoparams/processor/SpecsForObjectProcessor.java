@@ -2,7 +2,6 @@ package test.autoparams.processor;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.customization.Customizer;
 import autoparams.processor.InstancePropertyWriter;
 import autoparams.processor.ObjectProcessor;
 import test.autoparams.AutoParameterizedTest;
@@ -11,26 +10,6 @@ import test.autoparams.HasSetter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForObjectProcessor {
-
-    @Deprecated
-    @AutoParameterizedTest
-    void toCustomizer_returns_customizer(InstancePropertyWriter sut) {
-        Customizer actual = sut.toCustomizer();
-        assertThat(actual).isNotNull();
-    }
-
-    @Deprecated
-    @AutoParameterizedTest
-    void toCustomizer_returns_customizer_that_works_correctly(
-        InstancePropertyWriter sut,
-        ResolutionContext context
-    ) {
-        Customizer actual = sut.toCustomizer();
-
-        context.applyCustomizer(actual);
-        HasSetter value = context.resolve(HasSetter.class);
-        assertThat(value.getValue()).isNotNull();
-    }
 
     public static class Prefixer implements ObjectProcessor {
 

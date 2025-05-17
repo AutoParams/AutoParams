@@ -15,9 +15,4 @@ public interface ObjectProcessor extends Customizer {
     default ObjectProcessor customize(ObjectProcessor processor) {
         return new CompositeObjectProcessor(processor, this);
     }
-
-    @Deprecated
-    default Customizer toCustomizer() {
-        return this;
-    }
 }

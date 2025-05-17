@@ -22,9 +22,4 @@ public interface ObjectGenerator extends Customizer {
     default ObjectGenerator customize(ObjectGenerator generator) {
         return new CompositeObjectGenerator(this, generator);
     }
-
-    @Deprecated
-    default Customizer toCustomizer() {
-        return this;
-    }
 }

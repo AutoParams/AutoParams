@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
-import autoparams.customization.Customizer;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import test.autoparams.AutoParameterizedTest;
@@ -36,29 +35,6 @@ public class SpecsForObjectGenerator {
                     ? new ObjectContainer((StringFactory) () -> value)
                     : ObjectContainer.EMPTY;
         }
-    }
-
-    @Deprecated
-    @AutoParameterizedTest
-    void toCustomizer_returns_customizer(String value) {
-        ObjectGenerator sut = StringFactory.createGeneratorWith(value);
-        Customizer actual = sut.toCustomizer();
-        assertThat(actual).isNotNull();
-    }
-
-    @Deprecated
-    @AutoParameterizedTest
-    void toCustomizer_returns_customizer_that_works_correctly(
-        ResolutionContext context,
-        String value
-    ) {
-        ObjectGenerator sut = StringFactory.createGeneratorWith(value);
-
-        Customizer actual = sut.toCustomizer();
-
-        context.applyCustomizer(actual);
-        StringFactory factory = context.resolve(StringFactory.class);
-        assertThat(factory.get()).isEqualTo(value);
     }
 
     public static class StringGenerator implements ObjectGenerator {
