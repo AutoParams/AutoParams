@@ -101,9 +101,7 @@ public final class AutoParamsExtension implements
             extensionContext,
             TestResolutionContext.class
         );
-        SupportedParameterPredicate predicate = resolutionContext.resolve(
-            SupportedParameterPredicate.class
-        );
+        SupportedParameterPredicate predicate = resolutionContext.resolve();
         return predicate.test(parameterContext, extensionContext);
     }
 
