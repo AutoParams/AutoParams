@@ -7,31 +7,77 @@ import java.util.Optional;
 
 import static java.lang.System.lineSeparator;
 
+/**
+ * Represents a query for a constructor or method parameter.
+ * <p>
+ * This class provides access to the parameter, its index, and its type. It also
+ * offers methods to retrieve the parameter name, handling cases where the name
+ * is not available at runtime.
+ * </p>
+ *
+ * @see ObjectQuery
+ */
 public final class ParameterQuery implements ObjectQuery {
 
     private final Parameter parameter;
     private final int index;
     private final Type type;
 
+    /**
+     * Creates a new {@link ParameterQuery} for the given parameter, index, and
+     * type.
+     *
+     * @param parameter the {@link java.lang.reflect.Parameter} to query
+     * @param index     the index of the parameter in the declaring executable
+     * @param type      the type of the parameter
+     */
     public ParameterQuery(Parameter parameter, int index, Type type) {
         this.parameter = parameter;
         this.index = index;
         this.type = type;
     }
 
+    /**
+     * Returns the underlying {@link java.lang.reflect.Parameter}.
+     *
+     * @return the parameter
+     */
     public Parameter getParameter() {
         return parameter;
     }
 
+    /**
+     * Returns the index of the parameter in the declaring executable.
+     *
+     * @return the parameter index
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * Returns the type of the parameter.
+     *
+     * @return the parameter type
+     */
     @Override
     public Type getType() {
         return type;
     }
 
+    /**
+     * Returns an {@link Optional} containing the parameter name if available.
+     * <p>
+     * If the parameter name is not present at runtime, this method attempts to
+     * resolve it using the {@link ConstructorProperties} annotation if
+     * available.
+     * </p>
+     *
+     * @return an {@link Optional} with the parameter name, or empty if not
+     *         available
+     * @see ConstructorProperties
+     * @see #getRequiredParameterName()
+     */
     public Optional<String> getParameterName() {
         if (parameter.isNamePresent()) {
             return Optional.of(parameter.getName());
@@ -45,6 +91,19 @@ public final class ParameterQuery implements ObjectQuery {
         }
     }
 
+    /**
+     * Returns the parameter name, or throws an exception if it cannot be
+     * determined.
+     * <p>
+     * If the parameter name is not available at runtime, this method throws a
+     * {@link RuntimeException} with a detailed message describing how to enable
+     * parameter name retention.
+     * </p>
+     *
+     * @return the parameter name
+     * @throws RuntimeException if the parameter name cannot be determined
+     * @see #getParameterName()
+     */
     public String getRequiredParameterName() {
         return getParameterName().orElseThrow(() -> {
             String message = String.format(
@@ -85,6 +144,11 @@ public final class ParameterQuery implements ObjectQuery {
         });
     }
 
+    /**
+     * Returns a string representation of the parameter.
+     *
+     * @return a string describing the parameter
+     */
     @Override
     public String toString() {
         return parameter.toString();
