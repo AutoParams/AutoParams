@@ -15,8 +15,36 @@ import autoparams.internal.reflect.RuntimeTypeResolver;
 
 import static java.beans.Introspector.getBeanInfo;
 
+/**
+ * Processes an object by setting its writable properties using resolved values.
+ * <p>
+ * This processor inspects the target object type and uses JavaBeans property
+ * descriptors to find writable properties. For each property with a setter,
+ * it resolves a value using the provided {@link ResolutionContext} and assigns
+ * it to the property via reflection.
+ * </p>
+ *
+ * @see ObjectProcessor
+ * @see ResolutionContext
+ */
 public final class InstancePropertyWriter implements ObjectProcessor {
 
+    /**
+     * Sets writable properties of the given object using values resolved from
+     * the context.
+     * <p>
+     * This method inspects the type of the target object and finds all writable
+     * properties. For each property with a setter, it resolves a value using
+     * the provided {@link ResolutionContext} and assigns it to the property via
+     * reflection.
+     * </p>
+     *
+     * @param query   the object query describing the requested object
+     * @param value   the generated object to process
+     * @param context the resolution context for further object resolution
+     * @see ObjectQuery
+     * @see ResolutionContext
+     */
     @Override
     public void process(
         ObjectQuery query,
