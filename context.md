@@ -1,3 +1,9 @@
+## Commit Message Guidelines
+
+- Write in English.
+- Follow the 50/72 rule.
+- Explain what and why, not how.
+
 ## Javadoc
 
 - Write in English.
