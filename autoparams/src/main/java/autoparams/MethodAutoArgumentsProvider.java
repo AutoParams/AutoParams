@@ -19,7 +19,8 @@ public final class MethodAutoArgumentsProvider
         this(createArgumentsProvider(MethodSource.class));
     }
 
-    @SuppressWarnings("unchecked")
+    @Deprecated
+    @SuppressWarnings({ "unchecked", "DeprecatedIsStillUsed" })
     public MethodAutoArgumentsProvider(ArgumentsProvider assetProvider) {
         super(assetProvider);
         annotationConsumer = (AnnotationConsumer<MethodSource>) assetProvider;

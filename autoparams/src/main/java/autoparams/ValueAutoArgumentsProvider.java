@@ -19,7 +19,8 @@ public final class ValueAutoArgumentsProvider
         this(createArgumentsProvider(ValueSource.class));
     }
 
-    @SuppressWarnings("unchecked")
+    @Deprecated
+    @SuppressWarnings({ "unchecked", "DeprecatedIsStillUsed" })
     public ValueAutoArgumentsProvider(ArgumentsProvider assetProvider) {
         super(assetProvider);
         annotationConsumer = (AnnotationConsumer<ValueSource>) assetProvider;
