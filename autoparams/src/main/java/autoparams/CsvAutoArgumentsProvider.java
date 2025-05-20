@@ -8,6 +8,35 @@ import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import static autoparams.ArgumentsProviderCreator.createArgumentsProvider;
 
+/**
+ * An implementation of {@link ArgumentsProvider} that processes
+ * {@link CsvAutoSource} annotations and combines CSV-formatted test data with
+ * automatic parameter generation.
+ * <p>
+ * This provider acts as a bridge between JUnit 5's standard {@link CsvSource}
+ * functionality and AutoParams' automatic test data generation. It enables the
+ * use of explicit values for some parameters while automatically generating
+ * values for any remaining parameters.
+ * </p>
+ *
+ * <p>
+ * The provider works by:
+ * </p>
+ * <ol>
+ *   <li>Processing the {@link CsvAutoSource} annotation</li>
+ *   <li>
+ *       Converting it to a {@link CsvSource} for JUnit to handle CSV parsing
+ *   </li>
+ *   <li>
+ *       Delegating to {@link AutoArgumentsProvider} to fill in missing
+ *       parameters
+ *   </li>
+ * </ol>
+ *
+ * @see CsvAutoSource
+ * @see AutoArgumentsProvider
+ * @see CsvSource
+ */
 public final class CsvAutoArgumentsProvider
     extends AutoArgumentsProvider
     implements AnnotationConsumer<CsvAutoSource> {
@@ -25,6 +54,18 @@ public final class CsvAutoArgumentsProvider
         annotationConsumer = (AnnotationConsumer<CsvSource>) assetProvider;
     }
 
+    /**
+     * Accepts and processes a {@link CsvAutoSource} annotation.
+     * <p>
+     * This method converts the {@link CsvAutoSource} annotation to an
+     * equivalent {@link CsvSource} annotation and passes it to the internal
+     * annotation consumer. This allows the CSV data to be properly parsed while
+     * maintaining compatibility with AutoParams' automatic parameter
+     * generation.
+     * </p>
+     *
+     * @param annotation the {@link CsvAutoSource} annotation to process
+     */
     @Override
     public void accept(CsvAutoSource annotation) {
         annotationConsumer.accept((CsvSource) Proxy.newProxyInstance(
