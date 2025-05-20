@@ -20,3 +20,4 @@
 - Do not write `@author` tags.
 - Add `@see` tags for closely related types.
 - Close `<p>` with `</p>` correctly.
+- Write Javadoc for one type or one member at a time. Do not write Javadoc for a type and its members at the same time.
