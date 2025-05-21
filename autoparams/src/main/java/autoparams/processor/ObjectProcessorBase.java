@@ -40,6 +40,13 @@ public abstract class ObjectProcessorBase<T> implements ObjectProcessor {
 
     private final Type type = inferType(getClass());
 
+    /**
+     * Constructs an instance of
+     * {@link ObjectProcessorBase ObjectProcessorBase&lt;T&gt;}.
+     */
+    protected ObjectProcessorBase() {
+    }
+
     private Type inferType(Class<?> processorType) {
         return getBaseType(processorType).getActualTypeArguments()[0];
     }
