@@ -4,14 +4,34 @@ import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * Provides utility methods for {@link Type} objects.
+ * <p>
+ * This class is for internal implementation purposes and is not safe for
+ * external use because its interface and behavior can change at any time.
+ * </p>
+ */
 public final class TypeLens {
 
     private final Type type;
 
+    /**
+     * Constructs a {@link TypeLens} for the specified type.
+     *
+     * @param type the type to inspect.
+     */
     public TypeLens(Type type) {
         this.type = type;
     }
 
+    /**
+     * Checks if the type inspected by this {@link TypeLens} implements the
+     * specified interface type.
+     *
+     * @param type the interface type to check against.
+     * @return {@code true} if the inspected type implements the interface,
+     *         otherwise {@code false}.
+     */
     public boolean implementsInterface(Type type) {
         return this.type instanceof Class
             && implementsInterface((Class<?>) this.type, type);
@@ -54,6 +74,14 @@ public final class TypeLens {
         return false;
     }
 
+    /**
+     * Checks if the type inspected by this {@link TypeLens} matches the
+     * specified type.
+     *
+     * @param type the type to compare against.
+     * @return {@code true} if the inspected type matches the specified type,
+     *         otherwise {@code false}.
+     */
     public boolean matches(Type type) {
         return match(this.type, type);
     }
