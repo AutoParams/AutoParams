@@ -10,6 +10,13 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Resolves generic type variables to their runtime actual types.
+ * <p>
+ * This class is for internal implementation purposes and is not safe for
+ * external use because its interface and behavior can change at any time.
+ * </p>
+ */
 public final class RuntimeTypeResolver {
 
     private final Map<TypeVariable<?>, Type> typeArguments;
@@ -18,6 +25,12 @@ public final class RuntimeTypeResolver {
         this.typeArguments = typeArguments;
     }
 
+    /**
+     * Creates a {@link RuntimeTypeResolver} for the given root type.
+     *
+     * @param rootType the root type.
+     * @return a new {@link RuntimeTypeResolver} instance.
+     */
     public static RuntimeTypeResolver create(Type rootType) {
         return new RuntimeTypeResolver(getTypeArguments(rootType));
     }
@@ -40,6 +53,12 @@ public final class RuntimeTypeResolver {
             .collect(toMap(i -> parameters[i], i -> arguments[i]));
     }
 
+    /**
+     * Resolves the given type.
+     *
+     * @param type the type to resolve.
+     * @return the resolved type.
+     */
     public Type resolve(Type type) {
         if (type instanceof TypeVariable<?> &&
             typeArguments.containsKey(type)) {
