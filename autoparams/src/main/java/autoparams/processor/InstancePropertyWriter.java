@@ -30,6 +30,12 @@ import static java.beans.Introspector.getBeanInfo;
 public final class InstancePropertyWriter implements ObjectProcessor {
 
     /**
+     * Creates an instance of {@link InstancePropertyWriter}.
+     */
+    public InstancePropertyWriter() {
+    }
+
+    /**
      * Sets writable properties of the given object using values resolved from
      * the context.
      * <p>
