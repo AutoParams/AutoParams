@@ -15,6 +15,12 @@ public final class DefaultAssetConverter implements AssetConverter {
     private final AssetConverter converter = new StringAssetConverter();
 
     /**
+     * Creates an instance of {@link DefaultAssetConverter}.
+     */
+    public DefaultAssetConverter() {
+    }
+
+    /**
      * Converts an object to a type suitable for the specified test method
      * parameter.
      *
