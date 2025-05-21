@@ -101,6 +101,16 @@ public @interface EnumAutoSource {
     class ProxyFactory {
 
         /**
+         * Do not use this constructor.
+         *
+         * @deprecated {@link ProxyFactory} provides a static factory method
+         *             only.
+         */
+        @Deprecated
+        public ProxyFactory() {
+        }
+
+        /**
          * Creates a dynamic proxy instance of {@link EnumAutoSource} with the
          * specified attributes.
          * <p>
