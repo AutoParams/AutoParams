@@ -51,6 +51,12 @@ public final class AutoParamsExtension implements
     }
 
     /**
+     * Creates a new instance of the {@link AutoParamsExtension} class.
+     */
+    public AutoParamsExtension() {
+    }
+
+    /**
      * Initializes the {@link ResolutionContext} before test execution.
      * <p>
      * This method is called by the JUnit 5 lifecycle before each test method
