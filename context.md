@@ -22,3 +22,5 @@
 - Close `<p>` with `</p>` correctly.
 - Write Javadoc for one type or one member at a time. Do not write Javadoc for a type and its members at the same time.
 - Do not mention non-public types or members in Javadoc.
+- When writing Javadoc for the types in the `autoparams.internal` package and its subpackages, mention that the types are code for internal implementation purposes and are not safe for external use because their interface and behavior can change at any time.
+- Keep Javadoc to a minimum for the types in the autoparams.internal package and subpackages.
