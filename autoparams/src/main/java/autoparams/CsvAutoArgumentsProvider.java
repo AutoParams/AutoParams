@@ -43,6 +43,9 @@ public final class CsvAutoArgumentsProvider
 
     private final AnnotationConsumer<CsvSource> annotationConsumer;
 
+    /**
+     * Creates an instance of {@link CsvAutoArgumentsProvider}.
+     */
     @SuppressWarnings("unused")
     public CsvAutoArgumentsProvider() {
         this(createArgumentsProvider(CsvSource.class));
