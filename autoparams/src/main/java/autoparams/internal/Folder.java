@@ -6,6 +6,9 @@ import java.util.stream.Stream;
 
 public final class Folder {
 
+    private Folder() {
+    }
+
     public static <T, U> U foldl(BiFunction<U, T, U> f, U z, Stream<T> xs) {
         Iterator<T> i = xs.iterator();
         U a = z;
