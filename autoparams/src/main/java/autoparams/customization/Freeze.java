@@ -22,6 +22,21 @@ import java.lang.annotation.Target;
  * configuration options.
  * </p>
  *
+ * <p><b>Example: Freezing a Simple Type</b></p>
+ * <p>
+ * The following example demonstrates how to use {@link Freeze @Freeze} to
+ * ensure that a generated string value is reused for the following string
+ * parameters. This is useful for ensuring consistency across multiple arguments
+ * of the same type.
+ * </p>
+ * <pre>
+ * &#64;Test
+ * &#64;AutoParams
+ * void testMethod(&#64;Freeze String frozenString, String anotherString) {
+ *     assertSame(frozenString, anotherString);
+ * }
+ * </pre>
+ *
  * @see FreezeBy
  * @see RecycleArgument
  */
