@@ -5,12 +5,56 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation that freezes a generated value for reuse in the following parameters.
+ * <p>
+ * This annotation marks a parameter as a source of a frozen value that should
+ * be reused when generating other arguments of compatible types during test
+ * execution. It provides a convenient way to ensure value consistency between
+ * related parameters without manual setup.
+ * </p>
+ * <p>
+ * The freezing behavior can be controlled through settings that determine which
+ * targets should receive the frozen value during object generation.
+ * </p>
+ * <p>
+ * This annotation is shorthand for {@code @FreezeBy(EXACT_TYPE)} with additional
+ * configuration options.
+ * </p>
+ *
+ * @see FreezeBy
+ * @see RecycleArgument
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @RecycleArgument(LimitedFreezingRecycler.class)
 public @interface Freeze {
 
+    /**
+     * Controls whether values should be frozen by exact type matching.
+     * <p>
+     * When set to {@code true}, the frozen value will be reused for all targets
+     * with exactly the same type as the annotated parameter. If {@code false},
+     * exact type matching will not be used.
+     * </p>
+     * <p>Defaults to {@code true}.</p>
+     *
+     * @return {@code true} if freezing by exact type is enabled, {@code false}
+     *         otherwise
+     */
     boolean byExactType() default true;
 
+    /**
+     * Controls whether values should be frozen by implemented interfaces.
+     * <p>
+     * When set to {@code true}, the frozen value will be reused for all targets
+     * whose types are interfaces that the frozen value's type implements. If
+     * {@code false}, interface-based matching will not be used.
+     * </p>
+     * <p>Defaults to {@code false}.</p>
+     *
+     * @return {@code true} if freezing by implemented interfaces is enabled,
+     *         {@code false} otherwise
+     */
     boolean byImplementedInterfaces() default false;
 }
