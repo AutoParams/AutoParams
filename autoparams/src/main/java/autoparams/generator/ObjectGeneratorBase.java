@@ -62,6 +62,13 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
     }
 
     /**
+     * Constructs an instance of
+     * {@link ObjectGeneratorBase ObjectGeneratorBase&lt;T&gt;}.
+     */
+    protected ObjectGeneratorBase() {
+    }
+
+    /**
      * Generates an {@link ObjectContainer} for the given {@link ObjectQuery}
      * and {@link ResolutionContext} if the requested type matches the inferred
      * type.
