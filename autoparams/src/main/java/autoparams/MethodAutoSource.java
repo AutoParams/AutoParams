@@ -97,6 +97,16 @@ public @interface MethodAutoSource {
     class ProxyFactory {
 
         /**
+         * Do not use this constructor.
+         *
+         * @deprecated {@link ProxyFactory} provides a static factory method
+         *             only.
+         */
+        @Deprecated
+        public ProxyFactory() {
+        }
+
+        /**
          * Creates a dynamic proxy instance of {@link MethodAutoSource} with the
          * specified method names.
          * <p>
