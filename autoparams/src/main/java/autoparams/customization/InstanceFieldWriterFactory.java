@@ -27,6 +27,12 @@ public class InstanceFieldWriterFactory implements
     private Class<?>[] target;
 
     /**
+     * Creates an instance of {@link InstanceFieldWriterFactory}.
+     */
+    public InstanceFieldWriterFactory() {
+    }
+
+    /**
      * Creates a {@link Customizer} that enables writing to instance fields.
      * <p>
      * This implementation of {@link CustomizerFactory#createCustomizer()}
