@@ -187,6 +187,16 @@ public @interface CsvAutoSource {
     class ProxyFactory {
 
         /**
+         * Do not use this constructor.
+         *
+         * @deprecated {@link ProxyFactory} provides a static factory method
+         *             only.
+         */
+        @Deprecated
+        public ProxyFactory() {
+        }
+
+        /**
          * Creates a dynamic proxy instance of {@link CsvAutoSource} with the
          * specified attributes.
          * <p>
