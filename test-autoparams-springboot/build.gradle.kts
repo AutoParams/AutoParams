@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.javadoc.Javadoc
+
 plugins {
     java
     id("org.springframework.boot") version "3.2.5"
@@ -20,6 +22,10 @@ java {
     withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.named<Javadoc>("javadoc") {
+    enabled = false
 }
 
 tasks.test {
