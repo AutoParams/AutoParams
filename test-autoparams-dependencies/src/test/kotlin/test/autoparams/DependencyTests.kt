@@ -7,6 +7,7 @@ import autoparams.lombok.BuilderCustomizer
 import autoparams.mockito.MockitoCustomizer
 import org.junit.jupiter.api.Test
 
+@Suppress("UNUSED_PARAMETER")
 class DependencyTests {
 
     @Test

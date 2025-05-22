@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import kotlin.reflect.KClass
 
+@Suppress("UNUSED_PARAMETER")
 class SpecsForEnumAutoKotlinSource {
 
     @ParameterizedTest

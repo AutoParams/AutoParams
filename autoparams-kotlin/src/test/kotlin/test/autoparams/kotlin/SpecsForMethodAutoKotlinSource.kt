@@ -30,6 +30,7 @@ class SpecsForMethodAutoKotlinSource {
         assertThat(value3).containsExactly("a", "b")
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @ParameterizedTest
     @MethodAutoKotlinSource(["stringIntAndListProvider"])
     fun `SUT correctly fills extra arguments`(
