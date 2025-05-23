@@ -117,7 +117,6 @@ public final class FreezeArgument {
      * @see #where(Predicate)
      * @see ParameterQueryDsl#parameterTypeMatches(Type)
      * @see #to(Object)
-     * @see DeclaringClassEquals
      */
     public FreezeArgument in(Class<?> declaringClass) {
         return where(new DeclaringClassEquals(declaringClass));
