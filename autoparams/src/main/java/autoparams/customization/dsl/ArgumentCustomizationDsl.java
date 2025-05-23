@@ -136,7 +136,6 @@ public final class ArgumentCustomizationDsl {
      * @param parameterName the name of parameters to select
      * @return a new {@link FreezeArgument} that selects parameters with the
      *         specified name
-     * @see ParameterNameEquals
      * @see FreezeArgument#where(Predicate)
      * @see FreezeArgument#to(Object)
      */
@@ -166,8 +165,6 @@ public final class ArgumentCustomizationDsl {
      * @param parameterName the name of parameters to select
      * @return a new {@link FreezeArgument} that selects parameters with the
      *         specified type and name
-     * @see ParameterTypeMatches
-     * @see ParameterNameEquals
      * @see FreezeArgument#where(Predicate)
      * @see FreezeArgument#to(Object)
      */
@@ -246,7 +243,6 @@ public final class ArgumentCustomizationDsl {
      *         getter method
      * @see FunctionDelegate
      * @see FreezeArgument#to(Object)
-     * @see ParameterNameInferencer#inferParameterNameFromGetter(Method)
      */
     public static <T, P> FreezeArgument set(
         FunctionDelegate<T, P> getterDelegate
@@ -281,7 +277,6 @@ public final class ArgumentCustomizationDsl {
      * @param parameterType the type of parameters to select
      * @return a new {@link FreezeArgument} that selects parameters of the
      *         specified type
-     * @see ParameterTypeMatches
      * @see FreezeArgument#where(Predicate)
      * @see FreezeArgument#to(Object)
      */
