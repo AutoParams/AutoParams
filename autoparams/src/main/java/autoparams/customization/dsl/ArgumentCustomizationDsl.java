@@ -26,22 +26,50 @@ import static autoparams.customization.dsl.ParameterNameInferencer.inferParamete
  * "name":
  * </p>
  * <pre>
- * freezeArgument("name")
- *     .where(parameterTypeMatches(String.class))
- *     .to("John Doe")
+ * import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+ * import static autoparams.customization.dsl.ParameterQueryDsl.parameterTypeMatches;
+ *
+ * public class TestClass {
+ *
+ *     &#64;Test
+ *     &#64;AutoParams
+ *     void testMethod(ResolutionContext context) {
+ *         context.customize(
+ *             freezeArgument("name")
+ *                 .where(parameterTypeMatches(String.class))
+ *                 .to("Product 1")
+ *         );
+ *         Product product = context.resolve();
+ *         assertEquals("Product 1", product.getName());
+ *     }
+ * }
  * </pre>
  *
  * <p><b>Example: Setting a parameter using method reference</b></p>
  * <p>
  * This example shows how to set the product parameter of a Review to a specific
- * value:
+ * value using {@link autoparams.generator.Factory Factory&lt;T&gt;}:
  * </p>
  * <pre>
- * set(Review::getProduct).to(product)
+ * import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
+ *
+ * public class TestClass {
+ *
+ *     &#64;Test
+ *     &#64;AutoParams
+ *     void testMethod(Product product, Factory&lt;Review&gt; factory) {
+ *         Review review = factory.get(
+ *             set(Review::getProduct).to(product)
+ *         );
+ *
+ *         assertSame(product, review.getProduct());
+ *     }
+ * }
  * </pre>
  *
  * @see FreezeArgument
  * @see ParameterQueryDsl
+ * @see autoparams.generator.Factory
  */
 public final class ArgumentCustomizationDsl {
 
@@ -230,10 +258,24 @@ public final class ArgumentCustomizationDsl {
      * <p><b>Example: Setting parameters using method reference</b></p>
      * <p>
      * This example shows how to set the product parameter of a Review to a
-     * specific value:
+     * specific value using
+     * {@link autoparams.generator.Factory Factory&lt;T&gt;}:
      * </p>
      * <pre>
-     * set(Review::getProduct).to(product)
+     * import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
+     *
+     * public class TestClass {
+     *
+     *     &#64;Test
+     *     &#64;AutoParams
+     *     void testMethod(Product product, Factory&lt;Review&gt; factory) {
+     *         Review review = factory.get(
+     *             set(Review::getProduct).to(product)
+     *         );
+     *
+     *         assertSame(product, review.getProduct());
+     *     }
+     * }
      * </pre>
      *
      * @param <T> the type containing the getter method
@@ -243,6 +285,7 @@ public final class ArgumentCustomizationDsl {
      *         getter method
      * @see FunctionDelegate
      * @see FreezeArgument#to(Object)
+     * @see autoparams.generator.Factory
      */
     public static <T, P> FreezeArgument set(
         FunctionDelegate<T, P> getterDelegate
