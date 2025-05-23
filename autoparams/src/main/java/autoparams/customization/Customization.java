@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * // Apply customizers to a test method for custom object resolution
  * &#64;Test
  * &#64;AutoParams
- * &#64;Customization({MyCustomizer1.class, MyCustomizer2.class})
+ * &#64;Customization({ MyCustomizer1.class, MyCustomizer2.class })
  * void testMethod(MyClass arg) {
  *     // Customizers are applied to object resolution for arg
  * }
@@ -45,7 +45,7 @@ public @interface Customization {
      * // Apply customizers to a test method for custom object resolution
      * &#64;Test
      * &#64;AutoParams
-     * &#64;Customization({MyCustomizer1.class, MyCustomizer2.class})
+     * &#64;Customization({ MyCustomizer1.class, MyCustomizer2.class })
      * void testMethod(MyClass arg) {
      *     // Customizers are applied to object resolution for arg
      * }
