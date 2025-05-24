@@ -30,6 +30,7 @@ import autoparams.type.TypeReference;
  */
 public class ResolutionContext {
 
+    private final EventHandler eventHandler = new EventHandler();
     private ObjectGenerator generator;
     private ObjectProcessor processor;
 
@@ -209,8 +210,10 @@ public class ResolutionContext {
             throw new IllegalArgumentException("The argument 'query' is null.");
         }
 
+        eventHandler.onResolving(query);
         Object value = generateValue(query);
         processValue(query, value);
+        eventHandler.onResolved(query, value);
         return value;
     }
 
