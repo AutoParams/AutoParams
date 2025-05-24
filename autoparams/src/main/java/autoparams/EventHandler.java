@@ -9,7 +9,7 @@ class EventHandler {
         RESOLVING {
             @Override
             public String getSymbol() {
-                return "▶";
+                return "▼";
             }
         },
 
