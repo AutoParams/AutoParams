@@ -495,5 +495,3 @@ public class ResolutionContext {
         return context;
     }
 }
-
-
