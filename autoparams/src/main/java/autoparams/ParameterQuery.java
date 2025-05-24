@@ -145,12 +145,12 @@ public final class ParameterQuery implements ObjectQuery {
     }
 
     /**
-     * Returns a string representation of the parameter.
+     * Returns a string representation of this parameter query.
      *
-     * @return a string describing the parameter
+     * @return a string representation of the parameter query
      */
     @Override
     public String toString() {
-        return parameter.toString();
+        return "Parameter " + parameter;
     }
 }
