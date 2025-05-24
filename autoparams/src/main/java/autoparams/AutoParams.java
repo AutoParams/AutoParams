@@ -8,6 +8,13 @@ import java.lang.annotation.Target;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
+ * <pre>
+ *     _         _        ____
+ *    / \  _   _| |_ ___ |  _ \ __ _ _ __ __ _ _ __ ___  ___
+ *   / _ \| | | | __/ _ \| |_) / _` | '__/ _` | '_ ` _ \/ __|
+ *  / ___ \ |_| | || (_) |  __/ (_| | | | (_| | | | | | \__ \
+ * /_/   \_\__,_|\__\___/|_|   \__,_|_|  \__,_|_| |_| |_|___/
+ * </pre>
  * Annotation to enable automatic parameter injection for JUnit 5 test methods.
  * <p>
  * When this annotation is applied to a test method, {@link AutoParamsExtension}
