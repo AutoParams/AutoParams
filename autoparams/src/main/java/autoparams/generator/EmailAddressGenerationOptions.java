@@ -66,4 +66,28 @@ public final class EmailAddressGenerationOptions {
     public List<String> domains() {
         return domains;
     }
+
+    /**
+     * Returns a string representation of this
+     * {@link EmailAddressGenerationOptions} in the format
+     * "EmailAddressGenerationOptions[domains=[...]]".
+     *
+     * @return a string representation of this
+     *         {@link EmailAddressGenerationOptions}
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder(
+            "EmailAddressGenerationOptions[domains=["
+        );
+        for (int i = 0; i < domains.size(); i++) {
+            result.append("\"").append(domains.get(i)).append("\"");
+            if (i < domains.size() - 1) {
+                result.append(", ");
+            }
+        }
+
+        result.append("]]");
+        return result.toString();
+    }
 }

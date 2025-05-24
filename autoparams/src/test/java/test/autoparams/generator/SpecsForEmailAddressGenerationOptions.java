@@ -51,6 +51,7 @@ public class SpecsForEmailAddressGenerationOptions {
         assertThat(sut.domains()).containsExactlyInAnyOrder(domains);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @ParameterizedTest
     @AutoSource
     void domains_returns_immutable_list(List<URL> urls) {
@@ -72,5 +73,46 @@ public class SpecsForEmailAddressGenerationOptions {
             EmailAddressGenerationOptions.DEFAULT;
 
         assertThat(sut.domains()).containsExactlyInAnyOrder("test.com");
+    }
+
+    @Test
+    void toString_returns_a_string_starting_with_the_class_name() {
+        // Arrange
+        EmailAddressGenerationOptions sut = EmailAddressGenerationOptions.DEFAULT;
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).startsWith("EmailAddressGenerationOptions");
+    }
+
+    @Test
+    void toString_properly_formats_the_domains_list_with_square_brackets() {
+        // Arrange
+        EmailAddressGenerationOptions sut = new EmailAddressGenerationOptions(
+            new String[] { "example.com", "test.org", "gmail.com" }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual)
+            .contains("domains=[\"example.com\", \"test.org\", \"gmail.com\"]");
+    }
+
+    @Test
+    void toString_surrounds_the_entire_output_with_brackets_after_the_class_name() {
+        // Arrange
+        EmailAddressGenerationOptions sut = new EmailAddressGenerationOptions(
+            new String[] { "test.domain" }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).matches("EmailAddressGenerationOptions\\[.*]");
     }
 }
