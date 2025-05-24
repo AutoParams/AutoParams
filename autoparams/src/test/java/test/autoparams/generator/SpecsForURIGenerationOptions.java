@@ -202,6 +202,7 @@ public class SpecsForURIGenerationOptions {
         );
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void schemes_returns_immutable_list() {
         String[] schemes = { "https" };
@@ -218,6 +219,7 @@ public class SpecsForURIGenerationOptions {
             .isInstanceOf(UnsupportedOperationException.class);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void hosts_returns_immutable_list() {
         String[] schemes = { "https" };
@@ -234,6 +236,7 @@ public class SpecsForURIGenerationOptions {
             .isInstanceOf(UnsupportedOperationException.class);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void ports_returns_immutable_list() {
         String[] schemes = { "https" };
@@ -266,5 +269,107 @@ public class SpecsForURIGenerationOptions {
     void default_instance_has_no_ports() {
         URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
         assertThat(sut.ports()).isEmpty();
+    }
+
+    @Test
+    void toString_displays_all_information_for_default_instance() {
+        // Arrange
+        URIGenerationOptions sut = URIGenerationOptions.DEFAULT;
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual)
+            .startsWith("URIGenerationOptions")
+            .contains("schemes=[\"https\"]")
+            .contains("hosts=[\"test.com\"]")
+            .contains("ports=[]");
+    }
+
+    @Test
+    void toString_properly_formats_the_schemes_list_with_square_brackets() {
+        // Arrange
+        String[] schemes = { "http", "https", "ftp" };
+        URIGenerationOptions sut = new URIGenerationOptions(
+            schemes,
+            new String[] { "example.com" },
+            new int[] { 80 }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).contains("schemes=[\"http\", \"https\", \"ftp\"]");
+    }
+
+    @Test
+    void toString_properly_formats_the_hosts_list_with_square_brackets() {
+        // Arrange
+        String[] hosts = { "example.com", "test.org", "localhost" };
+        URIGenerationOptions sut = new URIGenerationOptions(
+            new String[] { "https" },
+            hosts,
+            new int[] { 443 }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual)
+            .contains("hosts=[\"example.com\", \"test.org\", \"localhost\"]");
+    }
+
+    @Test
+    void toString_properly_formats_the_ports_list_with_square_brackets() {
+        // Arrange
+        int[] ports = { 80, 443, 8080 };
+        URIGenerationOptions sut = new URIGenerationOptions(
+            new String[] { "https" },
+            new String[] { "example.com" },
+            ports
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).contains("ports=[80, 443, 8080]");
+    }
+
+    @Test
+    void toString_separates_fields_with_commas() {
+        // Arrange
+        URIGenerationOptions sut = new URIGenerationOptions(
+            new String[] { "http", "https" },
+            new String[] { "example.com" },
+            new int[] { 80, 443 }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).contains("schemes=");
+        assertThat(actual).contains(", hosts=");
+        assertThat(actual).contains(", ports=");
+    }
+
+    @Test
+    void toString_surrounds_the_entire_output_with_brackets_after_the_class_name() {
+        // Arrange
+        URIGenerationOptions sut = new URIGenerationOptions(
+            new String[] { "http" },
+            new String[] { "example.com" },
+            new int[] { 80 }
+        );
+
+        // Act
+        String actual = sut.toString();
+
+        // Assert
+        assertThat(actual).matches("URIGenerationOptions\\[.*]");
     }
 }

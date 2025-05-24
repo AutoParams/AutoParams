@@ -156,4 +156,32 @@ public final class URIGenerationOptions {
     public List<Integer> ports() {
         return ports;
     }
+
+    /**
+     * Returns a string representation of this {@link URIGenerationOptions} in
+     * the format "URIGenerationOptions[schemes=..., hosts=..., ports=...]".
+     *
+     * @return a string representation of this {@link URIGenerationOptions}
+     */
+    @Override
+    public String toString() {
+        return "URIGenerationOptions["
+            + "schemes=" + formatValues(schemes)
+            + ", hosts=" + formatValues(hosts)
+            + ", ports=" + ports + "]";
+    }
+
+    private static String formatValues(List<String> values) {
+        StringBuilder result = new StringBuilder("[");
+        int size = values.size();
+        for (int i = 0; i < size; i++) {
+            result.append("\"").append(values.get(i)).append("\"");
+            if (i < size - 1) {
+                result.append(", ");
+            }
+        }
+
+        result.append("]");
+        return result.toString();
+    }
 }
