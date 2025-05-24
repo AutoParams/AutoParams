@@ -48,4 +48,14 @@ public final class FieldQuery implements ObjectQuery {
     public Type getType() {
         return type;
     }
+
+    /**
+     * Returns a string representation of this field query.
+     *
+     * @return a string representation of the field query
+     */
+    @Override
+    public String toString() {
+        return "Field " + field;
+    }
 }

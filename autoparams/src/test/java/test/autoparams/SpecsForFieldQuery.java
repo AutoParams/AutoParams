@@ -32,6 +32,30 @@ public class SpecsForFieldQuery {
         assertThat(sut.getType()).isSameAs(field.getType());
     }
 
+    @Test
+    void toString_returns_value_that_starts_with_correct_prefix() {
+        Field field = getField();
+        FieldQuery sut = new FieldQuery(field, field.getType());
+        String actual = sut.toString();
+        assertThat(actual).startsWith("Field ");
+    }
+
+    @Test
+    void toString_returns_value_that_contains_type_of_field() {
+        Field field = getField();
+        FieldQuery sut = new FieldQuery(field, field.getType());
+        String actual = sut.toString();
+        assertThat(actual).contains(field.getType().getTypeName());
+    }
+
+    @Test
+    void toString_returns_value_that_contains_name_of_field() {
+        Field field = getField();
+        FieldQuery sut = new FieldQuery(field, field.getType());
+        String actual = sut.toString();
+        assertThat(actual).contains(field.getName());
+    }
+
     private Field getField() {
         try {
             return Container.class.getDeclaredField("field");
