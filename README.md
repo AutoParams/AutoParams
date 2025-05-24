@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>11.0.2</version>
+  <version>11.0.3</version>
 </dependency>
 ```
 
@@ -82,7 +82,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:11.0.2'
+testImplementation 'io.github.autoparams:autoparams:11.0.3'
 ```
 
 ## Features
@@ -543,6 +543,64 @@ void testMethod(User user) {
 
 In this test, the `User` object is created using its default constructor, and AutoParams sets values on its writable properties via their setters. This is especially useful when working with legacy models or data transfer objects(DTOs) that do not have constructors covering all fields.
 
+### Logging for Object Resolution
+
+AutoParams provides detailed logging capabilities that help you understand how objects are being resolved during test execution. The resolution log is printed to standard output during test execution, making it easy to trace how each value is generated.
+
+For example, resolving a `User` class now produces a detailed trace. Given the following class:
+
+```java
+@AllArgsConstructor
+@Getter
+public class User {
+
+    private final UUID id;
+    private final String email;
+    private final String username;
+}
+```
+
+Running the following code:
+
+```java
+ResolutionContext context = new ResolutionContext();
+User user = context.resolve();
+```
+
+Will print a hierarchical visualization of the resolution process:
+
+```text
+▼ Resolving for: class your.app.User
+├── ▼ Resolving for: interface autoparams.generator.ConstructorResolver
+│   ├── ▼ Resolving for: interface autoparams.generator.ConstructorExtractor
+│   │   ✓ Resolved: autoparams.generator.DefaultConstructorExtractor@3b39e79b for: interface autoparams.generator.ConstructorExtractor
+│   ✓ Resolved: autoparams.generator.CompositeConstructorResolver@6dded900 for: interface autoparams.generator.ConstructorResolver
+│
+├── ▼ Resolving for: Parameter final java.lang.Long id
+│   ✓ Resolved: 15775 for: Parameter final java.lang.Long id
+│
+├── ▼ Resolving for: Parameter final java.lang.String email
+│   ├── ▼ Resolving for: class autoparams.generator.EmailAddressGenerationOptions
+│   │   ✓ Resolved: EmailAddressGenerationOptions[domains=["test.com"]] for: class autoparams.generator.EmailAddressGenerationOptions
+│   ✓ Resolved: 27b1bb70-f355-421c-8823-72fb69e9e4e7@test.com for: Parameter final java.lang.String email
+│
+├── ▼ Resolving for: Parameter final java.lang.String username
+│   ✓ Resolved: username6942b0dc-da65-42ca-a756-4303fcb6328a for: Parameter final java.lang.String username
+✓ Resolved: your.app.User@56835f2f for: class your.app.User
+```
+
+The log uses the following symbols to represent the resolution flow:
+- `▼` indicates the start of a resolution attempt
+- `├──` shows nested resolution steps
+- `✓` indicates successful resolution
+- Indentation levels represent the depth of the resolution chain
+
+This logging is particularly valuable when working with:
+- Customizations
+- Complex object hierarchies
+- Dependency injection scenarios
+- Debugging test failures related to object generation
+
 ### Parameterized Tests
 
 AutoParams also supports **parameterized tests**, allowing you to execute the same test logic with multiple sets of input data. With AutoParams, you can seamlessly combine manually specified values with automatically generated test data—enabling both flexibility and convenience.
@@ -729,7 +787,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>11.0.2</version>
+  <version>11.0.3</version>
 </dependency>
 ```
 
@@ -738,7 +796,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:11.0.2'
+testImplementation 'io.github.autoparams:autoparams-spring:11.0.3'
 ```
 
 ### `@UseBeans` Annotation
@@ -801,7 +859,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>11.0.2</version>
+  <version>11.0.3</version>
 </dependency>
 ```
 
@@ -810,7 +868,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:11.0.2'
+testImplementation 'io.github.autoparams:autoparams-mockito:11.0.3'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -877,7 +935,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>11.0.2</version>
+  <version>11.0.3</version>
 </dependency>
 ```
 
@@ -886,7 +944,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:11.0.2'
+testImplementation 'io.github.autoparams:autoparams-lombok:11.0.3'
 ```
 
 ### `BuilderCustomizer` Class
@@ -989,7 +1047,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>11.0.2</version>
+  <version>11.0.3</version>
 </dependency>
 ```
 
@@ -998,7 +1056,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:11.0.2'
+testImplementation 'io.github.autoparams:autoparams-kotlin:11.0.3'
 ```
 
 #### Gradle (Kotlin)
@@ -1006,7 +1064,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:11.0.2'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:11.0.2")
+testImplementation("io.github.autoparams:autoparams-kotlin:11.0.3")
 ```
 
 ### `@AutoKotlinParams` Annotation
