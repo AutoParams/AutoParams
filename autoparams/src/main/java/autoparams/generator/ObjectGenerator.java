@@ -66,7 +66,7 @@ public interface ObjectGenerator extends Customizer {
      * @param type    the type of object to generate
      * @param context the resolution context for object generation
      * @return an {@link ObjectContainer} with the generated object, or
-     * {@link ObjectContainer#EMPTY} if not possible
+     *            {@link ObjectContainer#EMPTY} if not possible
      */
     default ObjectContainer generate(Type type, ResolutionContext context) {
         return generate(new DefaultObjectQuery(type), context);

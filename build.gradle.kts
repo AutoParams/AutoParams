@@ -29,7 +29,7 @@ subprojects {
     configure<CheckstyleExtension> {
         configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
         configProperties["suppressionFile"] = "${rootProject.projectDir}/config/checkstyle/checkstyle-suppressions.xml"
-        toolVersion = "8.40"
+        toolVersion = "9.3"
         isIgnoreFailures = false
         maxErrors = 0
         maxWarnings = 0
