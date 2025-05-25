@@ -1,11 +1,29 @@
+## Coding Guidelines
+
+- The Maximum line length is 80 characters except for names of tests.
+- Do not write code not related to the task.
+- Do not write code and Javadoc at the same time.
+- For package names, use singular nouns in lowercase.
+- Do not write comments in the code except for Javadoc.
+
+## Test Guidelines
+
+- Write a test scenario with a single sentence in English.
+- Manage test scenarios with task list items in GitHub Flavored Markdown format.
+- Use the text of the test scenario as the name of the test method in snake_case.
+- Use the term 'sut' for the system under test.
+- Do not write production code and test code at the same time.
+- Do not write production code, test data types, and test code at the same time.
+
 ## Commit Message Guidelines
 
 - Write in English.
 - Follow the 50/72 rule.
 - Explain what and why, not how.
 - Do not use prefixes like "feat:", "fix:", etc.
+- Keep the commit message brief.
 
-## Javadoc
+## Javadoc Guidelines
 
 - Write in English.
 - Never modify or remove source code.
