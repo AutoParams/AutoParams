@@ -83,8 +83,8 @@ public final class Factory<T> implements Supplier<T> {
      * Creates a {@link Factory} instance for the type inferred from the
      * generic parameter.
      * <p>
-     * You do not need to specify the array parameter explicitly; type inference
-     * is handled automatically by the compiler.
+     * You do not need to specify the array parameter explicitly; the compiler
+     *  handles type inference automatically.
      * </p>
      *
      * <p><b>Example:</b></p>
@@ -110,8 +110,8 @@ public final class Factory<T> implements Supplier<T> {
      * Creates a {@link Factory} instance for the type inferred from the generic
      * parameter, using the provided {@link ResolutionContext}.
      * <p>
-     * You do not need to specify the array parameter explicitly; type inference
-     * is handled automatically by the compiler.
+     * You do not need to specify the array parameter explicitly; the compiler
+     *  handles type inference automatically.
      * </p>
      *
      * <p><b>Example:</b></p>
@@ -205,8 +205,7 @@ public final class Factory<T> implements Supplier<T> {
      * </p>
      *
      * @param typeReference the type reference describing the generic type
-     * @param <T>           the type of object to be created by the
-     *                      {@link Factory}
+     * @param <T>           the type of object to be created by {@link Factory}
      * @return a {@link Factory} instance for the specified generic type
      */
     public static <T> Factory<T> create(TypeReference<T> typeReference) {
@@ -224,8 +223,7 @@ public final class Factory<T> implements Supplier<T> {
      *
      * @param context       the resolution context to use
      * @param typeReference the type reference describing the generic type
-     * @param <T>           the type of object to be created by the
-     *                      {@link Factory}
+     * @param <T>           the type of object to be created by {@link Factory}
      * @return a {@link Factory} instance for the specified generic type
      */
     public static <T> Factory<T> create(
