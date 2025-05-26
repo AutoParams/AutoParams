@@ -55,21 +55,28 @@ class EventHandler {
     public void onResolved(ObjectQuery query, Object value) {
         decreaseDepth();
         addEvent(EventType.RESOLVED, "Resolved: " + value + " for: " + query);
-        flushEventsIfRootDepth();
     }
 
     private void decreaseDepth() {
         depth--;
     }
 
-    private void flushEventsIfRootDepth() {
+    public void flushEventsIfRootDepth() {
         if (depth == 0) {
-            printEvents();
-            events.clear();
+            flushEvents();
         }
     }
 
+    public void flushEvents() {
+        printEvents();
+        events.clear();
+    }
+
     private void printEvents() {
+        if (events.isEmpty()) {
+            return;
+        }
+
         StringBuilder report = new StringBuilder();
         int depth = 0;
         for (int i = 0; i < events.size(); i++) {

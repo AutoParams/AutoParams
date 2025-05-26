@@ -126,6 +126,24 @@ public class SpecsForReporting {
         assertThat(output[17]).startsWith("│   │");
     }
 
+    public static class Uninstantiable {
+
+        protected Uninstantiable() {
+        }
+    }
+
+    @Test
+    void writes_resolution_log_even_when_object_resolution_fails() {
+        var context = new ResolutionContext();
+        String[] output = captureOutput(() -> {
+            try {
+                context.resolve(Uninstantiable.class);
+            } catch (Exception ignored) {
+            }
+        });
+        assertThat(output[0]).contains("Resolving for:");
+    }
+
     private static String[] captureOutput(Runnable runnable) {
         PrintStream originalOut = System.out;
         String outputStr = null;

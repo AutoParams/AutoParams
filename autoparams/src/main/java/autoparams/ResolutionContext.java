@@ -214,8 +214,10 @@ public class ResolutionContext {
         try {
             Object value = generateThenProcessValue(query);
             eventHandler.onResolved(query, value);
+            eventHandler.flushEventsIfRootDepth();
             return value;
         } catch (Exception exception) {
+            eventHandler.flushEvents();
             String message = "Failed to resolve an object for the given query: "
                 + query + ". See the internal error message for details.";
             throw new RuntimeException(message, exception);
