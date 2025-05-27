@@ -211,9 +211,20 @@ public class ResolutionContext {
         }
 
         eventHandler.onResolving(query);
+        try {
+            Object value = generateThenProcessValue(query);
+            eventHandler.onResolved(query, value);
+            return value;
+        } catch (Exception exception) {
+            String message = "Failed to resolve an object for the given query: "
+                + query + ". See the internal error message for details.";
+            throw new RuntimeException(message, exception);
+        }
+    }
+
+    private Object generateThenProcessValue(ObjectQuery query) {
         Object value = generateValue(query);
         processValue(query, value);
-        eventHandler.onResolved(query, value);
         return value;
     }
 
@@ -229,19 +240,13 @@ public class ResolutionContext {
             try {
                 return generator.generate(query, this).unwrapOrElseThrow();
             } catch (UnwrapFailedException exception) {
-                throw composeGenerationFailedException(query, exception);
+                String message = "Failed to generate an object for the query: "
+                    + query + ". The requested type may be an abstract class"
+                    + " or interface. See the internal error message for"
+                    + " details.";
+                throw new RuntimeException(message, exception);
             }
         }
-    }
-
-    private RuntimeException composeGenerationFailedException(
-        ObjectQuery query,
-        Throwable cause
-    ) {
-        String messageFormat = "Object cannot be created with the given query '%s'."
-            + " This can happen if the query represents an interface or abstract class.";
-        String message = String.format(messageFormat, query);
-        return new RuntimeException(message, cause);
     }
 
     private void processValue(ObjectQuery query, Object value) {

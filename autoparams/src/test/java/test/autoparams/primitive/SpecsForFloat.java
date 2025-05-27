@@ -83,10 +83,8 @@ public class SpecsForFloat {
             parameter.getAnnotatedType().getType()
 
         );
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(0) @Max(-1) float arg) {

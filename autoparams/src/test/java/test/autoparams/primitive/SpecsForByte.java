@@ -108,10 +108,7 @@ public class SpecsForByte {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelyLargeMaxConstraint(
@@ -130,10 +127,7 @@ public class SpecsForByte {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelySmallMaxConstraint(
@@ -158,10 +152,7 @@ public class SpecsForByte {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelyLargeMinConstraint(
@@ -180,10 +171,7 @@ public class SpecsForByte {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelySmallMinConstraint(
@@ -202,10 +190,7 @@ public class SpecsForByte {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(

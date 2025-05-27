@@ -97,10 +97,7 @@ public class SpecsForLong {
             parameter.getAnnotatedType().getType()
         );
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) long arg) {

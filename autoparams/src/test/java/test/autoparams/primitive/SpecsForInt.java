@@ -88,10 +88,7 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelyLargeMaxConstraint(@Max(Integer.MAX_VALUE + 1L) int arg) {
@@ -108,10 +105,7 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void excessivelySmallMaxConstraint(@Max(Integer.MIN_VALUE - 1L) int arg) {
@@ -134,9 +128,14 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThatThrownBy(() -> context.resolve(query))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("min");
+        assertThatThrownBy(() -> context.resolve(query)).isInstanceOfSatisfying(
+            RuntimeException.class,
+            actual -> {
+                assertThat(actual)
+                    .hasCauseInstanceOf(IllegalArgumentException.class);
+                assertThat(actual.getCause()).hasMessageContaining("min");
+            }
+        );
     }
 
     void excessivelyLargeMinConstraint(@Min(Integer.MAX_VALUE + 1L) int arg) {
@@ -153,9 +152,14 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThatThrownBy(() -> context.resolve(query))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("min");
+        assertThatThrownBy(() -> context.resolve(query)).isInstanceOfSatisfying(
+            RuntimeException.class,
+            actual -> {
+                assertThat(actual)
+                    .hasCauseInstanceOf(IllegalArgumentException.class);
+                assertThat(actual.getCause()).hasMessageContaining("min");
+            }
+        );
     }
 
     void excessivelySmallMinConstraint(@Min(Integer.MIN_VALUE - 1L) int arg) {
@@ -172,10 +176,7 @@ public class SpecsForInt {
 
         ObjectQuery query = getFirstParameterQuery(parameter);
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) int arg) {

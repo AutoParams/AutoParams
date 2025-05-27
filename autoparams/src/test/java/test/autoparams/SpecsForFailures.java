@@ -4,6 +4,7 @@ import autoparams.AutoSource;
 import autoparams.generator.Factory;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SpecsForFailures {
@@ -26,9 +27,13 @@ class SpecsForFailures {
     void sut_throws_when_object_of_abstract_class_is_requested(
         Factory<AbstractClass> factory
     ) {
-        assertThatThrownBy(factory::get)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("abstract");
+        assertThatThrownBy(factory::get).isInstanceOfSatisfying(
+            RuntimeException.class,
+            actual -> {
+                assertThat(actual).hasCauseInstanceOf(RuntimeException.class);
+                assertThat(actual.getCause()).hasMessageContaining("abstract");
+            }
+        );
     }
 
     @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)
@@ -36,9 +41,13 @@ class SpecsForFailures {
     void sut_throws_when_object_of_abstract_class_with_public_constructor_is_requested(
         Factory<AbstractWithPublicConstructor> factory
     ) {
-        assertThatThrownBy(factory::get)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("abstract");
+        assertThatThrownBy(factory::get).isInstanceOfSatisfying(
+            RuntimeException.class,
+            actual -> {
+                assertThat(actual).hasCauseInstanceOf(RuntimeException.class);
+                assertThat(actual.getCause()).hasMessageContaining("abstract");
+            }
+        );
     }
 
     @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER)

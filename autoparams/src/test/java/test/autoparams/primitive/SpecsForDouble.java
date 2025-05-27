@@ -84,10 +84,7 @@ public class SpecsForDouble {
             parameter.getAnnotatedType().getType()
         );
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> context.resolve(query)
-        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     @SuppressWarnings("unused")
