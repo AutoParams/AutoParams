@@ -52,9 +52,15 @@ class EventHandler {
         depth++;
     }
 
-    public void onResolved(ObjectQuery query, Object value) {
+    public void onResolved(
+        ObjectQuery query,
+        Object value,
+        long elapsedMillis
+    ) {
         decreaseDepth();
-        addEvent(EventType.RESOLVED, "Resolved: " + value + " for: " + query);
+        String format = "Resolved(%s): %s for: %s";
+        String time = elapsedMillis == 0 ? "<1 ms" : elapsedMillis + " ms";
+        addEvent(EventType.RESOLVED, String.format(format, time, value, query));
     }
 
     private void decreaseDepth() {

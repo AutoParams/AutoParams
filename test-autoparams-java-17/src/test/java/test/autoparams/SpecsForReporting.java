@@ -32,7 +32,7 @@ public class SpecsForReporting {
         String[] output = captureOutput(() -> context.resolve(String.class));
         String actual = output[1];
 
-        assertThat(actual).contains("Resolved:");
+        assertThat(actual).matches(".*Resolved\\(<*\\d+ ms\\):.*");
         assertThat(actual).contains("java.lang.String");
         assertThat(actual).contains(value);
     }
