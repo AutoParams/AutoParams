@@ -1,6 +1,6 @@
 ## Coding Guidelines
 
-- The Maximum line length is 80 characters except for names of tests.
+- The maximum line length is 80 characters except for names of tests.
 - Do not write code not related to the task.
 - Do not write code and Javadoc at the same time.
 - For package names, use singular nouns in lowercase.
@@ -11,9 +11,22 @@
 - Write a test scenario with a single sentence in English.
 - Manage test scenarios with task list items in GitHub Flavored Markdown format.
 - Use the text of the test scenario as the name of the test method in snake_case.
-- Use the term 'sut' for the system under test.
+- Always use the term 'sut' (not 'it') when referring to the system under test.
+- Do not use uppercase letters in test scenarios except for type names.
 - Do not write production code and test code at the same time.
 - Do not write production code, test data types, and test code at the same time.
+
+### Good examples:
+- "sut returns correct price when discount is applied"
+- "sut creates multiple Product instances with different ids"
+- "sut resolves primitive types with default values"
+- "sut returns empty Optional when type is not supported"
+
+### Bad examples:
+- "Test Product.getPrice() with discount" (too vague, not a complete sentence)
+- "When Product has a discount, the Price should be correctly calculated and returned to the Client" (too verbose)
+- "Product Returns Correct Price When Discount Is Applied" (improper capitalization)
+- "test that it returns the right price for discounted products" (uses 'it' instead of 'sut')
 
 ## Commit Message Guidelines
 
