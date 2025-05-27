@@ -20,8 +20,8 @@
 - Write in English.
 - Follow the 50/72 rule.
 - Explain what and why, not how.
+- Do not include details about tests
 - Do not use prefixes like "feat:", "fix:", etc.
-- Keep the commit message brief.
 
 ## Javadoc Guidelines
 
