@@ -60,70 +60,70 @@ public class SpecsForReporting {
     void writes_zero_depth_indentation_for_resolving_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[0]).doesNotContain("├── ");
+        assertThat(output[0]).doesNotContain("|-- ");
     }
 
     @Test
     void writes_one_depth_indentation_for_resolving_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[1]).startsWith("├── ");
+        assertThat(output[1]).startsWith("|-- ");
     }
 
     @Test
     void writes_two_depth_indentation_for_resolving_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[2]).startsWith("│   ├── ");
+        assertThat(output[2]).startsWith("|   |-- ");
     }
 
     @Test
     void writes_three_depth_indentation_for_resolving_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[14]).startsWith("│   │   ├── ");
+        assertThat(output[14]).startsWith("|   |   |-- ");
     }
 
     @Test
     void writes_zero_depth_indentation_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[27]).doesNotContain("│");
+        assertThat(output[27]).doesNotContain("|");
     }
 
     @Test
     void writes_one_depth_indentation_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[4]).startsWith("│   ");
+        assertThat(output[4]).startsWith("|   ");
     }
 
     @Test
     void writes_two_depth_indentation_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[3]).startsWith("│   │   ");
+        assertThat(output[3]).startsWith("|   |   ");
     }
 
     @Test
     void writes_three_depth_indentation_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[15]).startsWith("│   │   │   ");
+        assertThat(output[15]).startsWith("|   |   |   ");
     }
 
     @Test
     void writes_one_depth_blank_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[5]).startsWith("│");
+        assertThat(output[5]).startsWith("|");
     }
 
     @Test
     void writes_two_depth_blank_for_resolved_event_correctly() {
         var context = new ResolutionContext();
         String[] output = captureOutput(() -> context.resolve(Review.class));
-        assertThat(output[17]).startsWith("│   │");
+        assertThat(output[17]).startsWith("|   |");
     }
 
     public static class Uninstantiable {

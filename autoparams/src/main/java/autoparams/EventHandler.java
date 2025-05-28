@@ -9,14 +9,14 @@ class EventHandler {
         RESOLVING {
             @Override
             public String getSymbol() {
-                return "▼";
+                return ">";
             }
         },
 
         RESOLVED {
             @Override
             public String getSymbol() {
-                return "✓";
+                return "<";
             }
         };
 
@@ -92,14 +92,14 @@ class EventHandler {
             if (event.type.equals(EventType.RESOLVING)) {
                 if (i != 0 && previousDepth == depth) {
                     report
-                        .append(repeat("│   ", depth).trim())
+                        .append(repeat("|   ", depth).trim())
                         .append(System.lineSeparator());
                 }
 
                 StringBuilder indentation = new StringBuilder();
-                indentation.append(repeat("│   ", depth - 1));
+                indentation.append(repeat("|   ", depth - 1));
                 if (depth > 0) {
-                    indentation.append("├── ");
+                    indentation.append("|-- ");
                 }
 
                 report
@@ -110,7 +110,7 @@ class EventHandler {
                     .append(System.lineSeparator());
             } else if (event.type.equals(EventType.RESOLVED)) {
                 report
-                    .append(repeat("│   ", depth))
+                    .append(repeat("|   ", depth))
                     .append(event.type.getSymbol())
                     .append(" ")
                     .append(event.message)
