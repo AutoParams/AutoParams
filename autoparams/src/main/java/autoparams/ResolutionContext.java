@@ -37,7 +37,23 @@ public class ResolutionContext {
     private final LogWriter logWriter;
     private final EventHandler eventHandler = new EventHandler();
 
-    ResolutionContext(
+    /**
+     * Creates a new {@link ResolutionContext} with the specified object
+     * generator, processor, and log writer.
+     * <p>
+     * This constructor allows for custom configuration of the context by
+     * providing specific implementations of {@link ObjectGenerator},
+     * {@link ObjectProcessor}, and {@link LogWriter}.
+     * </p>
+     *
+     * @param generator the object generator to use for object creation
+     * @param processor the object processor to use for post-processing
+     *                  generated objects
+     * @param logWriter the log writer to use for logging resolution events
+     * @throws IllegalArgumentException if {@code generator}, {@code processor},
+     *                                  or {@code logWriter} is {@code null}
+     */
+    public ResolutionContext(
         ObjectGenerator generator,
         ObjectProcessor processor,
         LogWriter logWriter
