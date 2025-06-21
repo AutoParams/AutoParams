@@ -18,6 +18,7 @@ import autoparams.customization.CustomizerSource;
 import autoparams.customization.RecycleArgument;
 import autoparams.generator.ObjectGenerator;
 import autoparams.processor.ObjectProcessor;
+import lombok.val;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,9 +37,8 @@ class TestResolutionContext extends ResolutionContext {
     }
 
     static TestResolutionContext create(ExtensionContext extensionContext) {
-        TestResolutionContext resolutionContext = new TestResolutionContext(
-            getLogWriter(extensionContext)
-        );
+        LogWriter logWriter = getLogWriter(extensionContext);
+        val resolutionContext = new TestResolutionContext(logWriter);
         resolutionContext.initialize(extensionContext);
         return resolutionContext;
     }

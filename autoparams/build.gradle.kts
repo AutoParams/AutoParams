@@ -8,6 +8,9 @@ dependencies {
     api("jakarta.validation:jakarta.validation-api:3.0.2")
     api("com.google.code.findbugs:jsr305:3.0.2")
 
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
     testImplementation("org.assertj:assertj-core:3.8.0")
     testImplementation("org.mockito:mockito-core:5.14.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
