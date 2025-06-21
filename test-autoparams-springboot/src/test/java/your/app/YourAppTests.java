@@ -1,14 +1,14 @@
 package your.app;
 
-import autoparams.ResolutionContext;
+import autoparams.AutoParams;
+import autoparams.LogResolution;
 import org.junit.jupiter.api.Test;
 
 public class YourAppTests {
 
-    @SuppressWarnings("unused")
     @Test
-    void testMethodReporting() {
-        ResolutionContext context = new ResolutionContext();
-        User user = context.resolve();
+    @AutoParams
+    @LogResolution
+    void testMethodReporting(User user) {
     }
 }
