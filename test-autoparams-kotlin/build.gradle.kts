@@ -9,7 +9,7 @@ dependencies {
     testImplementation(project(":autoparams"))
     testImplementation(project(":autoparams-kotlin"))
     testImplementation("org.assertj:assertj-core:3.20.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
 }
 
 tasks.withType<KotlinCompile>().configureEach {
