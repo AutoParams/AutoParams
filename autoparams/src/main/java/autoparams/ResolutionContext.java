@@ -78,7 +78,7 @@ public class ResolutionContext {
         ObjectGenerator generator,
         ObjectProcessor processor
     ) {
-        this(generator, processor, new ConsoleLogWriter());
+        this(generator, processor, new NoOpLogWriter());
     }
 
     /**

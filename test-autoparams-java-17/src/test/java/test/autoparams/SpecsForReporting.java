@@ -213,4 +213,11 @@ public class SpecsForReporting {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output).isEmpty();
     }
+
+    @Test
+    void sut_created_with_default_constructor_does_not_write_resolution_log() {
+        var context = new ResolutionContext();
+        String[] output = captureOutput(() -> context.resolve(Product.class));
+        assertThat(output).isEmpty();
+    }
 }
