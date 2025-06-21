@@ -102,7 +102,7 @@ class StringAssetConverter implements AssetConverter {
         .with(StringAssetConverter::convertToString)
         .and(StringAssetConverter::convertToEnum)
         .and(UUID.class, UUID::fromString)
-        .and(Locale.class, Locale::new)
+        .and(Locale.class, Locale::forLanguageTag)
         .and(Currency.class, Currency::getInstance)
         .and(URI.class, URI::create)
         .and(StringAssetConverter::convertToURL)
@@ -144,7 +144,7 @@ class StringAssetConverter implements AssetConverter {
     private static Optional<Object> convertToURL(String source, Type type) {
         try {
             return type.equals(URL.class)
-                ? Optional.of(new URL(source))
+                ? Optional.of(URI.create(source).toURL())
                 : empty();
         } catch (MalformedURLException exception) {
             String message = "Cannot convert \"" + source + "\" to URL.";
