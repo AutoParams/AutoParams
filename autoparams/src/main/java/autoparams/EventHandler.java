@@ -44,7 +44,7 @@ class EventHandler {
     }
 
     public void onResolving(ObjectQuery query) {
-        addEvent(EventType.RESOLVING, "Resolving for: " + query);
+        addEvent(EventType.RESOLVING, "Resolving: for " + query);
         increaseDepth();
     }
 
@@ -58,7 +58,7 @@ class EventHandler {
         long elapsedMillis
     ) {
         decreaseDepth();
-        String format = "Resolved(%s): %s for: %s";
+        String format = "Resolved(%s): %s for %s";
         String time = elapsedMillis == 0 ? "<1 ms" : elapsedMillis + " ms";
         addEvent(EventType.RESOLVED, String.format(format, time, value, query));
     }

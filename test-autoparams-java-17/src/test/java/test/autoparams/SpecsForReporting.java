@@ -20,7 +20,7 @@ public class SpecsForReporting {
         String[] output = captureOutput(() -> context.resolve(String.class));
         String actual = output[0];
 
-        assertThat(actual).contains("Resolving for:");
+        assertThat(actual).contains("Resolving: for");
         assertThat(actual).contains("java.lang.String");
     }
 
@@ -182,7 +182,7 @@ public class SpecsForReporting {
             } catch (Exception ignored) {
             }
         });
-        assertThat(output[0]).contains("Resolving for:");
+        assertThat(output[0]).contains("Resolving: for");
     }
 
     private static String[] captureOutput(Runnable runnable) {
