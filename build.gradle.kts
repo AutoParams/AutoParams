@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     java
     `maven-publish`
@@ -33,6 +35,13 @@ subprojects {
         isIgnoreFailures = false
         maxErrors = 0
         maxWarnings = 0
+    }
+
+    tasks.test {
+        testLogging {
+            events("skipped", "failed")
+            exceptionFormat = TestExceptionFormat.FULL
+        }
     }
 
     tasks.withType<Jar>().configureEach {
