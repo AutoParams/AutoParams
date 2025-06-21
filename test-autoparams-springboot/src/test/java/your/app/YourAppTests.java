@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class YourAppTests {
 
+    @SuppressWarnings("unused")
     @Test
     void testMethodReporting() {
         ResolutionContext context = new ResolutionContext();

@@ -174,6 +174,7 @@ public class Examples {
         assertTrue(value <= 10);
     }
 
+    @SuppressWarnings("unused")
     @Test
     void testMethodResolutionContext() {
         ResolutionContext context = new ResolutionContext();
@@ -181,6 +182,7 @@ public class Examples {
         Review review = context.resolve();
     }
 
+    @SuppressWarnings("unused")
     @Test
     void testMethodFactory() {
         Factory<Product> factory = Factory.create(Product.class);
