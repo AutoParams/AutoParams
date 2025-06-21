@@ -67,18 +67,18 @@ class EventHandler {
         depth--;
     }
 
-    public void flushEventsIfRootDepth() {
+    public void flushEventsIfRootDepth(LogWriter writer) {
         if (depth == 0) {
-            flushEvents();
+            flushEvents(writer);
         }
     }
 
-    public void flushEvents() {
-        printEvents();
+    public void flushEvents(LogWriter writer) {
+        printEvents(writer);
         events.clear();
     }
 
-    private void printEvents() {
+    private void printEvents(LogWriter writer) {
         if (events.isEmpty()) {
             return;
         }
@@ -118,7 +118,7 @@ class EventHandler {
             }
         }
 
-        System.out.println(report);
+        writer.write(report.toString());
     }
 
     @SuppressWarnings("SameParameterValue")

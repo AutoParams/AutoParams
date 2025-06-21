@@ -32,9 +32,32 @@ import static java.lang.System.currentTimeMillis;
  */
 public class ResolutionContext {
 
-    private final EventHandler eventHandler = new EventHandler();
     private ObjectGenerator generator;
     private ObjectProcessor processor;
+    private final LogWriter logWriter;
+    private final EventHandler eventHandler = new EventHandler();
+
+    ResolutionContext(
+        ObjectGenerator generator,
+        ObjectProcessor processor,
+        LogWriter logWriter
+    ) {
+        if (generator == null) {
+            throw new IllegalArgumentException("The argument 'generator' is null.");
+        }
+
+        if (processor == null) {
+            throw new IllegalArgumentException("The argument 'processor' is null.");
+        }
+
+        if (logWriter == null) {
+            throw new IllegalArgumentException("The argument 'logWriter' is null.");
+        }
+
+        this.generator = generator;
+        this.processor = processor;
+        this.logWriter = logWriter;
+    }
 
     /**
      * Creates a new {@link ResolutionContext} with the specified object
@@ -55,16 +78,7 @@ public class ResolutionContext {
         ObjectGenerator generator,
         ObjectProcessor processor
     ) {
-        if (generator == null) {
-            throw new IllegalArgumentException("The argument 'generator' is null.");
-        }
-
-        if (processor == null) {
-            throw new IllegalArgumentException("The argument 'processor' is null.");
-        }
-
-        this.generator = generator;
-        this.processor = processor;
+        this(generator, processor, new ConsoleLogWriter());
     }
 
     /**
@@ -218,10 +232,10 @@ public class ResolutionContext {
             Object value = generateThenProcessValue(query);
             long elapsedMillis = currentTimeMillis() - startedMillis;
             eventHandler.onResolved(query, value, elapsedMillis);
-            eventHandler.flushEventsIfRootDepth();
+            eventHandler.flushEventsIfRootDepth(logWriter);
             return value;
         } catch (Exception exception) {
-            eventHandler.flushEvents();
+            eventHandler.flushEvents(logWriter);
             String message = "Failed to resolve an object for the given query: "
                 + query + ". See the internal error message for details.";
             throw new RuntimeException(message, exception);

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import autoparams.AutoParams;
+import autoparams.LogResolution;
 import autoparams.ResolutionContext;
 import autoparams.customization.Freeze;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SpecsForReporting {
 
     @Test
-    void writes_resolving_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_resolving_event_correctly(ResolutionContext context) {
         String[] output = captureOutput(() -> context.resolve(String.class));
         String actual = output[0];
 
@@ -24,11 +26,11 @@ public class SpecsForReporting {
 
     @Test
     @AutoParams
+    @LogResolution
     void writes_resolved_event_correctly(
         @Freeze String value,
-        ResolutionContext sourceContext
+        ResolutionContext context
     ) {
-        ResolutionContext context = sourceContext.branch();
         String[] output = captureOutput(() -> context.resolve(String.class));
         String actual = output[1];
 
@@ -38,8 +40,11 @@ public class SpecsForReporting {
     }
 
     @Test
-    void writes_blank_line_between_object_resolution() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_blank_line_between_object_resolution(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> {
             context.resolve(String.class);
             context.resolve(Integer.class);
@@ -50,78 +55,111 @@ public class SpecsForReporting {
     }
 
     @Test
-    void does_not_write_blank_line_after_last_object_resolution_in_scope() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void does_not_write_blank_line_after_last_object_resolution_in_scope(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[4]).isNotEmpty();
     }
 
     @Test
-    void writes_zero_depth_indentation_for_resolving_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_zero_depth_indentation_for_resolving_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[0]).doesNotContain("|-- ");
     }
 
     @Test
-    void writes_one_depth_indentation_for_resolving_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_one_depth_indentation_for_resolving_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[1]).startsWith("|-- ");
     }
 
     @Test
-    void writes_two_depth_indentation_for_resolving_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_two_depth_indentation_for_resolving_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[2]).startsWith("|   |-- ");
     }
 
     @Test
-    void writes_three_depth_indentation_for_resolving_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_three_depth_indentation_for_resolving_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[14]).startsWith("|   |   |-- ");
     }
 
     @Test
-    void writes_zero_depth_indentation_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_zero_depth_indentation_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[27]).doesNotContain("|");
     }
 
     @Test
-    void writes_one_depth_indentation_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_one_depth_indentation_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[4]).startsWith("|   ");
     }
 
     @Test
-    void writes_two_depth_indentation_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_two_depth_indentation_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[3]).startsWith("|   |   ");
     }
 
     @Test
-    void writes_three_depth_indentation_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_three_depth_indentation_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[15]).startsWith("|   |   |   ");
     }
 
     @Test
-    void writes_one_depth_blank_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_one_depth_blank_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
         assertThat(output[5]).startsWith("|");
     }
 
     @Test
-    void writes_two_depth_blank_for_resolved_event_correctly() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_two_depth_blank_for_resolved_event_correctly(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Review.class));
         assertThat(output[17]).startsWith("|   |");
     }
@@ -133,8 +171,11 @@ public class SpecsForReporting {
     }
 
     @Test
-    void writes_resolution_log_even_when_object_resolution_fails() {
-        var context = new ResolutionContext();
+    @AutoParams
+    @LogResolution
+    void writes_resolution_log_even_when_object_resolution_fails(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> {
             try {
                 context.resolve(Uninstantiable.class);
@@ -153,12 +194,23 @@ public class SpecsForReporting {
             System.setOut(new PrintStream(outputStream));
             runnable.run();
             outputStr = outputStream.toString();
-            outputLines = outputStr.split("\\R");
+            outputLines = outputStr.isEmpty()
+                ? new String[0]
+                : outputStr.split("\\R");
         } finally {
             System.setOut(originalOut);
             System.out.print(outputStr);
         }
 
         return outputLines;
+    }
+
+    @Test
+    @AutoParams
+    void sut_does_not_write_resolution_log_when_not_requested(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Product.class));
+        assertThat(output).isEmpty();
     }
 }

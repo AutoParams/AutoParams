@@ -2,6 +2,7 @@ package autoparams;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
 import autoparams.customization.RecycleArgument;
+import autoparams.generator.ObjectGenerator;
+import autoparams.processor.ObjectProcessor;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -28,13 +31,23 @@ class TestResolutionContext extends ResolutionContext {
 
     private static final Object[] EMPTY_ASSET = new Object[0];
 
-    private TestResolutionContext() {
+    private TestResolutionContext(LogWriter logWriter) {
+        super(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT, logWriter);
     }
 
     static TestResolutionContext create(ExtensionContext extensionContext) {
-        TestResolutionContext resolutionContext = new TestResolutionContext();
+        TestResolutionContext resolutionContext = new TestResolutionContext(
+            getLogWriter(extensionContext)
+        );
         resolutionContext.initialize(extensionContext);
         return resolutionContext;
+    }
+
+    private static LogWriter getLogWriter(ExtensionContext extensionContext) {
+        Method method = extensionContext.getRequiredTestMethod();
+        return method.isAnnotationPresent(LogResolution.class)
+            ? new ConsoleLogWriter()
+            : new NoOpLogWriter();
     }
 
     private void initialize(ExtensionContext extensionContext) {

@@ -27,9 +27,9 @@ final class DefaultObjectGenerator extends CompositeObjectGenerator {
                     new CollectionGenerator(),
                     new OptionalGenerator(),
                     new FactoryGenerator(),
-                    new ServiceGenerator(),
                     new ComplexObjectGenerator(),
-                    new SealedTypeObjectGenerator()
+                    new SealedTypeObjectGenerator(),
+                    new ServiceGenerator()
                 )
             )
         );
