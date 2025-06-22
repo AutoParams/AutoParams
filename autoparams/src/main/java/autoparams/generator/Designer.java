@@ -47,6 +47,10 @@ public final class Designer<T> {
     public <P> ParameterBinding<T, P> set(
         FunctionDelegate<T, P> getterDelegate
     ) {
+        if (getterDelegate == null) {
+            throw new IllegalArgumentException("getterDelegate cannot be null");
+        }
+
         return new ParameterBinding<T, P>(this, getterDelegate);
     }
 

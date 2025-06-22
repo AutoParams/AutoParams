@@ -33,4 +33,25 @@ public class SpecsForDesigner {
 
         assertThat(actual.name()).isEqualTo(name);
     }
+
+    @Test
+    @AutoParams
+    void sut_overwrites_property_value_when_set_multiple_times(
+        String firstName,
+        String secondName
+    ) {
+        Product actual = Factory
+            .design(Product.class)
+            .set(Product::name).to(firstName)
+            .set(Product::name).to(secondName)
+            .create();
+
+        assertThat(actual.name()).isEqualTo(secondName);
+    }
+
+    @Test
+    void sut_throws_exception_when_property_getter_delegate_is_null() {
+        assertThatThrownBy(() -> Factory.design(Product.class).set(null))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
 }
