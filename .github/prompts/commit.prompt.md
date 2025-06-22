@@ -2,14 +2,23 @@
 mode: agent
 ---
 
-1. First, execute `git diff --staged` to check the staged changes.
+# Commit Message Workflow
 
-2. Refer to the [Commit Message Instructions](../../.docs/commit-message-instructions.md) file for detailed instructions on writing commit messages.
+## 1. Review Staged Changes
+- Execute `git diff --staged` to check the staged changes.
 
-3. Write a commit message for the staged changes following the guidelines.
+## 2. Review Commit Message Guidelines
+- Refer to the [Commit Message Instructions](../../.docs/commit-message-instructions.md) for detailed rules.
 
-  {{#if topic}}
-  Focus the commit message on changes related to: {{topic}}
-  {{/if}}
+## 3. Draft and Validate Commit Message
+- Write a commit message for the staged changes following the guidelines.
+- Before finalizing, check the subject line length using one of the following:
+  Bash: `echo -n "<subject line>" | wc -c`
+  PowerShell: `"<subject line>".Length`
+- If the subject line exceeds 50 characters, rewrite it to be 50 characters or less and repeat the check.
+{{#if topic}}
+- Focus the commit message on changes related to: {{topic}}
+{{/if}}
 
-4. Proceed with the commit after the commit message is reviewed.
+## 4. Review and Commit
+- Proceed with the commit after the commit message is reviewed.
