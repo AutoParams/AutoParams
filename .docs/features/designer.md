@@ -44,11 +44,19 @@ Product product = Factory
 ### Processing the Created Object
 
 ```java
-Product product = Factory
-    .design(Product.class)
-    .process(p -> p.applyPercentDiscount(10))
+Order order = Factory
+    .design(Order.class)
+    .process(o -> o.applyPercentDiscount(10))
     .create();
 ```
+
+- The `process` method accepts a `Consumer<T>` that allows you to perform additional operations on the created object before returning it.
+
+**Test Scenarios**:
+
+- [ ] sut applies processor to created object
+- [ ] sut applies multiple processors in sequence
+- [ ] sut throws exception when processor is null
 
 ### <WIP> Nested Object Configuration
 
