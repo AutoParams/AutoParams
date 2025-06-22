@@ -17,6 +17,7 @@ ij_wrap_on_typing = true
 [*.java]
 indent_size = 4
 tab_width = 4
+max_line_length = 100
 ij_continuation_indent_size = 4
 ij_java_align_consecutive_assignments = false
 ij_java_align_consecutive_variable_declarations = false
