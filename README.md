@@ -552,6 +552,7 @@ For example, resolving a `User` class produces a detailed trace. Given the follo
 ```java
 @AllArgsConstructor
 @Getter
+@ToString
 public class User {
 
     private final UUID id;
@@ -573,23 +574,23 @@ void testMethod(User user) {
 Will print a hierarchical visualization of the resolution process:
 
 ```text
-> Resolving: for class your.app.User
+> Resolving: for Parameter your.app.User user
 |-- > Resolving: for interface autoparams.generator.ConstructorResolver
 |   |-- > Resolving: for interface autoparams.generator.ConstructorExtractor
-|   |   < Resolved(<1 ms): autoparams.generator.DefaultConstructorExtractor@5807ea46 for interface autoparams.generator.ConstructorExtractor
-|   < Resolved(<1 ms): autoparams.generator.CompositeConstructorResolver@305289b3 for interface autoparams.generator.ConstructorResolver
+|   |   < Resolved(1 ms): autoparams.generator.DefaultConstructorExtractor@52035328 for interface autoparams.generator.ConstructorExtractor
+|   < Resolved(1 ms): autoparams.generator.CompositeConstructorResolver@5614ae05 for interface autoparams.generator.ConstructorResolver
 |
-|-- > Resolving: for Parameter java.util.UUID id
-|   < Resolved(<1 ms): 2c792f91-2fb8-41c0-a7af-5bda64192949 for Parameter java.util.UUID id
+|-- > Resolving: for Parameter final java.util.UUID id
+|   < Resolved(<1 ms): fbdf7aa8-1af7-4308-bc64-ee9dbfeba8d2 for Parameter final java.util.UUID id
 |
-|-- > Resolving: for Parameter java.lang.String email
+|-- > Resolving: for Parameter final java.lang.String email
 |   |-- > Resolving: for class autoparams.generator.EmailAddressGenerationOptions
 |   |   < Resolved(<1 ms): EmailAddressGenerationOptions[domains=["test.com"]] for class autoparams.generator.EmailAddressGenerationOptions
-|   < Resolved(1 ms): bab83e7b-bb56-4acb-aef4-ee7b4db24121@test.com for Parameter java.lang.String email
+|   < Resolved(2 ms): 53bf56a3-8a42-47f3-a5c9-854862ea4a56@test.com for Parameter final java.lang.String email
 |
-|-- > Resolving: for Parameter java.lang.String username
-|   < Resolved(<1 ms): username24cbc137-4990-414b-9af7-39ae7ce1b437 for Parameter java.lang.String username
-< Resolved(1 ms): your.app.User@33e4068 for class your.app.User
+|-- > Resolving: for Parameter final java.lang.String username
+|   < Resolved(1 ms): usernamec6962921-ab77-4dbc-a71d-6932a9faa5be for Parameter final java.lang.String username
+< Resolved(5 ms): User(id=fbdf7aa8-1af7-4308-bc64-ee9dbfeba8d2, email=53bf56a3-8a42-47f3-a5c9-854862ea4a56@test.com, username=usernamec6962921-ab77-4dbc-a71d-6932a9faa5be) for Parameter your.app.User user
 ```
 
 The log uses the following symbols to represent the resolution flow:

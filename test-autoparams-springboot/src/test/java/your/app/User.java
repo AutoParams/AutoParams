@@ -2,5 +2,16 @@ package your.app;
 
 import java.util.UUID;
 
-public record User(UUID id, String email, String username) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+@AllArgsConstructor
+@Getter
+@ToString
+public class User {
+
+    private final UUID id;
+    private final String email;
+    private final String username;
 }
