@@ -16,6 +16,11 @@ Product product = designer.create();
 - The `Designer<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `Factory.design(Class<T> type)` method.
 - The `create()` method generates an arbitrary object of type `T`.
 
+**Test Scenarios**:
+
+- [ ] design throws exception when argument type is null
+- [ ] sut creates an object of the specified type
+
 ### Setting Constructor Argument Values Corresponding to Properties
 
 ```java
