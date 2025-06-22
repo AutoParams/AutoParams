@@ -39,6 +39,7 @@ Product product = Factory
 
 - [x] sut sets property value when using method reference
 - [ ] sut overwrites property value when set multiple times
+- [ ] sut throws exception when property getter delegate is null
 
 ### Processing the Created Object
 
