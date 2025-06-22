@@ -478,6 +478,7 @@ public final class Factory<T> implements Supplier<T> {
             throw new IllegalArgumentException("The argument 'type' is null.");
         }
 
-        return new Designer<>(type);
+        Factory<T> factory = create(type);
+        return new Designer<>(factory);
     }
 }
