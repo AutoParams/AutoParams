@@ -32,8 +32,8 @@ Product product = Factory
 ```
 
 - The `<P>set` method accepts a method reference of type `FunctionDelegate<T, P>`.
-- The `<P>set` method returns an instance of the `PropertyBinding<T, P>` class, which is defined inside the `Designer<T>` class.
-- The `PropertyBinding<T, P>` class allows you to set the property value using the `to(P value)` method.
+- The `<P>set` method returns an instance of the `ParameterBinding<P>` class, which is provided by the `Designer<T>` class.
+- The `ParameterBinding<P>` class allows you to set the property value using the `to(P value)` method.
 
 **Test Scenarios**:
 
