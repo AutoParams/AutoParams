@@ -46,7 +46,7 @@ The project enforces consistent coding standards through `.editorconfig`. Key fo
 **File Structure:**
 - **Indentation**: 4 spaces (never tabs)
 - **Character encoding**: UTF-8
-- **Max line length**: 120 characters
+- **Max line length**: 100 characters
 - **Final newline**: Always required
 
 **Code Layout:**

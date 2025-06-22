@@ -4,7 +4,7 @@ end_of_line = crlf
 indent_size = 2
 indent_style = space
 insert_final_newline = true
-max_line_length = 120
+max_line_length = 100
 tab_width = 2
 ij_continuation_indent_size = 2
 ij_formatter_off_tag = @formatter:off
@@ -17,7 +17,6 @@ ij_wrap_on_typing = true
 [*.java]
 indent_size = 4
 tab_width = 4
-max_line_length = 100
 ij_continuation_indent_size = 4
 ij_java_align_consecutive_assignments = false
 ij_java_align_consecutive_variable_declarations = false
