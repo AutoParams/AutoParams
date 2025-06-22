@@ -20,6 +20,7 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 ### TDD Guidelines
 
 - Use the test scenario phrase as the test method name, replacing spaces with underscores (_).
+- Before writing tests, define minimal method signatures (empty methods, methods returning null, or methods returning default values) to prevent compilation errors.
 - Request a review before writing and running tests.
 - Use the command `./gradlew :{module}:test --tests {fullTestClassName}` to run tests within a specific test class.
 - If a test fails, understand the reason for the failure and modify the code to make the test pass.
@@ -36,7 +37,7 @@ All code must follow consistent formatting standards to ensure readability and m
 ### Core Formatting Rules
 
 - **Method and Class Member Separation**: Use exactly one blank line to separate methods, constructors, and other class members
-- **Annotation Placement**: Place all annotations (@Test, @Override, etc.) on their own line, never on the same line as method signatures or class declarations
+- **Annotation Placement**: Place all annotations (`@Test`, `@Override`, etc.) on their own line, never on the same line as method signatures or class declarations
 - **EditorConfig Compliance**: Follow all formatting rules defined in the project's `.editorconfig` file
 
 ### EditorConfig Standards
