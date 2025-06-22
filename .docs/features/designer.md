@@ -54,9 +54,9 @@ Order order = Factory
 
 **Test Scenarios**:
 
-- [ ] sut applies processor to created object
-- [ ] sut applies multiple processors in sequence
-- [ ] sut throws exception when processor is null
+- [x] sut applies processor to created object
+- [x] sut applies multiple processors in sequence
+- [x] sut throws exception when processor is null
 
 ### <WIP> Nested Object Configuration
 

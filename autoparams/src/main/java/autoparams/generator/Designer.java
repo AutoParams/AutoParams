@@ -1,7 +1,8 @@
 package autoparams.generator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import autoparams.customization.Customizer;
 import autoparams.customization.dsl.FunctionDelegate;
@@ -9,22 +10,24 @@ import autoparams.customization.dsl.FunctionDelegate;
 public final class Designer<T> {
 
     private final Class<T> type;
-    private final Map<FunctionDelegate<T, ?>, Object> propertyBindings;
+    private final List<PropertyEntry<T, ?>> propertyBindings;
+    private final List<Consumer<T>> processors;
 
     Designer(Class<T> type) {
         this.type = type;
-        this.propertyBindings = new HashMap<>();
+        this.propertyBindings = new ArrayList<>();
+        this.processors = new ArrayList<>();
     }
 
     public T create() {
         Factory<T> factory = Factory.create(type);
 
-        Customizer[] customizers = propertyBindings.entrySet().stream()
+        Customizer[] customizers = propertyBindings.stream()
             .map(entry -> {
                 @SuppressWarnings("unchecked")
                 FunctionDelegate<T, Object> getter =
-                    (FunctionDelegate<T, Object>) entry.getKey();
-                Object value = entry.getValue();
+                    (FunctionDelegate<T, Object>) entry.getterDelegate;
+                Object value = entry.value;
                 return new Customizer() {
                     @Override
                     public ObjectGenerator customize(ObjectGenerator generator) {
@@ -41,7 +44,13 @@ public final class Designer<T> {
                 };
             }).toArray(Customizer[]::new);
 
-        return factory.get(customizers);
+        T object = factory.get(customizers);
+        
+        for (Consumer<T> processor : processors) {
+            processor.accept(object);
+        }
+        
+        return object;
     }
 
     public <P> ParameterBinding<T, P> set(
@@ -52,6 +61,25 @@ public final class Designer<T> {
         }
 
         return new ParameterBinding<T, P>(this, getterDelegate);
+    }
+
+    public Designer<T> process(Consumer<T> processor) {
+        if (processor == null) {
+            throw new IllegalArgumentException("processor cannot be null");
+        }
+
+        this.processors.add(processor);
+        return this;
+    }
+
+    private static class PropertyEntry<T, P> {
+        final FunctionDelegate<T, P> getterDelegate;
+        final Object value;
+
+        PropertyEntry(FunctionDelegate<T, P> getterDelegate, Object value) {
+            this.getterDelegate = getterDelegate;
+            this.value = value;
+        }
     }
 
     public static class ParameterBinding<T, P> {
@@ -65,7 +93,10 @@ public final class Designer<T> {
         }
 
         public Designer<T> to(P value) {
-            designer.propertyBindings.put(getterDelegate, value);
+            designer.propertyBindings.removeIf(entry -> 
+                entry.getterDelegate.getClass().equals(getterDelegate.getClass()));
+            
+            designer.propertyBindings.add(new PropertyEntry<>(getterDelegate, value));
             return designer;
         }
     }
