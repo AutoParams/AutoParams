@@ -31,6 +31,11 @@ Product product = Factory
     .create();
 ```
 
+**Test Scenarios**:
+
+- [ ] sut sets property value when using method reference
+- [ ] sut overwrites property value when set multiple times
+
 ### Processing the Created Object
 
 ```java
