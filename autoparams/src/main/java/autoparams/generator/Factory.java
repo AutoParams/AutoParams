@@ -472,4 +472,12 @@ public final class Factory<T> implements Supplier<T> {
     public void customize(Customizer... customizers) {
         context.customize(customizers);
     }
+
+    public static <T> Designer<T> design(Class<T> type) {
+        if (type == null) {
+            throw new IllegalArgumentException("The argument 'type' is null.");
+        }
+
+        return new Designer<>(type);
+    }
 }
