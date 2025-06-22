@@ -58,7 +58,7 @@ Order order = Factory
 - [x] sut applies multiple processors in sequence
 - [x] sut throws exception when processor is null
 
-### <WIP> Nested Object Configuration
+### **[WIP]** Nested Object Configuration
 
 ```java
 Product product = Factory
@@ -70,7 +70,7 @@ Product product = Factory
     .create();
 ```
 
-### <WIP> Type Inference
+### **[WIP]** Type Inference
 
 > *Needs to be checked for technical feasibility.*
 
