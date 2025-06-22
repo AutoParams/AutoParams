@@ -31,9 +31,13 @@ Product product = Factory
     .create();
 ```
 
+- The `<P>set` method accepts a method reference of type `FunctionDelegate<T, P>`.
+- The `<P>set` method returns an instance of the `PropertyBinding<T, P>` class, which is defined inside the `Designer<T>` class.
+- The `PropertyBinding<T, P>` class allows you to set the property value using the `to(P value)` method.
+
 **Test Scenarios**:
 
-- [ ] sut sets property value when using method reference
+- [x] sut sets property value when using method reference
 - [ ] sut overwrites property value when set multiple times
 
 ### Processing the Created Object

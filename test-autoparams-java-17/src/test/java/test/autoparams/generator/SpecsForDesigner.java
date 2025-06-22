@@ -1,5 +1,6 @@
 package test.autoparams.generator;
 
+import autoparams.AutoParams;
 import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Product;
@@ -20,5 +21,16 @@ public class SpecsForDesigner {
     void sut_creates_an_object_of_the_specified_type() {
         Product actual = Factory.design(Product.class).create();
         assertThat(actual).isInstanceOf(Product.class);
+    }
+
+    @Test
+    @AutoParams
+    void sut_sets_property_value_when_using_method_reference(String name) {
+        Product actual = Factory
+            .design(Product.class)
+            .set(Product::name).to(name)
+            .create();
+
+        assertThat(actual.name()).isEqualTo(name);
     }
 }
