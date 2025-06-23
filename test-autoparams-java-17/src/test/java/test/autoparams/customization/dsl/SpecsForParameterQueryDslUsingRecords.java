@@ -55,7 +55,7 @@ public class SpecsForParameterQueryDslUsingRecords {
     }
 
     @ParameterizedTest
-    @ValueAutoSource(strings = { "Quantity", "y" })
+    @ValueAutoSource(strings = { "Quantity", "ty" })
     void parameterNameEndsWith_creates_predicate_correctly(
         String suffix,
         ResolutionContext context,

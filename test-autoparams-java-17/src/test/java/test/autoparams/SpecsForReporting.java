@@ -111,7 +111,7 @@ public class SpecsForReporting {
         ResolutionContext context
     ) {
         String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[27]).doesNotContain("|");
+        assertThat(output[40]).doesNotContain("|");
     }
 
     @Test

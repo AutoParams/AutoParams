@@ -109,8 +109,8 @@ final class ComplexObjectGenerator implements ObjectGenerator {
                 .map(context::resolve)
                 .toArray();
             return constructor.newInstance(arguments);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
     }
 }
