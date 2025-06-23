@@ -61,7 +61,7 @@ Order order = Factory
 
 ### Nested Object Configuration
 
-- The `withDesign` method configures a nested object by accepting a function that takes and returns a `DesignLanguage<T>` instance.
+- The `withDesign` method configures a nested object by accepting a function that takes and returns a `DesignLanguage<T>` instance (`Function<DesignLanguage<T>, DesignLanguage<T>>`).
 - The `DesignLanguage<T>` class provides a fluent interface for configuring nested objects, similar to the `Designer<T>` class.
 - The `DesignLanguage<T>` class is located in the `autoparams.generator` package of the `autoparams` module.
 - The `DesignLanguage<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `withDesign` method of the `Designer<T>` class.
