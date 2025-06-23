@@ -82,10 +82,10 @@ Review review = Factory
 **Test Scenarios**:
 
 - [x] withDesign configures nested object using design function
-- [ ] withDesign throws exception when design function argument is null
-- [ ] withDesign throws exception when design function does not return its argument
-- [ ] withDesign does not affect properties outside the nested object
-- [ ] withDesign supports multiple levels of nested object configuration
+- [x] withDesign throws exception when design function argument is null
+- [x] withDesign throws exception when design function does not return its argument
+- [x] withDesign does not affect properties outside the nested object
+- [x] withDesign supports multiple levels of nested object configuration
 
 ### **[WIP]** Type Inference
 

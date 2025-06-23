@@ -18,7 +18,7 @@ abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
 
     public <P> ParameterBinding<P> set(FunctionDelegate<T, P> getterDelegate) {
         if (getterDelegate == null) {
-            throw new IllegalArgumentException("getterDelegate cannot be null");
+            throw new IllegalArgumentException("The argument 'getterDelegate' is null.");
         }
 
         return new ParameterBinding<>(getterDelegate);
@@ -26,7 +26,7 @@ abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
 
     public Context process(Consumer<T> processor) {
         if (processor == null) {
-            throw new IllegalArgumentException("processor cannot be null");
+            throw new IllegalArgumentException("The argument 'processor' is null.");
         }
 
         this.processors.add(processor);
@@ -46,8 +46,16 @@ abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
         public Context withDesign(
             Function<DesignLanguage<P>, DesignLanguage<P>> design
         ) {
+            if (design == null) {
+                throw new IllegalArgumentException("The argument 'design' is null.");
+            }
+
             DesignLanguage<P> designLanguage = new DesignLanguage<>();
-            design.apply(designLanguage);
+            DesignLanguage<P> result = design.apply(designLanguage);
+
+            if (result != designLanguage) {
+                throw new IllegalArgumentException("The design function must return its argument.");
+            }
 
             generators.add(new NestedDesignGenerator<>(getter, designLanguage));
             return context();

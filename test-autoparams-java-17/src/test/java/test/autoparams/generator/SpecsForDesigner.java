@@ -1,10 +1,12 @@
 package test.autoparams.generator;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import autoparams.AutoParams;
 import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
+import test.autoparams.Category;
 import test.autoparams.Order;
 import test.autoparams.Product;
 import test.autoparams.Review;
@@ -111,5 +113,65 @@ public class SpecsForDesigner {
         assertThat(actual.product().name()).isEqualTo(productName);
         assertThat(actual.product().imageUri()).isEqualTo(imageUri);
         assertThat(actual.comment()).isEqualTo(comment);
+    }
+
+    @Test
+    void withDesign_throws_exception_when_design_function_argument_is_null() {
+        assertThatThrownBy(() -> Factory
+            .design(Review.class)
+            .set(Review::product).withDesign(null)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void withDesign_throws_exception_when_design_function_does_not_return_its_argument() {
+        assertThatThrownBy(() -> Factory
+            .design(Review.class)
+            .set(Review::product).withDesign(product -> null)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    public record User(UUID id, String username) { }
+
+    public record Following(User followee, User follower) { }
+
+    @Test
+    @AutoParams
+    void withDesign_does_not_affect_properties_outside_the_nested_object(
+        String followeeName
+    ) {
+        Following actual = Factory
+            .design(Following.class)
+            .set(Following::followee).withDesign(user -> user
+                .set(User::username).to(followeeName)
+            )
+            .create();
+
+        assertThat(actual.followee().username()).isEqualTo(followeeName);
+        assertThat(actual.follower().username()).isNotEqualTo(followeeName);
+        assertThat(actual.followee()).isNotSameAs(actual.follower());
+    }
+
+    @Test
+    @AutoParams
+    void withDesign_supports_multiple_levels_of_nested_object_configuration(
+        String reviewComment,
+        String productName,
+        String categoryName
+    ) {
+        Review actual = Factory
+            .design(Review.class)
+            .set(Review::comment).to(reviewComment)
+            .set(Review::product).withDesign(product -> product
+                .set(Product::name).to(productName)
+                .set(Product::category).withDesign(category -> category
+                    .set(Category::name).to(categoryName)
+                )
+            )
+            .create();
+
+        assertThat(actual.comment()).isEqualTo(reviewComment);
+        assertThat(actual.product().name()).isEqualTo(productName);
+        assertThat(actual.product().category().name()).isEqualTo(categoryName);
     }
 }
