@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import autoparams.AutoParams;
+import autoparams.generator.Designer;
 import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
@@ -123,14 +124,6 @@ public class SpecsForDesigner {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    void withDesign_throws_exception_when_design_function_does_not_return_its_argument() {
-        assertThatThrownBy(() -> Factory
-            .design(Review.class)
-            .set(Review::product).withDesign(product -> null)
-        ).isInstanceOf(IllegalArgumentException.class);
-    }
-
     public record User(UUID id, String username) { }
 
     public record Following(User followee, User follower) { }
@@ -173,5 +166,14 @@ public class SpecsForDesigner {
         assertThat(actual.comment()).isEqualTo(reviewComment);
         assertThat(actual.product().name()).isEqualTo(productName);
         assertThat(actual.product().category().name()).isEqualTo(categoryName);
+    }
+
+    @Test
+    void create_throws_exception_when_design_function_does_not_return_its_argument() {
+        Designer<Review> designer = Factory
+            .design(Review.class)
+            .set(Review::product).withDesign(product -> null);
+        assertThatThrownBy(designer::create)
+            .isInstanceOf(RuntimeException.class);
     }
 }

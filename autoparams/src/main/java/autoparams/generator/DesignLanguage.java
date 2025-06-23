@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
+import autoparams.ParameterQuery;
+import autoparams.ResolutionContext;
+import autoparams.customization.Customizer;
 import autoparams.customization.dsl.ArgumentCustomizationDsl;
 import autoparams.customization.dsl.FunctionDelegate;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -93,6 +96,9 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
 
     private final List<ObjectGenerator> generators = new ArrayList<>();
     private final List<Consumer<T>> processors = new ArrayList<>();
+
+    DesignLanguage() {
+    }
 
     abstract Context context();
 
@@ -248,10 +254,13 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      * @see #to(Object)
      * @see #withDesign(Function)
      */
-    @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
     public class ParameterBinding<P> {
 
         private final FunctionDelegate<T, P> getter;
+
+        ParameterBinding(FunctionDelegate<T, P> getter) {
+            this.getter = getter;
+        }
 
         /**
          * Sets the property to a specific value.
@@ -303,6 +312,12 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * applying the Designer pattern to nested objects. The design function
          * receives a {@link DesignContext} instance for the nested object type
          * and must return the same instance to maintain the fluent chain.
+         * </p>
+         * <p>
+         * The design function is executed lazily - it is not invoked when
+         * {@code withDesign} is called, but only when the actual object
+         * generation occurs. This enables more efficient object creation
+         * and prevents unnecessary computations.
          * </p>
          *
          * <p><b>Single Level Nesting:</b></p>
@@ -366,15 +381,66 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
                 throw new IllegalArgumentException("The argument 'design' is null.");
             }
 
-            DesignContext<P> designLanguage = new DesignContext<>();
-            DesignContext<P> result = design.apply(designLanguage);
+            generators.add(new LazyNestedDesignGenerator<>(getter, design));
+            return context();
+        }
+    }
 
-            if (result != designLanguage) {
-                throw new IllegalArgumentException("The design function must return its argument.");
+    private static final class LazyNestedDesignGenerator<T, P> implements ArgumentGenerator {
+
+        private final Predicate<ParameterQuery> predicate;
+        private final Function<DesignContext<P>, DesignContext<P>> design;
+
+        LazyNestedDesignGenerator(
+            FunctionDelegate<T, P> getter,
+            Function<DesignContext<P>, DesignContext<P>> design
+        ) {
+            this.predicate = createParameterPredicate(getter);
+            this.design = design;
+        }
+
+        private Predicate<ParameterQuery> createParameterPredicate(FunctionDelegate<T, P> getter) {
+            // Use ArgumentCustomizationDsl logic directly to avoid duplication
+            try {
+                ArgumentGenerator tempGenerator =
+                    (ArgumentGenerator) ArgumentCustomizationDsl.set(getter).to(null);
+                return query -> {
+                    ObjectContainer result = tempGenerator.generate(query, null);
+                    return result != ObjectContainer.EMPTY;
+                };
+            } catch (Exception e) {
+                return query -> false;
+            }
+        }
+
+        @Override
+        public ObjectContainer generate(ParameterQuery query, ResolutionContext context) {
+            if (!predicate.test(query)) {
+                return ObjectContainer.EMPTY;
             }
 
-            generators.add(new NestedDesignGenerator<>(getter, designLanguage));
-            return context();
+            // Lazily execute the design function when object generation is needed
+            try {
+                DesignContext<P> designContext = new DesignContext<>();
+                DesignContext<P> result = design.apply(designContext);
+
+                if (result != designContext) {
+                    throw new RuntimeException("The design function must return its argument.", 
+                        new IllegalArgumentException(
+                            "The design function must return its argument."));
+                }
+
+                Class<?> nestedType = (Class<?>) query.getType();
+                Factory<?> factory = Factory.create(nestedType);
+                Customizer[] customizers = designContext.generators().toArray(Customizer[]::new);
+                Object nestedObject = factory.get(customizers);
+                return new ObjectContainer(nestedObject);
+            } catch (RuntimeException e) {
+                // Re-throw RuntimeException to propagate validation errors properly
+                throw e;
+            } catch (Exception e) {
+                return ObjectContainer.EMPTY;
+            }
         }
     }
 }

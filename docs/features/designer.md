@@ -67,6 +67,7 @@ Order order = Factory
 - The `DesignContext<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `withDesign` method of the `Designer<T>` class.
 - The `DesignContext<T>` class is derived from the same parent class as the `Designer<T>` class.
 - The function passed to the `withDesign` method must return the received argument as is.
+- The design function is executed lazily - it is not invoked when `withDesign` is called, but only when the actual object generation occurs during `create()`. This enables more efficient object creation and prevents unnecessary computations.
 
 ```java
 Review review = Factory
@@ -83,6 +84,6 @@ Review review = Factory
 
 - [x] withDesign configures nested object using design function
 - [x] withDesign throws exception when design function argument is null
-- [x] withDesign throws exception when design function does not return its argument
 - [x] withDesign does not affect properties outside the nested object
 - [x] withDesign supports multiple levels of nested object configuration
+- [x] create throws exception when design function does not return its argument
