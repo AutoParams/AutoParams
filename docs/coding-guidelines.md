@@ -74,3 +74,4 @@ After completing any code changes, verify the following:
 5. **Indentation Consistency**: All Java code uses 4 spaces for indentation (not tabs or 2 spaces)
 6. **Pattern Consistency**: New code follows the same formatting pattern as existing code in the file
 7. **Line Integrity**: No lines were accidentally merged or had spacing removed during editing
+8. **Final Newline**: Every file must end with a final newline character (as required by EditorConfig)
