@@ -81,7 +81,7 @@ Review review = Factory
 
 **Test Scenarios**:
 
-- [ ] withDesign configures nested object using design function
+- [x] withDesign configures nested object using design function
 - [ ] withDesign throws exception when design function argument is null
 - [ ] withDesign throws exception when design function does not return its argument
 - [ ] withDesign does not affect properties outside the nested object

@@ -7,6 +7,7 @@ import autoparams.generator.Factory;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Order;
 import test.autoparams.Product;
+import test.autoparams.Review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -87,5 +88,28 @@ public class SpecsForDesigner {
     void sut_throws_exception_when_processor_is_null() {
         assertThatThrownBy(() -> Factory.design(Product.class).process(null))
             .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @AutoParams
+    void withDesign_configures_nested_object_using_design_function(
+        String productName,
+        String imageName,
+        String comment
+    ) {
+        String imageUri = "http://example.com/images/" + imageName;
+
+        Review actual = Factory
+            .design(Review.class)
+            .set(Review::product).withDesign(product -> product
+                .set(Product::name).to(productName)
+                .set(Product::imageUri).to(imageUri)
+            )
+            .set(Review::comment).to(comment)
+            .create();
+
+        assertThat(actual.product().name()).isEqualTo(productName);
+        assertThat(actual.product().imageUri()).isEqualTo(imageUri);
+        assertThat(actual.comment()).isEqualTo(comment);
     }
 }

@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import autoparams.customization.dsl.ArgumentCustomizationDsl;
 import autoparams.customization.dsl.FunctionDelegate;
@@ -39,6 +40,16 @@ abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
 
         public Context to(P value) {
             generators.add(ArgumentCustomizationDsl.set(getter).to(value));
+            return context();
+        }
+
+        public Context withDesign(
+            Function<DesignLanguage<P>, DesignLanguage<P>> design
+        ) {
+            DesignLanguage<P> designLanguage = new DesignLanguage<>();
+            design.apply(designLanguage);
+
+            generators.add(new NestedDesignGenerator<>(getter, designLanguage));
             return context();
         }
     }
