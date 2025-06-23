@@ -87,3 +87,80 @@ Review review = Factory
 - [x] withDesign does not affect properties outside the nested object
 - [x] withDesign supports multiple levels of nested object configuration
 - [x] create throws exception when design function does not return its argument
+
+### Using Custom ResolutionContext with Designer<T>
+
+- When you create a `Designer<T>` instance using the `design` method with a `ResolutionContext` argument, the `Designer<T>` uses the provided `ResolutionContext` when generating objects.
+- The `ResolutionContext` enables customization of the object creation process when using `Designer<T>`.
+
+```java
+@Test
+@AutoParams
+void testMethod(@Freeze BigDecimal priceAmount, ResolutionContext context) {
+    Designer<Product> designer = Factory.design(context, Product.class);
+    Product product = designer.create();
+    assertThat(product.priceAmount()).isEqualTo(priceAmount);
+}
+```
+
+**Test Scenarios**:
+
+- [ ] sut uses provided resolution context when creating object
+- [ ] sut throws exception when resolution context is null
+- [ ] sut throws exception when type is null
+
+### Resolving and Injecting Designer Instances
+
+`Designer<T>` can be directly injected or resolved in test code using parameter provider tools such as `@AutoParams`. This enables more flexible handling of object creation and configuration in tests.
+
+- **Resolution via ResolutionContext**: At runtime, you can resolve a `Designer<T>` instance based on type information. By using `TypeReference`, generic type information is preserved, and `context.resolve(...)` returns a Designer instance of the specified type.
+- **Automatic Injection via AutoParams**: If you declare `Designer<T>` as a parameter in a test method, the `@AutoParams` annotation automatically injects the instance. This makes test code more concise and allows for more intuitive object creation and configuration.
+
+The following example demonstrates how to use `ResolutionContext` to resolve a `Designer<Product>` instance at runtime, configure the desired property values through method chaining, and then create the object.
+
+```java
+@Test
+void testMethod() {
+    var context = new ResolutionContext();
+    Designer<Product> designer = context.resolve(new TypeReference<>() { });
+    Product product = designer
+        .set(Product::name).to("Product A")
+        .set(Product::imageUri).to("https://example.com/product-a.jpg")
+        .create();
+}
+```
+
+The following example demonstrates how to use `@AutoParams` to automatically inject a `Designer<Product>` as a parameter in a test method and create an object using method chaining in the same way.
+
+```java
+@Test
+@AutoParams
+void testMethod(Designer<Product> designer) {
+    Product product = designer
+        .set(Product::name).to("Product A")
+        .set(Product::imageUri).to("https://example.com/product-a.jpg")
+        .create();
+}
+```
+
+**Test Scenarios**:
+
+- [ ] ResolutionContext resolves designer instance correctly
+- [ ] AutoParams resolves parameter of type designer
+
+### Object Stream
+
+- `stream` method of `Designer<T>` returns a `Stream<T>` that allows for lazy generation of multiple objects of type `T`.
+
+```java
+Stream<Product> stream = Factory
+    .design(Product.class)
+    .set(Product::stockQuantity).to(100)
+    .stream();
+assertThat(stream.limit(5))
+    .allSatisfy(p -> assertThat(p.stockQuantity()).isEqualTo(100));
+```
+
+**Test Scenarios**:
+
+- [ ] sut returns stream of objects with configured property values
