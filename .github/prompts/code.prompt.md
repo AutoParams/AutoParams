@@ -4,7 +4,7 @@ mode: agent
 
 # Write Code to Implement a Test Scenario
 
-Before writing code, read the [Coding Guidelines](../../.docs/coding-guidelines.md) and explain which steps you will follow. Then, check that your explanation meets the following criteria:
+Before writing code, read the [Coding Guidelines](../../docs/coding-guidelines.md) and explain which steps you will follow. Then, check that your explanation meets the following criteria:
 
 - Do not implement multiple scenarios
 - Follow TDD Guidelines from coding guidelines for reviews and process
