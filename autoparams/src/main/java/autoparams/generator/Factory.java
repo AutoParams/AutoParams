@@ -473,6 +473,55 @@ public final class Factory<T> implements Supplier<T> {
         context.customize(customizers);
     }
 
+    /**
+     * Creates a {@link Designer} instance for fluent object configuration of
+     * the specified type.
+     * <p>
+     * The Designer API provides a fluent interface for configuring and creating
+     * objects with specific property values and nested object relationships.
+     * This is particularly useful for test data generation where you need to
+     * control specific aspects of object creation.
+     * </p>
+     *
+     * <p><b>Basic Usage:</b></p>
+     * <pre>
+     * Product product = Factory
+     *     .design(Product.class)
+     *     .set(Product::name).to("Product A")
+     *     .set(Product::price).to(BigDecimal.valueOf(100))
+     *     .create();
+     * </pre>
+     *
+     * <p><b>Nested Object Configuration:</b></p>
+     * <pre>
+     * Review review = Factory
+     *     .design(Review.class)
+     *     .set(Review::product).withDesign(product -> product
+     *         .set(Product::name).to("Product A")
+     *         .set(Product::price).to(BigDecimal.valueOf(100))
+     *     )
+     *     .set(Review::comment).to("Great product!")
+     *     .create();
+     * </pre>
+     *
+     * <p><b>Object Processing:</b></p>
+     * <pre>
+     * Order order = Factory
+     *     .design(Order.class)
+     *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
+     *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
+     *     .create();
+     * </pre>
+     *
+     * @param type the class type for which to create the designer
+     * @param <T>  the type of object to be configured and created
+     * @return a {@link Designer} instance for fluent object configuration
+     * @throws IllegalArgumentException if {@code type} is {@code null}
+     * @see Designer
+     * @see Designer#set(autoparams.customization.dsl.FunctionDelegate)
+     * @see Designer#process(java.util.function.Consumer)
+     * @see Designer#create()
+     */
     public static <T> Designer<T> design(Class<T> type) {
         if (type == null) {
             throw new IllegalArgumentException("The argument 'type' is null.");
