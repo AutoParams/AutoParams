@@ -59,10 +59,10 @@ import autoparams.customization.Customizer;
  *
  * @param <T> the type of object this designer creates and configures
  * @see Factory#design(Class)
- * @see DesignContext#set(autoparams.customization.dsl.FunctionDelegate)
- * @see DesignContext#process(java.util.function.Consumer)
+ * @see DesignLanguage#set(autoparams.customization.dsl.FunctionDelegate)
+ * @see DesignLanguage#process(java.util.function.Consumer)
  */
-public class Designer<T> extends DesignContext<T, Designer<T>> {
+public class Designer<T> extends DesignLanguage<T, Designer<T>> {
 
     private Factory<T> factory;
 

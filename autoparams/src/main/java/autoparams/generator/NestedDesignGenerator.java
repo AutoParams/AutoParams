@@ -11,9 +11,9 @@ import autoparams.customization.dsl.FunctionDelegate;
 final class NestedDesignGenerator<T, P> implements ArgumentGenerator {
 
     private final Predicate<ParameterQuery> predicate;
-    private final DesignLanguage<P> designLanguage;
+    private final DesignContext<P> designLanguage;
 
-    NestedDesignGenerator(FunctionDelegate<T, P> getter, DesignLanguage<P> designLanguage) {
+    NestedDesignGenerator(FunctionDelegate<T, P> getter, DesignContext<P> designLanguage) {
         this.predicate = createParameterPredicate(getter);
         this.designLanguage = designLanguage;
     }
