@@ -12,9 +12,84 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+/**
+ * Abstract base class providing a fluent interface for object configuration
+ * in the Designer API.
+ * <p>
+ * This class defines the core fluent design language that enables intuitive
+ * and readable object configuration through method chaining. It provides the
+ * foundational methods {@code set()} and {@code process()} that are used by
+ * both {@link Designer} for main object configuration and {@link DesignContext}
+ * for nested object configuration.
+ * </p>
+ *
+ * <p><b>Core Design Patterns:</b></p>
+ * <ul>
+ * <li><b>Fluent Interface:</b> All methods return a context to enable method chaining</li>
+ * <li><b>Builder Pattern:</b> Accumulates configuration before final object creation</li>
+ * <li><b>Type Safety:</b> Compile-time checking of property types and method references</li>
+ * <li><b>Generic Design:</b> Works with any object type through parameterization</li>
+ * </ul>
+ *
+ * <p><b>Property Configuration:</b></p>
+ * <p>
+ * The {@link #set(FunctionDelegate)} method accepts method references to identify
+ * properties and returns a {@link ParameterBinding} that provides two configuration
+ * options:
+ * </p>
+ * <ul>
+ * <li><b>{@link ParameterBinding#to(Object)}:</b> Set a simple value</li>
+ * <li><b>{@link ParameterBinding#withDesign(Function)}:</b> Configure nested objects</li>
+ * </ul>
+ *
+ * <p><b>Object Processing:</b></p>
+ * <p>
+ * The {@link #process(Consumer)} method allows custom post-creation processing
+ * through lambda expressions or method references. Multiple processors can be
+ * chained and are executed in the order they are added.
+ * </p>
+ *
+ * <p><b>Usage Examples:</b></p>
+ * <pre>
+ * // Simple property setting
+ * Factory.design(Product.class)
+ *     .set(Product::name).to("Laptop")
+ *     .set(Product::price).to(BigDecimal.valueOf(999.99))
+ *     .create();
+ *
+ * // Nested object configuration
+ * Factory.design(Review.class)
+ *     .set(Review::product).withDesign(product -> product
+ *         .set(Product::name).to("Laptop")
+ *         .set(Product::category).withDesign(category -> category
+ *             .set(Category::name).to("Electronics")
+ *         )
+ *     )
+ *     .create();
+ *
+ * // Object processing
+ * Factory.design(Order.class)
+ *     .set(Order::originalPrice).to(BigDecimal.valueOf(100))
+ *     .process(order -> order.applyDiscount(0.1))
+ *     .process(order -> order.calculateTax())
+ *     .create();
+ * </pre>
+ *
+ * <p><b>Implementation Classes:</b></p>
+ * <ul>
+ * <li><b>{@link Designer}:</b> Main entry point for object design</li>
+ * <li><b>{@link DesignContext}:</b> Specialized context for nested object configuration</li>
+ * </ul>
+ *
+ * @param <T> the type of object being configured
+ * @param <Context> the specific context type (enables method chaining with correct return type)
+ * @see Designer
+ * @see DesignContext
+ * @see Factory#design(Class)
+ */
 @Getter(AccessLevel.PACKAGE)
 @Accessors(fluent = true)
-abstract class DesignLanguage<T, Context extends DesignLanguage<T, Context>> {
+public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Context>> {
 
     private final List<ObjectGenerator> generators = new ArrayList<>();
     private final List<Consumer<T>> processors = new ArrayList<>();
