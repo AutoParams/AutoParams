@@ -108,11 +108,11 @@ public class Designer<T> extends DesignContext<T, Designer<T>> {
     }
 
     private T generate() {
-        return factory.get(this.generators.toArray(Customizer[]::new));
+        return factory.get(generators().toArray(Customizer[]::new));
     }
 
     private void process(T object) {
-        for (Consumer<T> processor : processors) {
+        for (Consumer<T> processor : processors()) {
             processor.accept(object);
         }
     }

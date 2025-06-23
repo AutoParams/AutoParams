@@ -62,8 +62,4 @@ public class DesignLanguage<T> extends DesignContext<T, DesignLanguage<T>> {
     DesignLanguage<T> context() {
         return this;
     }
-
-    ObjectGenerator[] getGenerators() {
-        return generators.toArray(new ObjectGenerator[0]);
-    }
 }

@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
+import autoparams.customization.Customizer;
 import autoparams.customization.dsl.ArgumentCustomizationDsl;
 import autoparams.customization.dsl.FunctionDelegate;
 
@@ -41,7 +42,8 @@ final class NestedDesignGenerator<T, P> implements ArgumentGenerator {
         try {
             Class<?> nestedType = (Class<?>) query.getType();
             Factory<?> factory = Factory.create(nestedType);
-            Object nestedObject = factory.get(designLanguage.getGenerators());
+            Customizer[] customizers = designLanguage.generators().toArray(Customizer[]::new);
+            Object nestedObject = factory.get(customizers);
             return new ObjectContainer(nestedObject);
         } catch (Exception e) {
             return ObjectContainer.EMPTY;

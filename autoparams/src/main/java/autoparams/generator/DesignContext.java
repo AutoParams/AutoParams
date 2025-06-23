@@ -7,12 +7,17 @@ import java.util.function.Function;
 
 import autoparams.customization.dsl.ArgumentCustomizationDsl;
 import autoparams.customization.dsl.FunctionDelegate;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
+@Getter(AccessLevel.PACKAGE)
+@Accessors(fluent = true)
 abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
 
-    final List<ObjectGenerator> generators = new ArrayList<>();
-    final List<Consumer<T>> processors = new ArrayList<>();
+    private final List<ObjectGenerator> generators = new ArrayList<>();
+    private final List<Consumer<T>> processors = new ArrayList<>();
 
     abstract Context context();
 
@@ -143,7 +148,7 @@ abstract class DesignContext<T, Context extends DesignContext<T, Context>> {
         }
 
         this.processors.add(processor);
-        return this.context();
+        return context();
     }
 
     /**
