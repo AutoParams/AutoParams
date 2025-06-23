@@ -85,6 +85,7 @@ Review review = Factory
 - [ ] withDesign throws exception when design function argument is null
 - [ ] withDesign throws exception when design function does not return its argument
 - [ ] withDesign does not affect properties outside the nested object
+- [ ] withDesign supports multiple levels of nested object configuration
 
 ### **[WIP]** Type Inference
 
