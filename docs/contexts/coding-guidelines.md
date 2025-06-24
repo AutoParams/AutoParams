@@ -20,7 +20,7 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 ### TDD Guidelines
 
 - Use the test scenario phrase as the test method name, replacing spaces with underscores (_).
-- Before writing tests, define minimal method signatures (empty methods, methods returning null, or methods returning default values) to prevent compilation errors.
+- Before writing tests, define minimal method signatures (such as empty methods or methods returning default values) without comments or implementation, only to prevent compilation errors.
 - Request a review before writing and running tests.
 - Use the command `./gradlew :{module}:test --tests {fullTestClassName}` to run tests within a specific test class.
 - If a test fails, understand the reason for the failure and modify the code to make the test pass.
