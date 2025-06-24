@@ -80,3 +80,22 @@ When you say "code", Claude will:
 
 For feature-focused implementation, use: **"code feature: [feature]"**
 - This will focus on test scenarios most relevant to the specified feature
+
+## Build Command
+When you say "build", Claude will:
+1. Execute `./gradlew build` to run the full build process
+2. Monitor build output for errors, failures, or warnings
+3. If build fails, analyze error messages and identify root causes
+4. Apply appropriate fixes for common build issues:
+   - Compilation errors: Resolve syntax and dependency issues
+   - Test failures: Analyze and fix failing tests
+   - Checkstyle violations: Fix code formatting and style issues
+   - Lint warnings: Address code quality warnings
+5. Re-run build after fixes to verify resolution
+6. Report build status and any remaining issues
+
+The build command ensures code quality by running:
+- Compilation for all modules
+- All test suites
+- Code style checks (Checkstyle)
+- Static analysis and linting
