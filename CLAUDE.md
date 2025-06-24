@@ -99,3 +99,35 @@ The build command ensures code quality by running:
 - All test suites
 - Code style checks (Checkstyle)
 - Static analysis and linting
+
+## JavaDoc Command
+Usage: **"javadoc [filepath]"** or **"javadoc [filepath] method: [methodname]"**
+
+When you use the javadoc command, Claude will:
+1. **Validate parameters** - If no file is specified, respond: "Please specify a target file. Usage: javadoc [filepath] or javadoc [filepath] method: [methodname]"
+2. Follow the guidelines in [docs/contexts/javadoc-guidelines.md](docs/contexts/javadoc-guidelines.md)
+3. Read and analyze the specified Java file to understand its purpose and functionality
+4. Write JavaDoc documentation focusing on:
+   - What the class/method/field does (functionality, not implementation)
+   - Public API behavior and contracts
+   - Parameter descriptions and return values
+   - Usage examples when helpful
+5. Apply proper JavaDoc formatting:
+   - Escape special characters (`@` → `&#64;`, `<` → `&lt;`, `>` → `&gt;`)
+   - Use `@link` for references to other classes/methods
+   - Include `@see` tags for related types
+   - Bold example titles with `<b>` tags
+6. Write documentation for one type or member at a time
+7. Never modify existing source code, only add JavaDoc comments
+8. Avoid mentioning internal implementation details or non-public members
+
+**Required Parameter:**
+- **[filepath]** - Target Java file path (mandatory)
+
+**Optional Parameter:**
+- **method: [methodname]** - Specific method to document (optional)
+
+**Examples:**
+- `javadoc src/main/java/autoparams/Generator.java` - Document entire class
+- `javadoc autoparams/src/main/java/autoparams/ObjectGenerator.java method: generate` - Document specific method
+- `javadoc autoparams/generator/Factory.java method: create` - Document the create method in Factory class
