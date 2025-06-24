@@ -1,4 +1,4 @@
-## Javadoc Guidelines
+# Javadoc Guidelines
 
 - Write in English.
 - Never modify or remove source code.

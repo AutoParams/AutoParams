@@ -5,10 +5,10 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 ## Commit Guidelines
 
 ### Commit Message Format
-Follow the guidelines in [docs/contexts/commit-message-guidelines.md](docs/contexts/commit-message-guidelines.md)
+Follow the guidelines in [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
 
 ### Commit Workflow
-Follow the structured workflow in [.github/prompts/commit.prompt.md](.github/prompts/commit.prompt.md):
+Follow the structured workflow in [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md):
 1. Review staged changes with `git diff --staged`
 2. Draft commit message following guidelines
 3. Validate subject line length (≤50 characters)
@@ -16,8 +16,8 @@ Follow the structured workflow in [.github/prompts/commit.prompt.md](.github/pro
 
 ### Commit Command
 When you say "commit", Claude will:
-1. Follow the structured workflow from `.github/prompts/commit.prompt.md`
-2. Apply guidelines from `docs/contexts/commit-message-guidelines.md`
+1. Follow the structured workflow from [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
+2. Apply guidelines from [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
 3. Review **only staged changes** with `git diff --staged`
 4. Generate appropriate commit message based on staged changes only
 5. Present complete commit message (subject + body) for user approval
@@ -66,7 +66,7 @@ Follow the guidelines in [docs/contexts/test-scenario-guidelines.md](docs/contex
 
 ## Code Implementation Command
 When you say "code", Claude will:
-1. Follow the TDD workflow from [.github/prompts/code.prompt.md](.github/prompts/code.prompt.md)
+1. Follow the TDD workflow from [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md)
 2. Read coding guidelines and explain implementation steps
 3. Select first uncompleted test scenario from available list
 4. Follow strict TDD compliance steps in order:

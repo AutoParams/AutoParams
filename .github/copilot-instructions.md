@@ -1,11 +1,11 @@
-## Coding guidelines
+## Test Scenario Guidelines
 
-Refer to the [Coding Guidelines](../docs/contexts/coding-guidelines.md) file for detailed instructions on coding practices.
+See [Test Scenario Guidelines](../docs/contexts/test-scenario-guidelines.md) for detailed instructions on writing test scenarios.
 
-## Write test scenarios
+## Coding Guidelines
 
-Refer to the [Test Scenario Writing Guidelines](../docs/contexts/test-scenario-guidelines.md) file for detailed instructions on writing test scenarios.
+See [Coding Guidelines](../docs/contexts/coding-guidelines.md) for detailed instructions on coding practices, including TDD methodology, code formatting, and general principles.
 
-## Write commit messages
+## Commit Guidelines
 
-Refer to the [Commit Message Instructions](../docs/contexts/commit-message-instructions.md) file for detailed instructions on writing commit messages.
+See [Commit Guidelines](../docs/contexts/commit-guidelines.md) for detailed instructions on writing commit messages and following the commit workflow.
