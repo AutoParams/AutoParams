@@ -21,19 +21,22 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 Implements features using Test-Driven Development methodology.
 
 **Usage:**
-- `code` - Implement the next uncompleted test scenario
 - `code feature: [feature]` - Focus on scenarios for specific feature
 
+**Parameters:**
+- **Required**: `feature: [feature]` - Target feature to implement
+
 **Process:**
-1. Follow TDD workflow from [coding guidelines](docs/contexts/coding-guidelines.md)
-2. Select first uncompleted test scenario from available list
-3. Follow strict TDD compliance steps:
+1. Validate parameters (error if no feature specified)
+2. Follow TDD workflow from [coding guidelines](docs/contexts/coding-guidelines.md)
+3. Select first uncompleted test scenario from available list
+4. Follow strict TDD compliance steps:
    - Request review approval before writing test code
    - Request review approval before running test
    - Use command: `./gradlew :{module}:test --tests {fullTestClassName}`
    - Request review approval after test passes
    - Mark scenario complete with `[x]`
-4. Never modify failed tests, only implementation code
+5. Never modify failed tests, only implementation code
 
 ### Build & Quality: `build`
 Runs full build process with quality checks and error resolution.
