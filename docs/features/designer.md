@@ -164,3 +164,20 @@ assertThat(stream.limit(5))
 **Test Scenarios**:
 
 - [x] sut returns stream of objects with configured property values
+
+### Creating a List of Objects
+
+- The `createRange(int count)` method of `Designer<T>` generates a list of objects of type `T` with the specified number of elements.
+
+```java
+List<Product> products = Factory
+    .design(Product.class)
+    .set(Product::priceAmount).to(new BigDecimal("19.99"))
+    .createRange(5);
+```
+
+**Test Scenarios**:
+
+- [ ] sut creates a list of objects as many as specified
+- [ ] sut creates a list of objects with configured property values
+- [ ] sut throws exception when count is less than 0
