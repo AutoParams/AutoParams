@@ -5,7 +5,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 ## Commit Guidelines
 
 ### Commit Message Format
-Follow the guidelines in [docs/commit-message-instructions.md](docs/commit-message-instructions.md)
+Follow the guidelines in [docs/contexts/commit-message-instructions.md](docs/contexts/commit-message-instructions.md)
 
 ### Commit Workflow
 Follow the structured workflow in [.github/prompts/commit.prompt.md](.github/prompts/commit.prompt.md):
@@ -17,7 +17,7 @@ Follow the structured workflow in [.github/prompts/commit.prompt.md](.github/pro
 ### Commit Command
 When you say "commit", Claude will:
 1. Follow the structured workflow from `.github/prompts/commit.prompt.md`
-2. Apply guidelines from `docs/commit-message-instructions.md`
+2. Apply guidelines from `docs/contexts/commit-message-instructions.md`
 3. Review **only staged changes** with `git diff --staged`
 4. Generate appropriate commit message based on staged changes only
 5. Present complete commit message (subject + body) for user approval
@@ -35,7 +35,7 @@ For topic-focused commits, use: **"commit topic: [topic]"**
 - Checkstyle configuration: `config/checkstyle/checkstyle.xml`
 
 ## Coding Guidelines
-Follow the guidelines in [docs/coding-guidelines.md](docs/coding-guidelines.md):
+Follow the guidelines in [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md):
 
 ### General Principles
 - Work in smallest possible increments, request review after each unit
@@ -56,7 +56,7 @@ Follow the guidelines in [docs/coding-guidelines.md](docs/coding-guidelines.md):
 - Follow `.editorconfig` standards for consistent formatting
 
 ## Test Scenario Guidelines
-Follow the guidelines in [docs/test-scenario-guidelines.md](docs/test-scenario-guidelines.md):
+Follow the guidelines in [docs/contexts/test-scenario-guidelines.md](docs/contexts/test-scenario-guidelines.md):
 - Write one scenario at a time (most important first)
 - Write in a single sentence using present tense
 - Write in English, refer to system under test as 'sut'

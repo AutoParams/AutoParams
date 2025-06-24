@@ -8,7 +8,7 @@ mode: agent
 
 ### Configuration Check
 - Read `.editorconfig` for formatting rules
-- Review [Coding Guidelines](../../docs/coding-guidelines.md)
+- Review [Coding Guidelines](../../docs/contexts/coding-guidelines.md)
 
 ### File Inspection
 - Read entire file and identify class members

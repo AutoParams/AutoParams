@@ -8,7 +8,7 @@ mode: agent
 - Execute `git diff --staged` to check the staged changes.
 
 ## 2. Review Commit Message Guidelines
-- Refer to the [Commit Message Instructions](../../docs/commit-message-instructions.md) for detailed rules.
+- Refer to the [Commit Message Instructions](../../docs/contexts/commit-message-instructions.md) for detailed rules.
 
 ## 3. Draft and Validate Commit Message
 - Write a commit message for the staged changes following the guidelines.
