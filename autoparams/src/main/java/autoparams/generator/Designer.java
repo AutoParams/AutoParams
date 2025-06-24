@@ -103,8 +103,8 @@ public class Designer<T> extends DesignLanguage<T, Designer<T>> {
      *         and processing steps applied
      */
     public T create() {
-        T object = generate();        
-        process(object);        
+        T object = generate();
+        process(object);
         return object;
     }
 
