@@ -2,132 +2,95 @@
 
 AutoParams is a Java/Kotlin library for automatic parameter generation in unit tests, supporting JUnit 5 and various frameworks like Spring, Mockito, and Lombok.
 
-## Commit Guidelines
+## Development Guidelines
 
-### Commit Message Format
-Follow the guidelines in [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
-
-### Commit Workflow
-Follow the structured workflow in [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md):
-1. Review staged changes with `git diff --staged`
-2. Draft commit message following guidelines
-3. Validate subject line length (≤50 characters)
-4. Review and commit
-
-### Commit Command
-When you say "commit", Claude will:
-1. Follow the structured workflow from [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
-2. Apply guidelines from [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
-3. Review **only staged changes** with `git diff --staged`
-4. Generate appropriate commit message based on staged changes only
-5. Present complete commit message (subject + body) for user approval
-6. Validate message format and length
-7. Execute the commit only after user confirmation
-8. **Never include Claude Code promotional content or co-authorship attribution**
-
-For topic-focused commits, use: **"commit topic: [topic]"**
-- Example: "commit topic: Designer API"
-- Example: "commit topic: Kotlin support"
-- This will focus the commit message on changes related to the specified topic
-
-## Code Style
-- Use IntelliJ formatter: `config/formatter/intellij-java-google-style.xml`
-- Checkstyle configuration: `config/checkstyle/checkstyle.xml`
-
-## Coding Guidelines
-Follow the guidelines in [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md):
-
-### General Principles
+### Core Principles
+- Follow Test-Driven Development (TDD) methodology
 - Work in smallest possible increments, request review after each unit
 - Write self-explanatory code, avoid comments unless requested
 
-### TDD Methodology
-- Write test scenarios list → implement one test → make test pass → refactor
-- Use test scenario phrase as method name (spaces → underscores)
-- Define minimal method signatures before writing tests
-- Run tests with: `./gradlew :{module}:test --tests {fullTestClassName}`
-- Never modify failed tests, only implementation code
-- Mark completed scenarios: `- [x] test scenario description`
+### Guidelines References
+- **Coding Guidelines**: [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md)
+- **Test Scenarios**: [docs/contexts/test-scenario-guidelines.md](docs/contexts/test-scenario-guidelines.md)
+- **Commit Guidelines**: [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
+- **JavaDoc Guidelines**: [docs/contexts/javadoc-guidelines.md](docs/contexts/javadoc-guidelines.md)
 
-### Code Formatting
-- Method separation: exactly one blank line between methods/class members
-- Annotations: always on separate line from method signatures
-- Indentation: 4 spaces (never tabs), UTF-8 encoding, 100 char line limit
-- Follow `.editorconfig` standards for consistent formatting
+## Available Commands
 
-## Test Scenario Guidelines
-Follow the guidelines in [docs/contexts/test-scenario-guidelines.md](docs/contexts/test-scenario-guidelines.md):
-- Write one scenario at a time (most important first)
-- Write in a single sentence using present tense
-- Write in English, refer to system under test as 'sut'
-- Do not start with capital letter (for test method names)
-- Write concisely while preserving meaning
-- Format as to-do item (- [ ])
+### Code Implementation: `code`
+Implements features using Test-Driven Development methodology.
 
-## Code Implementation Command
-When you say "code", Claude will:
-1. Follow the TDD workflow from [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md)
-2. Read coding guidelines and explain implementation steps
-3. Select first uncompleted test scenario from available list
-4. Follow strict TDD compliance steps in order:
+**Usage:**
+- `code` - Implement the next uncompleted test scenario
+- `code feature: [feature]` - Focus on scenarios for specific feature
+
+**Process:**
+1. Follow TDD workflow from [coding guidelines](docs/contexts/coding-guidelines.md)
+2. Select first uncompleted test scenario from available list
+3. Follow strict TDD compliance steps:
    - Request review approval before writing test code
    - Request review approval before running test
-   - Use correct test command: `./gradlew :{module}:test --tests {fullTestClassName}`
+   - Use command: `./gradlew :{module}:test --tests {fullTestClassName}`
    - Request review approval after test passes
    - Mark scenario complete with `[x]`
-5. Never write tests or run tests without prior review approval
-6. Never modify failed tests, only implementation code
+4. Never modify failed tests, only implementation code
 
-For feature-focused implementation, use: **"code feature: [feature]"**
-- This will focus on test scenarios most relevant to the specified feature
+### Build & Quality: `build`
+Runs full build process with quality checks and error resolution.
 
-## Build Command
-When you say "build", Claude will:
-1. Execute `./gradlew build` to run the full build process
-2. Monitor build output for errors, failures, or warnings
-3. If build fails, analyze error messages and identify root causes
-4. Apply appropriate fixes for common build issues:
-   - Compilation errors: Resolve syntax and dependency issues
-   - Test failures: Analyze and fix failing tests
-   - Checkstyle violations: Fix code formatting and style issues
-   - Lint warnings: Address code quality warnings
-5. Re-run build after fixes to verify resolution
-6. Report build status and any remaining issues
+**Process:**
+1. Execute `./gradlew build` for full build
+2. Monitor output for errors, failures, warnings
+3. Apply fixes for common issues:
+   - Compilation errors and dependency issues
+   - Test failures and assertion problems
+   - Checkstyle violations and formatting issues
+   - Static analysis warnings
+4. Re-run build after fixes to verify resolution
+5. Report final build status
 
-The build command ensures code quality by running:
+**Quality Checks:**
 - Compilation for all modules
-- All test suites
+- Complete test suite execution
 - Code style checks (Checkstyle)
 - Static analysis and linting
 
-## JavaDoc Command
-Usage: **"javadoc [filepath]"** or **"javadoc [filepath] method: [methodname]"**
+### Commit Changes: `commit`
+Creates commits following project guidelines and workflow.
 
-When you use the javadoc command, Claude will:
-1. **Validate parameters** - If no file is specified, respond: "Please specify a target file. Usage: javadoc [filepath] or javadoc [filepath] method: [methodname]"
-2. Follow the guidelines in [docs/contexts/javadoc-guidelines.md](docs/contexts/javadoc-guidelines.md)
-3. Read and analyze the specified Java file to understand its purpose and functionality
-4. Write JavaDoc documentation focusing on:
-   - What the class/method/field does (functionality, not implementation)
-   - Public API behavior and contracts
-   - Parameter descriptions and return values
-   - Usage examples when helpful
-5. Apply proper JavaDoc formatting:
-   - Escape special characters (`@` → `&#64;`, `<` → `&lt;`, `>` → `&gt;`)
-   - Use `@link` for references to other classes/methods
-   - Include `@see` tags for related types
-   - Bold example titles with `<b>` tags
-6. Write documentation for one type or member at a time
-7. Never modify existing source code, only add JavaDoc comments
-8. Avoid mentioning internal implementation details or non-public members
+**Usage:**
+- `commit` - Create commit for staged changes
+- `commit topic: [topic]` - Focus commit message on specific topic
 
-**Required Parameter:**
-- **[filepath]** - Target Java file path (mandatory)
+**Process:**
+1. Review staged changes with `git diff --staged`
+2. Apply guidelines from [commit guidelines](docs/contexts/commit-guidelines.md)
+3. Generate appropriate commit message based on staged changes only
+4. Validate message format and length (≤50 character subject)
+5. Present complete commit message for user approval
+6. Execute commit only after user confirmation
 
-**Optional Parameter:**
-- **method: [methodname]** - Specific method to document (optional)
+### JavaDoc Documentation: `javadoc`
+Writes JavaDoc documentation for Java classes and methods.
+
+**Usage:**
+- `javadoc [filepath]` - Document entire class
+- `javadoc [filepath] method: [methodname]` - Document specific method
+
+**Parameters:**
+- **Required**: `[filepath]` - Target Java file path
+- **Optional**: `method: [methodname]` - Specific method to document
+
+**Process:**
+1. Validate parameters (error if no file specified)
+2. Follow guidelines from [JavaDoc guidelines](docs/contexts/javadoc-guidelines.md)
+3. Analyze file to understand purpose and functionality
+4. Write documentation focusing on public API behavior
+5. Apply proper JavaDoc formatting and escaping
+6. Never modify existing source code, only add documentation
 
 **Examples:**
-- `javadoc src/main/java/autoparams/Generator.java` - Document entire class
-- `javadoc autoparams/src/main/java/autoparams/ObjectGenerator.java method: generate` - Document specific method
-- `javadoc autoparams/generator/Factory.java method: create` - Document the create method in Factory class
+```
+javadoc src/main/java/autoparams/Generator.java
+javadoc autoparams/ObjectGenerator.java method: generate
+```
