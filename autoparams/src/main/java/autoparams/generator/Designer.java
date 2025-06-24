@@ -1,6 +1,7 @@
 package autoparams.generator;
 
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import autoparams.customization.Customizer;
 
@@ -115,5 +116,42 @@ public class Designer<T> extends DesignLanguage<T, Designer<T>> {
         for (Consumer<T> processor : processors()) {
             processor.accept(object);
         }
+    }
+
+    /**
+     * Creates an infinite stream of configured objects.
+     * <p>
+     * This method returns a {@code Stream<T>} that generates objects on-demand
+     * using the same configuration settings as the {@code create()} method.
+     * Each object in the stream is created independently with the same property
+     * values and processing steps applied.
+     * </p>
+     *
+     * <p><b>Usage Example:</b></p>
+     * <pre>
+     * Stream&lt;Product&gt; stream = Factory
+     *     .design(Product.class)
+     *     .set(Product::category).to("Electronics")
+     *     .set(Product::inStock).to(true)
+     *     .stream();
+     *
+     * List&lt;Product&gt; products = stream
+     *     .limit(10)
+     *     .collect(Collectors.toList());
+     * </pre>
+     *
+     * <p><b>Important Notes:</b></p>
+     * <ul>
+     * <li>The stream is infinite and lazy - objects are created only when consumed</li>
+     * <li>Each object in the stream is independently created and configured</li>
+     * <li>Remember to limit the stream to avoid infinite loops</li>
+     * <li>All configured property values and processors are applied to each object</li>
+     * </ul>
+     *
+     * @return an infinite {@code Stream<T>} of configured objects
+     * @see #create()
+     */
+    public Stream<T> stream() {
+        return Stream.generate(this::create);
     }
 }

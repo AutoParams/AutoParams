@@ -105,9 +105,9 @@ void testMethod(@Freeze BigDecimal priceAmount, ResolutionContext context) {
 
 **Test Scenarios**:
 
-- [ ] sut uses provided resolution context when creating object
-- [ ] sut throws exception when resolution context is null
-- [ ] sut throws exception when type is null
+- [x] sut uses provided resolution context when creating object
+- [x] sut throws exception when resolution context is null
+- [x] sut throws exception when type is null
 
 ### Resolving and Injecting Designer Instances
 
@@ -145,8 +145,8 @@ void testMethod(Designer<Product> designer) {
 
 **Test Scenarios**:
 
-- [ ] ResolutionContext resolves designer instance correctly
-- [ ] AutoParams resolves parameter of type designer
+- [x] sut is resolved from ResolutionContext
+- [x] sut is injected as a parameter using @AutoParams
 
 ### Object Stream
 
@@ -163,4 +163,4 @@ assertThat(stream.limit(5))
 
 **Test Scenarios**:
 
-- [ ] sut returns stream of objects with configured property values
+- [x] sut returns stream of objects with configured property values

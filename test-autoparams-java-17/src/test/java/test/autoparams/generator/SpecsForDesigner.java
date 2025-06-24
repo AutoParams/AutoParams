@@ -2,10 +2,14 @@ package test.autoparams.generator;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import autoparams.AutoParams;
+import autoparams.ResolutionContext;
+import autoparams.customization.Freeze;
 import autoparams.generator.Designer;
 import autoparams.generator.Factory;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
 import test.autoparams.Order;
@@ -175,5 +179,60 @@ public class SpecsForDesigner {
             .set(Review::product).withDesign(product -> null);
         assertThatThrownBy(designer::create)
             .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @AutoParams
+    void sut_uses_provided_resolution_context_when_creating_object(
+        @Freeze BigDecimal priceAmount,
+        ResolutionContext context
+    ) {
+        Designer<Product> designer = Factory.design(context, Product.class);
+        Product product = designer.create();
+        assertThat(product.priceAmount()).isEqualTo(priceAmount);
+    }
+
+    @Test
+    void sut_throws_exception_when_resolution_context_is_null() {
+        assertThatThrownBy(() -> Factory.design(null, Product.class))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void sut_throws_exception_when_type_is_null() {
+        var context = new ResolutionContext();
+        assertThatThrownBy(() -> Factory.design(context, null))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void sut_is_resolved_from_ResolutionContext() {
+        var context = new ResolutionContext();
+        Designer<Product> designer = context.resolve(new TypeReference<>() { });
+        assertThat(designer).isNotNull();
+        assertThat(designer.create()).isInstanceOf(Product.class);
+    }
+
+    @Test
+    @AutoParams
+    void sut_is_injected_as_a_parameter_using_AutoParams(
+        Designer<Product> designer
+    ) {
+        assertThat(designer).isNotNull();
+        assertThat(designer.create()).isInstanceOf(Product.class);
+    }
+
+    @Test
+    @AutoParams
+    void sut_returns_stream_of_objects_with_configured_property_values(
+        String productName
+    ) {
+        Stream<Product> stream = Factory
+            .design(Product.class)
+            .set(Product::name).to(productName)
+            .stream();
+
+        assertThat(stream.limit(5))
+            .allSatisfy(p -> assertThat(p.name()).isEqualTo(productName));
     }
 }

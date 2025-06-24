@@ -530,4 +530,66 @@ public final class Factory<T> implements Supplier<T> {
         Factory<T> factory = create(type);
         return new Designer<>(factory);
     }
+
+    /**
+     * Creates a {@link Designer} instance for fluent object configuration of
+     * the specified type using a custom {@link ResolutionContext}.
+     * <p>
+     * This method creates a Designer that uses the provided ResolutionContext
+     * for object generation, allowing you to customize the object creation
+     * process while still benefiting from the fluent configuration API.
+     * The ResolutionContext enables dependency injection, custom generators,
+     * and other advanced configuration scenarios.
+     * </p>
+     *
+     * <p><b>Basic Usage with Custom Context:</b></p>
+     * <pre>
+     * &#64;Test
+     * &#64;AutoParams
+     * void testMethod(&#64;Freeze BigDecimal price, ResolutionContext context) {
+     *     Product product = Factory
+     *         .design(context, Product.class)
+     *         .set(Product::name).to("Laptop")
+     *         .create();
+     *
+     *     // The price will be the frozen value from the context
+     *     assertThat(product.price()).isEqualTo(price);
+     * }
+     * </pre>
+     *
+     * <p><b>Advanced Customization:</b></p>
+     * <pre>
+     * ResolutionContext context = new ResolutionContext();
+     * context.customize(new MyCustomGenerator());
+     *
+     * Order order = Factory
+     *     .design(context, Order.class)
+     *     .set(Order::getStatus).to(OrderStatus.PENDING)
+     *     .process(o -> o.calculateTotals())
+     *     .create();
+     * </pre>
+     *
+     * @param context the resolution context to use for object generation
+     * @param type    the class type for which to create the designer
+     * @param <T>     the type of object to be configured and created
+     * @return a {@link Designer} instance using the specified context
+     * @throws IllegalArgumentException if {@code context} or {@code type} is {@code null}
+     * @see Designer
+     * @see ResolutionContext
+     * @see #design(Class)
+     */
+    public static <T> Designer<T> design(
+        ResolutionContext context,
+        Class<T> type
+    ) {
+        if (context == null) {
+            throw new IllegalArgumentException("The argument 'context' is null.");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("The argument 'type' is null.");
+        }
+
+        Factory<T> factory = create(context, type);
+        return new Designer<>(factory);
+    }
 }
