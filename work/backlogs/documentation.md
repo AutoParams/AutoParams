@@ -196,10 +196,18 @@ The following tasks represent the first 5 priority items to begin implementation
     - [x] Using ArgumentCustomizationDsl.set method with Factory
 
 - [ ] **Task 5: Create basic Designer documentation with examples**
-  - Establish structure for docs/core-features/designer.md
-  - Write example test classes demonstrating Designer usage
-  - Create domain models as needed for Designer examples
-  - Include sections for basic usage, advanced patterns, and examples
+  - [ ] Establish structure for docs/core-features/designer.md (including basic usage sections)
+  - [ ] Create domain model as needed for Designer examples (reuse existing models where possible)
+  - [ ] Write basic Designer creation examples:
+    - [ ] Basic fluent chaining: `Factory.design(Class<T>).set().to().create()`
+    - [ ] Multiple property chaining
+  - [ ] Write withDesign configuration examples:
+    - [ ] Single level nesting
+    - [ ] Multiple level nesting
+  - [ ] Write object processing examples:
+    - [ ] Processing chain
+    - [ ] Multiple processing
+  - [ ] Write stream generation examples
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
