@@ -1,7 +1,7 @@
 # Commit Guidelines
 
-## Workflow for Writing Commit Messages
-Follow the structured workflow below to write commit messages that adhere to the guidelines.
+## Workflow for Creating Commits
+Follow the structured workflow below to create commits that adhere to the guidelines.
 
 ### 1. Review Staged Changes
 - Execute `git diff --staged` to check the staged changes.

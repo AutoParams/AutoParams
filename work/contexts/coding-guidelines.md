@@ -19,59 +19,21 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 
 ### TDD Guidelines
 
-- Use the test scenario phrase as the test method name, replacing spaces with underscores (_).
-- Before writing tests, define minimal method signatures (such as empty methods or methods returning default values) without comments or implementation, only to prevent compilation errors.
-- Request a review before writing and running tests.
-- Use the command `./gradlew :{module}:test --tests {fullTestClassName}` to run tests within a specific test class.
-- If a test fails, understand the reason for the failure and modify the code to make the test pass.
-- If you fail to make the test pass after two attempts, stop working and get confirmation before making further attempts.
-- Request a review after the test passes.
-- Never modify a failed test. If a test needs to be changed, it will be updated manually.
-- When a test passes, mark the corresponding test scenario as completed. For example: `- [x] test scenario description`.
-- Never write implementation without corresponding tests. Only add code that is driven by failing tests.
+- The list of test scenario must be prepared in advance.
+- Never modify a failed test. If a test needs to be changed, update it manually.
+- Do not write code that is not required to pass a test. Only add code driven by a failing test.
 
-## Code Style Guidelines
+### TDD Workflow
 
-All code must follow consistent formatting standards to ensure readability and maintainability across the project.
-
-### Core Formatting Rules
-
-- **Method and Class Member Separation**: Use exactly one blank line to separate methods, constructors, and other class members
-- **Annotation Placement**: Place all annotations (`@Test`, `@Override`, etc.) on their own line, never on the same line as method signatures or class declarations
-- **EditorConfig Compliance**: Follow all formatting rules defined in the project's `.editorconfig` file
-
-### EditorConfig Standards
-
-The project enforces consistent coding standards through `.editorconfig`. Key formatting requirements for Java files:
-
-**File Structure:**
-- **Indentation**: 4 spaces (never tabs)
-- **Character encoding**: UTF-8
-- **Max line length**: 100 characters
-- **Final newline**: Always required
-
-**Code Layout:**
-- **Method spacing**: 1 blank line around methods (`ij_java_blank_lines_around_method = 1`)
-- **Class spacing**: 1 blank line around classes (`ij_java_blank_lines_around_class = 1`)
-- **Annotation wrapping**: Split annotations into separate lines (`ij_java_method_annotation_wrap = split_into_lines`)
-
-### Pre-Edit Checklist
-
-Before making any code changes, ensure you understand:
-
-1. The existing code structure and formatting patterns
-2. Which methods or classes will be affected
-3. The proper spacing requirements for the code section
-
-### Post-Edit Verification
-
-After completing any code changes, verify the following:
-
-1. **Method Separation**: Every method is separated from other methods/class members by exactly one blank line
-2. **Annotation Placement**: All annotations are on their own line, separate from method signatures or class declarations
-3. **Class Member Spacing**: Fields, constructors, and methods have appropriate blank line separation
-4. **Import Organization**: Imports are properly organized and unused imports are removed
-5. **Indentation Consistency**: All Java code uses 4 spaces for indentation (not tabs or 2 spaces)
-6. **Pattern Consistency**: New code follows the same formatting pattern as existing code in the file
-7. **Line Integrity**: No lines were accidentally merged or had spacing removed during editing
-8. **Final Newline**: Every file must end with a final newline character (as required by EditorConfig)
+1. Select one incomplete test scenario.
+2. If the minimum method signature required to implement the selected test scenario is not defined, define an empty method or a method that returns a default value. At this stage, only define the method signature without comments or implementation.
+3. If you defined the method signature in step 2, request a review. Do not write the test at this stage.
+4. Convert the selected test scenario from step 1 into a concrete, executable test and request a review.
+5. Run the test and check the result.
+6. Confirm that the test fails. If the test passes, stop working and request a review.
+7. Understand the cause of the test failure and modify the code to make the test pass.
+8. Run the test for the specific test class containing the added test using the command `./gradlew :{module}:test --tests {fullTestClassName}`.
+9. If the test does not pass after three attempts, stop working and request a review.
+10. If the test passes, run the full build including compilation, tests, and style checks using `./gradlew :{module}:build`.
+11. If the build fails, analyze the cause and apply the necessary fixes. Repeat steps 10 and 11 until the build succeeds.
+12. When the build succeeds, mark the test scenario as completed using checkbox format: `- [x] test scenario description`.
