@@ -11,13 +11,14 @@ Follow the structured workflow below to write commit messages that adhere to the
 
 ### 3. Draft and Validate Commit Message
 - Write a commit message for the staged changes following the guidelines.
-- Before finalizing, check the subject line length using one of the following:
+- **Always check the subject line length before finalizing.**
+- Use one of the following to check the subject line length:
   Bash: `echo -n "<subject line>" | wc -c`
   PowerShell: `"<subject line>".Length`
-- If the subject line exceeds 50 characters, rewrite it to be 50 characters or less and repeat the check.
+- **If the subject line exceeds 50 characters, rewrite it to be 50 characters or less and repeat the check. Never skip this step.**
 
 ### 4. Review and Commit
-- Proceed with the commit after the commit message is reviewed.
+- Proceed with the commit after the commit message is reviewed and the subject line length is confirmed to be 50 characters or less.
 
 ## Commit Message Guidelines
 When writing commit messages, please follow these guidelines:
@@ -31,3 +32,4 @@ When writing commit messages, please follow these guidelines:
 7. Describe changes to public API features and do not include implementation details such as package-private code.
 8. Do not mention test code in commit messages.
 9. Do not use any prefix (such as "fix:", "update:", "docs:", "feat:", etc.) in the subject line.
+10. Do not start the subject line with a lowercase letter unless the first word is a function name or another identifier that is conventionally lowercase and there is a clear, justifiable reason for the exception. Otherwise, always start with an uppercase letter.
