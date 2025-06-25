@@ -48,7 +48,6 @@ README.md (Overview & Quick Start)
 │   │   └── customizers.md
 │   └── examples/               # Documentation Examples Subproject
 │       ├── build.gradle.kts
-│       ├── settings.gradle.kts
 │       └── src/
 │           ├── main/java/examples/     # Shared domain models
 │           │   ├── Product.java
@@ -67,7 +66,7 @@ README.md (Overview & Quick Start)
 **Purpose**: Dedicated testing environment for documentation examples that solves Problem #4.
 
 **Key Components**:
-- Independent Gradle subproject with its own dependencies
+- Gradle subproject integrated with root project build system
 - Realistic domain models shared across all examples
 - Runnable test classes organized by feature category
 - CI validation ensures documentation accuracy
@@ -139,14 +138,21 @@ This structured approach will transform the current single-file documentation in
 
 The following tasks represent the first 5 priority items to begin implementation:
 
-- [ ] **Initialize basic docs/ directory structure**
-  - Set up getting-started/ directory
-  - Establish consistent folder naming and organization
+- [x] **Initialize basic docs/ directory structure**
+  - Create docs/ directory if it doesn't exist
+  - Set up getting-started/ directory only
+  - Other directories will be created as needed during implementation
 
-- [ ] **Set up docs/examples/ subproject with build.gradle.kts**
-  - Create independent Gradle subproject configuration
+- [x] **Set up docs/examples/ subproject with build.gradle.kts**
+  - Create subproject as part of root project (not independent)
+  - Add to root settings.gradle.kts as included subproject
+  - Configure Java 17 as source and target compatibility
+  - Configure with Spring Boot 3.2.5 plugin (org.springframework.boot)
+  - Configure with Spring Dependency Management 1.1.4 plugin (io.spring.dependency-management)
+  - Disable javadoc task (not needed for examples project)
   - Configure dependencies for AutoParams and extensions
   - Set up proper source and test directory structure
+  - Ensure `./gradlew build` command succeeds for entire project
 
 - [ ] **Create domain models in docs/examples/src/main/java/examples/**
   - Implement Product, Review, Order, User classes
