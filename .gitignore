@@ -8,4 +8,4 @@ build
 bin
 out
 .idea
-.claude
+settings.local.json
