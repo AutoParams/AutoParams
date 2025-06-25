@@ -9,16 +9,21 @@ Follow the structured workflow below to write commit messages that adhere to the
 ### 2. Review Commit Message Guidelines
 - Refer to the section '[Commit Message Guidelines](#commit-message-guidelines)' for detailed rules on writing commit messages.
 
-### 3. Draft and Validate Commit Message
+### 3. Draft Commit Message
 - Write a commit message for the staged changes following the guidelines.
-- **Always check the subject line length before finalizing.**
-- Use one of the following to check the subject line length:
-  Bash: `echo -n "<subject line>" | wc -c`
-  PowerShell: `"<subject line>".Length`
-- **If the subject line exceeds 50 characters, rewrite it to be 50 characters or less and repeat the check. Never skip this step.**
 
-### 4. Review and Commit
-- Proceed with the commit after the commit message is reviewed and the subject line length is confirmed to be 50 characters or less.
+### 4. Create Commit
+- Create the commit with the drafted message.
+
+### 5. Validate and Fix Commit Message
+- **Immediately after creating the commit, validate it using the validation script.**
+- Run `work/scripts/check-commit-message.sh` to check if the commit message follows the 50/72 rule.
+- **If the validation fails:**
+  - Use `git commit --amend` to modify the commit message
+  - Fix the issues identified by the script (subject line length, body line length, etc.)
+  - Run the validation script again to confirm the fixes
+  - Repeat the amend and validation process until the validation passes
+  - Never leave a commit with a message that fails validation
 
 ## Commit Message Guidelines
 When writing commit messages, please follow these guidelines:
