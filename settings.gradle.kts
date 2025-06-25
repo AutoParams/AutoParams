@@ -13,4 +13,3 @@ include("test-autoparams-parameters")
 include("test-autoparams-springboot")
 
 include("examples")
-project(":examples").projectDir = file("docs/examples")
