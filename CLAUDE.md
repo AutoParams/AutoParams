@@ -97,3 +97,33 @@ Writes JavaDoc documentation for Java classes and methods.
 javadoc src/main/java/autoparams/Generator.java
 javadoc autoparams/ObjectGenerator.java method: generate
 ```
+
+### Backlog Execution: `run`
+Executes the next uncompleted task from a backlog file.
+
+**Usage:**
+- `run backlog: [filepath]` - Execute next uncompleted task from backlog
+
+**Parameters:**
+- **Required**: `backlog: [filepath]` - Target backlog file path
+
+**Process:**
+1. Validate parameters (error if no backlog specified)
+2. Read the specified backlog file
+3. Find the first uncompleted task marked with `- [ ]`
+4. Execute exactly one task following its specific requirements
+5. Mark the completed task as `- [x]` in the file
+6. Report completion status and next available task
+
+**Task Execution Rules:**
+- Execute only one task per command invocation
+- Follow any sub-requirements listed under the main task
+- Update task status immediately upon completion
+- Never skip tasks or execute out of order
+- Provide clear progress updates during execution
+
+**Examples:**
+```
+run backlog: work/backlogs/documentation.md
+run backlog: work/backlogs/feature-requests.md
+```
