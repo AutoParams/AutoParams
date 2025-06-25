@@ -6,11 +6,6 @@ This guide will get you up and running with AutoParams in just a few minutes.
 
 AutoParams eliminates the boilerplate of creating test data by automatically generating arbitrary values for your test method parameters. Simply annotate your test with `@AutoParams` and focus on your test logic rather than setting up test data.
 
-## Prerequisites
-
-- AutoParams installed in your project ([Installation Guide](installation.md))
-- Basic familiarity with JUnit 5
-
 ## Basic Usage
 
 ### Simple Parameter Generation
@@ -95,4 +90,6 @@ void testGeneratedArray(String[] items) {
 
 ## Next Steps
 
-Now that you have the basics working, explore more advanced features when they become available.
+Now that you have the basics working, explore more advanced features:
+
+- [Factory](../core-features/factory.md) - Create instances of a given type

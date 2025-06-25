@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * This test corresponds to the example in the Installation Guide.
  */
 class InstallationTest {
-    
+
     @Test
     @AutoParams
     void autoParamsWorking(String value) {

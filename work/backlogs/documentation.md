@@ -79,25 +79,35 @@ README.md (Overview & Quick Start)
 **Writing Principles**:
 - Progressive disclosure: basic → advanced concepts
 - Practical examples with real-world domain models
-- Clear prerequisites and next steps
+- Clear next steps
 - Consistent voice and terminology
 
 **Structure Template**:
 ```markdown
 # Feature Name
 ## Overview
-## Prerequisites
 ## Basic Usage
-## Advanced Patterns
-## Common Pitfalls
+## [Advanced Feature Topics as ## sections]
 ## Next Steps
 ```
+
+**Documentation Structure Guidelines**:
+- Use `## Overview` for introduction and key concepts
+- Use `## Basic Usage` for essential functionality with examples
+- Advanced content should be organized as separate `##` level sections (e.g., `## Customizations with DSL`, `## Stream Processing`, etc.) rather than grouped under `## Advanced Patterns`
+- Use `## Next Steps` for navigation to related documentation
 
 **Code Example Requirements**:
 - All examples executable via examples subproject
 - Include both Java and Kotlin where applicable
 - Create domain models incrementally as needed for specific examples
 - Provide expected output and explanations
+
+**Domain Model Standards**:
+- Keep domain models simple and focused on their purpose
+- Avoid unnecessary JavaDoc comments in domain model classes
+- Use clear, descriptive property names that explain their purpose
+- Follow immutable object patterns with final fields and getter methods
 
 **Quality Validation Rules**:
 - After any modification to the examples subproject, run `./gradlew :examples:build` to ensure all examples compile and tests pass
@@ -167,11 +177,23 @@ The following tasks represent the first 5 priority items to begin implementation
   - Create domain models as needed for examples (incremental approach)
   - Note: README.md will remain unchanged until all docs/ work is complete
 
-- [ ] **Task 4: Create basic Factory documentation with examples**
-  - Establish structure for docs/core-features/factory.md
-  - Write example test classes demonstrating Factory usage
-  - Create domain models as needed for Factory examples
-  - Include sections for basic usage, advanced patterns, and examples
+- [x] **Task 4: Create basic Factory documentation with examples**
+  - [x] Establish structure for docs/core-features/factory.md (including basic usage and advanced patterns sections)
+  - [x] Create domain model as needed for Factory examples (Product only)
+  - [x] Write basic Factory creation examples:
+    - [x] Factory creation: `Factory.create(Class<T>)` basic usage
+    - [x] Generic Factory creation: `Factory.create()` with TypeReference for `List<T>`
+    - [x] Type inference example: `Factory.create()` with implicit types
+    - [x] Diamond operator example: `TypeReference<>` with inferred generic types
+  - [x] Write automatic injection examples:
+    - [x] Test parameter injection: `@AutoSource` with Factory parameters
+    - [x] Generic Factory parameter injection: `Factory<List<T>>` as test parameters
+  - [x] Write object generation examples:
+    - [x] Single object generation: `factory.get()` method
+    - [x] Multiple object generation: `factory.getRange(int size)` method
+    - [x] Stream generation: `factory.stream().limit(n)` pattern
+  - [x] Write customization examples:
+    - [x] Using ArgumentCustomizationDsl.set method with Factory
 
 - [ ] **Task 5: Create basic Designer documentation with examples**
   - Establish structure for docs/core-features/designer.md

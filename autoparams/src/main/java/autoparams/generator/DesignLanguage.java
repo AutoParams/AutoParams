@@ -425,7 +425,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
                 DesignContext<P> result = design.apply(designContext);
 
                 if (result != designContext) {
-                    throw new RuntimeException("The design function must return its argument.", 
+                    throw new RuntimeException("The design function must return its argument.",
                         new IllegalArgumentException(
                             "The design function must return its argument."));
                 }

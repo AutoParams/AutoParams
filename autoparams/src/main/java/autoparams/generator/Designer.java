@@ -19,7 +19,7 @@ import autoparams.customization.Customizer;
  * <p><b>Key Features:</b></p>
  * <ul>
  * <li><b>Property Setting:</b> Use method references to set specific property values</li>
- * <li><b>Nested Object Configuration:</b> Configure complex object hierarchies 
+ * <li><b>Nested Object Configuration:</b> Configure complex object hierarchies
  *     with {@code withDesign}</li>
  * <li><b>Object Processing:</b> Apply post-creation processing steps</li>
  * <li><b>Fluent Interface:</b> Chain operations for readable and maintainable code</li>
