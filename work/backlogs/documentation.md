@@ -49,11 +49,7 @@ README.md (Overview & Quick Start)
 │   └── examples/               # Documentation Examples Subproject
 │       ├── build.gradle.kts
 │       └── src/
-│           ├── main/java/examples/     # Shared domain models
-│           │   ├── Product.java
-│           │   ├── Review.java
-│           │   ├── Order.java
-│           │   └── User.java
+│           ├── main/java/examples/     # Domain models (created incrementally)
 │           └── test/java/examples/     # Runnable examples
 │               ├── basic/
 │               ├── core/
@@ -67,7 +63,7 @@ README.md (Overview & Quick Start)
 
 **Key Components**:
 - Gradle subproject integrated with root project build system
-- Realistic domain models shared across all examples
+- Domain models created incrementally as needed for examples
 - Runnable test classes organized by feature category
 - CI validation ensures documentation accuracy
 - Clear separation from library's internal tests
@@ -100,15 +96,15 @@ README.md (Overview & Quick Start)
 **Code Example Requirements**:
 - All examples executable via examples subproject
 - Include both Java and Kotlin where applicable
-- Use consistent domain models (Product, Review, Order, User)
+- Create domain models incrementally as needed for specific examples
 - Provide expected output and explanations
 
 ### 4. Implementation Strategy
 
 **Phase 1: Foundation**
 - Set up directory structure and examples subproject
-- Create domain models and basic infrastructure
-- Migrate core getting-started content
+- Migrate core getting-started content with basic examples
+- Create domain models incrementally as needed
 
 **Phase 2: Core Features**
 - Document Factory, Designer, and ResolutionContext
@@ -138,12 +134,12 @@ This structured approach will transform the current single-file documentation in
 
 The following tasks represent the first 5 priority items to begin implementation:
 
-- [x] **Initialize basic docs/ directory structure**
+- [x] **Task 1: Initialize basic docs/ directory structure**
   - Create docs/ directory if it doesn't exist
   - Set up getting-started/ directory only
   - Other directories will be created as needed during implementation
 
-- [x] **Set up docs/examples/ subproject with build.gradle.kts**
+- [x] **Task 2: Set up docs/examples/ subproject with build.gradle.kts**
   - Create subproject as part of root project (not independent)
   - Add to root settings.gradle.kts as included subproject
   - Configure Java 17 as source and target compatibility
@@ -154,19 +150,23 @@ The following tasks represent the first 5 priority items to begin implementation
   - Set up proper source and test directory structure
   - Ensure `./gradlew build` command succeeds for entire project
 
-- [ ] **Create domain models in docs/examples/src/main/java/examples/**
-  - Implement Product, Review, Order, User classes
-  - Design realistic relationships between domain objects
-  - Ensure models support various AutoParams features
-
-- [ ] **Create installation and quick-start documentation**
+- [ ] **Task 3: Create installation and quick-start documentation**
   - Copy installation instructions from README.md to docs/getting-started/installation.md
   - Create focused quick-start guide with minimal viable example
+  - Write runnable example test class for quick-start guide
+  - Create domain models as needed for examples (incremental approach)
   - Note: README.md will remain unchanged until all docs/ work is complete
 
-- [ ] **Create basic Factory and Designer documentation templates**
+- [ ] **Task 4: Create basic Factory documentation with examples**
   - Establish structure for docs/core-features/factory.md
+  - Write example test classes demonstrating Factory usage
+  - Create domain models as needed for Factory examples
+  - Include sections for basic usage, advanced patterns, and examples
+
+- [ ] **Task 5: Create basic Designer documentation with examples**
   - Establish structure for docs/core-features/designer.md
+  - Write example test classes demonstrating Designer usage
+  - Create domain models as needed for Designer examples
   - Include sections for basic usage, advanced patterns, and examples
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
