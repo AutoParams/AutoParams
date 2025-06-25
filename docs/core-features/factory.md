@@ -2,9 +2,9 @@
 
 ## Overview
 
-Factory is a class for creating instances of a given type. It supports both simple and generic type creation.
+`Factory<T>` is a class for creating instances of a given type. It supports both simple and generic type creation.
 
-Factory is particularly useful when you need to:
+`Factory<T>` is particularly useful when you need to:
 - Create instances of specific types
 - Apply customizations to generated objects
 - Create streams of test data
@@ -49,7 +49,7 @@ List<Product> products = factory.get();
 
 ### Generating Objects
 
-Factory provides multiple methods for generating objects based on your needs:
+`Factory<T>` provides multiple methods for generating objects based on your needs:
 
 **Single Object Generation**
 
@@ -84,11 +84,11 @@ List<Product> products = factory.stream()
 
 ### Automatic Injection in Tests
 
-AutoParams can automatically inject Factory instances into your test methods:
+AutoParams can automatically inject `Factory<T>` instances into your test methods:
 
 **Basic Factory Injection**
 
-AutoParams automatically injects Factory instances into test method parameters:
+AutoParams automatically injects `Factory<T>` instances into test method parameters:
 
 ```java
 @Test
@@ -133,7 +133,7 @@ void testWithMultipleFactories(
 
 ## Customizations with DSL
 
-Factory integrates with AutoParams' customization DSL to let you set specific property values:
+`Factory<T>` integrates with AutoParams' customization DSL to let you set specific property values:
 
 ```java
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
