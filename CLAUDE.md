@@ -112,13 +112,14 @@ Executes the next uncompleted task from a backlog file.
 2. Read the specified backlog file
 3. Find the first uncompleted task marked with `- [ ]`
 4. Execute exactly one task following its specific requirements
-5. Mark the completed task as `- [x]` in the file
-6. Report completion status and next available task
+5. Request user confirmation before marking task as complete
+6. Mark the completed task as `- [x]` in the file only after confirmation
+7. Report completion status and next available task
 
 **Task Execution Rules:**
 - Execute only one task per command invocation
 - Follow any sub-requirements listed under the main task
-- Update task status immediately upon completion
+- Request user confirmation before updating task status
 - Never skip tasks or execute out of order
 - Provide clear progress updates during execution
 
