@@ -40,5 +40,6 @@ tasks.named<Javadoc>("javadoc") {
 }
 
 tasks.test {
+    dependsOn("checkstyleMain", "checkstyleTest")
     useJUnitPlatform()
 }
