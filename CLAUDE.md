@@ -10,10 +10,10 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 - Write self-explanatory code, avoid comments unless requested
 
 ### Guidelines References
-- **Coding Guidelines**: [docs/contexts/coding-guidelines.md](docs/contexts/coding-guidelines.md)
-- **Test Scenarios**: [docs/contexts/test-scenario-guidelines.md](docs/contexts/test-scenario-guidelines.md)
-- **Commit Guidelines**: [docs/contexts/commit-guidelines.md](docs/contexts/commit-guidelines.md)
-- **JavaDoc Guidelines**: [docs/contexts/javadoc-guidelines.md](docs/contexts/javadoc-guidelines.md)
+- **Coding Guidelines**: [work/contexts/coding-guidelines.md](work/contexts/coding-guidelines.md)
+- **Test Scenarios**: [work/contexts/test-scenario-guidelines.md](work/contexts/test-scenario-guidelines.md)
+- **Commit Guidelines**: [work/contexts/commit-guidelines.md](work/contexts/commit-guidelines.md)
+- **JavaDoc Guidelines**: [work/contexts/javadoc-guidelines.md](work/contexts/javadoc-guidelines.md)
 
 ## Available Commands
 
@@ -28,7 +28,7 @@ Implements features using Test-Driven Development methodology.
 
 **Process:**
 1. Validate parameters (error if no feature specified)
-2. Follow TDD workflow from [coding guidelines](docs/contexts/coding-guidelines.md)
+2. Follow TDD workflow from [coding guidelines](work/contexts/coding-guidelines.md)
 3. Select first uncompleted test scenario from available list
 4. Follow strict TDD compliance steps:
    - Request review approval before writing test code
@@ -67,7 +67,7 @@ Creates commits following project guidelines and workflow.
 
 **Process:**
 1. Review staged changes with `git diff --staged`
-2. Apply guidelines from [commit guidelines](docs/contexts/commit-guidelines.md)
+2. Apply guidelines from [commit guidelines](work/contexts/commit-guidelines.md)
 3. Generate appropriate commit message based on staged changes only
 4. Validate message format and length (≤50 character subject)
 5. Present complete commit message for user approval
@@ -86,7 +86,7 @@ Writes JavaDoc documentation for Java classes and methods.
 
 **Process:**
 1. Validate parameters (error if no file specified)
-2. Follow guidelines from [JavaDoc guidelines](docs/contexts/javadoc-guidelines.md)
+2. Follow guidelines from [JavaDoc guidelines](work/contexts/javadoc-guidelines.md)
 3. Analyze file to understand purpose and functionality
 4. Write documentation focusing on public API behavior
 5. Apply proper JavaDoc formatting and escaping
