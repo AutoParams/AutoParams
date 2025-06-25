@@ -2,7 +2,7 @@
 
 # Check if a commit message follows the 50/72 rule
 # 50/72 rule: Subject line ≤50 characters, body lines ≤72 characters
-# Usage: ./check-commit-message.sh [commit-hash]
+# Usage: ./check-commit-message-rule.sh [commit-hash]
 # If no commit-hash is provided, checks the latest commit
 
 # Determine which commit to check

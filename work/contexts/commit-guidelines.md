@@ -17,7 +17,7 @@ Follow the structured workflow below to write commit messages that adhere to the
 
 ### 5. Validate and Fix Commit Message
 - **Immediately after creating the commit, validate it using the validation script.**
-- Run `work/scripts/check-commit-message.sh` to check if the commit message follows the 50/72 rule.
+- Run `work/scripts/check-commit-message-rule.sh` to check if the commit message follows the 50/72 rule.
 - **If the validation fails:**
   - Use `git commit --amend` to modify the commit message
   - Fix the issues identified by the script (subject line length, body line length, etc.)
