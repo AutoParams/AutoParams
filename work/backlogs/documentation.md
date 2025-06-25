@@ -99,6 +99,16 @@ README.md (Overview & Quick Start)
 - Create domain models incrementally as needed for specific examples
 - Provide expected output and explanations
 
+**Quality Validation Rules**:
+- After any modification to the examples subproject, run `./gradlew :examples:build` to ensure all examples compile and tests pass
+- All files must end with a final newline
+- Follow existing code style and formatting conventions
+
+**Documentation Cross-Reference Rules**:
+- Next Steps sections should only link to existing documents
+- When a new document is created, analyze and update Next Steps in related documents to include appropriate links
+- Maintain logical progression: getting-started → core-features → advanced-features → extensions
+
 ### 4. Implementation Strategy
 
 **Phase 1: Foundation**
@@ -150,7 +160,7 @@ The following tasks represent the first 5 priority items to begin implementation
   - Set up proper source and test directory structure
   - Ensure `./gradlew build` command succeeds for entire project
 
-- [ ] **Task 3: Create installation and quick-start documentation**
+- [x] **Task 3: Create installation and quick-start documentation**
   - Copy installation instructions from README.md to docs/getting-started/installation.md
   - Create focused quick-start guide with minimal viable example
   - Write runnable example test class for quick-start guide
