@@ -19,7 +19,7 @@ Follow the structured workflow below to write commit messages that adhere to the
 - **Immediately after creating the commit, validate it using the validation script.**
 - Run `work/scripts/check-commit-message-rule.sh` to check if the commit message follows the 50/72 rule.
 - **If the validation fails:**
-  - Use `git commit --amend` to modify the commit message
+  - Use `git commit --amend -m "<new commit message>"` to modify the commit message
   - Fix the issues identified by the script (subject line length, body line length, etc.)
   - Run the validation script again to confirm the fixes
   - Repeat the amend and validation process until the validation passes
