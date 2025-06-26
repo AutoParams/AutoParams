@@ -42,7 +42,7 @@ import lombok.experimental.Accessors;
  * </p>
  * <ul>
  * <li><b>{@link ParameterBinding#to(Object)}:</b> Set a simple value</li>
- * <li><b>{@link ParameterBinding#withDesign(Function)}:</b> Configure nested objects</li>
+ * <li><b>{@link ParameterBinding#using(Function)}:</b> Configure nested objects</li>
  * </ul>
  *
  * <p><b>Object Processing:</b></p>
@@ -62,9 +62,9 @@ import lombok.experimental.Accessors;
  *
  * // Nested object configuration
  * Factory.design(Review.class)
- *     .set(Review::product).withDesign(product -> product
+ *     .set(Review::product).using(product -> product
  *         .set(Product::name).to("Laptop")
- *         .set(Product::category).withDesign(category -> category
+ *         .set(Product::category).using(category -> category
  *             .set(Category::name).to("Electronics")
  *         )
  *     )
@@ -110,7 +110,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      * accepting a method reference (getter) that identifies the property to be
      * configured. The method returns a {@link ParameterBinding} that allows you
      * to either set a specific value using {@code to()} or configure a nested
-     * object using {@code withDesign()}.
+     * object using {@code using()}.
      * </p>
      *
      * <p><b>Setting a Simple Value:</b></p>
@@ -126,7 +126,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      * <pre>
      * Factory
      *     .design(Review.class)
-     *     .set(Review::product).withDesign(product -> product
+     *     .set(Review::product).using(product -> product
      *         .set(Product::name).to("Laptop")
      *         .set(Product::price).to(BigDecimal.valueOf(999.99))
      *     )
@@ -150,7 +150,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *         or configuring nested objects
      * @throws IllegalArgumentException if {@code getterDelegate} is {@code null}
      * @see ParameterBinding#to(Object)
-     * @see ParameterBinding#withDesign(Function)
+     * @see ParameterBinding#using(Function)
      */
     public <P> ParameterBinding<P> set(FunctionDelegate<T, P> getterDelegate) {
         if (getterDelegate == null) {
@@ -240,7 +240,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      * </p>
      * <ul>
      * <li><b>{@link #to(Object)}:</b> Set the property to a specific value</li>
-     * <li><b>{@link #withDesign(Function)}:</b> Configure a nested object
+     * <li><b>{@link #using(Function)}:</b> Configure a nested object
      *     using the Designer API</li>
      * </ul>
      *
@@ -252,7 +252,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * @param <P> the type of the property being configured
      * @see #to(Object)
-     * @see #withDesign(Function)
+     * @see #using(Function)
      */
     public class ParameterBinding<P> {
 
@@ -298,7 +298,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * @param value the value to assign to the property; must be compatible
          *              with the property type {@code P}
          * @return the current context to enable method chaining
-         * @see #withDesign(Function)
+         * @see #using(Function)
          */
         public Context to(P value) {
             generators.add(ArgumentCustomizationDsl.set(getter).to(value));
@@ -315,7 +315,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * </p>
          * <p>
          * The design function is executed lazily - it is not invoked when
-         * {@code withDesign} is called, but only when the actual object
+         * {@code using} is called, but only when the actual object
          * generation occurs. This enables more efficient object creation
          * and prevents unnecessary computations.
          * </p>
@@ -324,7 +324,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * <pre>
          * Review review = Factory
          *     .design(Review.class)
-         *     .set(Review::product).withDesign(product -> product
+         *     .set(Review::product).using(product -> product
          *         .set(Product::name).to("Laptop")
          *         .set(Product::price).to(BigDecimal.valueOf(999.99))
          *     )
@@ -336,9 +336,9 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * <pre>
          * Review review = Factory
          *     .design(Review.class)
-         *     .set(Review::product).withDesign(product -> product
+         *     .set(Review::product).using(product -> product
          *         .set(Product::name).to("Laptop")
-         *         .set(Product::category).withDesign(category -> category
+         *         .set(Product::category).using(category -> category
          *             .set(Category::name).to("Electronics")
          *             .set(Category::description).to("Electronic devices")
          *         )
@@ -353,12 +353,12 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * </p>
          * <pre>
          * // Correct - returns the received parameter
-         * .set(Review::product).withDesign(product -> product
+         * .set(Review::product).using(product -> product
          *     .set(Product::name).to("Laptop")
          * )
          *
          * // Wrong - returns null (throws IllegalArgumentException)
-         * .set(Review::product).withDesign(product -> {
+         * .set(Review::product).using(product -> {
          *     product.set(Product::name).to("Laptop");
          *     return null; // This will cause an exception
          * })
@@ -374,7 +374,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          * @see DesignContext
          * @see #to(Object)
          */
-        public Context withDesign(
+        public Context using(
             Function<DesignContext<P>, DesignContext<P>> design
         ) {
             if (design == null) {

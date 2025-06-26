@@ -6,7 +6,7 @@ package autoparams.generator;
  * <p>
  * This class provides the same fluent interface as {@link Designer} but is
  * specifically used for configuring nested objects through the
- * {@link DesignLanguage.ParameterBinding#withDesign(java.util.function.Function)}
+ * {@link DesignLanguage.ParameterBinding#using(java.util.function.Function)}
  * method. It extends {@link DesignLanguage} to inherit all configuration
  * capabilities while being tailored for nested object scenarios.
  * </p>
@@ -24,7 +24,7 @@ package autoparams.generator;
  * <pre>
  * Review review = Factory
  *     .design(Review.class)
- *     .set(Review::product).withDesign(product -> product // DesignContext&lt;Product&gt;
+ *     .set(Review::product).using(product -> product // DesignContext&lt;Product&gt;
  *         .set(Product::name).to("Laptop")
  *         .set(Product::price).to(BigDecimal.valueOf(999.99))
  *         .process(p -> p.applyDiscount(0.1))
@@ -34,15 +34,15 @@ package autoparams.generator;
  *
  * <p><b>Design Function Contract:</b></p>
  * <p>
- * When used in {@code withDesign()}, the design function must return the same
+ * When used in {@code using()}, the design function must return the same
  * {@code DesignContext} instance it receives:
  * </p>
  * <pre>
  * // Correct usage - returns the parameter
- * .withDesign(product -> product.set(Product::name).to("Laptop"))
+ * .using(product -> product.set(Product::name).to("Laptop"))
  *
  * // Incorrect usage - would throw IllegalArgumentException
- * .withDesign(product -> {
+ * .using(product -> {
  *     product.set(Product::name).to("Laptop");
  *     return null; // Wrong! Must return the parameter
  * })
@@ -51,7 +51,7 @@ package autoparams.generator;
  * @param <T> the type of the nested object being configured
  * @see Designer
  * @see DesignLanguage
- * @see DesignLanguage.ParameterBinding#withDesign(java.util.function.Function)
+ * @see DesignLanguage.ParameterBinding#using(java.util.function.Function)
  */
 public class DesignContext<T> extends DesignLanguage<T, DesignContext<T>> {
 

@@ -61,18 +61,18 @@ Order order = Factory
 
 ### Nested Object Configuration
 
-- The `withDesign` method configures a nested object by accepting a function that takes and returns a `DesignContext<T>` instance (`Function<DesignContext<T>, DesignContext<T>>`).
+- The `using` method configures a nested object by accepting a function that takes and returns a `DesignContext<T>` instance (`Function<DesignContext<T>, DesignContext<T>>`).
 - The `DesignContext<T>` class provides a fluent interface for configuring nested objects, similar to the `Designer<T>` class.
 - The `DesignContext<T>` class is located in the `autoparams.generator` package of the `autoparams` module.
-- The `DesignContext<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `withDesign` method of the `Designer<T>` class.
+- The `DesignContext<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `using` method of the `Designer<T>` class.
 - The `DesignContext<T>` class is derived from the same parent class as the `Designer<T>` class.
-- The function passed to the `withDesign` method must return the received argument as is.
-- The design function is executed lazily - it is not invoked when `withDesign` is called, but only when the actual object generation occurs during `create()`. This enables more efficient object creation and prevents unnecessary computations.
+- The function passed to the `using` method must return the received argument as is.
+- The design function is executed lazily - it is not invoked when `using` is called, but only when the actual object generation occurs during `create()`. This enables more efficient object creation and prevents unnecessary computations.
 
 ```java
 Review review = Factory
     .design(Review.class)
-    .set(Review::product).withDesign(product -> product
+    .set(Review::product).using(product -> product
         .set(Product::name).to("Product A")
         .set(Product::imageUri).to("https://example.com/product-a.jpg")
     )
@@ -82,10 +82,10 @@ Review review = Factory
 
 **Test Scenarios**:
 
-- [x] withDesign configures nested object using design function
-- [x] withDesign throws exception when design function argument is null
-- [x] withDesign does not affect properties outside the nested object
-- [x] withDesign supports multiple levels of nested object configuration
+- [x] using configures nested object using design function
+- [x] using throws exception when design function argument is null
+- [x] using does not affect properties outside the nested object
+- [x] using supports multiple levels of nested object configuration
 - [x] create throws exception when design function does not return its argument
 
 ### Using Custom ResolutionContext with Designer<T>

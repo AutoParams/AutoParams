@@ -99,7 +99,7 @@ public class SpecsForDesigner {
 
     @Test
     @AutoParams
-    void withDesign_configures_nested_object_using_design_function(
+    void using_configures_nested_object_using_design_function(
         String productName,
         String imageName,
         String comment
@@ -108,7 +108,7 @@ public class SpecsForDesigner {
 
         Review actual = Factory
             .design(Review.class)
-            .set(Review::product).withDesign(product -> product
+            .set(Review::product).using(product -> product
                 .set(Product::name).to(productName)
                 .set(Product::imageUri).to(imageUri)
             )
@@ -121,10 +121,10 @@ public class SpecsForDesigner {
     }
 
     @Test
-    void withDesign_throws_exception_when_design_function_argument_is_null() {
+    void using_throws_exception_when_design_function_argument_is_null() {
         assertThatThrownBy(() -> Factory
             .design(Review.class)
-            .set(Review::product).withDesign(null)
+            .set(Review::product).using(null)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -134,12 +134,12 @@ public class SpecsForDesigner {
 
     @Test
     @AutoParams
-    void withDesign_does_not_affect_properties_outside_the_nested_object(
+    void using_does_not_affect_properties_outside_the_nested_object(
         String followeeName
     ) {
         Following actual = Factory
             .design(Following.class)
-            .set(Following::followee).withDesign(user -> user
+            .set(Following::followee).using(user -> user
                 .set(User::username).to(followeeName)
             )
             .create();
@@ -151,7 +151,7 @@ public class SpecsForDesigner {
 
     @Test
     @AutoParams
-    void withDesign_supports_multiple_levels_of_nested_object_configuration(
+    void using_supports_multiple_levels_of_nested_object_configuration(
         String reviewComment,
         String productName,
         String categoryName
@@ -159,9 +159,9 @@ public class SpecsForDesigner {
         Review actual = Factory
             .design(Review.class)
             .set(Review::comment).to(reviewComment)
-            .set(Review::product).withDesign(product -> product
+            .set(Review::product).using(product -> product
                 .set(Product::name).to(productName)
-                .set(Product::category).withDesign(category -> category
+                .set(Product::category).using(category -> category
                     .set(Category::name).to(categoryName)
                 )
             )
@@ -176,7 +176,7 @@ public class SpecsForDesigner {
     void create_throws_exception_when_design_function_does_not_return_its_argument() {
         Designer<Review> designer = Factory
             .design(Review.class)
-            .set(Review::product).withDesign(product -> null);
+            .set(Review::product).using(product -> null);
         assertThatThrownBy(designer::create)
             .isInstanceOf(RuntimeException.class);
     }
