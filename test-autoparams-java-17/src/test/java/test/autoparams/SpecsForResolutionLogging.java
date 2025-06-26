@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpecsForReporting {
+public class SpecsForResolutionLogging {
 
     @Test
     @AutoParams
