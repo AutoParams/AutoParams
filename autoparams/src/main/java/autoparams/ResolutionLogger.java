@@ -3,7 +3,9 @@ package autoparams;
 import java.util.ArrayList;
 import java.util.List;
 
-class EventHandler {
+class ResolutionLogger {
+
+    private final LogWriter logWriter;
 
     private enum EventType {
         RESOLVING {
@@ -39,6 +41,10 @@ class EventHandler {
     private final List<Event> events = new ArrayList<>();
     private int depth = 0;
 
+    public ResolutionLogger(LogWriter logWriter) {
+        this.logWriter = logWriter;
+    }
+
     private void addEvent(EventType type, String message) {
         events.add(new Event(depth, message, type));
     }
@@ -67,18 +73,18 @@ class EventHandler {
         depth--;
     }
 
-    public void flushEventsIfRootDepth(LogWriter writer) {
+    public void flushEventsIfRootDepth() {
         if (depth == 0) {
-            flushEvents(writer);
+            flushEvents();
         }
     }
 
-    public void flushEvents(LogWriter writer) {
-        printEvents(writer);
+    public void flushEvents() {
+        printEvents();
         events.clear();
     }
 
-    private void printEvents(LogWriter writer) {
+    private void printEvents() {
         if (events.isEmpty()) {
             return;
         }
@@ -118,7 +124,7 @@ class EventHandler {
             }
         }
 
-        writer.write(report.toString());
+        logWriter.write(report.toString());
     }
 
     @SuppressWarnings("SameParameterValue")

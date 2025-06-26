@@ -34,8 +34,7 @@ public class ResolutionContext {
 
     private ObjectGenerator generator;
     private ObjectProcessor processor;
-    private final LogWriter logWriter;
-    private final EventHandler eventHandler = new EventHandler();
+    private final ResolutionLogger logger;
 
     /**
      * Creates a new {@link ResolutionContext} with the specified object
@@ -72,7 +71,7 @@ public class ResolutionContext {
 
         this.generator = generator;
         this.processor = processor;
-        this.logWriter = logWriter;
+        this.logger = new ResolutionLogger(logWriter);
     }
 
     /**
@@ -242,16 +241,16 @@ public class ResolutionContext {
             throw new IllegalArgumentException("The argument 'query' is null.");
         }
 
-        eventHandler.onResolving(query);
+        logger.onResolving(query);
         try {
             long startedMillis = currentTimeMillis();
             Object value = generateThenProcessValue(query);
             long elapsedMillis = currentTimeMillis() - startedMillis;
-            eventHandler.onResolved(query, value, elapsedMillis);
-            eventHandler.flushEventsIfRootDepth(logWriter);
+            logger.onResolved(query, value, elapsedMillis);
+            logger.flushEventsIfRootDepth();
             return value;
         } catch (Exception exception) {
-            eventHandler.flushEvents(logWriter);
+            logger.flushEvents();
             String message = "Failed to resolve an object for the given query: "
                 + query + ". See the internal error message for details.";
             throw new RuntimeException(message, exception);
