@@ -23,6 +23,7 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 - The list of test scenario must be prepared in advance.
 - Never modify a failed test. If a test needs to be changed, update it manually.
 - Do not write code that is not required to pass a test. Only add code driven by a failing test.
+- Set the timeout to 10 minutes when running Gradle commands.
 
 ### TDD Workflow
 
