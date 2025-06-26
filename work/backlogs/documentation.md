@@ -23,7 +23,7 @@ README.md (Overview & Quick Start)
 │   │   ├── installation.md
 │   │   ├── quick-start.md
 │   │   └── first-test.md
-│   ├── core-features/          # Essential AutoParams functionality
+│   ├── basics/                 # Essential AutoParams functionality
 │   │   ├── basic-usage.md
 │   │   ├── annotations.md
 │   │   ├── factory.md
@@ -52,7 +52,7 @@ README.md (Overview & Quick Start)
 │           ├── main/java/examples/     # Domain models (created incrementally)
 │           └── test/java/examples/     # Runnable examples
 │               ├── basic/
-│               ├── core/
+│               ├── basics/
 │               ├── advanced/
 │               └── extensions/
 ```
@@ -86,14 +86,14 @@ README.md (Overview & Quick Start)
 ```markdown
 # Feature Name
 ## Overview
-## Basic Usage
+## How to Use
 ## [Advanced Feature Topics as ## sections]
 ## Next Steps
 ```
 
 **Documentation Structure Guidelines**:
 - Use `## Overview` for introduction and key concepts
-- Use `## Basic Usage` for essential functionality with examples
+- Use `## How to Use` for essential functionality with examples
 - Advanced content should be organized as separate `##` level sections (e.g., `## Customizations with DSL`, `## Stream Processing`, etc.) rather than grouped under `## Advanced Patterns`
 - Use `## Next Steps` for navigation to related documentation
 
@@ -117,7 +117,7 @@ README.md (Overview & Quick Start)
 **Documentation Cross-Reference Rules**:
 - Next Steps sections should only link to existing documents
 - When a new document is created, analyze and update Next Steps in related documents to include appropriate links
-- Maintain logical progression: getting-started → core-features → advanced-features → extensions
+- Maintain logical progression: getting-started → basics → advanced-features → extensions
 
 ### 4. Implementation Strategy
 
@@ -126,7 +126,7 @@ README.md (Overview & Quick Start)
 - Migrate core getting-started content with basic examples
 - Create domain models incrementally as needed
 
-**Phase 2: Core Features**
+**Phase 2: Basic Features**
 - Document Factory, Designer, and ResolutionContext
 - Create comprehensive annotation reference
 - Build examples for fundamental features
@@ -178,7 +178,7 @@ The following tasks represent the first 5 priority items to begin implementation
   - Note: README.md will remain unchanged until all docs/ work is complete
 
 - [x] **Task 4: Create basic Factory documentation with examples**
-  - [x] Establish structure for docs/core-features/factory.md (including basic usage and advanced patterns sections)
+  - [x] Establish structure for docs/basics/factory.md (including how to use and advanced patterns sections)
   - [x] Create domain model as needed for Factory examples (Product only)
   - [x] Write basic Factory creation examples:
     - [x] Factory creation: `Factory.create(Class<T>)` basic usage
@@ -196,7 +196,7 @@ The following tasks represent the first 5 priority items to begin implementation
     - [x] Using ArgumentCustomizationDsl.set method with Factory
 
 - [ ] **Task 5: Create basic Designer documentation with examples**
-  - [ ] Establish structure for docs/core-features/designer.md (including basic usage sections)
+  - [ ] Establish structure for docs/basics/designer.md (including how to use sections)
   - [ ] Create domain model as needed for Designer examples (reuse existing models where possible)
   - [ ] Write basic Designer creation examples:
     - [ ] Basic fluent chaining: `Factory.design(Class<T>).set().to().create()`

@@ -9,7 +9,7 @@
 - Apply customizations to generated objects
 - Create streams of test data
 
-## Basic Usage
+## How to Use
 
 **Basic Factory Creation**
 
