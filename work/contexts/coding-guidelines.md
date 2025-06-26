@@ -5,6 +5,9 @@
 - Do not try to do too much at once. Work in the smallest possible increments, and request a review after completing each unit of work.
 - Do not write Javadoc and other comments unless explicitly requested. Write self-explanatory code instead.
 - Exception messages for argument validation should start with "The argument 'argumentName'" (e.g., "The argument 'count' must not be less than 0").
+- Always add a final newline when creating a new code file.
+- Set the timeout to 10 minutes when running Gradle commands.
+- Do not use 'clazz' as a variable name for values of type `Class<?>`.
 
 ## Test-Driven Development
 
@@ -21,9 +24,9 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 ### TDD Guidelines
 
 - The list of test scenario must be prepared in advance.
+- Do not write more than one test at a time.
+- Do not write code that is not required (for example, unnecessary if statements) to pass a test. Only add code driven by a failing test.
 - Never modify a failed test. If a test needs to be changed, update it manually.
-- Do not write code that is not required to pass a test. Only add code driven by a failing test.
-- Set the timeout to 10 minutes when running Gradle commands.
 
 ### TDD Workflow
 
