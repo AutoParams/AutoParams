@@ -10,7 +10,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 - Write self-explanatory code, avoid comments unless requested
 
 ### Guidelines References
-- **Coding Guidelines**: [work/contexts/coding-guidelines.md](work/contexts/coding-guidelines.md)
-- **Test Scenarios**: [work/contexts/test-scenario-guidelines.md](work/contexts/test-scenario-guidelines.md)
-- **Commit Guidelines**: [work/contexts/commit-guidelines.md](work/contexts/commit-guidelines.md)
-- **JavaDoc Guidelines**: [work/contexts/javadoc-guidelines.md](work/contexts/javadoc-guidelines.md)
+- **Coding**: [work/contexts/coding-guidelines.md](work/contexts/coding-guidelines.md)
+- **Test Scenarios Writing**: [work/contexts/test-scenario-guidelines.md](work/contexts/test-scenario-guidelines.md)
+- **Commit**: [work/contexts/commit-guidelines.md](work/contexts/commit-guidelines.md)
+- **JavaDoc**: [work/contexts/javadoc-guidelines.md](work/contexts/javadoc-guidelines.md)
