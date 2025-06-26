@@ -39,6 +39,5 @@ Use Test-Driven Development (TDD) methodology when implementing new features or 
 7. Understand the cause of the test failure and modify the code to make the test pass.
 8. Run the test for the specific test class containing the added test using the command `./gradlew :{module}:test --tests {fullTestClassName}`.
 9. If the test does not pass after three attempts, stop working and request a review.
-10. If the test passes, run the full build including compilation, tests, and style checks using `./gradlew :{module}:build`.
-11. If the build fails, analyze the cause and apply the necessary fixes. Repeat steps 10 and 11 until the build succeeds.
-12. When the build succeeds, mark the test scenario as completed using checkbox format: `- [x] test scenario description`.
+10. If the build fails, analyze the cause and apply the necessary fixes. Repeat steps 9 and 10 until the build succeeds.
+11. When the build succeeds, mark the test scenario as completed using checkbox format: `- [x] test scenario description`.

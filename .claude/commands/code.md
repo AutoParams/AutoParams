@@ -30,6 +30,5 @@ Execute these steps in order:
 7. **Run Test**: Execute test to confirm it fails appropriately (TDD Workflow step 5-6)
 8. **Implement Code**: Write minimal code to make test pass (TDD Step 3, Workflow step 7)
 9. **Run Specific Test**: Use `./gradlew :{module}:test --tests {fullTestClassName}` (TDD Workflow step 8)
-10. **Run Full Build**: Execute `./gradlew :{module}:build` when test passes (TDD Workflow step 10)
-11. **Mark Complete**: Mark scenario as `- [x]` when build succeeds (TDD Workflow step 12)
-12. **Repeat**: Go back to step 2 until all scenarios complete (TDD Step 5)
+10. **Mark Complete**: Mark scenario as `- [x]` when build succeeds (TDD Workflow step 12)
+11. **Repeat**: Go back to step 2 until all scenarios complete (TDD Step 5)

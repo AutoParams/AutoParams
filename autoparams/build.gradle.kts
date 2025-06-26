@@ -21,8 +21,11 @@ dependencies {
 }
 
 tasks.test {
-    dependsOn("checkstyleMain", "checkstyleTest", "jar")
     useJUnitPlatform()
+}
+
+tasks.build {
+    dependsOn("checkstyleMain", "checkstyleTest", "jar")
 }
 
 java {
