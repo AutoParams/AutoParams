@@ -4,6 +4,7 @@
 
 - Do not try to do too much at once. Work in the smallest possible increments, and request a review after completing each unit of work.
 - Do not write Javadoc and other comments unless explicitly requested. Write self-explanatory code instead.
+- Exception messages for argument validation should start with "The argument 'argumentName'" (e.g., "The argument 'count' must not be less than 0").
 
 ## Test-Driven Development
 
