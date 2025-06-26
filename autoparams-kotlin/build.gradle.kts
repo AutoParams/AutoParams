@@ -9,7 +9,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.assertj:assertj-core:3.20.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 }
 
 java {
