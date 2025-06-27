@@ -57,109 +57,83 @@ class ResolutionLogger {
         entries.clear();
     }
 
-    private int getChildIndex(int entryIndex) {
-        LogEntry entry = entries.get(entryIndex);
-        int childIndex = 0;
-        for (int i = 0; i < entryIndex; i++) {
-            if (entries.get(i).depth == entry.depth) {
-                childIndex++;
-            }
-        }
-        return childIndex;
-    }
-
-    private int getTotalChildrenAtDepth(int targetDepth) {
-        int count = 0;
-        for (LogEntry entry : entries) {
-            if (entry.depth == targetDepth) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     private String generatePrefix(int entryIndex, int depth) {
-        if (depth == 1) {
-            int childIndex = getChildIndex(entryIndex);
-            int totalChildren = getTotalChildrenAtDepth(depth);
-            return (childIndex == totalChildren - 1) ? " └─ " : " ├─ ";
-        } else if (depth == 2) {
-            int childIndex = getChildIndexWithinParent(entryIndex);
-            int totalChildren = getTotalChildrenWithinParent(entryIndex);
-            boolean isLastChild = (childIndex == totalChildren - 1);
-
-            boolean isParentLastChild = isParentLastChild(entryIndex);
-            String verticalBar = isParentLastChild ? "    " : " │  ";
-            String connector = isLastChild ? " └─ " : " ├─ ";
-
-            return verticalBar + connector;
+        if (depth == 0) {
+            return "";
         }
-        return "";
+
+        StringBuilder prefix = new StringBuilder();
+
+        for (int currentDepth = 1; currentDepth <= depth; currentDepth++) {
+            if (currentDepth == depth) {
+                int childIndex = getChildIndexAtDepth(entryIndex, currentDepth);
+                int totalChildren = getTotalChildrenAtDepth(entryIndex, currentDepth);
+                boolean isLastChild = (childIndex == totalChildren - 1);
+                prefix.append(isLastChild ? " └─ " : " ├─ ");
+            } else {
+                boolean isAncestorLastChild = isAncestorLastChild(entryIndex, currentDepth);
+                prefix.append(isAncestorLastChild ? "    " : " │  ");
+            }
+        }
+
+        return prefix.toString();
     }
 
-    private boolean isParentLastChild(int entryIndex) {
-        LogEntry entry = entries.get(entryIndex);
-        int parentDepth = entry.depth - 1;
-
+    private boolean isAncestorLastChild(int entryIndex, int ancestorDepth) {
         for (int i = entryIndex - 1; i >= 0; i--) {
-            LogEntry previousEntry = entries.get(i);
-            if (previousEntry.depth == parentDepth) {
-                int parentChildIndex = getChildIndex(i);
-                int parentTotalChildren = getTotalChildrenAtDepth(parentDepth);
-                return parentChildIndex == parentTotalChildren - 1;
+            LogEntry ancestorEntry = entries.get(i);
+            if (ancestorEntry.depth == ancestorDepth) {
+                int ancestorChildIndex = getChildIndexAtDepth(i, ancestorDepth);
+                int ancestorTotalChildren = getTotalChildrenAtDepth(i, ancestorDepth);
+                return ancestorChildIndex == ancestorTotalChildren - 1;
             }
         }
         return false;
     }
 
-    private int getChildIndexWithinParent(int entryIndex) {
-        LogEntry entry = entries.get(entryIndex);
-        int parentDepth = entry.depth - 1;
-        int parentIndex = -1;
-
-        for (int i = entryIndex - 1; i >= 0; i--) {
-            if (entries.get(i).depth == parentDepth) {
-                parentIndex = i;
-                break;
-            }
-        }
-
+    private int getChildIndexAtDepth(int entryIndex, int targetDepth) {
+        int parentIndex = findParentIndex(entryIndex, targetDepth - 1);
         int childIndex = 0;
-        for (int i = parentIndex + 1; i < entryIndex; i++) {
-            if (entries.get(i).depth == entry.depth) {
+        int startIndex = (parentIndex == -1) ? 0 : parentIndex + 1;
+
+        for (int i = startIndex; i < entryIndex; i++) {
+            if (entries.get(i).depth == targetDepth) {
                 childIndex++;
             }
         }
         return childIndex;
     }
 
-    private int getTotalChildrenWithinParent(int entryIndex) {
-        LogEntry entry = entries.get(entryIndex);
-        int parentDepth = entry.depth - 1;
-        int parentIndex = -1;
-
-        for (int i = entryIndex - 1; i >= 0; i--) {
-            if (entries.get(i).depth == parentDepth) {
-                parentIndex = i;
-                break;
-            }
-        }
-
-        int nextParentIndex = entries.size();
-        for (int i = parentIndex + 1; i < entries.size(); i++) {
-            if (entries.get(i).depth == parentDepth) {
-                nextParentIndex = i;
-                break;
-            }
-        }
-
+    private int getTotalChildrenAtDepth(int entryIndex, int targetDepth) {
+        int parentIndex = findParentIndex(entryIndex, targetDepth - 1);
+        int nextParentIndex = findNextParentIndex(parentIndex, targetDepth - 1);
         int count = 0;
-        for (int i = parentIndex + 1; i < nextParentIndex; i++) {
-            if (entries.get(i).depth == entry.depth) {
+        int startIndex = (parentIndex == -1) ? 0 : parentIndex + 1;
+
+        for (int i = startIndex; i < nextParentIndex; i++) {
+            if (entries.get(i).depth == targetDepth) {
                 count++;
             }
         }
         return count;
+    }
+
+    private int findParentIndex(int entryIndex, int parentDepth) {
+        for (int i = entryIndex - 1; i >= 0; i--) {
+            if (entries.get(i).depth == parentDepth) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findNextParentIndex(int parentIndex, int parentDepth) {
+        for (int i = parentIndex + 1; i < entries.size(); i++) {
+            if (entries.get(i).depth == parentDepth) {
+                return i;
+            }
+        }
+        return entries.size();
     }
 
     private static class LogEntry {

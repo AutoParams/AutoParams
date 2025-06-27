@@ -246,6 +246,50 @@ void testMethod(ResolutionContext context) {
 - [x] sut prints two depth tree structure with last leaf of last stem
   Example: `     └─ String zipCode → zipCodexyz789 (1ms)`
 
+### 7. N-Depth Tree Structure
+
+Implement an N-depth tree structure for the log output. The logger should print the query and its resolved value in a tree-like format, with each level indented.
+
+```java
+@Test
+@AutoParams
+@LogResolution
+void testMethod(ResolutionContext context) {
+    context.resolve(Order.class);
+    // Expected log output:
+    //  0: Order → Order[customer=User[...], shippingAddress=Address[...], products=[Product[...], Product[...]]] (5ms)
+    //  1:  ├─ User customer → User[id=587c2513..., email=user@test.com] (2ms)
+    //  2:  │   ├─ UUID id → 587c2513-7781-4249-8a72-d274f5ea1f9d (1ms)
+    //  3:  │   └─ String email → user@test.com (1ms)
+    //  4:  ├─ Address shippingAddress → Address[street=street123, city=city456, zipCode=12345] (2ms)
+    //  5:  │   ├─ String street → street123 (1ms)
+    //  6:  │   ├─ String city → city456 (< 1ms)
+    //  7:  │   └─ String zipCode → zipCode789 (1ms)
+    //  8:  └─ List<Product> products → [Product[...], Product[...]] (3ms)
+    //  9:      ├─ Product → Product[name=nameabc123, price=19.99] (1ms)
+    // 10:      │   ├─ String name → nameabc123 (1ms)
+    // 11:      │   └─ BigDecimal price → 19.99 (1ms)
+    // 12:      ├─ Product → Product[name=nameabc456, price=29.99] (1ms)
+    // 13:      │   ├─ String name → nameabc456 (1ms)
+    // 14:      │   └─ BigDecimal price → 29.99 (1ms)
+    // 15:      └─ Product → Product[name=namexyz789, price=39.99] (1ms)
+    // 16:          ├─ String name → namexyz789 (1ms)
+    // 17:          └─ BigDecimal price → 39.99 (1ms)
+}
+```
+
+**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+
+**Test Scenarios**:
+- [x] sut prints deep tree structure with first leaf
+  Example: `     │   ├─ String name → nameabc123 (1ms)`
+- [x] sut prints deep tree structure with last leaf
+  Example: `     │   └─ BigDecimal price → 19.99 (1ms)`
+- [x] sut prints deep tree structure with first leaf of last stem
+  Example: `         ├─ String name → namexyz789 (1ms)`
+- [x] sut prints deep tree structure with last leaf of last stem
+  Example: `         └─ BigDecimal price → 39.99 (1ms)`
+
 ## Backlogs
 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.

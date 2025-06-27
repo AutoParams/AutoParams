@@ -2,6 +2,7 @@ package test.autoparams;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,12 @@ public class SpecsForResolutionLogging {
     }
 
     public record Address(String street, String city, String zipCode) {
+    }
+
+    public record Product(String name, BigDecimal price) {
+    }
+
+    public record Order(User customer, Address shippingAddress, List<Product> products) {
     }
 
     private static String[] captureOutput(Runnable runnable) {
@@ -277,5 +284,45 @@ public class SpecsForResolutionLogging {
         for (String line : output) {
             assertThat(line).doesNotContain("ResolutionContext");
         }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_deep_tree_structure_with_first_leaf(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Order.class));
+        assertThat(output[10]).matches(" {5}│ {3}├─ String name → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_deep_tree_structure_with_last_leaf(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Order.class));
+        assertThat(output[11]).matches(" {5}│ {3}└─ BigDecimal price → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_deep_tree_structure_with_first_leaf_of_last_stem(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Order.class));
+        assertThat(output[16]).matches(" {9}├─ String name → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_deep_tree_structure_with_last_leaf_of_last_stem(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Order.class));
+        assertThat(output[17]).matches(" {9}└─ BigDecimal price → .* \\(.*ms\\)");
     }
 }
