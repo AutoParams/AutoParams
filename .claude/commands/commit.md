@@ -24,7 +24,7 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 4. **No Secrets**: Check that no sensitive information (keys, passwords) is being committed
 
 ## Execution Workflow
-1. **Analyze Staged Changes**: Execute `git diff --staged` to examine what will be committed
+1. **Analyze Staged Changes Only**: Execute `git diff --staged` to examine ONLY what is already staged - do not stage additional files
 2. **Categorize Changes**: Identify the nature of changes (new feature, enhancement, bug fix, refactoring, etc.)
 3. **Check Sensitive Data**: Scan for any secrets, keys, or sensitive information in staged changes
 4. **Draft Message**: Write commit message following CLAUDE.md commit guidelines
@@ -38,6 +38,12 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 - **Validation Failures**: Never leave commit with message that fails validation (per CLAUDE.md)
 - **Sensitive Data**: Abort commit if sensitive information detected
 - **Topic Mismatch**: Warn if staged changes don't align with specified topic
+
+## Important Notes
+- This command operates ONLY on staged changes
+- Files must be staged separately using `git add` before running `/commit`
+- The command will NOT automatically stage unstaged files
+- If additional files need to be committed, stage them first and run `/commit` again
 
 ## Success Criteria
 - Commit message passes validation and follows all CLAUDE.md commit guidelines
