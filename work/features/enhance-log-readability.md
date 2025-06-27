@@ -290,6 +290,15 @@ void testMethod(ResolutionContext context) {
 - [x] sut prints deep tree structure with last leaf of last stem
   Example: `         └─ BigDecimal price → 39.99 (1ms)`
 
+### 8. Internal Type Formatter (Refactoring)
+
+Implement an internal type formatter to format `Type` for logging. `ObjectQuery.toLog(boolean verbose)` and `ParameterQuery.toLog(boolean verbose)` methods should use this formatter to produce concise type names.
+
+- [ ] Add package-private `TypeFormatter` class in the `autoparams` package.
+- [ ] Implement `format(Type type, boolean verbose)` method to format types based on the `verbose` flag.
+- [ ] Use this formatter in `ObjectQuery.toLog(boolean verbose)` method.
+- [ ] Use this formatter in `ParameterQuery.toLog(boolean verbose)` method.
+
 ## Backlogs
 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
