@@ -18,13 +18,30 @@ Write JavaDoc documentation for Java code - /javadoc <file> [method: <method>]
 /javadoc autoparams/customization/Customizer.java method: customize
 ```
 
+## Pre-Documentation Validation
+1. **File Existence**: Confirm the specified Java file exists and is readable
+2. **Valid Java**: Verify file contains valid Java code structure
+3. **Target Identification**: If method specified, confirm method exists in the file
+4. **Documentation Scope**: Determine if target is public API or internal implementation
+5. **Package Context**: Check if target is in `autoparams.internal` package or subpackages
+
 ## Execution Workflow
+1. **Analyze Target File**: Read and understand the complete Java file structure and context
+2. **Validate Target**: Confirm target class/method exists and is appropriate for documentation
+3. **Assess Current State**: Check existing JavaDoc and identify what needs to be added or improved
+4. **Determine Scope**: If method parameter provided, focus on specific method; otherwise document appropriate scope
+5. **Apply CLAUDE.md Guidelines**: Follow all CLAUDE.md JavaDoc guidelines precisely
+6. **Draft Documentation**: Write JavaDoc comments with proper structure and required tags
+7. **Format Properly**: Ensure correct HTML formatting, escaping, and tag usage per CLAUDE.md
+8. **Review Completeness**: Verify documentation covers functionality without implementation details
 
-Execute these steps in order:
+## Error Handling
+- **File Not Found**: Provide clear error if specified file doesn't exist
+- **Invalid Target**: Report error if specified method doesn't exist in file
+- **Non-Public Target**: Skip or warn about non-public types/members (per CLAUDE.md guidelines)
+- **Malformed Java**: Handle cases where Java file has syntax issues
 
-1. **Read Guidelines**: First read [JavaDoc guidelines](../../work/contexts/javadoc-guidelines.md) to review formatting standards
-2. **Analyze Target**: Read the specified Java file to understand class/method structure
-3. **Identify Scope**: If method parameter provided, focus on specific method; otherwise document entire class
-4. **Draft Documentation**: Write JavaDoc comments following formatting conventions
-5. **Apply Standards**: Ensure proper use of @param, @return, @throws tags as appropriate
-6. **Review Completeness**: Verify all public APIs are documented according to guidelines
+## Success Criteria
+- Documentation follows all CLAUDE.md JavaDoc guidelines
+- Proper HTML formatting and escaping applied per CLAUDE.md rules
+- Internal implementation warnings added for `autoparams.internal` types as specified in CLAUDE.md

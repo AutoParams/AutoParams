@@ -17,18 +17,26 @@ Implement features using TDD methodology - /code feature: <feature>
 /code feature: ArgumentRecycler
 ```
 
+## Pre-Execution Validation
+1. **Feature Scope**: Confirm feature name/path is valid and well-defined
+2. **Test Scenarios**: Verify test scenario list exists and follows CLAUDE.md writing guidelines
+3. **Module Structure**: Identify correct module and package structure
+4. **Dependencies**: Check existing code dependencies and imports
+
 ## Execution Workflow
-
-Execute these steps in order:
-
-1. **Read Guidelines**: First read [coding guidelines](../../work/contexts/coding-guidelines.md) to review TDD methodology, guidelines, and workflow
+1. **Initialize**: Prepare test scenario list following CLAUDE.md test scenario guidelines
 2. **Select Scenario**: Choose one incomplete test scenario from the pre-prepared list
-3. **Define Method Signature**: If needed, define minimal method signature without implementation (TDD Workflow step 2)
-4. **Request Review**: Get confirmation if method signature was defined (TDD Workflow step 3)
-5. **Write One Test**: Convert selected scenario into concrete, executable test (TDD Step 2, Workflow step 4)
-6. **Request Review**: Get confirmation before running the test (TDD Workflow step 4)
-7. **Run Test**: Execute test to confirm it fails appropriately (TDD Workflow step 5-6)
-8. **Implement Code**: Write minimal code to make test pass (TDD Step 3, Workflow step 7)
-9. **Run Specific Test**: Use `./gradlew :{module}:test --tests {fullTestClassName}` (TDD Workflow step 8)
-10. **Mark Complete**: Mark scenario as `- [x]` when build succeeds (TDD Workflow step 12)
-11. **Repeat**: Go back to step 2 until all scenarios complete (TDD Step 5)
+3. **Validate Scenario**: Ensure scenario follows CLAUDE.md guidelines
+4. **Follow TDD Workflow**: Execute CLAUDE.md TDD workflow steps 2-11 precisely
+5. **Mark Complete**: Mark scenario as `- [x]` when build succeeds
+6. **Continue**: Return to step 2 until all scenarios complete
+
+## Error Handling
+- **Test Failure Limit**: Stop after 3 attempts and request review (per CLAUDE.md TDD workflow)
+- **Build Failure Recovery**: Apply CLAUDE.md build guidelines systematically
+- **Review Gates**: Always request review at designated checkpoints
+
+## Success Criteria
+- All test scenarios converted to passing tests
+- Code follows incremental development principles from CLAUDE.md
+- Test scenario list properly maintained with completion status

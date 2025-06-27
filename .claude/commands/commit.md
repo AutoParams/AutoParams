@@ -17,14 +17,29 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 /commit topic: documentation
 ```
 
+## Pre-Commit Validation
+1. **Staged Changes**: Ensure there are staged changes to commit
+2. **Change Quality**: Verify changes are coherent and focused
+3. **Topic Alignment**: If topic specified, confirm staged changes match the topic
+4. **No Secrets**: Check that no sensitive information (keys, passwords) is being committed
+
 ## Execution Workflow
+1. **Analyze Staged Changes**: Execute `git diff --staged` to examine what will be committed
+2. **Categorize Changes**: Identify the nature of changes (new feature, enhancement, bug fix, refactoring, etc.)
+3. **Check Sensitive Data**: Scan for any secrets, keys, or sensitive information in staged changes
+4. **Draft Message**: Write commit message following CLAUDE.md commit guidelines
+5. **Create Commit**: Execute commit using heredoc format for proper message formatting
+6. **Validate**: Run `work/scripts/check-commit-message-rule.sh` as per CLAUDE.md guidelines
+7. **Fix if Failed**: Use `git commit --amend` with heredoc format if validation fails
+8. **Repeat**: Continue validation cycle until passes
 
-Execute these steps in order:
+## Error Handling
+- **No Staged Changes**: Abort if no changes are staged for commit
+- **Validation Failures**: Never leave commit with message that fails validation (per CLAUDE.md)
+- **Sensitive Data**: Abort commit if sensitive information detected
+- **Topic Mismatch**: Warn if staged changes don't align with specified topic
 
-1. **Read Guidelines**: First read [commit guidelines](../../work/contexts/commit-guidelines.md) to review the full workflow
-2. **Review Staged**: Execute `git diff --staged` to examine what will be committed
-3. **Check Rules**: Verify commit message guidelines (50 char subject, 72 char body, present tense, no prefixes)
-4. **Draft Message**: Write commit message following rules and optional topic focus
-5. **Create Commit**: Execute `git commit -m "message"`
-6. **Validate**: Run `work/scripts/check-commit-message-rule.sh` to verify 50/72 rule
-7. **Fix if Failed**: Use `git commit --amend -m "new message"` if validation fails, repeat steps 6-7 until passes
+## Success Criteria
+- Commit message passes validation and follows all CLAUDE.md commit guidelines
+- Changes are coherent and appropriately scoped
+- No sensitive information committed
