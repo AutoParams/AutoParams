@@ -68,7 +68,8 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 8. Do not mention test code in commit messages.
 9. Do not use any prefix (such as "fix:", "update:", "docs:", "feat:", etc.) in the subject line.
 10. Do not start the subject line with a lowercase letter unless the first word is a function name or another identifier that is conventionally lowercase and there is a clear, justifiable reason for the exception. Otherwise, always start with an uppercase letter.
-11. Always validate commits using `work/scripts/check-commit-message-rule.sh` and fix until validation passes.
+11. Do not include tool advertisements, branding, or promotional content in commit messages.
+12. Always validate commits using `work/scripts/check-commit-message-rule.sh` and fix until validation passes.
 
 ### Build Standards
 - Execute `./gradlew build` with 10-minute timeout for comprehensive builds
