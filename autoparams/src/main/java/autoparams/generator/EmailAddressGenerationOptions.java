@@ -2,6 +2,8 @@ package autoparams.generator;
 
 import java.util.List;
 
+import autoparams.LogVisibility;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -13,6 +15,7 @@ import static java.util.Collections.unmodifiableList;
  * </p>
  *
  */
+@LogVisibility(verboseOnly = true)
 public final class EmailAddressGenerationOptions {
 
     /**

@@ -135,6 +135,13 @@ public class ConstructorResolverQuery implements ObjectQuery {
 }
 ```
 
+**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+
+**Test Scenarios**:
+- [x] sut does not print log for EmailAddressGenerationOptions
+- [x] sut does not print log for SupportedParameterPredicate
+- [x] sut does not print log for ResolutionContext
+
 ### 4. Query → Value (Elapsed) Format
 
 Implement the new log format. The logger should print logs in the format `query → value (elapsed)`.

@@ -3,16 +3,21 @@ package test.autoparams;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.UUID;
 
 import autoparams.AutoParams;
 import autoparams.LogResolution;
 import autoparams.ResolutionContext;
+import autoparams.SupportedParameterPredicate;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForResolutionLogging {
+
+    public record User(UUID id, String email) {
+    }
 
     public record Address(String street, String city, String zipCode) {
     }
@@ -232,5 +237,45 @@ public class SpecsForResolutionLogging {
             context.resolve(new TypeReference<List<Address>>() {})
         );
         assertThat(output[12]).matches(" {5}└─ String zipCode → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_log_for_EmailAddressGenerationOptions(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(User.class));
+        for (String line : output) {
+            assertThat(line).doesNotContain("EmailAddressGenerationOptions");
+        }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_log_for_SupportedParameterPredicate(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(SupportedParameterPredicate.class)
+        );
+        for (String line : output) {
+            assertThat(line).doesNotContain("SupportedParameterPredicate");
+        }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_log_for_ResolutionContext(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(ResolutionContext.class)
+        );
+        for (String line : output) {
+            assertThat(line).doesNotContain("ResolutionContext");
+        }
     }
 }

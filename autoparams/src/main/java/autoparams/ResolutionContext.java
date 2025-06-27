@@ -28,6 +28,7 @@ import autoparams.type.TypeReference;
  * MyClass instance2 = context.resolve();
  * </pre>
  */
+@LogVisibility(verboseOnly = true)
 public class ResolutionContext {
 
     private ObjectGenerator generator;

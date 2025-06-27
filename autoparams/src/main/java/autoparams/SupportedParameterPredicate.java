@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
  *
  * @see AutoParamsExtension#supportsParameter(ParameterContext, ExtensionContext)
  */
+@LogVisibility(verboseOnly = true)
 @FunctionalInterface
 public interface SupportedParameterPredicate
     extends BiPredicate<ParameterContext, ExtensionContext> {
