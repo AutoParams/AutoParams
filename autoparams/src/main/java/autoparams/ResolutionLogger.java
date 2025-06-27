@@ -173,8 +173,8 @@ class ResolutionLogger {
     private boolean shouldLog(ObjectQuery query, boolean verbose) {
         if (query.getType() instanceof Class<?>) {
             Class<?> type = (Class<?>) query.getType();
-            LogVisible logVisible = type.getAnnotation(LogVisible.class);
-            if (logVisible != null && logVisible.verboseOnly() && !verbose) {
+            LogVisibility logVisibility = type.getAnnotation(LogVisibility.class);
+            if (logVisibility != null && logVisibility.verboseOnly() && !verbose) {
                 return false;
             }
         }

@@ -113,7 +113,7 @@ Add `toLog(boolean verbose)` default method to `ObjectQuery` interface to implem
 
 ### 3. Log Visibility Control
 
-Add `@LogVisible` annotation to control which queries appear in different log modes. Technical implementation details like `ConstructorResolver` and `ConstructorExtractor` should only appear in verbose logs to improve readability.
+Add `@LogVisibility` annotation to control which queries appear in different log modes. Technical implementation details like `ConstructorResolver` and `ConstructorExtractor` should only appear in verbose logs to improve readability.
 
 **Project**: autoparams
 
@@ -122,7 +122,7 @@ package autoparams;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface LogVisible {
+public @interface LogVisibility {
     boolean verboseOnly() default false;
 }
 ```
@@ -130,7 +130,7 @@ public @interface LogVisible {
 **Usage Examples**:
 
 ```java
-@LogVisible(verboseOnly = true)
+@LogVisibility(verboseOnly = true)
 public class ConstructorResolverQuery implements ObjectQuery {
 }
 ```
@@ -241,5 +241,5 @@ void testMethod(ResolutionContext context) {
 
 ## Backlogs
 
-- [ ] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
+- [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
 - [ ] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.

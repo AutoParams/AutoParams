@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface LogVisible {
+public @interface LogVisibility {
 
     boolean verboseOnly() default false;
 }

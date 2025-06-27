@@ -3,7 +3,7 @@ package autoparams.generator;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 
-import autoparams.LogVisible;
+import autoparams.LogVisibility;
 
 /**
  * Represents a strategy for extracting constructors from a given type.
@@ -15,7 +15,7 @@ import autoparams.LogVisible;
  * custom rules.
  * </p>
  */
-@LogVisible(verboseOnly = true)
+@LogVisibility(verboseOnly = true)
 @FunctionalInterface
 public interface ConstructorExtractor {
 
