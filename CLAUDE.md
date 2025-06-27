@@ -24,7 +24,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 - Do not write Javadoc and other comments unless explicitly requested. Write self-explanatory code instead.
 - Exception messages for argument validation should start with "The argument 'argumentName'" (e.g., "The argument 'count' must not be less than 0").
 - Always add a final newline when creating a new code file.
-- Set the timeout to 10 minutes when running Gradle commands.
+- Set the Bash tool timeout to 10 minutes (600000ms) when running Gradle commands.
 - Do not use 'clazz' as a variable name for values of type `Class<?>`.
 
 ### Test-Driven Development (TDD)
@@ -75,7 +75,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 15. Always validate commits using `work/scripts/check-commit-message-rule.sh` and fix until validation passes.
 
 ### Build Standards
-- Execute `./gradlew build` with 10-minute timeout for comprehensive builds
+- Execute `./gradlew build` with 10-minute Bash tool timeout (600000ms) for comprehensive builds
 - Always run full build before committing changes
 - Address all errors and warnings systematically
 - Categorize errors: compilation, test failures, dependency issues, configuration problems, code quality violations
@@ -119,4 +119,4 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 - `/build` command should be run before `/commit` to ensure code quality
 - `/code` command output should be validated with `/build` before proceeding
 - `/exec` command can coordinate with other commands based on backlog task requirements
-- All commands should respect the 10-minute Gradle timeout guideline
+- All commands should respect the 10-minute Bash tool timeout guideline when running Gradle commands
