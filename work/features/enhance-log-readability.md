@@ -346,15 +346,15 @@ static Stream<Arguments> genericTestCases() {
 ```
 
 **Test Cases:**
-- [ ] `Gen1<Integer>`
-- [ ] `Gen1<Gen1<Integer>>`
-- [ ] `Gen2<Integer, Long>`
-- [ ] `Gen2<Gen1<Integer>, Gen1<Long>>`
-- [ ] `Gen3<Integer, Long, Double>`
-- [ ] `Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>`
-- [ ] `Gen1<Gen2<Integer, Gen3<Long, Double, String>>>`
+- [x] `Gen1<Integer>`
+- [x] `Gen1<Gen1<Integer>>`
+- [x] `Gen2<Integer, Long>`
+- [x] `Gen2<Gen1<Integer>, Gen1<Long>>`
+- [x] `Gen3<Integer, Long, Double>`
+- [x] `Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>`
+- [x] `Gen1<Gen2<Integer, Gen3<Long, Double, String>>>`
 
 ## Backlogs
 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
-- [ ] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.
+- [x] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.

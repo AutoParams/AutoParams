@@ -5,15 +5,20 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import autoparams.AutoParams;
 import autoparams.LogResolution;
+import autoparams.MethodAutoSource;
 import autoparams.ResolutionContext;
 import autoparams.SupportedParameterPredicate;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class SpecsForResolutionLogging {
 
@@ -27,6 +32,15 @@ public class SpecsForResolutionLogging {
     }
 
     public record Order(User customer, Address shippingAddress, List<Product> products) {
+    }
+
+    public record Gen1<T>(T value) {
+    }
+
+    public record Gen2<T, U>(T value1, U value2) {
+    }
+
+    public record Gen3<T, U, V>(T value1, U value2, V value3) {
     }
 
     private static String[] captureOutput(Runnable runnable) {
@@ -324,5 +338,50 @@ public class SpecsForResolutionLogging {
     ) {
         String[] output = captureOutput(() -> context.resolve(Order.class));
         assertThat(output[17]).matches(" {9}└─ BigDecimal price → .* \\(.*ms\\)");
+    }
+
+    @ParameterizedTest
+    @MethodAutoSource("genericTestCases")
+    @LogResolution
+    void sut_formats_generic_types_correctly(
+        TypeReference<?> typeReference,
+        String expected,
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(typeReference));
+        assertThat(output[0]).startsWith(expected);
+    }
+
+    static Stream<Arguments> genericTestCases() {
+        return Stream.of(
+            arguments(
+                new TypeReference<Gen1<Integer>>() { },
+                "Gen1<Integer>"
+            ),
+            arguments(
+                new TypeReference<Gen1<Gen1<Integer>>>() { },
+                "Gen1<Gen1<Integer>>"
+            ),
+            arguments(
+                new TypeReference<Gen2<Integer, Long>>() { },
+                "Gen2<Integer, Long>"
+            ),
+            arguments(
+                new TypeReference<Gen2<Gen1<Integer>, Gen1<Long>>>() { },
+                "Gen2<Gen1<Integer>, Gen1<Long>>"
+            ),
+            arguments(
+                new TypeReference<Gen3<Integer, Long, Double>>() { },
+                "Gen3<Integer, Long, Double>"
+            ),
+            arguments(
+                new TypeReference<Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>>() { },
+                "Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>"
+            ),
+            arguments(
+                new TypeReference<Gen1<Gen2<Integer, Gen3<Long, Double, String>>>>() { },
+                "Gen1<Gen2<Integer, Gen3<Long, Double, String>>>"
+            )
+        );
     }
 }
