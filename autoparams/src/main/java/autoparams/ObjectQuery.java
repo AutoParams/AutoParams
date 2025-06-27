@@ -22,4 +22,14 @@ public interface ObjectQuery {
      * @return the type information for object generation
      */
     Type getType();
+
+    default String toLog(boolean verbose) {
+        Type type = getType();
+        if (type instanceof Class<?>) {
+            Class<?> classType = (Class<?>) type;
+            return verbose ? classType.getName() : classType.getSimpleName();
+        } else {
+            return type.getTypeName();
+        }
+    }
 }

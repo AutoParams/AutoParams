@@ -3,6 +3,8 @@ package autoparams.generator;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 
+import autoparams.LogVisible;
+
 /**
  * Represents a strategy for extracting constructors from a given type.
  * <p>
@@ -13,6 +15,7 @@ import java.util.Collection;
  * custom rules.
  * </p>
  */
+@LogVisible(verboseOnly = true)
 @FunctionalInterface
 public interface ConstructorExtractor {
 

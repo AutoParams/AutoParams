@@ -3,6 +3,7 @@ package autoparams.generator;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
+import autoparams.LogVisible;
 import autoparams.ResolutionContext;
 
 /**
@@ -23,6 +24,7 @@ import autoparams.ResolutionContext;
  * certain types or conditions.
  * </p>
  */
+@LogVisible(verboseOnly = true)
 @FunctionalInterface
 public interface ConstructorResolver {
 

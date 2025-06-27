@@ -6,134 +6,178 @@ import java.util.List;
 class ResolutionLogger {
 
     private final LogWriter logWriter;
-
-    private enum EventType {
-        RESOLVING {
-            @Override
-            public String getSymbol() {
-                return ">";
-            }
-        },
-
-        RESOLVED {
-            @Override
-            public String getSymbol() {
-                return "<";
-            }
-        };
-
-        public abstract String getSymbol();
-    }
-
-    private static class Event {
-
-        private final int depth;
-        private final String message;
-        private final EventType type;
-
-        Event(int depth, String message, EventType type) {
-            this.depth = depth;
-            this.message = message;
-            this.type = type;
-        }
-    }
-
-    private final List<Event> events = new ArrayList<>();
+    private final List<LogEntry> entries = new ArrayList<>();
     private int depth = 0;
 
     public ResolutionLogger(LogWriter logWriter) {
         this.logWriter = logWriter;
     }
 
-    private void addEvent(EventType type, String message) {
-        events.add(new Event(depth, message, type));
-    }
-
     public void onResolving(ObjectQuery query) {
-        addEvent(EventType.RESOLVING, "Resolving: for " + query);
-        increaseDepth();
-    }
-
-    private void increaseDepth() {
+        LogEntry entry = new LogEntry();
+        entry.query = query;
+        entry.depth = depth;
+        entry.startTime = System.currentTimeMillis();
+        entries.add(entry);
         depth++;
     }
 
-    public void onResolved(
-        ObjectQuery query,
-        Object value,
-        long elapsedMillis
-    ) {
-        decreaseDepth();
-        String format = "Resolved(%s): %s for %s";
-        String time = elapsedMillis == 0 ? "<1 ms" : elapsedMillis + " ms";
-        addEvent(EventType.RESOLVED, String.format(format, time, value, query));
-    }
-
-    private void decreaseDepth() {
+    public void onResolved(ObjectQuery query, Object value) {
         depth--;
-    }
-
-    public void flushEventsIfRootDepth() {
-        if (depth == 0) {
-            flushEvents();
-        }
-    }
-
-    public void flushEvents() {
-        printEvents();
-        events.clear();
-    }
-
-    private void printEvents() {
-        if (events.isEmpty()) {
-            return;
-        }
-
-        StringBuilder report = new StringBuilder();
-        int depth = 0;
-        for (int i = 0; i < events.size(); i++) {
-            Event event = events.get(i);
-            int previousDepth = depth;
-            depth = event.depth;
-            if (event.type.equals(EventType.RESOLVING)) {
-                if (i != 0 && previousDepth == depth) {
-                    report
-                        .append(repeat("|   ", depth).trim())
-                        .append(System.lineSeparator());
-                }
-
-                StringBuilder indentation = new StringBuilder();
-                indentation.append(repeat("|   ", depth - 1));
-                if (depth > 0) {
-                    indentation.append("|-- ");
-                }
-
-                report
-                    .append(indentation)
-                    .append(event.type.getSymbol())
-                    .append(" ")
-                    .append(event.message)
-                    .append(System.lineSeparator());
-            } else if (event.type.equals(EventType.RESOLVED)) {
-                report
-                    .append(repeat("|   ", depth))
-                    .append(event.type.getSymbol())
-                    .append(" ")
-                    .append(event.message)
-                    .append(System.lineSeparator());
+        for (int i = entries.size() - 1; i >= 0; i--) {
+            LogEntry entry = entries.get(i);
+            if (entry.value == null && entry.depth == depth) {
+                entry.value = value;
+                entry.elapsed = System.currentTimeMillis() - entry.startTime;
+                break;
             }
         }
 
-        logWriter.write(report.toString());
+        if (depth == 0) {
+            flushEntries();
+        }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private static String repeat(String s, int count) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            result.append(s);
+    private void flushEntries() {
+        for (int i = 0; i < entries.size(); i++) {
+            LogEntry entry = entries.get(i);
+            if (shouldLog(entry.query, false)) {
+                String timeString = entry.elapsed < 1 ? "< 1ms" : entry.elapsed + "ms";
+                String prefix = "";
+
+                if (entry.depth > 0) {
+                    prefix = generatePrefix(i, entry.depth);
+                }
+
+                String message = prefix + entry.query.toLog(false) + " → " + entry.value
+                    + " (" + timeString + ")";
+                logWriter.write(message);
+            }
+        }
+        entries.clear();
+    }
+
+    private int getChildIndex(int entryIndex) {
+        LogEntry entry = entries.get(entryIndex);
+        int childIndex = 0;
+        for (int i = 0; i < entryIndex; i++) {
+            if (entries.get(i).depth == entry.depth) {
+                childIndex++;
+            }
+        }
+        return childIndex;
+    }
+
+    private int getTotalChildrenAtDepth(int targetDepth) {
+        int count = 0;
+        for (LogEntry entry : entries) {
+            if (entry.depth == targetDepth) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private String generatePrefix(int entryIndex, int depth) {
+        if (depth == 1) {
+            int childIndex = getChildIndex(entryIndex);
+            int totalChildren = getTotalChildrenAtDepth(depth);
+            return (childIndex == totalChildren - 1) ? " └─ " : " ├─ ";
+        } else if (depth == 2) {
+            int childIndex = getChildIndexWithinParent(entryIndex);
+            int totalChildren = getTotalChildrenWithinParent(entryIndex);
+            boolean isLastChild = (childIndex == totalChildren - 1);
+
+            boolean isParentLastChild = isParentLastChild(entryIndex);
+            String verticalBar = isParentLastChild ? "    " : " │  ";
+            String connector = isLastChild ? " └─ " : " ├─ ";
+
+            return verticalBar + connector;
+        }
+        return "";
+    }
+
+    private boolean isParentLastChild(int entryIndex) {
+        LogEntry entry = entries.get(entryIndex);
+        int parentDepth = entry.depth - 1;
+
+        for (int i = entryIndex - 1; i >= 0; i--) {
+            LogEntry previousEntry = entries.get(i);
+            if (previousEntry.depth == parentDepth) {
+                int parentChildIndex = getChildIndex(i);
+                int parentTotalChildren = getTotalChildrenAtDepth(parentDepth);
+                return parentChildIndex == parentTotalChildren - 1;
+            }
+        }
+        return false;
+    }
+
+    private int getChildIndexWithinParent(int entryIndex) {
+        LogEntry entry = entries.get(entryIndex);
+        int parentDepth = entry.depth - 1;
+        int parentIndex = -1;
+
+        for (int i = entryIndex - 1; i >= 0; i--) {
+            if (entries.get(i).depth == parentDepth) {
+                parentIndex = i;
+                break;
+            }
         }
 
-        return result.toString();
+        int childIndex = 0;
+        for (int i = parentIndex + 1; i < entryIndex; i++) {
+            if (entries.get(i).depth == entry.depth) {
+                childIndex++;
+            }
+        }
+        return childIndex;
+    }
+
+    private int getTotalChildrenWithinParent(int entryIndex) {
+        LogEntry entry = entries.get(entryIndex);
+        int parentDepth = entry.depth - 1;
+        int parentIndex = -1;
+
+        for (int i = entryIndex - 1; i >= 0; i--) {
+            if (entries.get(i).depth == parentDepth) {
+                parentIndex = i;
+                break;
+            }
+        }
+
+        int nextParentIndex = entries.size();
+        for (int i = parentIndex + 1; i < entries.size(); i++) {
+            if (entries.get(i).depth == parentDepth) {
+                nextParentIndex = i;
+                break;
+            }
+        }
+
+        int count = 0;
+        for (int i = parentIndex + 1; i < nextParentIndex; i++) {
+            if (entries.get(i).depth == entry.depth) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static class LogEntry {
+        ObjectQuery query;
+        Object value;
+        int depth;
+        long startTime;
+        long elapsed;
+    }
+
+    private boolean shouldLog(ObjectQuery query, boolean verbose) {
+        if (query.getType() instanceof Class<?>) {
+            Class<?> type = (Class<?>) query.getType();
+            LogVisible logVisible = type.getAnnotation(LogVisible.class);
+            if (logVisible != null && logVisible.verboseOnly() && !verbose) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -2,187 +2,19 @@ package test.autoparams;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import autoparams.AutoParams;
 import autoparams.LogResolution;
 import autoparams.ResolutionContext;
-import autoparams.customization.Freeze;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecsForResolutionLogging {
 
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_resolving_event_correctly(ResolutionContext context) {
-        String[] output = captureOutput(() -> context.resolve(String.class));
-        String actual = output[0];
-
-        assertThat(actual).contains("Resolving: for");
-        assertThat(actual).contains("java.lang.String");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_resolved_event_correctly(
-        @Freeze String value,
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(String.class));
-        String actual = output[1];
-
-        assertThat(actual).matches(".*Resolved\\(<*\\d+ ms\\):.*");
-        assertThat(actual).contains("java.lang.String");
-        assertThat(actual).contains(value);
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_blank_line_between_object_resolution(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> {
-            context.resolve(String.class);
-            context.resolve(Integer.class);
-        });
-
-        assertThat(output[2]).isEmpty();
-        assertThat(output[3]).isNotEmpty();
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void does_not_write_blank_line_after_last_object_resolution_in_scope(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[4]).isNotEmpty();
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_zero_depth_indentation_for_resolving_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[0]).doesNotContain("|-- ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_one_depth_indentation_for_resolving_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[1]).startsWith("|-- ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_two_depth_indentation_for_resolving_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[2]).startsWith("|   |-- ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_three_depth_indentation_for_resolving_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[14]).startsWith("|   |   |-- ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_zero_depth_indentation_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[40]).doesNotContain("|");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_one_depth_indentation_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[4]).startsWith("|   ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_two_depth_indentation_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[3]).startsWith("|   |   ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_three_depth_indentation_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[15]).startsWith("|   |   |   ");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_one_depth_blank_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output[5]).startsWith("|");
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_two_depth_blank_for_resolved_event_correctly(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> context.resolve(Review.class));
-        assertThat(output[17]).startsWith("|   |");
-    }
-
-    public static class Uninstantiable {
-
-        protected Uninstantiable() {
-        }
-    }
-
-    @Test
-    @AutoParams
-    @LogResolution
-    void writes_resolution_log_even_when_object_resolution_fails(
-        ResolutionContext context
-    ) {
-        String[] output = captureOutput(() -> {
-            try {
-                context.resolve(Uninstantiable.class);
-            } catch (Exception ignored) {
-            }
-        });
-        assertThat(output[0]).contains("Resolving: for");
+    public record Address(String street, String city, String zipCode) {
     }
 
     private static String[] captureOutput(Runnable runnable) {
@@ -207,17 +39,198 @@ public class SpecsForResolutionLogging {
 
     @Test
     @AutoParams
-    void sut_does_not_write_resolution_log_when_not_requested(
+    @LogResolution
+    void sut_prints_single_line_with_simple_object_query(
         ResolutionContext context
     ) {
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output).isEmpty();
+        String[] output = captureOutput(() -> context.resolve(String.class));
+        assertThat(output).hasSize(1);
+        assertThat(output[0]).startsWith("String");
     }
 
     @Test
-    void sut_created_with_default_constructor_does_not_write_resolution_log() {
-        var context = new ResolutionContext();
-        String[] output = captureOutput(() -> context.resolve(Product.class));
-        assertThat(output).isEmpty();
+    @AutoParams
+    @LogResolution
+    void sut_prints_arrow_after_query_with_simple_object_query(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(String.class));
+        assertThat(output[0]).matches("String → .*");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_resolved_value_after_arrow_with_simple_object_query(
+        ResolutionContext context
+    ) {
+        String[] result = new String[1];
+        String[] output = captureOutput(() -> result[0] = context.resolve(String.class));
+        assertThat(output[0]).matches("String → " + result[0] + " \\(.*\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_elapsed_time_in_ms_after_resolved_value_with_simple_object_query(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(String.class));
+        assertThat(output[0]).matches(".*\\((<\\s*\\d+|\\d+)\\s*ms\\)$");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_any_log_for_ConstructorResolver(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        for (String line : output) {
+            assertThat(line).doesNotContain("ConstructorResolver");
+        }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_any_log_for_ConstructorExtractor(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        for (String line : output) {
+            assertThat(line).doesNotContain("ConstructorExtractor");
+        }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_one_depth_tree_structure_with_first_child(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output.length).isGreaterThan(1);
+        assertThat(output[1]).startsWith(" ├─ ");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_one_depth_tree_structure_with_second_child(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output.length).isGreaterThan(2);
+        assertThat(output[2]).startsWith(" ├─ ");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_one_depth_tree_structure_with_last_child(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output.length).isGreaterThan(3);
+        assertThat(output[3]).startsWith(" └─ ");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_one_depth_entry_correctly(ResolutionContext context) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output[1]).matches(" ├─ String street → street.* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_value_of_root_correctly(ResolutionContext context) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output[0]).matches(
+            "Address → Address\\[street=street.*, city=city.*, zipCode=zipCode.*] \\(.*ms\\)"
+        );
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_value_of_last_child_correctly(ResolutionContext context) {
+        String[] output = captureOutput(() -> context.resolve(Address.class));
+        assertThat(output[3]).matches(" └─ String zipCode → zipCode.* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_first_leaf(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[2]).matches(" │ {3}├─ String street → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_second_leaf(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[3]).matches(" │ {3}├─ String city → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_last_leaf(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[4]).matches(" │ {3}└─ String zipCode → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_first_leaf_of_last_stem(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[10]).matches(" {5}├─ String street → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_second_leaf_of_last_stem(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[11]).matches(" {5}├─ String city → .* \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_two_depth_tree_structure_with_last_leaf_of_last_stem(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<Address>>() {})
+        );
+        assertThat(output[12]).matches(" {5}└─ String zipCode → .* \\(.*ms\\)");
     }
 }

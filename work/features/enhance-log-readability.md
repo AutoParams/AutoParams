@@ -86,8 +86,8 @@ Add `toLog(boolean verbose)` default method to `ObjectQuery` interface to implem
 **Test class:** `test.autoparams.SpecsForObjectQuery`
 
 **Test Scenarios**:
-- [ ] toLog returns class name with package when verbose is true
-- [ ] toLog returns simple class name when verbose is false
+- [x] toLog returns class name with package when verbose is true
+- [x] toLog returns simple class name when verbose is false
 
 **Notice**:
 - Do not remove `@FunctionalInterface` annotation from `ObjectQuery` interface.
@@ -108,8 +108,8 @@ Add `toLog(boolean verbose)` default method to `ObjectQuery` interface to implem
 **Test class:** `test.autoparams.SpecsForParameterQueryUsingName` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
-- [ ] toLog returns parameter type with package and parameter name when verbose is true
-- [ ] toLog returns simple type name and parameter name when verbose is false
+- [x] toLog returns parameter type with package and parameter name when verbose is true
+- [x] toLog returns simple type name and parameter name when verbose is false
 
 ### 3. Log Visibility Control
 
@@ -155,10 +155,10 @@ void testMethod(ResolutionContext context) {
 **Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
-- [ ] sut prints single line with simple object query
-- [ ] sut prints arrow after query with simple object query
-- [ ] sut prints resolved value after arrow with simple object query
-- [ ] sut prints elapsed time in ms after resolved value with simple object query
+- [x] sut prints single line with simple object query
+- [x] sut prints arrow after query with simple object query
+- [x] sut prints resolved value after arrow with simple object query
+- [x] sut prints elapsed time in ms after resolved value with simple object query
 
 ### 5. One-Depth Tree Structure
 
@@ -181,43 +181,22 @@ void testMethod(ResolutionContext context) {
 **Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
-- [ ] sut does not print any log for ConstructorResolver
-- [ ] sut does not print any log for ConstructorExtractor
-- [ ] sut prints one depth tree structure with first child
+- [x] sut does not print any log for ConstructorResolver
+- [x] sut does not print any log for ConstructorExtractor
+- [x] sut prints one depth tree structure with first child
   Example: ` ├─ `
-- [ ] sut prints one depth tree structure with second child
+- [x] sut prints one depth tree structure with second child
   Example: ` ├─ `
-- [ ] sut prints one depth tree structure with last child
+- [x] sut prints one depth tree structure with last child
   Example: ` └─ `
-- [ ] sut prints one depth entry correctly
+- [x] sut prints one depth entry correctly
   Example: ` ├─ String street → street123 (1ms)`
+- [x] sut prints value of root correctly
+  Example: `Address → Address[street=street123, city=city456, zipCode=zipCode789] (2ms)`
+- [x] sut prints value of last child correctly
+  Example: ` └─ String zipCode → zipCodexyz789 (1ms)`
 
-### 6. Generic Type Handling
-
-Implement support for generic types in the log output. The logger should correctly resolve and display generic types concisely, such as `List<String>`.
-
-```java
-@Test
-@AutoParams
-@LogResolution
-void testMethod(ResolutionContext context) {
-    context.resolve(new TypeReference<List<String>>() { });
-    // Expected log output:
-    // List<String> → ... (1ms)
-    //  ├─ String → ... (1ms)
-    // ...
-}
-```
-
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
-
-**Test Scenarios**:
-- [ ] sut prints generic type concisely
-  Example: `List<String> → ... (1ms)`
-- [ ] sut prints generic type with two type parameters concisely
-  Example: `Map<String, Integer> → ... (1ms)`
-
-### 7. Two-Depth Tree Structure
+### 6. Two-Depth Tree Structure
 
 Implement a two-depth tree structure for the log output. The logger should print the query and its resolved value in a tree-like format, with each level indented.
 
@@ -247,15 +226,20 @@ void testMethod(ResolutionContext context) {
 **Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
-- [ ] sut prints two depth tree structure with first leaf
+- [x] sut prints two depth tree structure with first leaf
   Example: ` │   ├─ String street → streetabc123 (1ms)`
-- [ ] sut prints two depth tree structure with second leaf
+- [x] sut prints two depth tree structure with second leaf
   Example: ` │   ├─ String city → cityabc123 (1ms)`
-- [ ] sut prints two depth tree structure with last leaf
+- [x] sut prints two depth tree structure with last leaf
   Example: ` │   └─ String zipCode → zipCodeabc123 (1ms)`
-- [ ] sut prints two depth tree structure with first leaf of last stem
+- [x] sut prints two depth tree structure with first leaf of last stem
   Example: `     ├─ String street → streetxyz789 (1ms)`
-- [ ] sut prints two depth tree structure with second leaf of last stem
+- [x] sut prints two depth tree structure with second leaf of last stem
   Example: `     ├─ String city → cityxyz789 (1ms)`
-- [ ] sut prints two depth tree structure with last leaf of last stem
+- [x] sut prints two depth tree structure with last leaf of last stem
   Example: `     └─ String zipCode → zipCodexyz789 (1ms)`
+
+## Backlogs
+
+- [ ] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
+- [ ] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.

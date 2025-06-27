@@ -8,8 +8,6 @@ import autoparams.generator.UnwrapFailedException;
 import autoparams.processor.ObjectProcessor;
 import autoparams.type.TypeReference;
 
-import static java.lang.System.currentTimeMillis;
-
 /**
  * Provides context for object resolution in AutoParams.
  * <p>
@@ -241,16 +239,12 @@ public class ResolutionContext {
             throw new IllegalArgumentException("The argument 'query' is null.");
         }
 
-        logger.onResolving(query);
         try {
-            long startedMillis = currentTimeMillis();
+            logger.onResolving(query);
             Object value = generateThenProcessValue(query);
-            long elapsedMillis = currentTimeMillis() - startedMillis;
-            logger.onResolved(query, value, elapsedMillis);
-            logger.flushEventsIfRootDepth();
+            logger.onResolved(query, value);
             return value;
         } catch (Exception exception) {
-            logger.flushEvents();
             String message = "Failed to resolve an object for the given query: "
                 + query + ". See the internal error message for details.";
             throw new RuntimeException(message, exception);
