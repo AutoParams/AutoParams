@@ -294,10 +294,10 @@ void testMethod(ResolutionContext context) {
 
 Implement an internal type formatter to format `Type` for logging. `ObjectQuery.toLog(boolean verbose)` and `ParameterQuery.toLog(boolean verbose)` methods should use this formatter to produce concise type names.
 
-- [ ] Add package-private `TypeFormatter` class in the `autoparams` package.
-- [ ] Implement `format(Type type, boolean verbose)` method to format types based on the `verbose` flag.
-- [ ] Use this formatter in `ObjectQuery.toLog(boolean verbose)` method.
-- [ ] Use this formatter in `ParameterQuery.toLog(boolean verbose)` method.
+- [x] Add package-private `TypeFormatter` class in the `autoparams` package.
+- [x] Implement `format(Type type, boolean verbose)` method to format types based on the `verbose` flag.
+- [x] Use this formatter in `ObjectQuery.toLog(boolean verbose)` method.
+- [x] Use this formatter in `ParameterQuery.toLog(boolean verbose)` method.
 
 ## Backlogs
 

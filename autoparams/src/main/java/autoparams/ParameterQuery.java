@@ -156,14 +156,7 @@ public final class ParameterQuery implements ObjectQuery {
 
     @Override
     public String toLog(boolean verbose) {
-        Type type = getType();
-        String typeName;
-        if (type instanceof Class<?>) {
-            Class<?> classType = (Class<?>) type;
-            typeName = verbose ? classType.getName() : classType.getSimpleName();
-        } else {
-            typeName = type.getTypeName();
-        }
+        String typeName = TypeFormatter.format(getType(), verbose);
         return typeName + " " + parameter.getName();
     }
 }

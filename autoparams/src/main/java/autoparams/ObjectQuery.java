@@ -24,12 +24,6 @@ public interface ObjectQuery {
     Type getType();
 
     default String toLog(boolean verbose) {
-        Type type = getType();
-        if (type instanceof Class<?>) {
-            Class<?> classType = (Class<?>) type;
-            return verbose ? classType.getName() : classType.getSimpleName();
-        } else {
-            return type.getTypeName();
-        }
+        return TypeFormatter.format(getType(), verbose);
     }
 }
