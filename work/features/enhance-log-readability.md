@@ -83,7 +83,7 @@ Add `toLog(boolean verbose)` default method to `ObjectQuery` interface to implem
 | true    | your.app.User |
 | false   | User          |
 
-**Test class:** `test.autoparams.SpecsForObjectQuery`
+**Test Class:** `test.autoparams.SpecsForObjectQuery`
 
 **Test Scenarios**:
 - [x] toLog returns class name with package when verbose is true
@@ -105,7 +105,7 @@ Add `toLog(boolean verbose)` default method to `ObjectQuery` interface to implem
 | true    | java.lang.String email |
 | false   | String email           |
 
-**Test class:** `test.autoparams.SpecsForParameterQueryUsingName` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForParameterQueryUsingName` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] toLog returns parameter type with package and parameter name when verbose is true
@@ -135,7 +135,7 @@ public class ConstructorResolverQuery implements ObjectQuery {
 }
 ```
 
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] sut does not print log for EmailAddressGenerationOptions
@@ -159,7 +159,7 @@ void testMethod(ResolutionContext context) {
 }
 ```
 
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] sut prints single line with simple object query
@@ -185,7 +185,7 @@ void testMethod(ResolutionContext context) {
 }
 ```
 
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] sut does not print any log for ConstructorResolver
@@ -230,7 +230,7 @@ void testMethod(ResolutionContext context) {
 }
 ```
 
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] sut prints two depth tree structure with first leaf
@@ -278,7 +278,7 @@ void testMethod(ResolutionContext context) {
 }
 ```
 
-**Test class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
 - [x] sut prints deep tree structure with first leaf
@@ -298,6 +298,61 @@ Implement an internal type formatter to format `Type` for logging. `ObjectQuery.
 - [x] Implement `format(Type type, boolean verbose)` method to format types based on the `verbose` flag.
 - [x] Use this formatter in `ObjectQuery.toLog(boolean verbose)` method.
 - [x] Use this formatter in `ParameterQuery.toLog(boolean verbose)` method.
+
+### 9. Generic Type Formatting
+
+Implement generic type formatting in the log output. The logger should print generic types in a concise format in non-verbose mode, e.g., `List<String>` instead of `java.util.List<java.lang.String>`.
+
+```java
+public record Gen1<T>(T value) {
+}
+```
+
+```java
+public record Gen2<T, U>(T value1, U value2) {
+}
+```
+
+```java
+public record Gen3<T, U, V>(T value1, U value2, V value3) {
+}
+```
+
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+
+**Test Methods:**
+```java
+@ParameterizedTest
+@MethodAutoSource("genericTestCases")
+@LogResolution
+void sut_formats_generic_types_correctly(
+    TypeReference<?> typeReference,
+    String expected,
+    ResolutionContext context
+) {
+    String[] output = captureOutput(() -> context.resolve(typeReference));
+    assertThat(output[0]).startsWith(expected);
+}
+
+static Stream<Arguments> genericTestCases() {
+    return Stream.of(
+        arguments(
+            new TypeReference<Gen1<Integer>>() { },
+            "Gen1<Integer>"
+        ),
+        ...
+    );
+}
+```
+
+**Test Cases:**
+- [ ] `Gen1<Integer>`
+- [ ] `Gen1<Gen1<Integer>>`
+- [ ] `Gen2<Integer, Long>`
+- [ ] `Gen2<Gen1<Integer>, Gen1<Long>>`
+- [ ] `Gen3<Integer, Long, Double>`
+- [ ] `Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>`
+- [ ] `Gen1<Gen2<Integer, Gen3<Long, Double, String>>>`
 
 ## Backlogs
 
