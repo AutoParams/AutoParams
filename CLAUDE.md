@@ -51,9 +51,10 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 6. Confirm that the test fails. If the test passes, stop working and request a review.
 7. Understand the cause of the test failure and modify the code to make the test pass.
 8. Run the test for the specific test class containing the added test using the command `./gradlew :{module}:test --tests {fullTestClassName}`.
-9. If the test does not pass after three attempts, stop working and request a review.
-10. If the build fails, analyze the cause and apply the necessary fixes. Repeat steps 9 and 10 until the build succeeds.
-11. When the build succeeds, mark the test scenario as completed using checkbox format: `- [x] test scenario description`.
+9. Do not run individual test methods. Always run the entire test class to ensure all tests pass together.
+10. If the test does not pass after three attempts, stop working and request a review.
+11. If the build fails, analyze the cause and apply the necessary fixes. Repeat steps 10 and 11 until the build succeeds.
+12. When the build succeeds, mark the test scenario as completed using checkbox format: `- [x] test scenario description`.
 
 ## Quality Assurance Guidelines
 
