@@ -3,6 +3,8 @@ package autoparams.generator;
 import java.net.URI;
 import java.util.List;
 
+import autoparams.LogVisibility;
+
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Collections.unmodifiableList;
@@ -17,6 +19,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @see URI
  */
+@LogVisibility(verboseOnly = true)
 public final class URIGenerationOptions {
 
     /**

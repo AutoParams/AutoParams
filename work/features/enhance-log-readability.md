@@ -141,6 +141,8 @@ public class ConstructorResolverQuery implements ObjectQuery {
 - [x] sut does not print log for EmailAddressGenerationOptions
 - [x] sut does not print log for SupportedParameterPredicate
 - [x] sut does not print log for ResolutionContext
+- [x] sut does not print log for URIGenerationOptions
+  Use `record Link(String uri, String text)`
 
 ### 4. Query → Value (Elapsed) Format
 

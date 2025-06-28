@@ -43,6 +43,9 @@ public class SpecsForResolutionLogging {
     public record Gen3<T, U, V>(T value1, U value2, V value3) {
     }
 
+    public record Link(String uri, String text) {
+    }
+
     private static String[] captureOutput(Runnable runnable) {
         PrintStream originalOut = System.out;
         String outputStr = null;
@@ -395,5 +398,25 @@ public class SpecsForResolutionLogging {
                 "Gen1<Gen2<Integer, Gen3<Long, Double, String>>>"
             )
         );
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_does_not_print_log_for_URIGenerationOptions(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() -> context.resolve(Link.class));
+        for (String line : output) {
+            assertThat(line).doesNotContain("URIGenerationOptions");
+        }
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_values_for_uri_leaf_nodes(ResolutionContext context) {
+        String[] output = captureOutput(() -> context.resolve(Link.class));
+        assertThat(output[2]).matches(" │ {3}└─ URI → .+ \\(.*ms\\)");
     }
 }

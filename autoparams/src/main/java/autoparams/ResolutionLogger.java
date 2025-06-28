@@ -180,7 +180,7 @@ class ResolutionLogger {
 
         for (int i = entryIndex + 1; i < entries.size(); i++) {
             LogEntry nextEntry = entries.get(i);
-            if (nextEntry.depth == currentDepth + 1) {
+            if (nextEntry.depth == currentDepth + 1 && shouldLog(nextEntry.query, false)) {
                 return false;
             }
             if (nextEntry.depth <= currentDepth) {
