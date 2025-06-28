@@ -6,9 +6,7 @@ import java.util.stream.Stream;
 
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
-import autoparams.customization.Freeze;
 import autoparams.generator.Designer;
-import autoparams.generator.Factory;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
@@ -23,21 +21,21 @@ public class SpecsForDesigner {
 
     @Test
     void design_throws_exception_when_argument_type_is_null() {
-        assertThatThrownBy(() -> Factory.design(null))
+        assertThatThrownBy(() -> Designer.design(null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("type");
     }
 
     @Test
     void sut_creates_an_object_of_the_specified_type() {
-        Product actual = Factory.design(Product.class).create();
+        Product actual = Designer.design(Product.class).create();
         assertThat(actual).isInstanceOf(Product.class);
     }
 
     @Test
     @AutoParams
     void sut_sets_property_value_when_using_method_reference(String name) {
-        Product actual = Factory
+        Product actual = Designer
             .design(Product.class)
             .set(Product::name).to(name)
             .create();
@@ -51,7 +49,7 @@ public class SpecsForDesigner {
         String firstName,
         String secondName
     ) {
-        Product actual = Factory
+        Product actual = Designer
             .design(Product.class)
             .set(Product::name).to(firstName)
             .set(Product::name).to(secondName)
@@ -62,13 +60,13 @@ public class SpecsForDesigner {
 
     @Test
     void sut_throws_exception_when_property_getter_delegate_is_null() {
-        assertThatThrownBy(() -> Factory.design(Product.class).set(null))
+        assertThatThrownBy(() -> Designer.design(Product.class).set(null))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void sut_applies_processor_to_created_object() {
-        Order actual = Factory
+        Order actual = Designer
             .design(Order.class)
             .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
             .process(o -> o.applyPercentDiscount(BigDecimal.valueOf(10)))
@@ -80,7 +78,7 @@ public class SpecsForDesigner {
 
     @Test
     void sut_applies_multiple_processors_in_sequence() {
-        Order actual = Factory
+        Order actual = Designer
             .design(Order.class)
             .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
             .process(o -> o.applyPercentDiscount(BigDecimal.valueOf(10)))
@@ -93,7 +91,7 @@ public class SpecsForDesigner {
 
     @Test
     void sut_throws_exception_when_processor_is_null() {
-        assertThatThrownBy(() -> Factory.design(Product.class).process(null))
+        assertThatThrownBy(() -> Designer.design(Product.class).process(null))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -106,7 +104,7 @@ public class SpecsForDesigner {
     ) {
         String imageUri = "http://example.com/images/" + imageName;
 
-        Review actual = Factory
+        Review actual = Designer
             .design(Review.class)
             .set(Review::product).using(product -> product
                 .set(Product::name).to(productName)
@@ -122,7 +120,7 @@ public class SpecsForDesigner {
 
     @Test
     void using_throws_exception_when_design_function_argument_is_null() {
-        assertThatThrownBy(() -> Factory
+        assertThatThrownBy(() -> Designer
             .design(Review.class)
             .set(Review::product).using(null)
         ).isInstanceOf(IllegalArgumentException.class);
@@ -137,7 +135,7 @@ public class SpecsForDesigner {
     void using_does_not_affect_properties_outside_the_nested_object(
         String followeeName
     ) {
-        Following actual = Factory
+        Following actual = Designer
             .design(Following.class)
             .set(Following::followee).using(user -> user
                 .set(User::username).to(followeeName)
@@ -156,7 +154,7 @@ public class SpecsForDesigner {
         String productName,
         String categoryName
     ) {
-        Review actual = Factory
+        Review actual = Designer
             .design(Review.class)
             .set(Review::comment).to(reviewComment)
             .set(Review::product).using(product -> product
@@ -174,35 +172,11 @@ public class SpecsForDesigner {
 
     @Test
     void create_throws_exception_when_design_function_does_not_return_its_argument() {
-        Designer<Review> designer = Factory
+        Designer<Review> designer = Designer
             .design(Review.class)
             .set(Review::product).using(product -> null);
         assertThatThrownBy(designer::create)
             .isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    @AutoParams
-    void sut_uses_provided_resolution_context_when_creating_object(
-        @Freeze BigDecimal priceAmount,
-        ResolutionContext context
-    ) {
-        Designer<Product> designer = Factory.design(context, Product.class);
-        Product product = designer.create();
-        assertThat(product.priceAmount()).isEqualTo(priceAmount);
-    }
-
-    @Test
-    void sut_throws_exception_when_resolution_context_is_null() {
-        assertThatThrownBy(() -> Factory.design(null, Product.class))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void sut_throws_exception_when_type_is_null() {
-        var context = new ResolutionContext();
-        assertThatThrownBy(() -> Factory.design(context, null))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -227,7 +201,7 @@ public class SpecsForDesigner {
     void sut_returns_stream_of_objects_with_configured_property_values(
         String productName
     ) {
-        Stream<Product> stream = Factory
+        Stream<Product> stream = Designer
             .design(Product.class)
             .set(Product::name).to(productName)
             .stream();

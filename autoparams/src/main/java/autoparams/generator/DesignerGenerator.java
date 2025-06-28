@@ -20,8 +20,7 @@ class DesignerGenerator implements ObjectGenerator {
                     Type targetType = typeArguments[0];
                     if (targetType instanceof Class) {
                         Class<?> targetClass = (Class<?>) targetType;
-                        Factory<?> factory = Factory.create(context, targetClass);
-                        return new ObjectContainer(new Designer<>(factory));
+                        return new ObjectContainer(new Designer<>(targetClass));
                     }
                 }
             }

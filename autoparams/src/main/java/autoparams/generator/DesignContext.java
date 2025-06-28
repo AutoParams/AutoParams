@@ -22,8 +22,7 @@ package autoparams.generator;
  *
  * <p><b>Usage in Nested Configuration:</b></p>
  * <pre>
- * Review review = Factory
- *     .design(Review.class)
+ * Review review = Designer.design(Review.class)
  *     .set(Review::product).using(product -> product // DesignContext&lt;Product&gt;
  *         .set(Product::name).to("Laptop")
  *         .set(Product::price).to(BigDecimal.valueOf(999.99))

@@ -199,7 +199,7 @@ The following tasks represent the first 5 priority items to begin implementation
   - [ ] Establish structure for docs/basics/designer.md (including how to use sections)
   - [ ] Create domain model as needed for Designer examples (reuse existing models where possible)
   - [ ] Write basic Designer creation examples:
-    - [ ] Basic fluent chaining: `Factory.design(Class<T>).set().to().create()`
+    - [ ] Basic fluent chaining: `Designer.design(Class<T>).set().to().create()`
     - [ ] Multiple property chaining
   - [ ] Write withDesign configuration examples:
     - [ ] Single level nesting

@@ -55,13 +55,13 @@ import lombok.experimental.Accessors;
  * <p><b>Usage Examples:</b></p>
  * <pre>
  * // Simple property setting
- * Factory.design(Product.class)
+ * Designer.design(Product.class)
  *     .set(Product::name).to("Laptop")
  *     .set(Product::price).to(BigDecimal.valueOf(999.99))
  *     .create();
  *
  * // Nested object configuration
- * Factory.design(Review.class)
+ * Designer.design(Review.class)
  *     .set(Review::product).using(product -> product
  *         .set(Product::name).to("Laptop")
  *         .set(Product::category).using(category -> category
@@ -71,7 +71,7 @@ import lombok.experimental.Accessors;
  *     .create();
  *
  * // Object processing
- * Factory.design(Order.class)
+ * Designer.design(Order.class)
  *     .set(Order::originalPrice).to(BigDecimal.valueOf(100))
  *     .process(order -> order.applyDiscount(0.1))
  *     .process(order -> order.calculateTax())
@@ -88,7 +88,7 @@ import lombok.experimental.Accessors;
  * @param <Context> the specific context type (enables method chaining with correct return type)
  * @see Designer
  * @see DesignContext
- * @see Factory#design(Class)
+ * @see Designer#design(Class)
  */
 @Getter(AccessLevel.PACKAGE)
 @Accessors(fluent = true)
@@ -115,8 +115,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Setting a Simple Value:</b></p>
      * <pre>
-     * Factory
-     *     .design(Product.class)
+     * Designer.design(Product.class)
      *     .set(Product::name).to("Laptop")
      *     .set(Product::price).to(BigDecimal.valueOf(999.99))
      *     .create();
@@ -124,8 +123,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Configuring a Nested Object:</b></p>
      * <pre>
-     * Factory
-     *     .design(Review.class)
+     * Designer.design(Review.class)
      *     .set(Review::product).using(product -> product
      *         .set(Product::name).to("Laptop")
      *         .set(Product::price).to(BigDecimal.valueOf(999.99))
@@ -135,8 +133,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Multiple Property Configuration:</b></p>
      * <pre>
-     * Factory
-     *     .design(User.class)
+     * Designer.design(User.class)
      *     .set(User::firstName).to("John")
      *     .set(User::lastName).to("Doe")
      *     .set(User::email).to("john.doe@example.com")
@@ -173,8 +170,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Single Processing Step:</b></p>
      * <pre>
-     * Order order = Factory
-     *     .design(Order.class)
+     * Order order = Designer.design(Order.class)
      *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
      *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
      *     .create();
@@ -182,8 +178,8 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Multiple Processing Steps:</b></p>
      * <pre>
-     * Order order = Factory
-     *     .design(Order.class)
+     * Order order = Designer.design(Order.class)
+     *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
      *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
      *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
      *     .process(o -> o.calculateTax())
@@ -193,8 +189,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
      *
      * <p><b>Complex Processing:</b></p>
      * <pre>
-     * User user = Factory
-     *     .design(User.class)
+     * User user = Designer.design(User.class)
      *     .set(User::firstName).to("John")
      *     .set(User::lastName).to("Doe")
      *     .process(u -> {
@@ -272,8 +267,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          *
          * <p><b>Basic Usage:</b></p>
          * <pre>
-         * Product product = Factory
-         *     .design(Product.class)
+         * Product product = Designer.design(Product.class)
          *     .set(Product::name).to("Laptop")
          *     .set(Product::price).to(BigDecimal.valueOf(999.99))
          *     .create();
@@ -322,8 +316,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          *
          * <p><b>Single Level Nesting:</b></p>
          * <pre>
-         * Review review = Factory
-         *     .design(Review.class)
+         * Review review = Designer.design(Review.class)
          *     .set(Review::product).using(product -> product
          *         .set(Product::name).to("Laptop")
          *         .set(Product::price).to(BigDecimal.valueOf(999.99))
@@ -334,8 +327,7 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
          *
          * <p><b>Multi-Level Nesting:</b></p>
          * <pre>
-         * Review review = Factory
-         *     .design(Review.class)
+         * Review review = Designer.design(Review.class)
          *     .set(Review::product).using(product -> product
          *         .set(Product::name).to("Laptop")
          *         .set(Product::category).using(category -> category

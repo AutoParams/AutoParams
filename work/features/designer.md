@@ -2,18 +2,18 @@
 
 ## API Design
 
-The `Factory.design(Class<T> type)` method returns a `Designer<T>` instance that provides a fluent interface for configuring and creating objects.
+The `Designer.design(Class<T> type)` static method returns a `Designer<T>` instance that provides a fluent interface for configuring and creating objects.
 
-### Factory and Designer<T>
+### Designer<T>
 
-- The `design` static method of `Factory` returns a `Designer<T>` instance for the specified type `T`.
-- The `Designer<T>` class is located in the `autoparams.generator` package of the `autoparams` module, where the `Factory<T>` class is also defined.
+- The `design` static method of `Designer<T>` returns a `Designer<T>` instance for the specified type `T`.
+- The `Designer<T>` class is located in the `autoparams.generator` package of the `autoparams` module.
 - The test class for `Designer<T>` is `test.autoparams.generator.SpecsForDesigner` in the `test-autoparams-java-17` module.
-- The `Designer<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `Factory.design(Class<T> type)` method.
+- The `Designer<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `Designer.design(Class<T> type)` static method.
 - The `create()` method generates an arbitrary object of type `T`.
 
 ```java
-Designer<Product> designer = Factory.design(Product.class);
+Designer<Product> designer = Designer.design(Product.class);
 Product product = designer.create();
 ```
 
@@ -29,7 +29,7 @@ Product product = designer.create();
 - The `ParameterBinding<P>` class allows you to set the property value using the `to(P value)` method.
 
 ```java
-Product product = Factory
+Product product = Designer
     .design(Product.class)
     .set(Product::name).to("Product A")
     .set(Product::imageUri).to("https://example.com/product-a.jpg")
@@ -47,7 +47,7 @@ Product product = Factory
 - The `process` method accepts a `Consumer<T>` that allows you to perform additional operations on the created object before returning it.
 
 ```java
-Order order = Factory
+Order order = Designer
     .design(Order.class)
     .process(o -> o.applyPercentDiscount(10))
     .create();
@@ -70,7 +70,7 @@ Order order = Factory
 - The design function is executed lazily - it is not invoked when `using` is called, but only when the actual object generation occurs during `create()`. This enables more efficient object creation and prevents unnecessary computations.
 
 ```java
-Review review = Factory
+Review review = Designer
     .design(Review.class)
     .set(Review::product).using(product -> product
         .set(Product::name).to("Product A")
@@ -87,29 +87,6 @@ Review review = Factory
 - [x] using does not affect properties outside the nested object
 - [x] using supports multiple levels of nested object configuration
 - [x] create throws exception when design function does not return its argument
-
-### ~~Using Custom ResolutionContext with Designer<T>~~
-
-> **Note**: This feature has been canceled and will be redesigned soon.
-
-- ~~When you create a `Designer<T>` instance using the `design` method with a `ResolutionContext` argument, the `Designer<T>` uses the provided `ResolutionContext` when generating objects.~~
-- ~~The `ResolutionContext` enables customization of the object creation process when using `Designer<T>`.~~
-
-```java
-@Test
-@AutoParams
-void testMethod(@Freeze BigDecimal priceAmount, ResolutionContext context) {
-    Designer<Product> designer = Factory.design(context, Product.class);
-    Product product = designer.create();
-    assertThat(product.priceAmount()).isEqualTo(priceAmount);
-}
-```
-
-**Test Scenarios**:
-
-- [x] ~~sut uses provided resolution context when creating object~~
-- [x] ~~sut throws exception when resolution context is null~~
-- [x] ~~sut throws exception when type is null~~
 
 ### Resolving and Injecting Designer Instances
 
@@ -155,7 +132,7 @@ void testMethod(Designer<Product> designer) {
 - `stream` method of `Designer<T>` returns a `Stream<T>` that allows for lazy generation of multiple objects of type `T`.
 
 ```java
-Stream<Product> stream = Factory
+Stream<Product> stream = Designer
     .design(Product.class)
     .set(Product::stockQuantity).to(100)
     .stream();
@@ -172,7 +149,7 @@ assertThat(stream.limit(5))
 - The `createRange(int count)` method of `Designer<T>` generates a list of objects of type `T` with the specified number of elements.
 
 ```java
-List<Product> products = Factory
+List<Product> products = Designer
     .design(Product.class)
     .set(Product::priceAmount).to(new BigDecimal("19.99"))
     .createRange(5);

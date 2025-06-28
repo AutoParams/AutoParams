@@ -27,8 +27,7 @@ import autoparams.customization.Customizer;
  *
  * <p><b>Basic Usage:</b></p>
  * <pre>
- * Product product = Factory
- *     .design(Product.class)
+ * Product product = Designer.design(Product.class)
  *     .set(Product::name).to("Product A")
  *     .set(Product::price).to(BigDecimal.valueOf(100))
  *     .create();
@@ -36,8 +35,7 @@ import autoparams.customization.Customizer;
  *
  * <p><b>Nested Configuration:</b></p>
  * <pre>
- * Review review = Factory
- *     .design(Review.class)
+ * Review review = Designer.design(Review.class)
  *     .set(Review::product).withDesign(product -> product
  *         .set(Product::name).to("Product A")
  *         .set(Product::category).withDesign(category -> category
@@ -50,8 +48,7 @@ import autoparams.customization.Customizer;
  *
  * <p><b>With Processing:</b></p>
  * <pre>
- * Order order = Factory
- *     .design(Order.class)
+ * Order order = Designer.design(Order.class)
  *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
  *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
  *     .process(o -> o.calculateTax())
@@ -59,16 +56,24 @@ import autoparams.customization.Customizer;
  * </pre>
  *
  * @param <T> the type of object this designer creates and configures
- * @see Factory#design(Class)
+ * @see Designer#design(Class)
  * @see DesignLanguage#set(autoparams.customization.dsl.FunctionDelegate)
  * @see DesignLanguage#process(java.util.function.Consumer)
  */
 public class Designer<T> extends DesignLanguage<T, Designer<T>> {
 
-    private Factory<T> factory;
+    private final Class<T> type;
 
-    Designer(Factory<T> factory) {
-        this.factory = factory;
+    Designer(Class<T> type) {
+        this.type = type;
+    }
+
+    public static <T> Designer<T> design(Class<T> type) {
+        if (type == null) {
+            throw new IllegalArgumentException("The argument 'type' is null.");
+        }
+
+        return new Designer<>(type);
     }
 
     @Override
@@ -91,8 +96,7 @@ public class Designer<T> extends DesignLanguage<T, Designer<T>> {
      *
      * <p><b>Example:</b></p>
      * <pre>
-     * Product product = Factory
-     *     .design(Product.class)
+     * Product product = Designer.design(Product.class)
      *     .set(Product::name).to("Laptop")
      *     .set(Product::price).to(BigDecimal.valueOf(999.99))
      *     .process(p -> p.applyDiscount(0.1))
@@ -109,6 +113,7 @@ public class Designer<T> extends DesignLanguage<T, Designer<T>> {
     }
 
     private T generate() {
+        Factory<T> factory = Factory.create(type);
         return factory.get(generators().toArray(Customizer[]::new));
     }
 
@@ -129,8 +134,7 @@ public class Designer<T> extends DesignLanguage<T, Designer<T>> {
      *
      * <p><b>Usage Example:</b></p>
      * <pre>
-     * Stream&lt;Product&gt; stream = Factory
-     *     .design(Product.class)
+     * Stream&lt;Product&gt; stream = Designer.design(Product.class)
      *     .set(Product::category).to("Electronics")
      *     .set(Product::inStock).to(true)
      *     .stream();
