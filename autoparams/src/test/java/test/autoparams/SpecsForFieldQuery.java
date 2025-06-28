@@ -56,6 +56,22 @@ public class SpecsForFieldQuery {
         assertThat(actual).contains(field.getName());
     }
 
+    @Test
+    void toLog_returns_field_type_with_package_and_field_name_when_verbose_is_true() {
+        Field field = getField();
+        FieldQuery sut = new FieldQuery(field, field.getType());
+        String actual = sut.toLog(true);
+        assertThat(actual).isEqualTo("java.lang.String field");
+    }
+
+    @Test
+    void toLog_returns_simple_type_name_and_field_name_when_verbose_is_false() {
+        Field field = getField();
+        FieldQuery sut = new FieldQuery(field, field.getType());
+        String actual = sut.toLog(false);
+        assertThat(actual).isEqualTo("String field");
+    }
+
     private Field getField() {
         try {
             return Container.class.getDeclaredField("field");

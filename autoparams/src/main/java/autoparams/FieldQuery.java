@@ -49,6 +49,12 @@ public final class FieldQuery implements ObjectQuery {
         return type;
     }
 
+    @Override
+    public String toLog(boolean verbose) {
+        String typeName = TypeFormatter.format(type, verbose);
+        return typeName + " " + field.getName();
+    }
+
     /**
      * Returns a string representation of this field query.
      *

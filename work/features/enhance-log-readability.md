@@ -383,8 +383,8 @@ Implement `toLog(boolean verbose)` method for `FieldQuery` interface to support 
 **Test Class:** `test.autoparams.SpecsForFieldQuery`
 
 **Test Scenarios**:
-- [ ] toLog returns field type with package and field name when verbose is true
-- [ ] toLog returns simple type name and field name when verbose is false
+- [x] toLog returns field type with package and field name when verbose is true
+- [x] toLog returns simple type name and field name when verbose is false
 
 ## Backlogs
 
