@@ -60,7 +60,7 @@ import autoparams.customization.Customizer;
  * @see DesignLanguage#set(autoparams.customization.dsl.FunctionDelegate)
  * @see DesignLanguage#process(java.util.function.Consumer)
  */
-public class Designer<T> extends DesignLanguage<T, Designer<T>> {
+public final class Designer<T> extends DesignLanguage<T, Designer<T>> {
 
     private final Class<T> type;
 

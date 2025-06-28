@@ -52,7 +52,7 @@ package autoparams.generator;
  * @see DesignLanguage
  * @see DesignLanguage.ParameterBinding#using(java.util.function.Function)
  */
-public class DesignContext<T> extends DesignLanguage<T, DesignContext<T>> {
+public final class DesignContext<T> extends DesignLanguage<T, DesignContext<T>> {
 
     DesignContext() {
     }
