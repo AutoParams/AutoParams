@@ -173,11 +173,23 @@ public class SpecsForResolutionLogging {
     @Test
     @AutoParams
     @LogResolution
-    void sut_prints_value_of_root_correctly(ResolutionContext context) {
+    void sut_does_not_print_values_for_branch_nodes_by_default(
+        ResolutionContext context
+    ) {
         String[] output = captureOutput(() -> context.resolve(Address.class));
-        assertThat(output[0]).matches(
-            "Address → Address\\[street=street.*, city=city.*, zipCode=zipCode.*] \\(.*ms\\)"
+        assertThat(output[0]).matches("Address \\(.*ms\\)");
+    }
+
+    @Test
+    @AutoParams
+    @LogResolution
+    void sut_prints_branch_value_if_query_type_and_value_type_differ(
+        ResolutionContext context
+    ) {
+        String[] output = captureOutput(() ->
+            context.resolve(new TypeReference<List<String>>() {})
         );
+        assertThat(output[0]).matches("List<String> → ArrayList<String> \\(.*ms\\)");
     }
 
     @Test

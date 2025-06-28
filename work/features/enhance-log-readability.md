@@ -364,8 +364,8 @@ Implement control over branch node values in the log output. The logger should n
 **Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
 
 **Test Scenarios**:
-- [ ] sut does not print values for branch nodes by default
-- [ ] sut prints branch value if query type and value type differ
+- [x] sut does not print values for branch nodes by default
+- [x] sut prints branch value if query type and value type differ
 
 ## Backlogs
 

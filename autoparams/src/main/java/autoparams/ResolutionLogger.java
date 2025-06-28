@@ -49,8 +49,15 @@ class ResolutionLogger {
                     prefix = generatePrefix(i, entry.depth);
                 }
 
-                String message = prefix + entry.query.toLog(false) + " → " + entry.value
-                    + " (" + timeString + ")";
+                String message = prefix + entry.query.toLog(false);
+                if (shouldIncludeValue(entry)) {
+                    if (isLeafNode(entry)) {
+                        message += " → " + entry.value;
+                    } else {
+                        message += " → " + getBranchValueDescription(entry);
+                    }
+                }
+                message += " (" + timeString + ")";
                 logWriter.write(message);
             }
         }
@@ -142,6 +149,68 @@ class ResolutionLogger {
         int depth;
         long startTime;
         long elapsed;
+    }
+
+    private boolean shouldIncludeValue(LogEntry entry) {
+        if (isLeafNode(entry)) {
+            return true;
+        }
+
+        Class<?> queryType = getRawClass(entry.query.getType());
+        Class<?> valueType = entry.value.getClass();
+        return !queryType.equals(valueType);
+    }
+
+    private boolean isLeafNode(LogEntry entry) {
+        int entryIndex = entries.indexOf(entry);
+        int currentDepth = entry.depth;
+
+        for (int i = entryIndex + 1; i < entries.size(); i++) {
+            LogEntry nextEntry = entries.get(i);
+            if (nextEntry.depth == currentDepth + 1) {
+                return false;
+            }
+            if (nextEntry.depth <= currentDepth) {
+                break;
+            }
+        }
+        return true;
+    }
+
+    private String getBranchValueDescription(LogEntry entry) {
+        java.lang.reflect.Type queryType = entry.query.getType();
+        Class<?> valueClass = entry.value.getClass();
+
+        if (queryType instanceof java.lang.reflect.ParameterizedType) {
+            java.lang.reflect.ParameterizedType parameterizedQuery =
+                (java.lang.reflect.ParameterizedType) queryType;
+            java.lang.reflect.Type[] typeArguments = parameterizedQuery.getActualTypeArguments();
+
+            String valueClassName = valueClass.getSimpleName();
+            if (typeArguments.length > 0) {
+                StringBuilder sb = new StringBuilder(valueClassName);
+                sb.append("<");
+                for (int i = 0; i < typeArguments.length; i++) {
+                    if (i > 0) {
+                        sb.append(", ");
+                    }
+                    sb.append(TypeFormatter.format(typeArguments[i], false));
+                }
+                sb.append(">");
+                return sb.toString();
+            }
+        }
+
+        return TypeFormatter.format(valueClass, false);
+    }
+
+    private Class<?> getRawClass(java.lang.reflect.Type type) {
+        if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        } else if (type instanceof java.lang.reflect.ParameterizedType) {
+            return (Class<?>) ((java.lang.reflect.ParameterizedType) type).getRawType();
+        }
+        return Object.class;
     }
 
     private boolean shouldLog(ObjectQuery query, boolean verbose) {
