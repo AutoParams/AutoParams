@@ -43,6 +43,10 @@ public class ResolutionContext {
      * providing specific implementations of {@link ObjectGenerator},
      * {@link ObjectProcessor}, and {@link LogWriter}.
      * </p>
+     * <p>
+     * <b>Note:</b> Logging is disabled by default. To collect and output logs,
+     * call the {@link #enableLogging()} method after creating the context.
+     * </p>
      *
      * @param generator the object generator to use for object creation
      * @param processor the object processor to use for post-processing
