@@ -113,6 +113,29 @@ public class ResolutionContext {
         this(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
     }
 
+    /**
+     * Enables logging of object resolution processes.
+     * <p>
+     * This method activates logging to collect and output detailed
+     * information about object creation and resolution timing.
+     * Logging is disabled by default and must be explicitly enabled.
+     * </p>
+     * <p>
+     * When enabled, logging outputs a hierarchical view of object
+     * resolution showing the order of creation, timing information,
+     * and nested dependency resolution.
+     * </p>
+     *
+     * <p><b>Example:</b></p>
+     * <pre>
+     * ResolutionContext context = new ResolutionContext();
+     * context.enableLogging();
+     * MyClass obj = context.resolve(MyClass.class);
+     * // Resolution logs will be output to console
+     * </pre>
+     *
+     * @see LogResolution
+     */
     public void enableLogging() {
         logger.enable();
     }
