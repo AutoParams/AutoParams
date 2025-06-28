@@ -50,22 +50,22 @@ public record Order(User customer, Address shippingAddress, List<Product> produc
 ```
 
 ```text
-Order → Order[customer=User[...], shippingAddress=Address[...], products=[Product[...], Product[...]]] (5ms)
- ├─ User customer → User[id=587c2513..., email=user@test.com] (2ms)
+Order (5ms)
+ ├─ User customer (2ms)
  │   ├─ UUID id → 587c2513-7781-4249-8a72-d274f5ea1f9d (1ms)
  │   └─ String email → user@test.com (1ms)
- ├─ Address shippingAddress → Address[street=street123, city=city456, zipCode=12345] (2ms)
+ ├─ Address shippingAddress (2ms)
  │   ├─ String street → street123 (1ms)
  │   ├─ String city → city456 (< 1ms)
  │   └─ String zipCode → zipCode789 (1ms)
- └─ List<Product> products → [Product[...], Product[...]] (3ms)
-     ├─ Product → Product[name=nameabc123, price=19.99] (1ms)
+ └─ List<Product> products → ArrayList<Product> (3ms)
+     ├─ Product (1ms)
      │   ├─ String name → nameabc123 (1ms)
      │   └─ BigDecimal price → 19.99 (1ms)
-     ├─ Product → Product[name=nameabc456, price=29.99] (1ms)
+     ├─ Product (1ms)
      │   ├─ String name → nameabc456 (1ms)
      │   └─ BigDecimal price → 29.99 (1ms)
-     └─ Product → Product[name=namexyz789, price=39.99] (1ms)
+     └─ Product (1ms)
          ├─ String name → namexyz789 (1ms)
          └─ BigDecimal price → 39.99 (1ms)
 ```
@@ -198,8 +198,8 @@ void testMethod(ResolutionContext context) {
   Example: ` └─ `
 - [x] sut prints one depth entry correctly
   Example: ` ├─ String street → street123 (1ms)`
-- [x] sut prints value of root correctly
-  Example: `Address → Address[street=street123, city=city456, zipCode=zipCode789] (2ms)`
+- [x] ~~sut prints value of root correctly~~ (Removed: Conflicts with Branch Node Value Control - branch nodes should not print values by default)
+  ~~Example: `Address → Address[street=street123, city=city456, zipCode=zipCode789] (2ms)`~~
 - [x] sut prints value of last child correctly
   Example: ` └─ String zipCode → zipCodexyz789 (1ms)`
 
@@ -354,7 +354,22 @@ static Stream<Arguments> genericTestCases() {
 - [x] `Gen3<Gen1<Integer>, Gen1<Long>, Gen1<Double>>`
 - [x] `Gen1<Gen2<Integer, Gen3<Long, Double, String>>>`
 
+### 10. Branch Node Value Control
+
+Implement control over branch node values in the log output. The logger should not print values for branch nodes by default for concise logs, but should allow specific conditions to output values when necessary.
+
+**Conditions for branch nodes to output values:**
+- If the type of the query and the type of the generated value are different, output the type of the value. For example, if the query is `List<String>` and the generated value is of type `ArrayList<String>`, output the value's type.
+
+**Test Class:** `test.autoparams.SpecsForResolutionLogging` in the `test-autoparams-java-17` project
+
+**Test Scenarios**:
+- [ ] sut does not print values for branch nodes by default
+- [ ] sut prints branch value if query type and value type differ
+
 ## Backlogs
 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
 - [x] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.
+- [ ] Handle cases where the generated value is `null`.
+- [ ] Improve the performance of the implementation.
