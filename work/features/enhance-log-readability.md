@@ -373,3 +373,4 @@ Implement control over branch node values in the log output. The logger should n
 - [x] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.
 - [ ] Handle cases where the generated value is `null`.
 - [ ] Improve the performance of the implementation.
+- [ ] Update the JavaDoc log output examples to reflect the new log format.
