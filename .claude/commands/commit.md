@@ -4,10 +4,12 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 
 ```
 /commit [topic: <topic>]
+/commit short
 ```
 
 **Parameters:**
 - `topic` (optional): A specific topic or area of focus for the commit. If not provided, the commit will be general.
+- `short`: Creates the shortest possible commit message while following guidelines
 
 ## Examples
 
@@ -15,6 +17,7 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 /commit
 /commit topic: Factory
 /commit topic: documentation
+/commit short
 ```
 
 ## Pre-Commit Validation
@@ -28,6 +31,8 @@ Create commits following project message guidelines - /commit [topic: <topic>]
 2. **Categorize Changes**: Identify the nature of changes (new feature, enhancement, bug fix, refactoring, etc.)
 3. **Check Sensitive Data**: Scan for any secrets, keys, or sensitive information in staged changes
 4. **Draft Message**: Write commit message following CLAUDE.md commit guidelines (including no branding/advertising)
+   - **If `short` parameter**: Create the most concise message possible while maintaining clarity
+   - **Otherwise**: Write standard descriptive commit message
 5. **Create Commit**: Execute commit using heredoc format for proper message formatting
 6. **Validate**: Run `work/scripts/check-commit-message-rule.sh` as per CLAUDE.md guidelines
 7. **Fix if Failed**: Use `git commit --amend` with heredoc format if validation fails
