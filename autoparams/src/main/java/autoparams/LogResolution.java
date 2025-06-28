@@ -35,12 +35,9 @@ import java.lang.annotation.Target;
  *
  * <p><b>Example output:</b></p>
  * <pre>
- * &gt; Resolving: for class com.example.MyClass
- * |-- &gt; Resolving: for Parameter java.lang.String value1
- * |   &lt; Resolved(2 ms): "generated string" for Parameter java.lang.String value1
- * |-- &gt; Resolving: for Parameter java.lang.Integer value2
- * |   &lt; Resolved(&lt;1 ms): 42 for Parameter java.lang.Integer value2
- * &lt; Resolved(3 ms): MyClass{...} for Parameter class com.example.MyClass
+ * MyClass obj (3ms)
+ *  ├─ String value1 → "generated string" (2ms)
+ *  └─ Integer value2 → 42 (&lt;1ms)
  * </pre>
  *
  * @see autoparams.AutoParams
