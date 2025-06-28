@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>11.1.0</version>
+  <version>11.1.1</version>
 </dependency>
 ```
 
@@ -82,7 +82,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:11.1.0'
+testImplementation 'io.github.autoparams:autoparams:11.1.1'
 ```
 
 ## Features
@@ -791,7 +791,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>11.1.0</version>
+  <version>11.1.1</version>
 </dependency>
 ```
 
@@ -800,7 +800,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:11.1.0'
+testImplementation 'io.github.autoparams:autoparams-spring:11.1.1'
 ```
 
 ### `@UseBeans` Annotation
@@ -863,7 +863,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>11.1.0</version>
+  <version>11.1.1</version>
 </dependency>
 ```
 
@@ -872,7 +872,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:11.1.0'
+testImplementation 'io.github.autoparams:autoparams-mockito:11.1.1'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -939,7 +939,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>11.1.0</version>
+  <version>11.1.1</version>
 </dependency>
 ```
 
@@ -948,7 +948,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:11.1.0'
+testImplementation 'io.github.autoparams:autoparams-lombok:11.1.1'
 ```
 
 ### `BuilderCustomizer` Class
@@ -1051,7 +1051,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>11.1.0</version>
+  <version>11.1.1</version>
 </dependency>
 ```
 
@@ -1060,7 +1060,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:11.1.0'
+testImplementation 'io.github.autoparams:autoparams-kotlin:11.1.1'
 ```
 
 #### Gradle (Kotlin)
@@ -1068,7 +1068,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:11.1.0'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:11.1.0")
+testImplementation("io.github.autoparams:autoparams-kotlin:11.1.1")
 ```
 
 ### `@AutoKotlinParams` Annotation
