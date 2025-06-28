@@ -23,6 +23,18 @@ public interface ObjectQuery {
      */
     Type getType();
 
+    /**
+     * Returns a log-friendly string representation of this object query.
+     * <p>
+     * This method provides a concise representation suitable for logging
+     * purposes, with the format controlled by the verbose parameter.
+     * </p>
+     *
+     * @param verbose if {@code true}, returns detailed format with full
+     *                package names; if {@code false}, returns simple format
+     *                with short type names
+     * @return a string representation of the query for logging
+     */
     default String toLog(boolean verbose) {
         return TypeFormatter.format(getType(), verbose);
     }
