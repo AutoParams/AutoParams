@@ -578,6 +578,7 @@ public final class Factory<T> implements Supplier<T> {
      * @see ResolutionContext
      * @see #design(Class)
      */
+    @Deprecated
     public static <T> Designer<T> design(
         ResolutionContext context,
         Class<T> type

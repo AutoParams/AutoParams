@@ -88,10 +88,12 @@ Review review = Factory
 - [x] using supports multiple levels of nested object configuration
 - [x] create throws exception when design function does not return its argument
 
-### Using Custom ResolutionContext with Designer<T>
+### ~~Using Custom ResolutionContext with Designer<T>~~
 
-- When you create a `Designer<T>` instance using the `design` method with a `ResolutionContext` argument, the `Designer<T>` uses the provided `ResolutionContext` when generating objects.
-- The `ResolutionContext` enables customization of the object creation process when using `Designer<T>`.
+> **Note**: This feature has been canceled and will be redesigned soon.
+
+- ~~When you create a `Designer<T>` instance using the `design` method with a `ResolutionContext` argument, the `Designer<T>` uses the provided `ResolutionContext` when generating objects.~~
+- ~~The `ResolutionContext` enables customization of the object creation process when using `Designer<T>`.~~
 
 ```java
 @Test
@@ -105,9 +107,9 @@ void testMethod(@Freeze BigDecimal priceAmount, ResolutionContext context) {
 
 **Test Scenarios**:
 
-- [x] sut uses provided resolution context when creating object
-- [x] sut throws exception when resolution context is null
-- [x] sut throws exception when type is null
+- [x] ~~sut uses provided resolution context when creating object~~
+- [x] ~~sut throws exception when resolution context is null~~
+- [x] ~~sut throws exception when type is null~~
 
 ### Resolving and Injecting Designer Instances
 
