@@ -92,7 +92,7 @@ public class ResolutionContext {
         ObjectGenerator generator,
         ObjectProcessor processor
     ) {
-        this(generator, processor, new NoOpLogWriter());
+        this(generator, processor, new ConsoleLogWriter());
     }
 
     /**
@@ -107,6 +107,10 @@ public class ResolutionContext {
      */
     public ResolutionContext() {
         this(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT);
+    }
+
+    public void enableLogging() {
+        logger.enable();
     }
 
     /**

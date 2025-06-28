@@ -16,8 +16,6 @@ import autoparams.customization.Customizer;
 import autoparams.customization.CustomizerFactory;
 import autoparams.customization.CustomizerSource;
 import autoparams.customization.RecycleArgument;
-import autoparams.generator.ObjectGenerator;
-import autoparams.processor.ObjectProcessor;
 import lombok.val;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -32,22 +30,16 @@ class TestResolutionContext extends ResolutionContext {
 
     private static final Object[] EMPTY_ASSET = new Object[0];
 
-    private TestResolutionContext(LogWriter logWriter) {
-        super(ObjectGenerator.DEFAULT, ObjectProcessor.DEFAULT, logWriter);
-    }
-
     static TestResolutionContext create(ExtensionContext extensionContext) {
-        LogWriter logWriter = getLogWriter(extensionContext);
-        val resolutionContext = new TestResolutionContext(logWriter);
+        val resolutionContext = new TestResolutionContext();
+
+        Method method = extensionContext.getRequiredTestMethod();
+        if (method.isAnnotationPresent(LogResolution.class)) {
+            resolutionContext.enableLogging();
+        }
+
         resolutionContext.initialize(extensionContext);
         return resolutionContext;
-    }
-
-    private static LogWriter getLogWriter(ExtensionContext extensionContext) {
-        Method method = extensionContext.getRequiredTestMethod();
-        return method.isAnnotationPresent(LogResolution.class)
-            ? new ConsoleLogWriter()
-            : new NoOpLogWriter();
     }
 
     private void initialize(ExtensionContext extensionContext) {

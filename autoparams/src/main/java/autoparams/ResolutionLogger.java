@@ -8,12 +8,21 @@ class ResolutionLogger {
     private final LogWriter logWriter;
     private final List<LogEntry> entries = new ArrayList<>();
     private int depth = 0;
+    private boolean enabled = false;
 
     public ResolutionLogger(LogWriter logWriter) {
         this.logWriter = logWriter;
     }
 
+    public void enable() {
+        this.enabled = true;
+    }
+
     public void onResolving(ObjectQuery query) {
+        if (!enabled) {
+            return;
+        }
+
         LogEntry entry = new LogEntry();
         entry.query = query;
         entry.depth = depth;
@@ -23,6 +32,10 @@ class ResolutionLogger {
     }
 
     public void onResolved(ObjectQuery query, Object value) {
+        if (!enabled) {
+            return;
+        }
+
         depth--;
         for (int i = entries.size() - 1; i >= 0; i--) {
             LogEntry entry = entries.get(i);
