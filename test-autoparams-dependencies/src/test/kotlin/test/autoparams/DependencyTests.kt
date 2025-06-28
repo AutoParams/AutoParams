@@ -1,6 +1,7 @@
 package test.autoparams
 
 import autoparams.AutoParams
+import autoparams.LogResolution
 import autoparams.customization.Customization
 import autoparams.kotlin.AutoKotlinParams
 import autoparams.lombok.BuilderCustomizer
@@ -12,6 +13,7 @@ class DependencyTests {
 
     @Test
     @AutoParams
+    @LogResolution
     fun `AutoParams installed`(x: Int) {
     }
 
