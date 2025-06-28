@@ -369,6 +369,23 @@ Implement control over branch node values in the log output. The logger should n
 - [x] sut does not print values for branch nodes by default
 - [x] sut prints branch value if query type and value type differ
 
+### 11. FieldQuery.toLog Implementation
+
+Implement `toLog(boolean verbose)` method for `FieldQuery` interface to support field-based logging in resolution logs.
+
+**Expected Result Example**:
+
+| Verbose | Result                     |
+|---------|----------------------------|
+| true    | java.lang.String fieldName |
+| false   | String fieldName           |
+
+**Test Class:** `test.autoparams.SpecsForFieldQuery`
+
+**Test Scenarios**:
+- [ ] toLog returns field type with package and field name when verbose is true
+- [ ] toLog returns simple type name and field name when verbose is false
+
 ## Backlogs
 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
