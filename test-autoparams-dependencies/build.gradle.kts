@@ -5,12 +5,13 @@ plugins {
 }
 
 dependencies {
-    api("io.github.autoparams:autoparams:[11.1.1, 12.0.0)")
-    api("io.github.autoparams:autoparams-kotlin:[11.1.1, 12.0.0)")
-    api("io.github.autoparams:autoparams-lombok:[11.1.1, 12.0.0)")
-    api("io.github.autoparams:autoparams-mockito:[11.1.1, 12.0.0)")
+    api("io.github.autoparams:autoparams:[11.2.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-kotlin:[11.2.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-lombok:[11.2.0, 12.0.0)")
+    api("io.github.autoparams:autoparams-mockito:[11.2.0, 12.0.0)")
     testImplementation("org.assertj:assertj-core:3.8.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 }
 
 tasks.withType<KotlinCompile>().configureEach {
