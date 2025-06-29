@@ -193,15 +193,15 @@ The following tasks represent the first 5 priority items to begin implementation
   - [x] Write customization examples:
     - [x] Using ArgumentCustomizationDsl.set method with Factory
 
-- [ ] **Task 5: Create basic logging documentation with examples**
-  - [ ] Establish structure for docs/basics/logging.md (including how to use sections)
-  - [ ] Write basic logging setup examples:
-    - [ ] Simplest approach: `@LogResolution` annotation on test methods (including hierarchical tree structure and timing information explanation)
-    - [ ] Programmatic approach: `ResolutionContext.enableLogging()` usage
-    - [ ] Default vs enabled logging behavior comparison
-  - [ ] Write advanced logging features:
-    - [ ] LogVisibility annotation usage for controlling log output
-    - [ ] Custom ObjectQuery.toLog() implementations
+- [x] **Task 5: Create basic logging documentation with examples**
+  - [x] Establish structure for docs/basics/logging.md (including how to use sections)
+  - [x] Write basic logging setup examples:
+    - [x] Simplest approach: `@LogResolution` annotation on test methods (including hierarchical tree structure and timing information explanation)
+    - [x] Programmatic approach: `ResolutionContext.enableLogging()` usage
+    - [x] Default vs enabled logging behavior comparison
+  - [x] Write advanced logging features:
+    - [x] LogVisibility annotation usage for controlling log output
+    - [x] Custom ObjectQuery.toLog() implementations
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
