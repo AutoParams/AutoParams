@@ -1,4 +1,4 @@
-package autoparams.generator;
+package autoparams.customization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,12 @@ import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
-import autoparams.customization.Customizer;
 import autoparams.customization.dsl.ArgumentCustomizationDsl;
 import autoparams.customization.dsl.FunctionDelegate;
+import autoparams.generator.ArgumentGenerator;
+import autoparams.generator.Factory;
+import autoparams.generator.ObjectContainer;
+import autoparams.generator.ObjectGenerator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Accessors;

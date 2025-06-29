@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
-import autoparams.generator.Designer;
+import autoparams.customization.Designer;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;

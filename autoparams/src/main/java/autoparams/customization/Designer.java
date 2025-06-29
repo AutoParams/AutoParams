@@ -1,8 +1,8 @@
-package autoparams.generator;
+package autoparams.customization;
 
 import java.util.stream.Stream;
 
-import autoparams.customization.Customizer;
+import autoparams.generator.Factory;
 
 /**
  * A fluent API for configuring and creating objects with specific property

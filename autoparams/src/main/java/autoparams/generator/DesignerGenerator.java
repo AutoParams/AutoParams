@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.customization.Designer;
 
 class DesignerGenerator implements ObjectGenerator {
 
@@ -20,7 +21,7 @@ class DesignerGenerator implements ObjectGenerator {
                     Type targetType = typeArguments[0];
                     if (targetType instanceof Class) {
                         Class<?> targetClass = (Class<?>) targetType;
-                        return new ObjectContainer(new Designer<>(targetClass));
+                        return new ObjectContainer(Designer.design(targetClass));
                     }
                 }
             }

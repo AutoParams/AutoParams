@@ -7,7 +7,7 @@ The `Designer.design(Class<T> type)` static method returns a `Designer<T>` insta
 ### Designer<T>
 
 - The `design` static method of `Designer<T>` returns a `Designer<T>` instance for the specified type `T`.
-- The `Designer<T>` class is located in the `autoparams.generator` package of the `autoparams` module.
+- The `Designer<T>` class is located in the `autoparams.customization` package of the `autoparams` module.
 - The test class for `Designer<T>` is `test.autoparams.generator.SpecsForDesigner` in the `test-autoparams-java-17` module.
 - The `Designer<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `Designer.design(Class<T> type)` static method.
 - The `create()` method generates an arbitrary object of type `T`.
@@ -47,7 +47,7 @@ Product product = Designer
 
 - The `using` method configures a nested object by accepting a function that takes and returns a `DesignContext<T>` instance (`Function<DesignContext<T>, DesignContext<T>>`).
 - The `DesignContext<T>` class provides a fluent interface for configuring nested objects, similar to the `Designer<T>` class.
-- The `DesignContext<T>` class is located in the `autoparams.generator` package of the `autoparams` module.
+- The `DesignContext<T>` class is located in the `autoparams.customization` package of the `autoparams` module.
 - The `DesignContext<T>` constructor is package-private, so instances cannot be created directly from outside and can only be accessed through the `using` method of the `Designer<T>` class.
 - The `DesignContext<T>` class is derived from the same parent class as the `Designer<T>` class.
 - The function passed to the `using` method must return the received argument as is.

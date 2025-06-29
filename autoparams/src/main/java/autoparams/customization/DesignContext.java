@@ -1,4 +1,4 @@
-package autoparams.generator;
+package autoparams.customization;
 
 /**
  * A specialized design context for configuring nested objects within the
