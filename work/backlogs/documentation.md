@@ -21,13 +21,11 @@ README.md (Overview & Quick Start)
 ├── docs/
 │   ├── getting-started/        # New user onboarding
 │   │   ├── installation.md
-│   │   ├── quick-start.md
-│   │   └── first-test.md
+│   │   └── quick-start.md
 │   ├── basics/                 # Essential AutoParams functionality
-│   │   ├── basic-usage.md
+│   │   ├── logging.md
 │   │   ├── annotations.md
 │   │   ├── factory.md
-│   │   ├── designer.md
 │   │   └── resolution-context.md
 │   ├── advanced-features/      # Power user features
 │   │   ├── customization.md
@@ -195,19 +193,15 @@ The following tasks represent the first 5 priority items to begin implementation
   - [x] Write customization examples:
     - [x] Using ArgumentCustomizationDsl.set method with Factory
 
-- [ ] **Task 5: Create basic Designer documentation with examples**
-  - [ ] Establish structure for docs/basics/designer.md (including how to use sections)
-  - [ ] Create domain model as needed for Designer examples (reuse existing models where possible)
-  - [ ] Write basic Designer creation examples:
-    - [ ] Basic fluent chaining: `Designer.design(Class<T>).set().to().create()`
-    - [ ] Multiple property chaining
-  - [ ] Write withDesign configuration examples:
-    - [ ] Single level nesting
-    - [ ] Multiple level nesting
-  - [ ] Write object processing examples:
-    - [ ] Processing chain
-    - [ ] Multiple processing
-  - [ ] Write stream generation examples
+- [ ] **Task 5: Create basic logging documentation with examples**
+  - [ ] Establish structure for docs/basics/logging.md (including how to use sections)
+  - [ ] Write basic logging setup examples:
+    - [ ] Simplest approach: `@LogResolution` annotation on test methods (including hierarchical tree structure and timing information explanation)
+    - [ ] Programmatic approach: `ResolutionContext.enableLogging()` usage
+    - [ ] Default vs enabled logging behavior comparison
+  - [ ] Write advanced logging features:
+    - [ ] LogVisibility annotation usage for controlling log output
+    - [ ] Custom ObjectQuery.toLog() implementations
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
