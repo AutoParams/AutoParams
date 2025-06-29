@@ -92,4 +92,5 @@ void testGeneratedArray(String[] items) {
 
 Now that you have the basics working, explore more advanced features:
 
+- [Logging](../basics/logging.md) - Enable detailed logging of object resolution
 - [Factory](../core-features/factory.md) - Create instances of a given type
