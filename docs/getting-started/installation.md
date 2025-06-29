@@ -44,7 +44,7 @@ import autoparams.AutoParams;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class InstallationTest {
-    
+
     @Test
     @AutoParams
     void autoParamsWorking(String value) {

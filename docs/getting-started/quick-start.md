@@ -67,7 +67,7 @@ AutoParams automatically generates collections and arrays with arbitrary data:
 void testGeneratedList(List<Integer> numbers) {
     assertNotNull(numbers);
     assertFalse(numbers.isEmpty());
-    
+
     // AutoParams generates a list with arbitrary integers
     for (Integer number : numbers) {
         assertNotNull(number);
@@ -79,7 +79,7 @@ void testGeneratedList(List<Integer> numbers) {
 void testGeneratedArray(String[] items) {
     assertNotNull(items);
     assertTrue(items.length > 0);
-    
+
     // AutoParams generates an array with arbitrary strings
     for (String item : items) {
         assertNotNull(item);
