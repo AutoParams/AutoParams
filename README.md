@@ -73,7 +73,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>11.1.1</version>
+  <version>11.2.0</version>
 </dependency>
 ```
 
@@ -82,7 +82,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:11.1.1'
+testImplementation 'io.github.autoparams:autoparams:11.2.0'
 ```
 
 ## Features
@@ -574,29 +574,16 @@ void testMethod(User user) {
 Will print a hierarchical visualization of the resolution process:
 
 ```text
-> Resolving: for Parameter your.app.User user
-|-- > Resolving: for interface autoparams.generator.ConstructorResolver
-|   |-- > Resolving: for interface autoparams.generator.ConstructorExtractor
-|   |   < Resolved(1 ms): autoparams.generator.DefaultConstructorExtractor@52035328 for interface autoparams.generator.ConstructorExtractor
-|   < Resolved(1 ms): autoparams.generator.CompositeConstructorResolver@5614ae05 for interface autoparams.generator.ConstructorResolver
-|
-|-- > Resolving: for Parameter final java.util.UUID id
-|   < Resolved(<1 ms): fbdf7aa8-1af7-4308-bc64-ee9dbfeba8d2 for Parameter final java.util.UUID id
-|
-|-- > Resolving: for Parameter final java.lang.String email
-|   |-- > Resolving: for class autoparams.generator.EmailAddressGenerationOptions
-|   |   < Resolved(<1 ms): EmailAddressGenerationOptions[domains=["test.com"]] for class autoparams.generator.EmailAddressGenerationOptions
-|   < Resolved(2 ms): 53bf56a3-8a42-47f3-a5c9-854862ea4a56@test.com for Parameter final java.lang.String email
-|
-|-- > Resolving: for Parameter final java.lang.String username
-|   < Resolved(1 ms): usernamec6962921-ab77-4dbc-a71d-6932a9faa5be for Parameter final java.lang.String username
-< Resolved(5 ms): User(id=fbdf7aa8-1af7-4308-bc64-ee9dbfeba8d2, email=53bf56a3-8a42-47f3-a5c9-854862ea4a56@test.com, username=usernamec6962921-ab77-4dbc-a71d-6932a9faa5be) for Parameter your.app.User user
+User user (5ms)
+ ├─ UUID id → fbdf7aa8-1af7-4308-bc64-ee9dbfeba8d2 (1ms)
+ ├─ String email → 53bf56a3-8a42-47f3-a5c9-854862ea4a56@test.com (2ms)
+ └─ String username → usernamec6962921-ab77-4dbc-a71d-6932a9faa5be (1ms)
 ```
 
-The log uses the following symbols to represent the resolution flow:
-- `>` indicates the start of a resolution attempt
-- `|--` shows nested resolution steps
-- `<` indicates successful resolution
+The log uses a tree structure to show the resolution hierarchy:
+- Each level shows the query type and parameter name
+- `→` indicates the generated value
+- Time taken for each resolution is shown in parentheses
 - Indentation levels represent the depth of the resolution chain
 
 This logging is particularly valuable when working with:
@@ -791,7 +778,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-spring</artifactId>
-  <version>11.1.1</version>
+  <version>11.2.0</version>
 </dependency>
 ```
 
@@ -800,7 +787,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-spring:11.1.1'
+testImplementation 'io.github.autoparams:autoparams-spring:11.2.0'
 ```
 
 ### `@UseBeans` Annotation
@@ -863,7 +850,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-mockito</artifactId>
-  <version>11.1.1</version>
+  <version>11.2.0</version>
 </dependency>
 ```
 
@@ -872,7 +859,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-mockito:11.1.1'
+testImplementation 'io.github.autoparams:autoparams-mockito:11.2.0'
 ```
 
 ### Generating Test Doubles with Mockito
@@ -939,7 +926,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-lombok</artifactId>
-  <version>11.1.1</version>
+  <version>11.2.0</version>
 </dependency>
 ```
 
@@ -948,7 +935,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-lombok:11.1.1'
+testImplementation 'io.github.autoparams:autoparams-lombok:11.2.0'
 ```
 
 ### `BuilderCustomizer` Class
@@ -1051,7 +1038,7 @@ For Maven, you can add the following dependency to your pom.xml:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams-kotlin</artifactId>
-  <version>11.1.1</version>
+  <version>11.2.0</version>
 </dependency>
 ```
 
@@ -1060,7 +1047,7 @@ For Maven, you can add the following dependency to your pom.xml:
 For Gradle-Groovy, use:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams-kotlin:11.1.1'
+testImplementation 'io.github.autoparams:autoparams-kotlin:11.2.0'
 ```
 
 #### Gradle (Kotlin)
@@ -1068,7 +1055,7 @@ testImplementation 'io.github.autoparams:autoparams-kotlin:11.1.1'
 For Gradle-Kotlin, use:
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams-kotlin:11.1.1")
+testImplementation("io.github.autoparams:autoparams-kotlin:11.2.0")
 ```
 
 ### `@AutoKotlinParams` Annotation

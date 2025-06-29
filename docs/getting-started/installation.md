@@ -15,7 +15,7 @@ For Maven, add the following dependency to your `pom.xml`:
 <dependency>
   <groupId>io.github.autoparams</groupId>
   <artifactId>autoparams</artifactId>
-  <version>11.1.0</version>
+  <version>11.2.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -25,13 +25,13 @@ For Maven, add the following dependency to your `pom.xml`:
 For Gradle, add to your `build.gradle`:
 
 ```groovy
-testImplementation 'io.github.autoparams:autoparams:11.1.0'
+testImplementation 'io.github.autoparams:autoparams:11.2.0'
 ```
 
 Or for Gradle with Kotlin DSL (`build.gradle.kts`):
 
 ```kotlin
-testImplementation("io.github.autoparams:autoparams:11.1.0")
+testImplementation("io.github.autoparams:autoparams:11.2.0")
 ```
 
 ## Verify Installation
