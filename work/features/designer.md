@@ -19,8 +19,8 @@ Product product = designer.create();
 
 **Test Scenarios**:
 
-- [x] design throws exception when argument type is null
-- [x] sut creates an object of the specified type
+- [ ] design throws exception when argument type is null
+- [ ] sut creates an object of the specified type
 
 ### Setting Constructor Argument Values Corresponding to Properties
 
@@ -38,9 +38,9 @@ Product product = Designer
 
 **Test Scenarios**:
 
-- [x] sut sets property value when using method reference
-- [x] sut overwrites property value when set multiple times
-- [x] sut throws exception when property getter delegate is null
+- [ ] sut sets property value when using method reference
+- [ ] sut overwrites property value when set multiple times
+- [ ] sut throws exception when property getter delegate is null
 
 
 ### Nested Object Configuration
@@ -66,11 +66,11 @@ Review review = Designer
 
 **Test Scenarios**:
 
-- [x] using configures nested object using design function
-- [x] using throws exception when design function argument is null
-- [x] using does not affect properties outside the nested object
-- [x] using supports multiple levels of nested object configuration
-- [x] create throws exception when design function does not return its argument
+- [ ] using configures nested object using design function
+- [ ] using throws exception when design function argument is null
+- [ ] using does not affect properties outside the nested object
+- [ ] using supports multiple levels of nested object configuration
+- [ ] create throws exception when design function does not return its argument
 
 ### Resolving and Injecting Designer Instances
 
@@ -108,8 +108,8 @@ void testMethod(Designer<Product> designer) {
 
 **Test Scenarios**:
 
-- [x] sut is resolved from ResolutionContext
-- [x] sut is injected as a parameter using @AutoParams
+- [ ] sut is resolved from ResolutionContext
+- [ ] sut is injected as a parameter using @AutoParams
 
 ### Object Stream
 
@@ -126,7 +126,7 @@ assertThat(stream.limit(5))
 
 **Test Scenarios**:
 
-- [x] sut returns stream of objects with configured property values
+- [ ] sut returns stream of objects with configured property values
 
 ### Creating a List of Objects
 
