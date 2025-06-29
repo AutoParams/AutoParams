@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 
 @Test
 @AutoParams
-@LogResolution
-void testWithLogging(User user) {
+@LogResolution // Enable resolution logging for this test
+void testMethod(User user) {
     assertNotNull(user);
 }
 ```
@@ -49,12 +49,10 @@ For more control over when logging is enabled, you can use `ResolutionContext` d
 
 ```java
 @Test
-void testWithProgrammaticLogging() {
-    ResolutionContext context = new ResolutionContext();
-    context.enableLogging();
-
+void testMethod() {
+    var context = new ResolutionContext();
+    context.enableLogging(); // Enable logging for this context
     User user = context.resolve();
-
     assertNotNull(user);
 }
 ```
@@ -80,7 +78,7 @@ Use the `@LogVisibility` annotation to control which types appear in resolution 
 
 ```java
 @LogVisibility(verboseOnly = true)
-public class InternalComponent {
+class InternalComponent {
     // This class will only appear in verbose logs
 }
 ```
