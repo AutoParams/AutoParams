@@ -1,6 +1,5 @@
 package autoparams.generator;
 
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import autoparams.customization.Customizer;
@@ -21,7 +20,6 @@ import autoparams.customization.Customizer;
  * <li><b>Property Setting:</b> Use method references to set specific property values</li>
  * <li><b>Nested Object Configuration:</b> Configure complex object hierarchies
  *     with {@code withDesign}</li>
- * <li><b>Object Processing:</b> Apply post-creation processing steps</li>
  * <li><b>Fluent Interface:</b> Chain operations for readable and maintainable code</li>
  * </ul>
  *
@@ -46,19 +44,9 @@ import autoparams.customization.Customizer;
  *     .create();
  * </pre>
  *
- * <p><b>With Processing:</b></p>
- * <pre>
- * Order order = Designer.design(Order.class)
- *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
- *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
- *     .process(o -> o.calculateTax())
- *     .create();
- * </pre>
- *
  * @param <T> the type of object this designer creates and configures
  * @see Designer#design(Class)
  * @see DesignLanguage#set(autoparams.customization.dsl.FunctionDelegate)
- * @see DesignLanguage#process(java.util.function.Consumer)
  */
 public final class Designer<T> extends DesignLanguage<T, Designer<T>> {
 
@@ -84,43 +72,26 @@ public final class Designer<T> extends DesignLanguage<T, Designer<T>> {
     /**
      * Creates and returns the configured object instance.
      * <p>
-     * This method generates the object using the configured property values
-     * and then applies any processing steps that were specified. The creation
-     * process follows these steps:
+     * This method generates the object using the configured property values.
      * </p>
-     * <ol>
-     * <li>Generate the object with all configured property values</li>
-     * <li>Apply all processing steps in the order they were added</li>
-     * <li>Return the final processed object</li>
-     * </ol>
      *
      * <p><b>Example:</b></p>
      * <pre>
      * Product product = Designer.design(Product.class)
      *     .set(Product::name).to("Laptop")
      *     .set(Product::price).to(BigDecimal.valueOf(999.99))
-     *     .process(p -> p.applyDiscount(0.1))
-     *     .create(); // Returns the configured and processed Product
+     *     .create(); // Returns the configured Product
      * </pre>
      *
-     * @return a new instance of type {@code T} with all configurations
-     *         and processing steps applied
+     * @return a new instance of type {@code T} with all configurations applied
      */
     public T create() {
-        T object = generate();
-        process(object);
-        return object;
+        return generate();
     }
 
     private T generate() {
         Factory<T> factory = Factory.create(type);
         return factory.get(generators().toArray(Customizer[]::new));
-    }
-
-    private void process(T object) {
-        for (Consumer<T> processor : processors()) {
-            processor.accept(object);
-        }
     }
 
     /**
@@ -129,7 +100,7 @@ public final class Designer<T> extends DesignLanguage<T, Designer<T>> {
      * This method returns a {@code Stream<T>} that generates objects on-demand
      * using the same configuration settings as the {@code create()} method.
      * Each object in the stream is created independently with the same property
-     * values and processing steps applied.
+     * values applied.
      * </p>
      *
      * <p><b>Usage Example:</b></p>
@@ -149,7 +120,7 @@ public final class Designer<T> extends DesignLanguage<T, Designer<T>> {
      * <li>The stream is infinite and lazy - objects are created only when consumed</li>
      * <li>Each object in the stream is independently created and configured</li>
      * <li>Remember to limit the stream to avoid infinite loops</li>
-     * <li>All configured property values and processors are applied to each object</li>
+     * <li>All configured property values are applied to each object</li>
      * </ul>
      *
      * @return an infinite {@code Stream<T>} of configured objects

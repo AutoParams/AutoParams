@@ -42,22 +42,6 @@ Product product = Designer
 - [x] sut overwrites property value when set multiple times
 - [x] sut throws exception when property getter delegate is null
 
-### Processing the Created Object
-
-- The `process` method accepts a `Consumer<T>` that allows you to perform additional operations on the created object before returning it.
-
-```java
-Order order = Designer
-    .design(Order.class)
-    .process(o -> o.applyPercentDiscount(10))
-    .create();
-```
-
-**Test Scenarios**:
-
-- [x] sut applies processor to created object
-- [x] sut applies multiple processors in sequence
-- [x] sut throws exception when processor is null
 
 ### Nested Object Configuration
 

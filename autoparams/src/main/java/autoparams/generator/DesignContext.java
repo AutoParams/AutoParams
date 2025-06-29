@@ -14,8 +14,7 @@ package autoparams.generator;
  * <p><b>Key Characteristics:</b></p>
  * <ul>
  * <li><b>Nested Configuration:</b> Used exclusively for nested object design</li>
- * <li><b>Fluent Interface:</b> Supports the same {@code set()} and {@code process()}
- *     methods as {@link Designer}</li>
+ * <li><b>Fluent Interface:</b> Supports the same {@code set()} method as {@link Designer}</li>
  * <li><b>Function Parameter:</b> Passed to and returned from design functions</li>
  * <li><b>Type Safety:</b> Parameterized with the nested object type</li>
  * </ul>
@@ -26,7 +25,6 @@ package autoparams.generator;
  *     .set(Review::product).using(product -> product // DesignContext&lt;Product&gt;
  *         .set(Product::name).to("Laptop")
  *         .set(Product::price).to(BigDecimal.valueOf(999.99))
- *         .process(p -> p.applyDiscount(0.1))
  *     )
  *     .create();
  * </pre>

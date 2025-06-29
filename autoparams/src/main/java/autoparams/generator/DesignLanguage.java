@@ -2,7 +2,6 @@ package autoparams.generator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,9 +20,9 @@ import lombok.experimental.Accessors;
  * <p>
  * This class defines the core fluent design language that enables intuitive
  * and readable object configuration through method chaining. It provides the
- * foundational methods {@code set()} and {@code process()} that are used by
- * both {@link Designer} for main object configuration and {@link DesignContext}
- * for nested object configuration.
+ * foundational method {@code set()} that is used by both {@link Designer}
+ * for main object configuration and {@link DesignContext} for nested object
+ * configuration.
  * </p>
  *
  * <p><b>Core Design Patterns:</b></p>
@@ -45,13 +44,6 @@ import lombok.experimental.Accessors;
  * <li><b>{@link ParameterBinding#using(Function)}:</b> Configure nested objects</li>
  * </ul>
  *
- * <p><b>Object Processing:</b></p>
- * <p>
- * The {@link #process(Consumer)} method allows custom post-creation processing
- * through lambda expressions or method references. Multiple processors can be
- * chained and are executed in the order they are added.
- * </p>
- *
  * <p><b>Usage Examples:</b></p>
  * <pre>
  * // Simple property setting
@@ -68,13 +60,6 @@ import lombok.experimental.Accessors;
  *             .set(Category::name).to("Electronics")
  *         )
  *     )
- *     .create();
- *
- * // Object processing
- * Designer.design(Order.class)
- *     .set(Order::originalPrice).to(BigDecimal.valueOf(100))
- *     .process(order -> order.applyDiscount(0.1))
- *     .process(order -> order.calculateTax())
  *     .create();
  * </pre>
  *
@@ -95,7 +80,6 @@ import lombok.experimental.Accessors;
 public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Context>> {
 
     private final List<ObjectGenerator> generators = new ArrayList<>();
-    private final List<Consumer<T>> processors = new ArrayList<>();
 
     DesignLanguage() {
     }
@@ -155,76 +139,6 @@ public abstract class DesignLanguage<T, Context extends DesignLanguage<T, Contex
         }
 
         return new ParameterBinding<>(getterDelegate);
-    }
-
-    /**
-     * Adds a processing step to be applied to the object after it is created.
-     * <p>
-     * This method allows you to specify custom operations that will be executed
-     * on the created object before it is returned. Processing steps are executed
-     * in the order they are added, after the object has been generated with all
-     * configured property values. This is useful for applying business logic,
-     * calculations, or state changes that cannot be achieved through simple
-     * property setting.
-     * </p>
-     *
-     * <p><b>Single Processing Step:</b></p>
-     * <pre>
-     * Order order = Designer.design(Order.class)
-     *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
-     *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
-     *     .create();
-     * </pre>
-     *
-     * <p><b>Multiple Processing Steps:</b></p>
-     * <pre>
-     * Order order = Designer.design(Order.class)
-     *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
-     *     .set(Order::getOriginalPrice).to(BigDecimal.valueOf(100))
-     *     .process(o -> o.applyDiscount(BigDecimal.valueOf(10)))
-     *     .process(o -> o.calculateTax())
-     *     .process(o -> o.addShippingCost(BigDecimal.valueOf(5)))
-     *     .create();
-     * </pre>
-     *
-     * <p><b>Complex Processing:</b></p>
-     * <pre>
-     * User user = Designer.design(User.class)
-     *     .set(User::firstName).to("John")
-     *     .set(User::lastName).to("Doe")
-     *     .process(u -> {
-     *         u.setFullName(u.getFirstName() + " " + u.getLastName());
-     *         u.setActive(true);
-     *         u.setCreatedAt(LocalDateTime.now());
-     *     })
-     *     .create();
-     * </pre>
-     *
-     * <p><b>Processing Order:</b></p>
-     * <p>
-     * Processing steps are applied in the exact order they are added:
-     * </p>
-     * <ol>
-     * <li>Object is created with all configured property values</li>
-     * <li>First processing step is applied</li>
-     * <li>Second processing step is applied (if any)</li>
-     * <li>Additional processing steps are applied in sequence</li>
-     * <li>Final processed object is returned</li>
-     * </ol>
-     *
-     * @param processor a consumer function that accepts the created object and
-     *                  applies custom processing logic to it
-     * @return the current context to enable method chaining
-     * @throws IllegalArgumentException if {@code processor} is {@code null}
-     * @see Designer#create()
-     */
-    public Context process(Consumer<T> processor) {
-        if (processor == null) {
-            throw new IllegalArgumentException("The argument 'processor' is null.");
-        }
-
-        this.processors.add(processor);
-        return context();
     }
 
     /**
