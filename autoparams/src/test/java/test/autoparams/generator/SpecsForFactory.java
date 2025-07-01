@@ -112,4 +112,28 @@ public class SpecsForFactory {
 
         assertThat(actual).isNotEqualTo(fixedValue);
     }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 0, 1, 2, 5, 10 })
+    void sut_returns_list_with_specified_count(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThat(actual).hasSize(count);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { -1, -5, -10 })
+    void sut_throws_exception_when_count_is_negative(int count, Factory<UUID> sut) {
+        assertThatThrownBy(() -> sut.get(count))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'count' must not be less than 0.");
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 1, 2, 5, 10 })
+    void sut_returns_list_with_unique_instances(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThat(actual).doesNotHaveDuplicates();
+    }
 }

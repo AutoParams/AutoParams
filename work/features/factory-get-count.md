@@ -12,8 +12,14 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 
 ## Test Scenarios
 
-- [ ] sut returns list with specified count (use `@ParameterizedTest` with values including 0)
-- [ ] sut throws exception when count is negative
-- [ ] sut returns list with unique instances
+- [x] sut returns list with specified count (use `@ParameterizedTest` with values including 0)
+- [x] sut throws exception when count is negative
+- [x] sut returns list with unique instances
 
 ## Implementation History
+
+- 2025-07-01: Added `get(int count)` method signature to Factory class
+- 2025-07-01: Implemented test scenario for returning list with specified count (including 0)
+- 2025-07-01: Implemented test scenario for throwing exception when count is negative
+- 2025-07-01: Implemented test scenario for returning list with unique instances
+- 2025-07-01: All test scenarios completed successfully
