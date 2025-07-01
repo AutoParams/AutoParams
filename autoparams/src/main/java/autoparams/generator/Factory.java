@@ -345,6 +345,13 @@ public final class Factory<T> implements Supplier<T> {
         return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
+    public List<T> get(int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("The argument 'count' must not be less than 0.");
+        }
+        return stream().limit(count).collect(toList());
+    }
+
     /**
      * Returns a sequential {@link Stream} of instances of the type managed by
      * this factory.
@@ -472,5 +479,4 @@ public final class Factory<T> implements Supplier<T> {
     public void customize(Customizer... customizers) {
         context.customize(customizers);
     }
-
 }
