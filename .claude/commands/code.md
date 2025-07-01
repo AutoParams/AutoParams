@@ -29,7 +29,8 @@ Implement features using TDD methodology - /code feature: <feature>
 3. **Validate Scenario**: Ensure scenario follows CLAUDE.md guidelines
 4. **Follow TDD Workflow**: Execute CLAUDE.md TDD workflow steps 2-11 precisely
 5. **Mark Complete**: Mark scenario as `- [x]` when build succeeds
-6. **Continue**: Return to step 2 until all scenarios complete
+6. **Log Progress**: Add or update Implementation History section with major events chronologically
+7. **Continue**: Return to step 2 until all scenarios complete
 
 ## Error Handling
 - **Test Failure Limit**: Stop after 3 attempts and request review (per CLAUDE.md TDD workflow)
