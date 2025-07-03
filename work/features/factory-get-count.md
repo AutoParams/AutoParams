@@ -15,6 +15,7 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - [x] sut returns list with specified count (use `@ParameterizedTest` with values including 0)
 - [x] sut throws exception when count is negative
 - [x] sut returns list with unique instances
+- [ ] sut returns immutable list
 
 ## Implementation History
 
