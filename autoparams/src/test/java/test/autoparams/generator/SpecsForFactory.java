@@ -136,4 +136,13 @@ public class SpecsForFactory {
 
         assertThat(actual).doesNotHaveDuplicates();
     }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 0, 1, 2, 5 })
+    void sut_returns_immutable_list(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThatThrownBy(() -> actual.add(UUID.randomUUID()))
+            .isInstanceOf(UnsupportedOperationException.class);
+    }
 }

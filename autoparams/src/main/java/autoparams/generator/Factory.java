@@ -349,7 +349,7 @@ public final class Factory<T> implements Supplier<T> {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0.");
         }
-        return stream().limit(count).collect(toList());
+        return unmodifiableList(stream().limit(count).collect(toList()));
     }
 
     /**

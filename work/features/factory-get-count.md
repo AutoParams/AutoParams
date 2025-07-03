@@ -15,7 +15,7 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - [x] sut returns list with specified count (use `@ParameterizedTest` with values including 0)
 - [x] sut throws exception when count is negative
 - [x] sut returns list with unique instances
-- [ ] sut returns immutable list
+- [x] sut returns immutable list
 
 ## Implementation History
 
@@ -24,3 +24,6 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - 2025-07-01: Implemented test scenario for throwing exception when count is negative
 - 2025-07-01: Implemented test scenario for returning list with unique instances
 - 2025-07-01: All test scenarios completed successfully
+- 2025-07-03: Added test scenario for returning immutable list
+- 2025-07-03: Modified `get(int count)` method to return unmodifiable list
+- 2025-07-03: All test scenarios completed successfully
