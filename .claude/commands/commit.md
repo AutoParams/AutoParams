@@ -1,15 +1,14 @@
-Create commits following project message guidelines - /commit [topic: <topic>] [short] [build]
+Create commits following project message guidelines - /commit [topic: <topic>] [short]
 
 ## Syntax
 
 ```
-/commit [topic: <topic>] [short] [build]
+/commit [topic: <topic>] [short]
 ```
 
 **Parameters:**
 - `topic` (optional): A specific topic or area of focus for the commit. If not provided, the commit will be general.
 - `short` (optional): Creates the shortest possible commit message while following guidelines
-- `build` (optional): Runs the build command first before committing when there are staged changes
 
 ## Examples
 
@@ -17,8 +16,7 @@ Create commits following project message guidelines - /commit [topic: <topic>] [
 /commit
 /commit topic: documentation
 /commit short
-/commit build
-/commit topic: Factory build
+/commit topic: Factory
 ```
 
 ## Pre-Commit Validation
@@ -29,20 +27,18 @@ Create commits following project message guidelines - /commit [topic: <topic>] [
 
 ## Execution Workflow
 1. **Analyze Staged Changes Only**: Execute `git diff --staged` to examine ONLY what is already staged - do not stage additional files
-2. **Pre-Build Check**: If `build` parameter is specified and there are staged changes, execute `/build` command first
-3. **Categorize Changes**: Identify the nature of changes (new feature, enhancement, bug fix, refactoring, etc.)
-4. **Check Sensitive Data**: Scan for any secrets, keys, or sensitive information in staged changes
-5. **Draft Message**: Write commit message following CLAUDE.md commit guidelines (including no branding/advertising)
+2. **Categorize Changes**: Identify the nature of changes (new feature, enhancement, bug fix, refactoring, etc.)
+3. **Check Sensitive Data**: Scan for any secrets, keys, or sensitive information in staged changes
+4. **Draft Message**: Write commit message following CLAUDE.md commit guidelines (including no branding/advertising)
    - **If `short` parameter**: Create the most concise message possible while maintaining clarity
    - **Otherwise**: Write standard descriptive commit message
-6. **Create Commit**: Execute commit using heredoc format for proper message formatting
-7. **Validate**: Run `work/scripts/check-commit-message-rule.sh` as per CLAUDE.md guidelines
-8. **Fix if Failed**: Use `git commit --amend` with heredoc format if validation fails
-9. **Repeat**: Continue validation cycle until passes
+5. **Create Commit**: Execute commit using heredoc format for proper message formatting
+6. **Validate**: Run `work/scripts/check-commit-message-rule.sh` as per CLAUDE.md guidelines
+7. **Fix if Failed**: Use `git commit --amend` with heredoc format if validation fails
+8. **Repeat**: Continue validation cycle until passes
 
 ## Error Handling
 - **No Staged Changes**: Abort if no changes are staged for commit
-- **Build Failures**: If `build` parameter is used and build fails, abort commit
 - **Validation Failures**: Never leave commit with message that fails validation (per CLAUDE.md)
 - **Sensitive Data**: Abort commit if sensitive information detected
 - **Topic Mismatch**: Warn if staged changes don't align with specified topic
@@ -52,8 +48,6 @@ Create commits following project message guidelines - /commit [topic: <topic>] [
 - Files must be staged separately using `git add` before running `/commit`
 - The command will NOT automatically stage unstaged files
 - If additional files need to be committed, stage them first and run `/commit` again
-- When `build` parameter is used, the build must succeed before proceeding with commit
-- The `build` parameter helps ensure code quality by running tests and checks before committing
 
 ## Success Criteria
 - Commit message passes validation and follows all CLAUDE.md commit guidelines
