@@ -73,7 +73,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 12. `/commit` command works only with already staged changes - never stage additional files during commit execution.
 13. Ensure all intended changes are staged before invoking `/commit` command.
 14. Use separate git commands to stage files before committing.
-15. Always validate commits using `work/scripts/check-commit-message-rule.sh` and fix until validation passes.
+15. Always validate commits using `work/scripts/check-commit-message-rules.sh` and fix until validation passes.
 
 ### Build Standards
 - Execute `./gradlew build` with 10-minute Bash tool timeout (600000ms) for comprehensive builds

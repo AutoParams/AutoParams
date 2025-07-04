@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Check if a commit message follows the 50/72 rule
-# 50/72 rule: Subject line ≤50 characters, body lines ≤72 characters
-# Usage: ./check-commit-message-rule.sh [commit-hash]
+# Check if a commit message follows project rules
+# Rules: 50/72 formatting, no advertisements/branding
+# Usage: ./check-commit-message-rules.sh [commit-hash]
 # If no commit-hash is provided, checks the latest commit
 
 # Determine which commit to check
@@ -53,10 +53,19 @@ else
     echo "[INFO] No body content to check"
 fi
 
-if [ $exit_code -eq 0 ]; then
-    echo "[PASS] Commit message follows 50/72 rule"
+# Check for advertisements, branding, or promotional content
+echo "Checking for advertisements and branding..."
+if echo "$commit_message" | grep -qi "generated with\|claude code\|anthropic\|co-authored-by.*claude\|🤖"; then
+    echo "[FAIL] Commit message contains advertisements, branding, or promotional content"
+    exit_code=1
 else
-    echo "[FAIL] Commit message violates 50/72 rule"
+    echo "[PASS] No advertisements or branding detected"
+fi
+
+if [ $exit_code -eq 0 ]; then
+    echo "[PASS] Commit message follows all rules"
+else
+    echo "[FAIL] Commit message violates project rules"
 fi
 
 exit $exit_code

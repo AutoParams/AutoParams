@@ -26,7 +26,7 @@ Follow all rules below throughout this process.
 1. Review staged changes with `git diff --staged`.
 2. Draft a commit message following the above guidelines.
 3. Create the commit with the drafted message.
-4. Immediately validate the commit message using `work/scripts/check-commit-message-rule.sh`.
+4. Immediately validate the commit message using `work/scripts/check-commit-message-rules.sh`.
 5. If validation fails:
    - Amend the commit message with `git commit --amend -m "<new commit message>"`
    - Fix the issues (subject/body length, etc.)
