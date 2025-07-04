@@ -4,6 +4,7 @@
 
 ```java
 public List<T> get(int count);
+public List<T> get(int count, Customizer... customizers);
 ```
 
 ## Description
@@ -16,6 +17,10 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - [x] get with count throws exception when count is negative
 - [x] get with count returns list with unique instances
 - [x] get with count returns immutable list
+- [ ] get with count and customizers applies customizers to all generated instances
+- [ ] get with count and customizers throws exception when count is negative
+- [ ] get with count and customizers returns list with specified count
+- [ ] get with count and customizers returns list with unique instances
 
 ## Implementation History
 
