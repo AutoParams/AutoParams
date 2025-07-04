@@ -3,7 +3,7 @@
 ## Method Signature
 
 ```java
-public List<T> get(int count)
+public List<T> get(int count);
 ```
 
 ## Description
@@ -12,10 +12,10 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 
 ## Test Scenarios
 
-- [x] sut returns list with specified count (use `@ParameterizedTest` with values including 0)
-- [x] sut throws exception when count is negative
-- [x] sut returns list with unique instances
-- [x] sut returns immutable list
+- [x] get with count returns list with specified count (use `@ParameterizedTest` with values including 0)
+- [x] get with count throws exception when count is negative
+- [x] get with count returns list with unique instances
+- [x] get with count returns immutable list
 
 ## Implementation History
 
