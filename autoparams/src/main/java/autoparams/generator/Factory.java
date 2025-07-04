@@ -352,6 +352,13 @@ public final class Factory<T> implements Supplier<T> {
         return unmodifiableList(stream().limit(count).collect(toList()));
     }
 
+    public List<T> get(int count, Customizer... customizers) {
+        if (count < 0) {
+            throw new IllegalArgumentException("The argument 'count' must not be less than 0.");
+        }
+        return stream(customizers).limit(count).collect(toList());
+    }
+
     /**
      * Returns a sequential {@link Stream} of instances of the type managed by
      * this factory.
