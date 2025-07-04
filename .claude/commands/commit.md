@@ -33,7 +33,7 @@ Create commits following project message guidelines - /commit [topic: <topic>] [
    - **If `short` parameter**: Create the most concise message possible while maintaining clarity
    - **Otherwise**: Write standard descriptive commit message
 5. **Create Commit**: Execute commit using heredoc format for proper message formatting
-6. **Validate**: Run `work/scripts/check-commit-message-rule.sh` as per CLAUDE.md guidelines
+6. **Validate**: Run `work/scripts/check-commit-message-rules.sh` as per CLAUDE.md guidelines
 7. **Fix if Failed**: Use `git commit --amend` with heredoc format if validation fails
 8. **Repeat**: Continue validation cycle until passes
 
