@@ -1,15 +1,18 @@
 package test.autoparams.generator;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import autoparams.AutoParams;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.ValueAutoSource;
 import autoparams.generator.Factory;
 import autoparams.generator.ObjectGeneratorBase;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.Product;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
@@ -49,6 +52,39 @@ public class SpecsForFactory {
 
         assertThat(product.id()).isNotEqualTo(id);
         assertThat(product.stockQuantity()).isNotEqualTo(stockQuantity);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 0, 1, 2, 5, 10 })
+    void get_with_count_returns_list_with_specified_count(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThat(actual).hasSize(count);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { -1, -5, -10 })
+    void get_with_count_throws_exception_when_count_is_negative(int count, Factory<UUID> sut) {
+        assertThatThrownBy(() -> sut.get(count))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'count' must not be less than 0.");
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 1, 2, 5, 10 })
+    void get_with_count_returns_list_with_unique_instances(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThat(actual).doesNotHaveDuplicates();
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 0, 1, 2, 5 })
+    void get_with_count_returns_immutable_list(int count, Factory<UUID> sut) {
+        List<UUID> actual = sut.get(count);
+
+        assertThatThrownBy(() -> actual.add(UUID.randomUUID()))
+            .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
