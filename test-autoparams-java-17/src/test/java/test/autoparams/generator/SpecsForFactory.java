@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.Product;
 
-import static autoparams.customization.dsl.ArgumentCustomizationDsl.freezeArgument;
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,8 +29,8 @@ public class SpecsForFactory {
         int stockQuantity
     ) {
         Product product = sut.get(
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         );
         assertThat(product.id()).isEqualTo(id);
         assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
@@ -44,8 +44,8 @@ public class SpecsForFactory {
         int stockQuantity
     ) {
         sut.get(
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         );
 
         Product product = sut.get();
@@ -89,14 +89,69 @@ public class SpecsForFactory {
 
     @Test
     @AutoParams
+    void get_with_count_and_customizers_applies_customizers_to_all_generated_instances(
+        Factory<Product> sut,
+        UUID id,
+        int stockQuantity,
+        int count
+    ) {
+        List<Product> actual = sut.get(
+            count,
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
+        );
+
+        assertThat(actual).hasSize(count);
+        for (Product product : actual) {
+            assertThat(product.id()).isEqualTo(id);
+            assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { -1, -5, -10 })
+    void get_with_count_and_customizers_throws_exception_when_count_is_negative(
+        int count,
+        Factory<Product> sut,
+        UUID id
+    ) {
+        assertThatThrownBy(() -> sut.get(count, set(Product::id).to(id)))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'count' must not be less than 0.");
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 0, 1, 2, 5, 10 })
+    void get_with_count_and_customizers_returns_list_with_specified_count(
+        int count,
+        Factory<Product> sut,
+        UUID id
+    ) {
+        List<Product> actual = sut.get(count, set(Product::id).to(id));
+        assertThat(actual).hasSize(count);
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(ints = { 1, 2, 5, 10 })
+    void get_with_count_and_customizers_returns_list_with_unique_instances(
+        int count,
+        Factory<Product> sut,
+        UUID id
+    ) {
+        List<Product> actual = sut.get(count, set(Product::id).to(id));
+        assertThat(actual).doesNotHaveDuplicates();
+    }
+
+    @Test
+    @AutoParams
     void stream_applies_customizers_correctly(
         Factory<Product> sut,
         UUID id,
         int stockQuantity
     ) {
         Product product = sut.stream(
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         ).findFirst().orElseThrow();
         assertThat(product.id()).isEqualTo(id);
         assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
@@ -110,8 +165,8 @@ public class SpecsForFactory {
         int stockQuantity
     ) {
         sut.stream(
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         ).findFirst().orElseThrow();
 
         Product product = sut.stream().findFirst().orElseThrow();
@@ -129,8 +184,8 @@ public class SpecsForFactory {
     ) {
         Product product = sut.getRange(
             1,
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         ).get(0);
         assertThat(product.id()).isEqualTo(id);
         assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
@@ -145,8 +200,8 @@ public class SpecsForFactory {
     ) {
         sut.getRange(
             1,
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         );
 
         Product product = sut.getRange(1).get(0);
@@ -163,8 +218,8 @@ public class SpecsForFactory {
         int stockQuantity
     ) {
         sut.customize(
-            freezeArgument("id").to(id),
-            freezeArgument("stockQuantity").to(stockQuantity)
+            set(Product::id).to(id),
+            set(Product::stockQuantity).to(stockQuantity)
         );
 
         Product product = sut.get();
@@ -187,7 +242,7 @@ public class SpecsForFactory {
         UUID id
     ) {
         Factory<Product> factory = Factory.create(context, Product.class);
-        context.customize(freezeArgument("id").to(id));
+        context.customize(set(Product::id).to(id));
         Product product = factory.get();
         assertThat(product).isNotNull();
         assertThat(product.id()).isEqualTo(id);
@@ -210,7 +265,7 @@ public class SpecsForFactory {
             context,
             new TypeReference<>() { }
         );
-        context.customize(freezeArgument("id").to(id));
+        context.customize(set(Product::id).to(id));
         Product product = factory.get();
         assertThat(product).isNotNull();
         assertThat(product.id()).isEqualTo(id);

@@ -17,10 +17,10 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - [x] get with count throws exception when count is negative
 - [x] get with count returns list with unique instances
 - [x] get with count returns immutable list
-- [ ] get with count and customizers applies customizers to all generated instances
-- [ ] get with count and customizers throws exception when count is negative
-- [ ] get with count and customizers returns list with specified count
-- [ ] get with count and customizers returns list with unique instances
+- [x] get with count and customizers applies customizers to all generated instances
+- [x] get with count and customizers throws exception when count is negative
+- [x] get with count and customizers returns list with specified count
+- [x] get with count and customizers returns list with unique instances
 
 ## Implementation History
 
@@ -32,3 +32,9 @@ The `get(int count)` method in the Factory class is designed to retrieve a speci
 - 2025-07-03: Added test scenario for returning immutable list
 - 2025-07-03: Modified `get(int count)` method to return unmodifiable list
 - 2025-07-03: All test scenarios completed successfully
+- 2025-07-04: Added `get(int count, Customizer...)` method signature to Factory class
+- 2025-07-04: Implemented test scenario for applying customizers to all generated instances
+- 2025-07-04: Implemented test scenario for throwing exception when count is negative with customizers
+- 2025-07-04: Implemented test scenario for returning list with specified count with customizers
+- 2025-07-04: Implemented test scenario for returning list with unique instances with customizers
+- 2025-07-04: All test scenarios for get(int count, Customizer...) method completed successfully
