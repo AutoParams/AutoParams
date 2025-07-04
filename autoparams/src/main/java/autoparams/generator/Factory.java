@@ -345,6 +345,34 @@ public final class Factory<T> implements Supplier<T> {
         return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
+    /**
+     * Returns an unmodifiable {@link List} containing a specified number of
+     * instances of the type managed by this factory.
+     * <p>
+     * This method generates a list of {@code count} objects of type {@code T}
+     * using the configured {@link ResolutionContext}. Each instance in the
+     * returned list is unique and generated independently.
+     * </p>
+     *
+     * <p><b>Examples:</b></p>
+     * <pre>
+     * Factory&lt;String&gt; factory = Factory.create(String.class);
+     *
+     * // Generate 3 String instances
+     * List&lt;String&gt; strings = factory.get(3);
+     * assertEquals(3, strings.size());
+     *
+     * // Generate empty list
+     * List&lt;String&gt; empty = factory.get(0);
+     * assertTrue(empty.isEmpty());
+     * </pre>
+     *
+     * @param count the number of instances to generate; must not be negative
+     * @return an unmodifiable {@link List} containing {@code count} instances
+     *         of type {@code T}
+     * @throws IllegalArgumentException if {@code count} is negative
+     * @see #get(int, Customizer...)
+     */
     public List<T> get(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0.");
@@ -352,6 +380,57 @@ public final class Factory<T> implements Supplier<T> {
         return unmodifiableList(stream().limit(count).collect(toList()));
     }
 
+    /**
+     * Returns a {@link List} containing a specified number of instances of the
+     * type managed by this factory, applying the given customizers.
+     * <p>
+     * This method generates a list of {@code count} objects of type {@code T}
+     * using the configured {@link ResolutionContext}, with the specified
+     * {@link Customizer} instances applied to each generated object. Each
+     * instance in the returned list is unique and generated independently.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> The provided customizers only affect the generated instances
+     * in the list and do not modify the state of this {@link Factory} itself.
+     * </p>
+     *
+     * <p><b>Examples:</b></p>
+     * <pre>
+     * import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
+     *
+     * &#64;AllArgsConstructor
+     * &#64;Getter
+     * public class Product {
+     *     private final UUID id;
+     *     private final String name;
+     *     private final int price;
+     * }
+     * </pre>
+     *
+     * <pre>
+     * Factory&lt;Product&gt; factory = Factory.create(Product.class);
+     *
+     * // Generate 3 Product instances with fixed price
+     * List&lt;Product&gt; products = factory.get(3,
+     *     set(Product::getPrice).to(100)
+     * );
+     *
+     * assertEquals(3, products.size());
+     * assertEquals(100, products.get(0).getPrice());
+     * assertEquals(100, products.get(1).getPrice());
+     * assertEquals(100, products.get(2).getPrice());
+     * // id and name are automatically generated and unique for each instance
+     * </pre>
+     *
+     * @param count       the number of instances to generate; must not be negative
+     * @param customizers customizers to apply to each generated instance
+     *                    (optional; does not affect this Factory)
+     * @return a {@link List} containing {@code count} instances of type {@code T}
+     *         with the customizations applied
+     * @throws IllegalArgumentException if {@code count} is negative
+     * @see #get(int)
+     */
     public List<T> get(int count, Customizer... customizers) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0.");
