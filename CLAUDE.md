@@ -26,6 +26,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 - Always add a final newline when creating a new code file.
 - Set the Bash tool timeout to 10 minutes (600000ms) when running Gradle commands.
 - Do not use 'clazz' as a variable name for values of type `Class<?>`.
+- Use snake_case for test method names.
 
 ### Test-Driven Development (TDD)
 
