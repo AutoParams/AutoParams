@@ -27,10 +27,11 @@ Implement features using TDD methodology - /code feature: <feature>
 1. **Initialize**: Prepare test scenario list following CLAUDE.md test scenario guidelines
 2. **Select Scenario**: Choose one incomplete test scenario from the pre-prepared list
 3. **Validate Scenario**: Ensure scenario follows CLAUDE.md guidelines
-4. **Follow TDD Workflow**: Execute CLAUDE.md TDD workflow steps 2-11 precisely
-5. **Mark Complete**: Mark scenario as `- [x]` when build succeeds
-6. **Log Progress**: Add or update Implementation History section with major events chronologically
-7. **Continue**: Return to step 2 until all scenarios complete
+4. **Check Review Flag**: If scenario ends with `?`, request user review after writing test but before implementation
+5. **Follow TDD Workflow**: Execute CLAUDE.md TDD workflow steps 2-11 precisely
+6. **Mark Complete**: Mark scenario as `- [x]` when build succeeds
+7. **Log Progress**: Add or update Implementation History section with major events chronologically
+8. **Continue**: Return to step 2 until all scenarios complete
 
 ## Error Handling
 - **Test Failure Limit**: Stop after 3 attempts and request review (per CLAUDE.md TDD workflow)
