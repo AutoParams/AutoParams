@@ -7,8 +7,40 @@ import java.lang.reflect.Method;
 
 import autoparams.customization.dsl.FunctionDelegate;
 
+/**
+ * Provides property reflection functionality for function delegates.
+ * <p>
+ * This is code for internal implementation purposes and is not safe for
+ * external use because its interface and behavior can change at any time.
+ * </p>
+ *
+ * @see FunctionDelegate
+ */
 public class PropertyReflector {
 
+    private PropertyReflector() {
+    }
+
+    /**
+     * Retrieves a {@link PropertyDescriptor} from a function delegate
+     * representing a getter method.
+     * <p>
+     * This method extracts property information from function delegates that
+     * reference getter methods, supporting both Java and Kotlin implementations.
+     * </p>
+     * <p>
+     * This is code for internal implementation purposes and is not safe for
+     * external use because its interface and behavior can change at any time.
+     * </p>
+     *
+     * @param <T> the type containing the getter method
+     * @param <R> the return type of the getter method
+     * @param getterDelegate a function delegate representing a getter method
+     * @return a {@link PropertyDescriptor} for the property
+     * @throws RuntimeException if property descriptor creation fails
+     * @see PropertyDescriptor
+     * @see FunctionDelegate
+     */
     public static <T, R> PropertyDescriptor getProperty(
         FunctionDelegate<T, R> getterDelegate
     ) {
