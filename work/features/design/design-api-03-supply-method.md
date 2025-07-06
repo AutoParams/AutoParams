@@ -25,10 +25,10 @@ The `supply` method configures a property value using a supplier, allowing for l
 
 ## Test Scenarios
 
-- [ ] supply configures property value using supplier
-- [ ] supply calls supplier only when instantiate is called
-- [ ] supply throws exception when propertyGetter is null
-- [ ] supply throws exception when supplier is null
+- [x] supply configures property value using supplier
+- [x] supply calls supplier only when instantiate is called
+- [x] supply throws exception when propertyGetter is null
+- [x] supply throws exception when supplier is null
 
 ## Implementation Guide
 
@@ -51,3 +51,8 @@ This method depends on:
 - `instantiate` method (where the supplier is actually called)
 
 ## Implementation History
+
+- **2025-07-06**: Added `supply` method signature to `Design` class
+- **2025-07-06**: Implemented supplier-based property configuration using `PropertyReflector` and custom `Customizer`
+- **2025-07-06**: Added comprehensive test coverage for all scenarios including lazy evaluation verification
+- **2025-07-06**: All test scenarios completed successfully
