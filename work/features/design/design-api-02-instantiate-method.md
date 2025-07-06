@@ -25,7 +25,7 @@ T instantiate();
 
 ## Test Scenarios
 
-- [ ] instantiate creates instance of configured type
+- [x] instantiate creates instance of configured type
 
 ## Implementation Guide
 
@@ -45,3 +45,8 @@ This method depends on:
 - `ResolutionContext` for object resolution
 
 ## Implementation History
+
+- **2025-07-06**: Implemented `instantiate` method using ResolutionContext
+  - Added method to create instances of configured type T
+  - Uses ResolutionContext.resolve() for object creation
+  - All test scenarios completed and passing

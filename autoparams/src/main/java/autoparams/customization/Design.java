@@ -1,5 +1,7 @@
 package autoparams.customization;
 
+import autoparams.ResolutionContext;
+
 public class Design<T> {
 
     private final Class<T> type;
@@ -13,5 +15,10 @@ public class Design<T> {
             throw new IllegalArgumentException("The argument 'type' must not be null");
         }
         return new Design<>(type);
+    }
+
+    public T instantiate() {
+        ResolutionContext context = new ResolutionContext();
+        return context.resolve(type);
     }
 }

@@ -22,4 +22,14 @@ class SpecsForDesign {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'type' must not be null");
     }
+
+    @Test
+    void instantiate_creates_instance_of_configured_type() {
+        Design<Product> design = Design.of(Product.class);
+
+        Product product = design.instantiate();
+
+        assertThat(product).isNotNull();
+        assertThat(product).isInstanceOf(Product.class);
+    }
 }
