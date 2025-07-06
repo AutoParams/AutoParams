@@ -45,7 +45,7 @@ AutoParams is a Java/Kotlin library for automatic parameter generation in unit t
 
 #### TDD Implementation Workflow
 1. Select one incomplete test scenario.
-2. If the minimum method signature required to implement the selected test scenario is not defined, define an empty method or a method that returns a default value. At this stage, only define the method signature without comments or implementation.
+2. If the minimum method signature required to implement the selected test scenario is not defined, add only the method(s) necessary for that specific scenario. Define an empty method or a method that returns a default value as needed. Do not add methods for other scenarios at this stage, and do not include comments or implementation.
 3. If you defined the method signature in step 2, request a review. Do not write the test at this stage.
 4. Convert the selected test scenario from step 1 into a concrete, executable test and request a review.
 5. Run the test and check the result.
