@@ -19,7 +19,7 @@ It replaces the `GetterDelegate` class and `ParameterNameInferencer` class.
 
 ### Todos
 
-- [ ] 1. Implement `getProperty` by referring to the `GetterDelegate` and `ParameterNameInferencer` implementations
-- [ ] 2. Find all code where `GetterDelegate` and `ParameterNameInferencer` is used and replace it with `PropertyReflector`
-- [ ] 3. Run `./gradlew build` to check if the build succeeds
-- [ ] 4. Remove `GetterDelegate` and `ParameterNameInferencer`
+- [x] 1. Implement `getProperty` by referring to the `GetterDelegate` and `ParameterNameInferencer` implementations
+- [x] 2. Find all code where `GetterDelegate` and `ParameterNameInferencer` is used and replace it with `PropertyReflector`
+- [x] 3. Run `./gradlew build` to check if the build succeeds
+- [x] 4. Remove `GetterDelegate` and `ParameterNameInferencer`
