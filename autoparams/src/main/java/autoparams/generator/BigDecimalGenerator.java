@@ -1,7 +1,6 @@
 package autoparams.generator;
 
 import java.math.BigDecimal;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import autoparams.ObjectQuery;
@@ -14,7 +13,7 @@ final class BigDecimalGenerator extends ObjectGeneratorBase<BigDecimal> {
         ObjectQuery query,
         ResolutionContext context
     ) {
-        Random random = ThreadLocalRandom.current();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
         int value = random.nextInt(getOrigin(), getBound());
         return new BigDecimal(value);
     }
