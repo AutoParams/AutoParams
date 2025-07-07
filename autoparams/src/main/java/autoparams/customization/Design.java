@@ -1,6 +1,5 @@
 package autoparams.customization;
 
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -11,8 +10,8 @@ import autoparams.ResolutionContext;
 import autoparams.customization.dsl.FunctionDelegate;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.internal.reflect.Property;
 
-import static autoparams.internal.reflect.PropertyReflector.getProperty;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
@@ -51,9 +50,9 @@ public class Design<T> {
             throw new IllegalArgumentException("The argument 'supplier' must not be null");
         }
 
-        PropertyDescriptor property = getProperty(propertyGetter);
+        Property<T, P> property = Property.parse(propertyGetter);
         List<Customizer> nextCustomizers = new ArrayList<>(customizers);
-        nextCustomizers.add(new ArgumentSupplier(property, supplier));
+        nextCustomizers.add(new ArgumentSupplier<>(property, supplier));
         return new Design<>(type, unmodifiableList(nextCustomizers));
     }
 
@@ -67,15 +66,12 @@ public class Design<T> {
         return context.resolve(type);
     }
 
-    private static class ArgumentSupplier implements ObjectGenerator {
+    private static class ArgumentSupplier<T, P> implements ObjectGenerator {
 
-        private final PropertyDescriptor property;
-        private final Supplier<?> supplier;
+        private final Property<T, P> property;
+        private final Supplier<P> supplier;
 
-        public ArgumentSupplier(
-            PropertyDescriptor property,
-            Supplier<?> supplier
-        ) {
+        public ArgumentSupplier(Property<T, P> property, Supplier<P> supplier) {
             this.property = property;
             this.supplier = supplier;
         }
@@ -102,7 +98,7 @@ public class Design<T> {
         }
 
         private boolean matchesParameterType(ParameterQuery query) {
-            return property.getPropertyType().equals(query.getType());
+            return property.getType().equals(query.getType());
         }
 
         private boolean matchesParameterName(ParameterQuery query) {
@@ -110,7 +106,7 @@ public class Design<T> {
         }
 
         private boolean matchesDeclaringClass(ParameterQuery query) {
-            return property.getReadMethod().getDeclaringClass().equals(
+            return property.getDeclaringClass().equals(
                 query
                     .getParameter()
                     .getDeclaringExecutable()

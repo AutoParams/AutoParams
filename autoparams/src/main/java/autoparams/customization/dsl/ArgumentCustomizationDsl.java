@@ -1,13 +1,11 @@
 package autoparams.customization.dsl;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
+import autoparams.internal.reflect.Property;
 import autoparams.type.TypeReference;
-
-import static autoparams.internal.reflect.PropertyReflector.getProperty;
 
 /**
  * A DSL(domain-specific language) for customizing parameter resolution in
@@ -289,13 +287,13 @@ public final class ArgumentCustomizationDsl {
     public static <T, P> FreezeArgument set(
         FunctionDelegate<T, P> getterDelegate
     ) {
-        PropertyDescriptor property = getProperty(getterDelegate);
+        Property<T, P> property = Property.parse(getterDelegate);
         return new FreezeArgument(
-            new ParameterTypeMatches(property.getPropertyType())
+            new ParameterTypeMatches(property.getType())
                 .and(new ParameterNameEquals(property.getName()))
                 .and(
                     new DeclaringClassEquals(
-                        property.getReadMethod().getDeclaringClass()
+                        property.getDeclaringClass()
                     )
                 )
         );
