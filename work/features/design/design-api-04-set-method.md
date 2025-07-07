@@ -25,10 +25,10 @@ The `set` method configures a property value for the instantiated object using a
 
 ## Test Scenarios
 
-- [ ] set configures property value for instantiated object
-- [ ] set allows chaining multiple property configurations
-- [ ] set throws exception when propertyGetter is null
-- [ ] set returns new Design instance
+- [x] set configures property value for instantiated object
+- [x] set allows chaining multiple property configurations
+- [x] set throws exception when propertyGetter is null
+- [x] set returns new Design instance
 
 ## Implementation Guide
 
@@ -49,3 +49,12 @@ This method depends on:
 - `supply` method (to supply the property value)
 
 ## Implementation History
+
+- **2025-07-07**: Implemented `set` method in `Design` class using TDD methodology
+  - Added `set` method that delegates to `supply` method with lambda supplier
+  - Implemented all test scenarios in `SpecsForDesign` class
+  - All tests pass successfully
+  - Method signature: `<P> Design<T> set(FunctionDelegate<T, P> propertyGetter, P value)`
+  - Method enables type-safe property configuration and supports method chaining
+  - Returns new Design instance (immutable design pattern)
+  - Throws IllegalArgumentException for null propertyGetter (handled by supply method)

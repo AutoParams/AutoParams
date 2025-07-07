@@ -57,6 +57,10 @@ public class Design<T> {
         return new Design<>(type, unmodifiableList(nextCustomizers));
     }
 
+    public <P> Design<T> set(FunctionDelegate<T, P> propertyGetter, P value) {
+        return supply(propertyGetter, () -> value);
+    }
+
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers.toArray(new Customizer[0]));

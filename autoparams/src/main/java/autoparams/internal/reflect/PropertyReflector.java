@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 
 import autoparams.customization.dsl.FunctionDelegate;
 
+import static java.lang.Character.isUpperCase;
+import static java.lang.Character.toLowerCase;
+
 /**
  * Provides property reflection functionality for function delegates.
  * <p>
@@ -140,17 +143,17 @@ public class PropertyReflector {
     private static boolean hasIsPrefix(String methodName) {
         return methodName.startsWith("is")
             && methodName.length() > 2
-            && Character.isUpperCase(methodName.charAt(2));
+            && isUpperCase(methodName.charAt(2));
     }
 
     private static boolean hasGetPrefix(String methodName) {
         return methodName.startsWith("get")
             && methodName.length() > 3
-            && Character.isUpperCase(methodName.charAt(3));
+            && isUpperCase(methodName.charAt(3));
     }
 
     private static String decapitalizeHead(String s) {
         char head = s.charAt(0);
-        return Character.isUpperCase(head) ? Character.toLowerCase(head) + s.substring(1) : s;
+        return isUpperCase(head) ? toLowerCase(head) + s.substring(1) : s;
     }
 }

@@ -78,4 +78,45 @@ class SpecsForDesign {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'supplier' must not be null");
     }
+
+    @Test
+    void set_configures_property_value_for_instantiated_object() {
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Test Product");
+
+        Product product = design.instantiate();
+
+        assertThat(product.name()).isEqualTo("Test Product");
+    }
+
+    @Test
+    void set_allows_chaining_multiple_property_configurations() {
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Test Product")
+            .set(Product::imageUri, "https://example.com/product.jpg");
+
+        Product product = design.instantiate();
+
+        assertThat(product.name()).isEqualTo("Test Product");
+        assertThat(product.imageUri()).isEqualTo("https://example.com/product.jpg");
+    }
+
+    @Test
+    void set_throws_exception_when_propertyGetter_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.set(null, "Test Product"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'propertyGetter' must not be null");
+    }
+
+    @Test
+    void set_returns_new_Design_instance() {
+        Design<Product> original = Design.of(Product.class);
+
+        Design<Product> modified = original.set(Product::name, "Test Product");
+
+        assertThat(modified).isNotSameAs(original);
+        assertThat(modified).isNotNull();
+    }
 }
