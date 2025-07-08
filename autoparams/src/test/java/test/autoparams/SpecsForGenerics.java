@@ -2,10 +2,12 @@ package test.autoparams;
 
 import java.util.UUID;
 
+import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.customization.Freeze;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,5 +57,14 @@ class SpecsForGenerics {
         Accessor<String> accessor
     ) {
         assertThat(accessor.getValue()).isSameAs(value);
+    }
+
+    @Test
+    @AutoParams
+    void sut_correctly_creates_generic_object_with_wildcard(
+        Container<? extends String> container
+    ) {
+        assertThat(container).isNotNull();
+        assertThat(container.getValue()).isInstanceOf(String.class);
     }
 }

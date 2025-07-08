@@ -3,6 +3,7 @@ package autoparams.internal.reflect;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -50,7 +51,22 @@ public final class RuntimeTypeResolver {
         return IntStream
             .range(0, parameters.length)
             .boxed()
-            .collect(toMap(i -> parameters[i], i -> arguments[i]));
+            .collect(toMap(i -> parameters[i], i -> resolveWildcardType(arguments[i])));
+    }
+
+    private static Type resolveWildcardType(Type type) {
+        if (type instanceof WildcardType) {
+            return resolveWildcardTypeBounds((WildcardType) type);
+        }
+        return type;
+    }
+
+    private static Type resolveWildcardTypeBounds(WildcardType wildcardType) {
+        Type[] upperBounds = wildcardType.getUpperBounds();
+        if (upperBounds.length > 0) {
+            return upperBounds[0];
+        }
+        return Object.class;
     }
 
     /**
@@ -65,6 +81,8 @@ public final class RuntimeTypeResolver {
             return typeArguments.get(type);
         } else if (type instanceof ParameterizedType) {
             return resolve((ParameterizedType) type);
+        } else if (type instanceof WildcardType) {
+            return resolve((WildcardType) type);
         } else {
             return type;
         }
@@ -79,5 +97,9 @@ public final class RuntimeTypeResolver {
             resolve(parameterizedType.getRawType()),
             resolve(parameterizedType.getOwnerType())
         );
+    }
+
+    private Type resolve(WildcardType wildcardType) {
+        return resolveWildcardTypeBounds(wildcardType);
     }
 }
