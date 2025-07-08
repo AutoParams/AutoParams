@@ -25,10 +25,10 @@ The `design` method configures a nested object property value using a design fun
 
 ## Test Scenarios
 
-- [ ] design configures nested object property values
-- [ ] design calls design function only when instantiate is called
-- [ ] design throws exception when propertyGetter is null
-- [ ] design throws exception when designFunction is null
+- [x] design configures nested object property values
+- [x] design calls design function only when instantiate is called
+- [x] design throws exception when propertyGetter is null
+- [x] design throws exception when designFunction is null
 
 ## Usage Example
 
@@ -49,3 +49,8 @@ This method depends on:
 - `instantiate` method (where the design function is actually called)
 
 ## Implementation History
+
+- Added `design` method signature to `Design` class with Function import
+- Implemented `ArgumentDesigner` inner class for lazy design function evaluation
+- Added all four test scenarios to `SpecsForDesign` test class
+- All tests pass and build is successful

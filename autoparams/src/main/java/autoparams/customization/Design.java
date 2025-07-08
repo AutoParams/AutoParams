@@ -2,6 +2,7 @@ package autoparams.customization;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import autoparams.ObjectQuery;
@@ -60,6 +61,24 @@ public class Design<T> {
         return supply(propertyGetter, () -> value);
     }
 
+    public <P> Design<T> design(
+        FunctionDelegate<T, P> propertyGetter,
+        Function<Design<P>, Design<P>> designFunction
+    ) {
+        if (propertyGetter == null) {
+            throw new IllegalArgumentException("The argument 'propertyGetter' must not be null");
+        }
+
+        if (designFunction == null) {
+            throw new IllegalArgumentException("The argument 'designFunction' must not be null");
+        }
+
+        Property<T, P> property = Property.parse(propertyGetter);
+        List<Customizer> nextCustomizers = new ArrayList<>(customizers);
+        nextCustomizers.add(new ArgumentDesigner<>(property, designFunction));
+        return new Design<>(type, unmodifiableList(nextCustomizers));
+    }
+
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers.toArray(new Customizer[0]));
@@ -84,6 +103,64 @@ public class Design<T> {
             return matches(query)
                 ? new ObjectContainer(supplier.get())
                 : ObjectContainer.EMPTY;
+        }
+
+        private boolean matches(ObjectQuery query) {
+            return query instanceof ParameterQuery
+                && matches((ParameterQuery) query);
+        }
+
+        private boolean matches(ParameterQuery query) {
+            return matchesParameterType(query)
+                && matchesParameterName(query)
+                && matchesDeclaringClass(query);
+        }
+
+        private boolean matchesParameterType(ParameterQuery query) {
+            return property.getType().equals(query.getType());
+        }
+
+        private boolean matchesParameterName(ParameterQuery query) {
+            return property.getName().equals(query.getRequiredParameterName());
+        }
+
+        private boolean matchesDeclaringClass(ParameterQuery query) {
+            return property.getDeclaringClass().equals(
+                query
+                    .getParameter()
+                    .getDeclaringExecutable()
+                    .getDeclaringClass()
+            );
+        }
+    }
+
+    private static class ArgumentDesigner<T, P> implements ObjectGenerator {
+
+        private final Property<T, P> property;
+        private final Function<Design<P>, Design<P>> designFunction;
+
+        public ArgumentDesigner(
+            Property<T, P> property,
+            Function<Design<P>, Design<P>> designFunction
+        ) {
+            this.property = property;
+            this.designFunction = designFunction;
+        }
+
+        @Override
+        public ObjectContainer generate(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return matches(query)
+                ? new ObjectContainer(createDesignedObject())
+                : ObjectContainer.EMPTY;
+        }
+
+        private P createDesignedObject() {
+            Design<P> initialDesign = Design.of(property.getType());
+            Design<P> configuredDesign = designFunction.apply(initialDesign);
+            return configuredDesign.instantiate();
         }
 
         private boolean matches(ObjectQuery query) {

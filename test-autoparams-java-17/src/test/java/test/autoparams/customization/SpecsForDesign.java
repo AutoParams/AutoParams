@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.customization.Design;
 import org.junit.jupiter.api.Test;
+import test.autoparams.Category;
 import test.autoparams.Product;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,5 +119,52 @@ class SpecsForDesign {
 
         assertThat(modified).isNotSameAs(original);
         assertThat(modified).isNotNull();
+    }
+
+    @Test
+    void design_configures_nested_object_property_values() {
+        Design<Product> design = Design.of(Product.class)
+            .design(Product::category, category -> category
+                .set(Category::name, "Electronics")
+            );
+
+        Product product = design.instantiate();
+
+        assertThat(product.category().name()).isEqualTo("Electronics");
+    }
+
+    @Test
+    void design_calls_design_function_only_when_instantiate_is_called() {
+        AtomicInteger callCount = new AtomicInteger(0);
+        Design<Product> design = Design.of(Product.class)
+            .design(Product::category, category -> {
+                callCount.incrementAndGet();
+                return category.set(Category::name, "Electronics");
+            });
+
+        assertThat(callCount.get()).isEqualTo(0);
+
+        design.instantiate();
+
+        assertThat(callCount.get()).isEqualTo(1);
+    }
+
+    @Test
+    void design_throws_exception_when_propertyGetter_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.design(null, (Design<Category> category) ->
+            category.set(Category::name, "Electronics")))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'propertyGetter' must not be null");
+    }
+
+    @Test
+    void design_throws_exception_when_designFunction_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.design(Product::category, null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'designFunction' must not be null");
     }
 }
