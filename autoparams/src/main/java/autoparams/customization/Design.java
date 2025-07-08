@@ -85,14 +85,13 @@ public class Design<T> {
         return context.resolve(type);
     }
 
-    private static class ArgumentSupplier<T, P> implements ObjectGenerator {
+    private abstract static class AbstractArgumentGenerator<T, P>
+        implements ObjectGenerator {
 
-        private final Property<T, P> property;
-        private final Supplier<P> supplier;
+        protected final Property<T, P> property;
 
-        public ArgumentSupplier(Property<T, P> property, Supplier<P> supplier) {
+        public AbstractArgumentGenerator(Property<T, P> property) {
             this.property = property;
-            this.supplier = supplier;
         }
 
         @Override
@@ -101,9 +100,11 @@ public class Design<T> {
             ResolutionContext context
         ) {
             return matches(query)
-                ? new ObjectContainer(supplier.get())
+                ? generate()
                 : ObjectContainer.EMPTY;
         }
+
+        protected abstract ObjectContainer generate();
 
         private boolean matches(ObjectQuery query) {
             return query instanceof ParameterQuery
@@ -134,61 +135,41 @@ public class Design<T> {
         }
     }
 
-    private static class ArgumentDesigner<T, P> implements ObjectGenerator {
+    private static class ArgumentSupplier<T, P>
+        extends AbstractArgumentGenerator<T, P> {
 
-        private final Property<T, P> property;
+        private final Supplier<P> supplier;
+
+        public ArgumentSupplier(Property<T, P> property, Supplier<P> supplier) {
+            super(property);
+            this.supplier = supplier;
+        }
+
+        @Override
+        protected ObjectContainer generate() {
+            return new ObjectContainer(supplier.get());
+        }
+    }
+
+    private static class ArgumentDesigner<T, P>
+        extends AbstractArgumentGenerator<T, P> {
+
         private final Function<Design<P>, Design<P>> designFunction;
 
         public ArgumentDesigner(
             Property<T, P> property,
             Function<Design<P>, Design<P>> designFunction
         ) {
-            this.property = property;
+            super(property);
             this.designFunction = designFunction;
         }
 
         @Override
-        public ObjectContainer generate(
-            ObjectQuery query,
-            ResolutionContext context
-        ) {
-            return matches(query)
-                ? new ObjectContainer(createDesignedObject())
-                : ObjectContainer.EMPTY;
-        }
-
-        private P createDesignedObject() {
-            Design<P> initialDesign = Design.of(property.getType());
-            Design<P> configuredDesign = designFunction.apply(initialDesign);
-            return configuredDesign.instantiate();
-        }
-
-        private boolean matches(ObjectQuery query) {
-            return query instanceof ParameterQuery
-                && matches((ParameterQuery) query);
-        }
-
-        private boolean matches(ParameterQuery query) {
-            return matchesParameterType(query)
-                && matchesParameterName(query)
-                && matchesDeclaringClass(query);
-        }
-
-        private boolean matchesParameterType(ParameterQuery query) {
-            return property.getType().equals(query.getType());
-        }
-
-        private boolean matchesParameterName(ParameterQuery query) {
-            return property.getName().equals(query.getRequiredParameterName());
-        }
-
-        private boolean matchesDeclaringClass(ParameterQuery query) {
-            return property.getDeclaringClass().equals(
-                query
-                    .getParameter()
-                    .getDeclaringExecutable()
-                    .getDeclaringClass()
-            );
+        protected ObjectContainer generate() {
+            P value = designFunction
+                .apply(Design.of(property.getType()))
+                .instantiate();
+            return new ObjectContainer(value);
         }
     }
 }
