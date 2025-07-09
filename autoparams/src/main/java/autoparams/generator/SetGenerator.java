@@ -9,6 +9,7 @@ import java.util.Set;
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 import static autoparams.generator.CollectionGenerator.getSize;
 
@@ -42,7 +43,9 @@ final class SetGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = setType.getActualTypeArguments()[0];
-        ObjectQuery query = new DefaultObjectQuery(elementType);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(setType);
+        Type resolvedElementType = typeResolver.resolve(elementType);
+        ObjectQuery query = new DefaultObjectQuery(resolvedElementType);
         HashSet<Object> instance = new HashSet<>();
         for (int i = 0; i < size; i++) {
             instance.add(context.resolve(query));

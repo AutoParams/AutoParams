@@ -9,6 +9,7 @@ import java.util.Map;
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 import static autoparams.generator.CollectionGenerator.getSize;
 
@@ -41,11 +42,14 @@ final class MapGenerator implements ObjectGenerator {
         int size,
         ResolutionContext context
     ) {
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(mapType);
         Type keyType = mapType.getActualTypeArguments()[0];
-        ObjectQuery keyQuery = new DefaultObjectQuery(keyType);
+        Type resolvedKeyType = typeResolver.resolve(keyType);
+        ObjectQuery keyQuery = new DefaultObjectQuery(resolvedKeyType);
 
         Type valueType = mapType.getActualTypeArguments()[1];
-        ObjectQuery valueQuery = new DefaultObjectQuery(valueType);
+        Type resolvedValueType = typeResolver.resolve(valueType);
+        ObjectQuery valueQuery = new DefaultObjectQuery(resolvedValueType);
 
         HashMap<Object, Object> instance = new HashMap<>();
         for (int i = 0; i < size; i++) {

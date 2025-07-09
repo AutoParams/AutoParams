@@ -7,6 +7,7 @@ import java.util.Optional;
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 final class OptionalGenerator implements ObjectGenerator {
 
@@ -34,7 +35,9 @@ final class OptionalGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = optionalType.getActualTypeArguments()[0];
-        ObjectQuery query = new DefaultObjectQuery(elementType);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(optionalType);
+        Type resolvedElementType = typeResolver.resolve(elementType);
+        ObjectQuery query = new DefaultObjectQuery(resolvedElementType);
         return Optional.of(context.resolve(query));
     }
 }

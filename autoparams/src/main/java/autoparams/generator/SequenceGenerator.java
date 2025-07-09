@@ -11,6 +11,7 @@ import java.util.List;
 import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 import static autoparams.generator.CollectionGenerator.getSize;
 
@@ -47,7 +48,9 @@ final class SequenceGenerator implements ObjectGenerator {
         ResolutionContext context
     ) {
         Type elementType = collectionType.getActualTypeArguments()[0];
-        ObjectQuery query = new DefaultObjectQuery(elementType);
+        RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(collectionType);
+        Type resolvedElementType = typeResolver.resolve(elementType);
+        ObjectQuery query = new DefaultObjectQuery(resolvedElementType);
         ArrayList<Object> instance = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             instance.add(context.resolve(query));
