@@ -1,13 +1,18 @@
 package test.autoparams.lombok;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
+import autoparams.AutoParams;
 import autoparams.AutoSource;
 import autoparams.ResolutionContext;
+import autoparams.customization.Customization;
 import autoparams.lombok.BuilderCustomizer;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,5 +68,20 @@ public class SpecsForBuilderCustomizer {
         assertThat(shipment.getPostalCode()).isNotNull();
         assertThat(shipment.getAddress()).isNotNull();
         assertThat(shipment.getShipped()).isNotNull();
+    }
+
+    @Builder
+    @Getter
+    public static class User {
+
+        @Singular private List<String> roles;
+    }
+
+    @Test
+    @AutoParams
+    @Customization(BuilderCustomizer.class)
+    void sut_creates_instance_with_singular_list(User user) {
+        assertThat(user.getRoles()).isNotNull();
+        assertThat(user.getRoles()).isNotEmpty();
     }
 }

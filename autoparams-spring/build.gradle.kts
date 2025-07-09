@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api("io.github.autoparams:autoparams:[11.1.0, 12.0.0)")
+    api("io.github.autoparams:autoparams:[11.2.2, 12.0.0)")
     api("org.springframework:spring-context:[6.1.14,)")
     api("org.springframework:spring-test:[6.1.14,)")
 }
