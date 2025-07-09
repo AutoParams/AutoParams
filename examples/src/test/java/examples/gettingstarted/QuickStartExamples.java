@@ -1,4 +1,4 @@
-package examples.basic;
+package examples.gettingstarted;
 
 import java.util.List;
 

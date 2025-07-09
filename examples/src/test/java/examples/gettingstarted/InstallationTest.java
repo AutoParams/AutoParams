@@ -1,4 +1,4 @@
-package examples.basic;
+package examples.gettingstarted;
 
 import autoparams.AutoParams;
 import org.junit.jupiter.api.Test;
