@@ -5,10 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [11.2.2] - 2025-07-09
+
+### Fixed
+- Enhanced wildcard type support for parameterized type generators:
+  - `List<? extends T>` - Lists with bounded wildcards
+  - `Set<? extends T>` - Sets with bounded wildcards
+  - `Map<? extends K, ? extends V>` - Maps with bounded wildcards for both keys and values
+  - `Optional<? extends T>` - Optional values with bounded wildcards
+
 ## [11.2.1] - 2025-07-09
 
 ### Fixed
-- Improved support for wildcard generic types (e.g., `List<? extends Number>`) in parameter generation
+- Improved support for wildcard generic types in parameter generation
 
 ## [11.2.0] - 2025-06-29
 
