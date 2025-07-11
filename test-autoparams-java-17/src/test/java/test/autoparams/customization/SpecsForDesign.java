@@ -278,4 +278,69 @@ class SpecsForDesign {
         assertThat(product1.stockQuantity()).isEqualTo(stockQuantity);
         assertThat(product2.stockQuantity()).isEqualTo(stockQuantity);
     }
+
+    @Test
+    @AutoParams
+    void instantiate_with_count_and_context_creates_list_using_provided_context(
+        int stockQuantity,
+        ResolutionContext context
+    ) {
+        context.customize(
+            set(Product::stockQuantity).to(stockQuantity)
+        );
+
+        List<Product> products = Design.of(Product.class)
+            .set(Product::name, "Product A")
+            .instantiate(3, context);
+
+        assertThat(products).hasSize(3);
+        assertThat(products).allMatch(p -> p.name().equals("Product A"));
+        assertThat(products).allMatch(p -> p.stockQuantity() == stockQuantity);
+    }
+
+    @Test
+    @AutoParams
+    void instantiate_with_count_and_context_throws_exception_when_count_is_negative(
+        ResolutionContext context
+    ) {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.instantiate(-1, context))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'count' must not be less than 0");
+    }
+
+    @Test
+    void instantiate_with_count_and_context_throws_exception_when_context_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.instantiate(3, null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'context' must not be null");
+    }
+
+    @Test
+    void instantiate_with_count_and_context_returns_unmodifiable_list() {
+        Design<Product> design = Design.of(Product.class);
+
+        List<Product> products = design.instantiate(2, new ResolutionContext());
+
+        assertThatThrownBy(() -> products.add(design.instantiate()))
+            .isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @Test
+    @AutoParams
+    void instantiate_with_count_and_context_does_not_modify_the_original_design(
+        String name,
+        ResolutionContext context
+    ) {
+        Design.of(Product.class)
+            .set(Product::name, name)
+            .instantiate(3, context);
+
+        Product product = context.resolve();
+
+        assertThat(product.name()).isNotEqualTo(name);
+    }
 }

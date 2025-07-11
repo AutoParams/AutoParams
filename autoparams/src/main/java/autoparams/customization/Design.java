@@ -107,6 +107,24 @@ public class Design<T> {
         return unmodifiableList(result);
     }
 
+    public List<T> instantiate(int count, ResolutionContext context) {
+        if (count < 0) {
+            throw new IllegalArgumentException("The argument 'count' must not be less than 0");
+        }
+
+        if (context == null) {
+            throw new IllegalArgumentException("The argument 'context' must not be null");
+        }
+
+        ResolutionContext branch = context.branch();
+        branch.customize(customizers.toArray(new Customizer[0]));
+        List<T> result = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            result.add(branch.resolve(type));
+        }
+        return unmodifiableList(result);
+    }
+
     private abstract static class AbstractArgumentGenerator<T, P>
         implements ObjectGenerator {
 
