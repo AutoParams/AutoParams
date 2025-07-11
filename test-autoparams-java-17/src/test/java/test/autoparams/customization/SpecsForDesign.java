@@ -1,5 +1,6 @@
 package test.autoparams.customization;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.customization.Design;
@@ -166,5 +167,60 @@ class SpecsForDesign {
         assertThatThrownBy(() -> design.design(Product::category, null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'designFunction' must not be null");
+    }
+
+    @Test
+    void instantiate_with_count_creates_list_with_specified_number_of_instances() {
+        Design<Product> design = Design.of(Product.class);
+
+        List<Product> products = design.instantiate(3);
+
+        assertThat(products).hasSize(3);
+        assertThat(products).allMatch(product -> product != null);
+        assertThat(products).allMatch(product -> product instanceof Product);
+    }
+
+    @Test
+    void instantiate_with_count_applies_configurations_to_all_instances() {
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Test Product")
+            .set(Product::stockQuantity, 100);
+
+        List<Product> products = design.instantiate(3);
+
+        assertThat(products).hasSize(3);
+        assertThat(products).allMatch(product -> product.name().equals("Test Product"));
+        assertThat(products).allMatch(product -> product.stockQuantity() == 100);
+    }
+
+    @Test
+    void instantiate_with_count_throws_exception_when_count_is_negative() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.instantiate(-1))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'count' must not be less than 0");
+    }
+
+    @Test
+    void instantiate_with_count_creates_unique_instances() {
+        Design<Product> design = Design.of(Product.class);
+
+        List<Product> products = design.instantiate(3);
+
+        assertThat(products).hasSize(3);
+        assertThat(products.get(0)).isNotSameAs(products.get(1));
+        assertThat(products.get(1)).isNotSameAs(products.get(2));
+        assertThat(products.get(0)).isNotSameAs(products.get(2));
+    }
+
+    @Test
+    void instantiate_with_count_returns_unmodifiable_list() {
+        Design<Product> design = Design.of(Product.class);
+
+        List<Product> products = design.instantiate(2);
+
+        assertThatThrownBy(() -> products.add(design.instantiate()))
+            .isInstanceOf(UnsupportedOperationException.class);
     }
 }

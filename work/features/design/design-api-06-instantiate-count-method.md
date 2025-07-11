@@ -25,11 +25,11 @@ List<T> instantiate(int count);
 
 ## Test Scenarios
 
-- [ ] instantiate with count creates list with specified number of instances
-- [ ] instantiate with count applies configurations to all instances
-- [ ] instantiate with count throws exception when count is negative
-- [ ] instantiate with count creates unique instances
-- [ ] instantiate with count returns unmodifiable list
+- [x] instantiate with count creates list with specified number of instances
+- [x] instantiate with count applies configurations to all instances
+- [x] instantiate with count throws exception when count is negative
+- [x] instantiate with count creates unique instances
+- [x] instantiate with count returns unmodifiable list
 
 ## Usage Example
 
@@ -47,3 +47,26 @@ This method depends on:
 - Configuration methods like `set`, `supply`, `design` (for object configuration)
 
 ## Implementation History
+
+### 2025-07-11 - Implementation Complete
+- **Commit**: `bd46cf9` - "Add Design API instantiate method with count"
+- **Implementation**: Added `instantiate(int count)` method to Design class
+- **Features**:
+  - Creates list with specified number of instances
+  - Applies all configurations to each instance
+  - Validates count parameter (throws IllegalArgumentException if negative)
+  - Creates unique instances (no shared references)
+  - Returns unmodifiable list for immutability
+- **Test Coverage**: 5 comprehensive test scenarios covering all functionality
+- **Location**: `autoparams/src/main/java/autoparams/customization/Design.java:88-98`
+- **Tests**: `test-autoparams-java-17/src/test/java/test/autoparams/customization/SpecsForDesign.java`
+
+### Implementation Details
+The method internally:
+1. Validates the count parameter (must be ≥ 0)
+2. Creates a new ArrayList with the specified capacity
+3. Calls the existing `instantiate()` method in a loop to create unique instances
+4. Returns the list wrapped with `Collections.unmodifiableList()` for immutability
+
+### Status
+✅ **COMPLETE** - All test scenarios implemented and passing

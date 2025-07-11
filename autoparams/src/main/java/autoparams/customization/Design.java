@@ -85,6 +85,18 @@ public class Design<T> {
         return context.resolve(type);
     }
 
+    public List<T> instantiate(int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("The argument 'count' must not be less than 0");
+        }
+
+        List<T> result = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            result.add(instantiate());
+        }
+        return unmodifiableList(result);
+    }
+
     private abstract static class AbstractArgumentGenerator<T, P>
         implements ObjectGenerator {
 
