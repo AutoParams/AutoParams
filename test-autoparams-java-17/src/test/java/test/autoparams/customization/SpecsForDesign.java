@@ -3,11 +3,14 @@ package test.autoparams.customization;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import autoparams.AutoParams;
+import autoparams.ResolutionContext;
 import autoparams.customization.Design;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
 import test.autoparams.Product;
 
+import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -222,5 +225,57 @@ class SpecsForDesign {
 
         assertThatThrownBy(() -> products.add(design.instantiate()))
             .isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @Test
+    @AutoParams
+    void instantiate_with_context_creates_instance_using_provided_context(
+        int stockQuantity,
+        ResolutionContext context
+    ) {
+        context.customize(
+            set(Product::stockQuantity).to(stockQuantity)
+        );
+
+        Product product = Design.of(Product.class)
+            .set(Product::name, "Product A")
+            .instantiate(context);
+
+        assertThat(product).isNotNull();
+        assertThat(product.name()).isEqualTo("Product A");
+        assertThat(product.stockQuantity()).isEqualTo(stockQuantity);
+    }
+
+    @Test
+    void instantiate_with_context_throws_exception_when_context_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.instantiate(null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'context' must not be null");
+    }
+
+    @Test
+    @AutoParams
+    void instantiate_with_context_does_not_modify_the_original_context(
+        int stockQuantity,
+        ResolutionContext context
+    ) {
+        context.customize(
+            set(Product::stockQuantity).to(stockQuantity)
+        );
+
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Product A");
+
+        Product product1 = design.instantiate(context);
+        Product product2 = context.resolve(Product.class);
+
+        assertThat(product1).isNotNull();
+        assertThat(product2).isNotNull();
+        assertThat(product1.name()).isEqualTo("Product A");
+        assertThat(product2.name()).isNotEqualTo("Product A");
+        assertThat(product1.stockQuantity()).isEqualTo(stockQuantity);
+        assertThat(product2.stockQuantity()).isEqualTo(stockQuantity);
     }
 }

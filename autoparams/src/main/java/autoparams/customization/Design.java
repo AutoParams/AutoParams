@@ -85,6 +85,16 @@ public class Design<T> {
         return context.resolve(type);
     }
 
+    public T instantiate(ResolutionContext context) {
+        if (context == null) {
+            throw new IllegalArgumentException("The argument 'context' must not be null");
+        }
+
+        ResolutionContext branch = context.branch();
+        branch.customize(customizers.toArray(new Customizer[0]));
+        return branch.resolve(type);
+    }
+
     public List<T> instantiate(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0");

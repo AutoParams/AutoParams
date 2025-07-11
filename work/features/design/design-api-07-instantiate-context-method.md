@@ -25,8 +25,9 @@ T instantiate(ResolutionContext context);
 
 ## Test Scenarios
 
-- [ ] instantiate with context creates instance using provided context
-- [ ] instantiate with context throws exception when context is null
+- [x] instantiate with context creates instance using provided context
+- [x] instantiate with context throws exception when context is null
+- [x] instantiate with context does not modify the original context
 
 ## Implementation Guide
 
@@ -41,6 +42,28 @@ ResolutionContext context = new ResolutionContext();
 Product product = design.instantiate(context);
 ```
 
+## Implementation Notes
+
+The method is implemented as:
+
+```java
+public T instantiate(ResolutionContext context) {
+    if (context == null) {
+        throw new IllegalArgumentException("The argument 'context' must not be null");
+    }
+
+    ResolutionContext branch = context.branch();
+    branch.customize(customizers.toArray(new Customizer[0]));
+    return branch.resolve(type);
+}
+```
+
+Key implementation details:
+- Validates that the context parameter is not null
+- Creates a branch of the provided context to avoid modifying the original
+- Applies the Design's customizers to the branched context
+- Resolves the configured type using the customized context
+
 ## Dependencies
 
 This method depends on:
@@ -50,3 +73,8 @@ This method depends on:
 - Configuration methods like `set`, `supply`, `design` (for object configuration)
 
 ## Implementation History
+
+- **Completed**: TDD implementation following CLAUDE.md guidelines
+- **Tests**: All 3 test scenarios implemented and passing
+- **Build**: Full build successful with no failures
+- **Status**: ✅ Complete
