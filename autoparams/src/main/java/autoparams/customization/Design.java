@@ -17,6 +17,40 @@ import lombok.AllArgsConstructor;
 
 import static java.util.Collections.unmodifiableList;
 
+/**
+ * A fluent API for configuring object creation and property customization.
+ * <p>
+ * The {@code Design} class provides a declarative way to specify how objects
+ * should be created and configured during test execution. It implements the
+ * {@link Customizer} interface, allowing Design instances to be used directly
+ * with {@link ResolutionContext} for seamless integration with the AutoParams
+ * framework.
+ * </p>
+ *
+ * <p><b>Basic Usage:</b></p>
+ * <pre>
+ * Product product = Design.of(Product.class)
+ *     .set(Product::name, "Test Product")
+ *     .set(Product::stockQuantity, 100)
+ *     .instantiate();
+ * </pre>
+ *
+ * <p><b>ResolutionContext Integration:</b></p>
+ * <pre>
+ * Design&lt;Product&gt; design = Design.of(Product.class)
+ *     .set(Product::stockQuantity, 100);
+ *
+ * ResolutionContext context = new ResolutionContext();
+ * context.customize(design);
+ *
+ * Product product = context.resolve(Product.class);
+ * </pre>
+ *
+ * @param <T> the type of object this design configures
+ *
+ * @see Customizer
+ * @see ResolutionContext
+ */
 public class Design<T> implements Customizer {
 
     private final Class<T> type;
@@ -32,6 +66,21 @@ public class Design<T> implements Customizer {
         this.customizers = customizers;
     }
 
+    /**
+     * Creates a new Design instance for the specified type.
+     * <p>
+     * This is the starting point for building a fluent object configuration.
+     * The returned Design can be further configured using
+     * {@link #set(FunctionDelegate, Object)},
+     * {@link #supply(FunctionDelegate, Supplier)}, and
+     * {@link #design(FunctionDelegate, Function)} methods.
+     * </p>
+     *
+     * @param <T> the type of object to design
+     * @param type the {@code Class} object representing the type to configure
+     * @return a new Design instance for the specified type
+     * @throws IllegalArgumentException if {@code type} is null
+     */
     public static <T> Design<T> of(Class<T> type) {
         if (type == null) {
             throw new IllegalArgumentException("The argument 'type' must not be null");
@@ -40,6 +89,27 @@ public class Design<T> implements Customizer {
         return new Design<>(type);
     }
 
+    /**
+     * Configures a property to be supplied by the given {@link Supplier}.
+     * <p>
+     * This method allows dynamic property value generation during object
+     * instantiation. The supplier will be called each time an object is created.
+     * </p>
+     *
+     * <p><b>Example:</b></p>
+     * <pre>
+     * Random random = new Random();
+     * Product product = Design.of(Product.class)
+     *     .supply(Product::stockQuantity, () -&gt; random.nextInt(100))
+     *     .instantiate();
+     * </pre>
+     *
+     * @param <P> the type of the property
+     * @param getterDelegate a function delegate representing the property getter
+     * @param supplier the supplier that provides property values
+     * @return a new Design instance with the property configuration added
+     * @throws IllegalArgumentException if {@code getterDelegate} or {@code supplier} is null
+     */
     public <P> Design<T> supply(
         FunctionDelegate<T, P> getterDelegate,
         Supplier<P> supplier
@@ -63,10 +133,57 @@ public class Design<T> implements Customizer {
         return result;
     }
 
+    /**
+     * Configures a property to have a fixed value.
+     * <p>
+     * This is a convenience method that sets a property to a constant value.
+     * It is equivalent to calling {@link #supply(FunctionDelegate, Supplier)}
+     * with a supplier that always returns the same value.
+     * </p>
+     *
+     * <p><b>Example:</b></p>
+     * <pre>
+     * Product product = Design.of(Product.class)
+     *     .set(Product::name, "Test Product")
+     *     .set(Product::stockQuantity, 100)
+     *     .instantiate();
+     * </pre>
+     *
+     * @param <P> the type of the property
+     * @param getterDelegate a function delegate representing the property getter
+     * @param value the fixed value to assign to the property
+     * @return a new Design instance with the property configuration added
+     * @throws IllegalArgumentException if {@code getterDelegate} is null
+     */
     public <P> Design<T> set(FunctionDelegate<T, P> getterDelegate, P value) {
         return supply(getterDelegate, () -> value);
     }
 
+    /**
+     * Configures a nested property using a nested Design configuration.
+     * <p>
+     * This method allows configuring complex object properties by applying
+     * a design function to create and configure the nested object. The design
+     * function receives a new Design instance for the property type and returns
+     * a configured Design that will be instantiated for the property value.
+     * </p>
+     *
+     * <p><b>Example:</b></p>
+     * <pre>
+     * Product product = Design.of(Product.class)
+     *     .design(Product::category, category -&gt; category
+     *         .set(Category::name, "Electronics")
+     *         .set(Category::description, "Electronic products")
+     *     )
+     *     .instantiate();
+     * </pre>
+     *
+     * @param <P> the type of the nested property
+     * @param getterDelegate a function delegate representing the property getter
+     * @param designFunction a function that configures the nested object design
+     * @return a new Design instance with the nested property configuration added
+     * @throws IllegalArgumentException if {@code getterDelegate} or {@code designFunction} is null
+     */
     public <P> Design<T> design(
         FunctionDelegate<T, P> getterDelegate,
         Function<Design<P>, Design<P>> designFunction
@@ -86,12 +203,24 @@ public class Design<T> implements Customizer {
         });
     }
 
+    /**
+     * Creates a new instance of the configured type with all design settings applied.
+     *
+     * @return a new instance of type {@code T} with all configured properties applied
+     */
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers);
         return context.resolve(type);
     }
 
+    /**
+     * Creates a new instance using the provided {@link ResolutionContext}.
+     *
+     * @param context the resolution context to use for object creation
+     * @return a new instance of type {@code T} with all configured properties applied
+     * @throws IllegalArgumentException if {@code context} is null
+     */
     public T instantiate(ResolutionContext context) {
         if (context == null) {
             throw new IllegalArgumentException("The argument 'context' must not be null");
@@ -102,6 +231,13 @@ public class Design<T> implements Customizer {
         return branch.resolve(type);
     }
 
+    /**
+     * Creates multiple instances of the configured type.
+     *
+     * @param count the number of instances to create
+     * @return an unmodifiable list containing the created instances
+     * @throws IllegalArgumentException if {@code count} is less than 0
+     */
     public List<T> instantiate(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0");
@@ -114,6 +250,14 @@ public class Design<T> implements Customizer {
         return unmodifiableList(result);
     }
 
+    /**
+     * Creates multiple instances using the provided {@link ResolutionContext}.
+     *
+     * @param count the number of instances to create
+     * @param context the resolution context to use for object creation
+     * @return an unmodifiable list containing the created instances
+     * @throws IllegalArgumentException if {@code count} is less than 0 or {@code context} is null
+     */
     public List<T> instantiate(int count, ResolutionContext context) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0");
@@ -132,6 +276,19 @@ public class Design<T> implements Customizer {
         return unmodifiableList(result);
     }
 
+    /**
+     * Customizes the provided {@link ObjectGenerator} with this design's configurations.
+     * <p>
+     * This method implements the {@link Customizer} interface, allowing Design instances
+     * to be used directly with {@link ResolutionContext} and other AutoParams framework
+     * components.
+     * </p>
+     *
+     * @param generator the object generator to customize
+     * @return a customized object generator that applies this design's configurations
+     * @throws IllegalArgumentException if {@code generator} is null
+     */
+    @SuppressWarnings("GrazieInspection")
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
         if (generator == null) {
