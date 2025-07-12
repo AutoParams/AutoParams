@@ -33,6 +33,8 @@ Write JavaDoc documentation for Java code - /javadoc <file> [method: <method>]
 5. **Apply CLAUDE.md Guidelines**: Follow all CLAUDE.md JavaDoc guidelines precisely
 6. **Draft Documentation**: Write JavaDoc comments with proper structure and required tags
 7. **Format Properly**: Ensure correct HTML formatting, escaping, and tag usage per CLAUDE.md
+   - Use `{@link }` syntax for type names and method references
+   - Use `{@code }` syntax for parameter names in descriptions and @throws tags
 8. **Review Completeness**: Verify documentation covers functionality without implementation details
 
 ## Error Handling
@@ -44,4 +46,6 @@ Write JavaDoc documentation for Java code - /javadoc <file> [method: <method>]
 ## Success Criteria
 - Documentation follows all CLAUDE.md JavaDoc guidelines
 - Proper HTML formatting and escaping applied per CLAUDE.md rules
+- Type names and method references use `{@link }` syntax for proper cross-referencing
+- Parameter names use `{@code }` syntax in descriptions and @throws tags
 - Internal implementation warnings added for `autoparams.internal` types as specified in CLAUDE.md
