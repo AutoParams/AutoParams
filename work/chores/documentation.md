@@ -26,6 +26,7 @@ README.md (Overview & Quick Start)
 │   │   ├── logging.md
 │   │   ├── annotations.md
 │   │   ├── factory.md
+│   │   ├── design.md
 │   │   └── resolution-context.md
 │   ├── advanced-features/      # Power user features
 │   │   ├── customization.md
@@ -40,19 +41,17 @@ README.md (Overview & Quick Start)
 │   │   ├── migration-guide.md
 │   │   ├── best-practices.md
 │   │   └── troubleshooting.md
-│   ├── api-reference/          # Technical reference
-│   │   ├── annotations.md
-│   │   ├── generators.md
-│   │   └── customizers.md
-│   └── examples/               # Documentation Examples Subproject
-│       ├── build.gradle.kts
-│       └── src/
-│           ├── main/java/examples/     # Domain models (created incrementally)
-│           └── test/java/examples/     # Runnable examples
-│               ├── basic/
-│               ├── basics/
-│               ├── advanced/
-│               └── extensions/
+│   └── api-reference/          # Technical reference
+│       ├── annotations.md
+│       ├── generators.md
+│       └── customizers.md
+└── examples/                   # Documentation Examples Subproject
+    ├── build.gradle.kts
+    └── src/
+        ├── main/java/examples/     # Domain models (created incrementally)
+        └── test/java/examples/     # Runnable examples
+            ├── gettingstarted/
+            └── basics/
 ```
 
 ### 2. Examples Subproject Solution
@@ -202,6 +201,20 @@ The following tasks represent the first 5 priority items to begin implementation
   - [x] Write advanced logging features:
     - [x] LogVisibility annotation usage for controlling log output
     - [x] Custom ObjectQuery.toLog() implementations
+
+- [ ] **Task 6: Create basic Design documentation with examples**
+  - [ ] Establish structure for docs/basics/design.md (including how to use and advanced patterns sections)
+  - [ ] Write basic Design creation examples:
+    - [ ] Design creation: `Design.of(Class<T>)` basic usage
+    - [ ] Property configuration: `.set()` method for fixed values (including type-safe method references and `.instantiate()` usage)
+    - [ ] Property configuration: `.supply()` method for dynamic values
+  - [ ] Write advanced Design features:
+    - [ ] Nested object configuration: `.design()` method for complex hierarchies
+    - [ ] Multiple instance creation: `.instantiate(int count)` method
+    - [ ] ResolutionContext integration: `.instantiate(ResolutionContext)` usage
+    - [ ] Creating reusable Customizers: Design as ObjectGenerator for integration with AutoParams framework
+  - [ ] Create domain models as needed for Design examples (if not already available)
+  - [ ] Write comprehensive example test classes demonstrating all Design capabilities
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
