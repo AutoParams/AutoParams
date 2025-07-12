@@ -41,41 +41,41 @@ public class Design<T> {
     }
 
     public <P> Design<T> supply(
-        FunctionDelegate<T, P> propertyGetter,
+        FunctionDelegate<T, P> getterDelegate,
         Supplier<P> supplier
     ) {
-        if (propertyGetter == null) {
-            throw new IllegalArgumentException("The argument 'propertyGetter' must not be null");
+        if (getterDelegate == null) {
+            throw new IllegalArgumentException("The argument 'getterDelegate' must not be null");
         }
 
         if (supplier == null) {
             throw new IllegalArgumentException("The argument 'supplier' must not be null");
         }
 
-        Property<T, P> property = Property.parse(propertyGetter);
+        Property<T, P> property = Property.parse(getterDelegate);
         List<Customizer> nextCustomizers = new ArrayList<>(customizers);
         nextCustomizers.add(new ArgumentSupplier<>(property, supplier));
         return new Design<>(type, unmodifiableList(nextCustomizers));
     }
 
-    public <P> Design<T> set(FunctionDelegate<T, P> propertyGetter, P value) {
-        return supply(propertyGetter, () -> value);
+    public <P> Design<T> set(FunctionDelegate<T, P> getterDelegate, P value) {
+        return supply(getterDelegate, () -> value);
     }
 
     public <P> Design<T> design(
-        FunctionDelegate<T, P> propertyGetter,
+        FunctionDelegate<T, P> getterDelegate,
         Function<Design<P>, Design<P>> designFunction
     ) {
-        if (propertyGetter == null) {
-            throw new IllegalArgumentException("The argument 'propertyGetter' must not be null");
+        if (getterDelegate == null) {
+            throw new IllegalArgumentException("The argument 'getterDelegate' must not be null");
         }
 
         if (designFunction == null) {
             throw new IllegalArgumentException("The argument 'designFunction' must not be null");
         }
 
-        return supply(propertyGetter, () -> {
-            Property<T, P> property = Property.parse(propertyGetter);
+        return supply(getterDelegate, () -> {
+            Property<T, P> property = Property.parse(getterDelegate);
             Design<P> design = Design.of(property.getType());
             return designFunction.apply(design).instantiate();
         });
