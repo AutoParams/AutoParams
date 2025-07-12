@@ -12,6 +12,7 @@ import autoparams.customization.dsl.FunctionDelegate;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.Property;
+import lombok.AllArgsConstructor;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
@@ -73,10 +74,11 @@ public class Design<T> {
             throw new IllegalArgumentException("The argument 'designFunction' must not be null");
         }
 
-        Property<T, P> property = Property.parse(propertyGetter);
-        List<Customizer> nextCustomizers = new ArrayList<>(customizers);
-        nextCustomizers.add(new ArgumentDesigner<>(property, designFunction));
-        return new Design<>(type, unmodifiableList(nextCustomizers));
+        return supply(propertyGetter, () -> {
+            Property<T, P> property = Property.parse(propertyGetter);
+            Design<P> design = Design.of(property.getType());
+            return designFunction.apply(design).instantiate();
+        });
     }
 
     public T instantiate() {
@@ -125,14 +127,11 @@ public class Design<T> {
         return unmodifiableList(result);
     }
 
-    private abstract static class AbstractArgumentGenerator<T, P>
-        implements ObjectGenerator {
+    @AllArgsConstructor
+    private static class ArgumentSupplier<T, P> implements ObjectGenerator {
 
-        protected final Property<T, P> property;
-
-        public AbstractArgumentGenerator(Property<T, P> property) {
-            this.property = property;
-        }
+        private final Property<T, P> property;
+        private final Supplier<P> supplier;
 
         @Override
         public ObjectContainer generate(
@@ -140,11 +139,9 @@ public class Design<T> {
             ResolutionContext context
         ) {
             return matches(query)
-                ? generate()
+                ? new ObjectContainer(supplier.get())
                 : ObjectContainer.EMPTY;
         }
-
-        protected abstract ObjectContainer generate();
 
         private boolean matches(ObjectQuery query) {
             return query instanceof ParameterQuery
@@ -172,44 +169,6 @@ public class Design<T> {
                     .getDeclaringExecutable()
                     .getDeclaringClass()
             );
-        }
-    }
-
-    private static class ArgumentSupplier<T, P>
-        extends AbstractArgumentGenerator<T, P> {
-
-        private final Supplier<P> supplier;
-
-        public ArgumentSupplier(Property<T, P> property, Supplier<P> supplier) {
-            super(property);
-            this.supplier = supplier;
-        }
-
-        @Override
-        protected ObjectContainer generate() {
-            return new ObjectContainer(supplier.get());
-        }
-    }
-
-    private static class ArgumentDesigner<T, P>
-        extends AbstractArgumentGenerator<T, P> {
-
-        private final Function<Design<P>, Design<P>> designFunction;
-
-        public ArgumentDesigner(
-            Property<T, P> property,
-            Function<Design<P>, Design<P>> designFunction
-        ) {
-            super(property);
-            this.designFunction = designFunction;
-        }
-
-        @Override
-        protected ObjectContainer generate() {
-            P value = designFunction
-                .apply(Design.of(property.getType()))
-                .instantiate();
-            return new ObjectContainer(value);
         }
     }
 }
