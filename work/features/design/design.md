@@ -3,7 +3,7 @@
 ## Vision
 
 ```java
-Design<Product> design = Design.of(Product.class) // Design<Product> implements ObjectGenerator
+Design<Product> design = Design.of(Product.class) // Design<Product> implements Customizer
     .set(Product::name, "Product A")
     .set(Product::imageUri, "https://example.com/product-a.jpg")
     .supply(Product::stockQuantity, intIn(10, 100)) // intIn(10, 100) returns Supplier<Integer>
@@ -41,7 +41,7 @@ The Design API should be implemented in the following order, with each API docum
 6. **[`instantiate(int count)` Method](design-api-06-instantiate-count-method.md)** - Multiple instance creation
 7. **[`instantiate(ResolutionContext context)` Method](design-api-07-instantiate-context-method.md)** - Context-based instantiation
 8. **[`instantiate(int count, ResolutionContext context)` Method](design-api-08-instantiate-count-context-method.md)** - Multiple instances with context
-9. **[`generate` Method](design-api-09-generate-method.md)** - ObjectGenerator interface implementation
+9. **[Customizer Interface Implementation](design-api-09-customizer-interface.md)** - AutoParams framework integration
 
 Each API document contains:
 - Method signature and description
