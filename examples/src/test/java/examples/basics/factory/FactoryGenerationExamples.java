@@ -1,4 +1,4 @@
-package examples.basics;
+package examples.basics.factory;
 
 import java.util.List;
 import java.util.stream.Collectors;
