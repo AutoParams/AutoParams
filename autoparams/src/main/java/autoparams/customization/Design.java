@@ -16,7 +16,7 @@ import autoparams.internal.reflect.Property;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-public class Design<T> {
+public class Design<T> implements ObjectGenerator {
 
     private final Class<T> type;
     private final List<Customizer> customizers;
@@ -80,9 +80,7 @@ public class Design<T> {
     }
 
     public T instantiate() {
-        ResolutionContext context = new ResolutionContext();
-        context.customize(customizers.toArray(new Customizer[0]));
-        return context.resolve(type);
+        return instantiate(new ResolutionContext());
     }
 
     public T instantiate(ResolutionContext context) {
@@ -100,11 +98,7 @@ public class Design<T> {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0");
         }
 
-        List<T> result = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            result.add(instantiate());
-        }
-        return unmodifiableList(result);
+        return instantiate(count, new ResolutionContext());
     }
 
     public List<T> instantiate(int count, ResolutionContext context) {
@@ -118,11 +112,31 @@ public class Design<T> {
 
         ResolutionContext branch = context.branch();
         branch.customize(customizers.toArray(new Customizer[0]));
-        List<T> result = new ArrayList<>(count);
+
+        List<T> instances = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            result.add(branch.resolve(type));
+            instances.add(branch.resolve(type));
         }
-        return unmodifiableList(result);
+
+        return unmodifiableList(instances);
+    }
+
+    @Override
+    public ObjectContainer generate(
+        ObjectQuery query,
+        ResolutionContext context
+    ) {
+        if (query == null) {
+            throw new IllegalArgumentException("The argument 'query' must not be null");
+        }
+
+        if (context == null) {
+            throw new IllegalArgumentException("The argument 'context' must not be null");
+        }
+
+        return query.getType().equals(type)
+            ? new ObjectContainer(instantiate(context))
+            : ObjectContainer.EMPTY;
     }
 
     private abstract static class AbstractArgumentGenerator<T, P>

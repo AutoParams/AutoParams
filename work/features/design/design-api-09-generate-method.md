@@ -25,11 +25,11 @@ ObjectGenerator generate(ObjectQuery query, ResolutionContext context);
 
 ## Test Scenarios
 
-- [ ] generate creates object using configured design
-- [ ] generate integrates with context for dependency resolution
-- [ ] generate returns empty when query type does not match
-- [ ] generate throws exception when query is null
-- [ ] generate throws exception when context is null
+- [x] generate creates object using configured design
+- [x] generate integrates with context for dependency resolution
+- [x] generate returns empty when query type does not match
+- [x] generate throws exception when query is null
+- [x] generate throws exception when context is null
 
 ## Usage Example
 
@@ -51,3 +51,11 @@ This method depends on:
 - Configuration methods like `set`, `supply`, `design` (for object configuration)
 
 ## Implementation History
+
+- **2025-01-12**: Implemented `generate` method with complete functionality
+  - Added `ObjectGenerator` interface implementation to `Design<T>` class
+  - Method validates input parameters (query and context) with proper exception handling
+  - Integrates with existing `instantiate(context)` method for object creation
+  - Returns configured objects when query type matches design type
+  - Returns `ObjectContainer.EMPTY` for non-matching types
+  - All test scenarios implemented and passing in `SpecsForDesign` test class

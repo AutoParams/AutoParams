@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.AutoParams;
+import autoparams.DefaultObjectQuery;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.customization.Design;
+import autoparams.generator.ObjectContainer;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
 import test.autoparams.Product;
@@ -342,5 +345,69 @@ class SpecsForDesign {
         Product product = context.resolve();
 
         assertThat(product.name()).isNotEqualTo(name);
+    }
+
+    @Test
+    void generate_creates_object_using_configured_design() {
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Test Product");
+        ObjectQuery query = new DefaultObjectQuery(Product.class);
+        ResolutionContext context = new ResolutionContext();
+
+        ObjectContainer result = design.generate(query, context);
+
+        assertThat(result).isNotEqualTo(ObjectContainer.EMPTY);
+        Product product = (Product) result.unwrapOrElseThrow();
+        assertThat(product.name()).isEqualTo("Test Product");
+    }
+
+    @Test
+    @AutoParams
+    void generate_integrates_with_context_for_dependency_resolution(
+        String categoryName,
+        ResolutionContext context
+    ) {
+        context.customize(set(Category::name).to(categoryName));
+
+        ObjectContainer result = Design.of(Product.class)
+            .set(Product::name, "Test Product")
+            .generate(Product.class, context);
+
+        assertThat(result).isNotEqualTo(ObjectContainer.EMPTY);
+        Product product = (Product) result.unwrapOrElseThrow();
+        assertThat(product.name()).isEqualTo("Test Product");
+        assertThat(product.category().name()).isEqualTo(categoryName);
+    }
+
+    @Test
+    void generate_returns_empty_when_query_type_does_not_match() {
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::name, "Test Product");
+        ResolutionContext context = new ResolutionContext();
+
+        ObjectContainer result = design.generate(String.class, context);
+
+        assertThat(result).isEqualTo(ObjectContainer.EMPTY);
+    }
+
+    @Test
+    void generate_throws_exception_when_query_is_null() {
+        Design<Product> design = Design.of(Product.class);
+        ObjectQuery query = (ObjectQuery) null;
+        ResolutionContext context = new ResolutionContext();
+
+        assertThatThrownBy(() -> design.generate(query, context))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'query' must not be null");
+    }
+
+    @Test
+    void generate_throws_exception_when_context_is_null() {
+        Design<Product> design = Design.of(Product.class);
+        ObjectQuery query = new DefaultObjectQuery(Product.class);
+
+        assertThatThrownBy(() -> design.generate(query, null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'context' must not be null");
     }
 }
