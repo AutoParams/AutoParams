@@ -212,7 +212,7 @@ The following tasks represent the first 5 priority items to begin implementation
     - [ ] Nested object configuration: `.design()` method for complex hierarchies
     - [ ] Multiple instance creation: `.instantiate(int count)` method
     - [ ] ResolutionContext integration: `.instantiate(ResolutionContext)` usage
-    - [ ] Creating reusable Customizers: Design as ObjectGenerator for integration with AutoParams framework
+    - [ ] Creating reusable Customizers: Design as `Customizer` for integration with AutoParams framework
   - [ ] Create domain models as needed for Design examples (if not already available)
   - [ ] Write comprehensive example test classes demonstrating all Design capabilities
 
