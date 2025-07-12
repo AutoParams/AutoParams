@@ -1,6 +1,7 @@
 package autoparams.customization;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -14,20 +15,19 @@ import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.Property;
 import lombok.AllArgsConstructor;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
-public class Design<T> {
+public class Design<T> implements Customizer {
 
     private final Class<T> type;
-    private final List<Customizer> customizers;
+    private final Customizer[] customizers;
 
     private Design(Class<T> type) {
         this.type = type;
-        this.customizers = emptyList();
+        this.customizers = new Customizer[0];
     }
 
-    private Design(Class<T> type, List<Customizer> customizers) {
+    private Design(Class<T> type, Customizer[] customizers) {
         this.type = type;
         this.customizers = customizers;
     }
@@ -53,9 +53,14 @@ public class Design<T> {
         }
 
         Property<T, P> property = Property.parse(getterDelegate);
-        List<Customizer> nextCustomizers = new ArrayList<>(customizers);
-        nextCustomizers.add(new ArgumentSupplier<>(property, supplier));
-        return new Design<>(type, unmodifiableList(nextCustomizers));
+        Customizer customizer = new ArgumentSupplier<>(property, supplier);
+        return new Design<>(type, append(customizers, customizer));
+    }
+
+    private static <E> E[] append(E[] source, E element) {
+        E[] result = Arrays.copyOf(source, source.length + 1);
+        result[source.length] = element;
+        return result;
     }
 
     public <P> Design<T> set(FunctionDelegate<T, P> getterDelegate, P value) {
@@ -83,7 +88,7 @@ public class Design<T> {
 
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
-        context.customize(customizers.toArray(new Customizer[0]));
+        context.customize(customizers);
         return context.resolve(type);
     }
 
@@ -93,7 +98,7 @@ public class Design<T> {
         }
 
         ResolutionContext branch = context.branch();
-        branch.customize(customizers.toArray(new Customizer[0]));
+        branch.customize(customizers);
         return branch.resolve(type);
     }
 
@@ -119,12 +124,21 @@ public class Design<T> {
         }
 
         ResolutionContext branch = context.branch();
-        branch.customize(customizers.toArray(new Customizer[0]));
+        branch.customize(customizers);
         List<T> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             result.add(branch.resolve(type));
         }
         return unmodifiableList(result);
+    }
+
+    @Override
+    public ObjectGenerator customize(ObjectGenerator generator) {
+        if (generator == null) {
+            throw new IllegalArgumentException("The argument 'generator' is null.");
+        }
+
+        return new CompositeCustomizer(customizers).customize(generator);
     }
 
     @AllArgsConstructor

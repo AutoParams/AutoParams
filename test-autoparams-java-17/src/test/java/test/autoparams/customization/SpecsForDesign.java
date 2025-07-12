@@ -5,7 +5,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.AutoParams;
 import autoparams.ResolutionContext;
+import autoparams.customization.CompositeCustomizer;
+import autoparams.customization.Customization;
 import autoparams.customization.Design;
+import autoparams.generator.ObjectGenerator;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
 import test.autoparams.Product;
@@ -179,7 +182,6 @@ class SpecsForDesign {
         List<Product> products = design.instantiate(3);
 
         assertThat(products).hasSize(3);
-        assertThat(products).allMatch(product -> product != null);
         assertThat(products).allMatch(product -> product instanceof Product);
     }
 
@@ -342,5 +344,62 @@ class SpecsForDesign {
         Product product = context.resolve();
 
         assertThat(product.name()).isNotEqualTo(name);
+    }
+
+    @Test
+    void customize_integrates_with_ResolutionContext_for_dependency_resolution() {
+        ResolutionContext context = new ResolutionContext();
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::stockQuantity, 100);
+        context.customize(design);
+
+        Product product = context.resolve(Product.class);
+
+        assertThat(product.stockQuantity()).isEqualTo(100);
+    }
+
+    @Test
+    void customize_can_be_combined_with_other_customizers_in_the_same_context() {
+        ResolutionContext context = new ResolutionContext();
+        Design<Product> design = Design.of(Product.class)
+            .set(Product::stockQuantity, 100);
+        context.customize(design, set(Product::name).to("Custom Product"));
+
+        Product product = context.resolve(Product.class);
+
+        assertThat(product.stockQuantity()).isEqualTo(100);
+        assertThat(product.name()).isEqualTo("Custom Product");
+    }
+
+    public static class ProductCustomizer extends CompositeCustomizer {
+
+        public ProductCustomizer() {
+            super(
+                Design.of(Product.class)
+                    .set(Product::name, "Custom Product")
+                    .design(Product::category, category ->
+                        category.set(Category::name, "Custom Category")
+                    ),
+                set(Product::stockQuantity).to(100)
+            );
+        }
+    }
+
+    @Test
+    @AutoParams
+    @Customization(ProductCustomizer.class)
+    void sut_can_be_composed_with_other_customizers(Product product) {
+        assertThat(product.name()).isEqualTo("Custom Product");
+        assertThat(product.category().name()).isEqualTo("Custom Category");
+        assertThat(product.stockQuantity()).isEqualTo(100);
+    }
+
+    @Test
+    void customize_with_generator_throws_exception_when_generator_is_null() {
+        Design<Product> design = Design.of(Product.class);
+
+        assertThatThrownBy(() -> design.customize((ObjectGenerator) null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'generator' is null.");
     }
 }

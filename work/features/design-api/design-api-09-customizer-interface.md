@@ -33,8 +33,10 @@ By implementing the `Customizer` interface, `Design<T>` instances become first-c
 
 ## Test Scenarios
 
-- [ ] customize integrates with ResolutionContext for dependency resolution
-- [ ] customize can be combined with other customizers in the same context
+- [x] customize integrates with ResolutionContext for dependency resolution
+- [x] customize can be combined with other customizers in the same context
+- [x] customize with generator throws exception when generator is null
+- [x] sut can be composed with other customizers
 
 ## Usage Examples
 
@@ -85,3 +87,13 @@ This implementation depends on:
 3. **Composability**: Can be combined with other customizers
 
 ## Implementation History
+
+- **2025-07-12**: Implemented Customizer interface in Design class
+  - Added `implements Customizer` to class declaration
+  - Implemented `customize(ObjectGenerator generator)` method using CompositeCustomizer
+  - Added null validation for ObjectGenerator parameter following Customizer interface contract
+  - Added tests for ResolutionContext integration and multi-customizer scenarios
+  - Changed customizers field from `List<Customizer>` to `Customizer[]` for better performance
+  - Added test for Design composition within CompositeCustomizer
+  - Updated tests to use ProductCustomizer class matching documentation examples
+  - All test scenarios completed successfully
