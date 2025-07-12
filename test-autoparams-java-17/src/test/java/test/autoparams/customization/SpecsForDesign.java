@@ -75,7 +75,7 @@ class SpecsForDesign {
 
         assertThatThrownBy(() -> design.supply(null, () -> 42))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("The argument 'propertyGetter' must not be null");
+            .hasMessage("The argument 'getterDelegate' must not be null");
     }
 
     @Test
@@ -115,7 +115,7 @@ class SpecsForDesign {
 
         assertThatThrownBy(() -> design.set(null, "Test Product"))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("The argument 'propertyGetter' must not be null");
+            .hasMessage("The argument 'getterDelegate' must not be null");
     }
 
     @Test
@@ -163,7 +163,7 @@ class SpecsForDesign {
         assertThatThrownBy(() -> design.design(null, (Design<Category> category) ->
             category.set(Category::name, "Electronics")))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("The argument 'propertyGetter' must not be null");
+            .hasMessage("The argument 'getterDelegate' must not be null");
     }
 
     @Test
