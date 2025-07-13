@@ -76,7 +76,7 @@ Use `stream()` for infinite streams:
 ```java
 Factory<Product> factory = Factory.create();
 
-// Generate 10 products using stream
+// Generate 10 products using a stream
 List<Product> products = factory.stream()
     .limit(10)
     .collect(Collectors.toList());
