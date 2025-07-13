@@ -1,7 +1,10 @@
 package autoparams;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 class ResolutionLogger {
 
@@ -51,112 +54,130 @@ class ResolutionLogger {
         }
     }
 
-    private void flushEntries() {
+    private List<TreeNode> buildTreeStructure() {
+        List<TreeNode> nodes = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
         for (int i = 0; i < entries.size(); i++) {
             LogEntry entry = entries.get(i);
-            if (shouldLog(entry.query, false)) {
-                String timeString = entry.elapsed < 1 ? "< 1ms" : entry.elapsed + "ms";
-                String prefix = "";
+            TreeNode node = new TreeNode();
+            node.entry = entry;
 
-                if (entry.depth > 0) {
-                    prefix = generatePrefix(i, entry.depth);
-                }
+            // Remove nodes from the stack that are not ancestors
+            while (!stack.isEmpty() && stack.peek().entry.depth >= entry.depth) {
+                stack.pop();
+            }
 
-                String message = prefix + entry.query.toLog(false);
-                if (shouldIncludeValue(entry)) {
-                    if (isLeafNode(entry)) {
-                        message += " → " + entry.value;
+            // Set parent-child relationship
+            if (!stack.isEmpty()) {
+                node.parent = stack.peek();
+                stack.peek().children.add(node);
+            }
+
+            nodes.add(node);
+            stack.push(node);
+        }
+
+        return nodes;
+    }
+
+    private void calculatePrefixes(List<TreeNode> nodes) {
+        for (TreeNode node : nodes) {
+            if (node.entry.depth == 0) {
+                node.cachedPrefix = "";
+            } else {
+                node.cachedPrefix = generatePrefixOptimized(node);
+            }
+        }
+    }
+
+    private String generatePrefixOptimized(TreeNode node) {
+        if (node.entry.depth == 0) {
+            return "";
+        }
+
+        // Build prefix in reverse order using append (O(1) operations)
+        StringBuilder prefix = new StringBuilder();
+        TreeNode current = node;
+
+        while (current.entry.depth > 0) {
+            if (current.entry.depth == node.entry.depth) {
+                // This is the current node - determine if it's the last child
+                boolean isLastChild = isLastChildOptimized(current);
+                prefix.append(isLastChild ? " ─└ " : " ─├ ");
+            } else {
+                // This is an ancestor - determine the prefix character
+                boolean isAncestorLastChild = isLastChildOptimized(current);
+                prefix.append(isAncestorLastChild ? "    " : "  │ ");
+            }
+            current = current.parent;
+        }
+
+        // Reverse once at the end (O(d) operation)
+        return prefix.reverse().toString();
+    }
+
+    private boolean isLastChildOptimized(TreeNode node) {
+        if (node.parent == null) {
+            return false;
+        }
+        List<TreeNode> siblings = node.parent.children;
+        return siblings.get(siblings.size() - 1) == node;
+    }
+
+    private void flushEntries() {
+        if (entries.isEmpty()) {
+            return;
+        }
+
+        // Build tree structure - O(n)
+        List<TreeNode> nodes = buildTreeStructure();
+
+        // Calculate prefixes - O(n)
+        calculatePrefixes(nodes);
+
+        // Output logs - O(n)
+        for (TreeNode node : nodes) {
+            if (shouldLog(node.entry.query, false)) {
+                String timeString = node.entry.elapsed < 1 ? "< 1ms" : node.entry.elapsed + "ms";
+                String message = node.cachedPrefix + node.entry.query.toLog(false);
+
+                if (shouldIncludeValueOptimized(node)) {
+                    if (isLeafNodeOptimized(node)) {
+                        message += " → " + node.entry.value;
                     } else {
-                        message += " → " + getBranchValueDescription(entry);
+                        message += " → " + getBranchValueDescription(node.entry);
                     }
                 }
                 message += " (" + timeString + ")";
                 logWriter.write(message);
             }
         }
+
         entries.clear();
     }
 
-    private String generatePrefix(int entryIndex, int depth) {
-        if (depth == 0) {
-            return "";
+    private boolean shouldIncludeValueOptimized(TreeNode node) {
+        if (isLeafNodeOptimized(node)) {
+            return true;
         }
 
-        StringBuilder prefix = new StringBuilder();
-
-        for (int currentDepth = 1; currentDepth <= depth; currentDepth++) {
-            if (currentDepth == depth) {
-                int childIndex = getChildIndexAtDepth(entryIndex, currentDepth);
-                int totalChildren = getTotalChildrenAtDepth(entryIndex, currentDepth);
-                boolean isLastChild = (childIndex == totalChildren - 1);
-                prefix.append(isLastChild ? " └─ " : " ├─ ");
-            } else {
-                boolean isAncestorLastChild = isAncestorLastChild(entryIndex, currentDepth);
-                prefix.append(isAncestorLastChild ? "    " : " │  ");
-            }
+        if (node.entry.value == null) {
+            return true;
         }
 
-        return prefix.toString();
+        Class<?> queryType = getRawClass(node.entry.query.getType());
+        Class<?> valueType = node.entry.value.getClass();
+        return !queryType.equals(valueType);
     }
 
-    private boolean isAncestorLastChild(int entryIndex, int ancestorDepth) {
-        for (int i = entryIndex - 1; i >= 0; i--) {
-            LogEntry ancestorEntry = entries.get(i);
-            if (ancestorEntry.depth == ancestorDepth) {
-                int ancestorChildIndex = getChildIndexAtDepth(i, ancestorDepth);
-                int ancestorTotalChildren = getTotalChildrenAtDepth(i, ancestorDepth);
-                return ancestorChildIndex == ancestorTotalChildren - 1;
-            }
-        }
-        return false;
-    }
-
-    private int getChildIndexAtDepth(int entryIndex, int targetDepth) {
-        int parentIndex = findParentIndex(entryIndex, targetDepth - 1);
-        int childIndex = 0;
-        int startIndex = (parentIndex == -1) ? 0 : parentIndex + 1;
-
-        for (int i = startIndex; i < entryIndex; i++) {
-            if (entries.get(i).depth == targetDepth) {
-                childIndex++;
-            }
-        }
-        return childIndex;
-    }
-
-    private int getTotalChildrenAtDepth(int entryIndex, int targetDepth) {
-        int parentIndex = findParentIndex(entryIndex, targetDepth - 1);
-        int nextParentIndex = findNextParentIndex(parentIndex, targetDepth - 1);
-        int count = 0;
-        int startIndex = (parentIndex == -1) ? 0 : parentIndex + 1;
-
-        for (int i = startIndex; i < nextParentIndex; i++) {
-            if (entries.get(i).depth == targetDepth) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private int findParentIndex(int entryIndex, int parentDepth) {
-        for (int i = entryIndex - 1; i >= 0; i--) {
-            if (entries.get(i).depth == parentDepth) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private int findNextParentIndex(int parentIndex, int parentDepth) {
-        for (int i = parentIndex + 1; i < entries.size(); i++) {
-            if (entries.get(i).depth == parentDepth) {
-                return i;
-            }
-        }
-        return entries.size();
+    private boolean isLeafNodeOptimized(TreeNode node) {
+        return node.children.isEmpty() ||
+               node.children.stream().noneMatch(child -> shouldLog(child.entry.query, false));
     }
 
     private static class LogEntry {
+
         ObjectQuery query;
         Object value;
         int depth;
@@ -164,40 +185,21 @@ class ResolutionLogger {
         long elapsed;
     }
 
-    private boolean shouldIncludeValue(LogEntry entry) {
-        if (isLeafNode(entry)) {
-            return true;
-        }
-
-        Class<?> queryType = getRawClass(entry.query.getType());
-        Class<?> valueType = entry.value.getClass();
-        return !queryType.equals(valueType);
-    }
-
-    private boolean isLeafNode(LogEntry entry) {
-        int entryIndex = entries.indexOf(entry);
-        int currentDepth = entry.depth;
-
-        for (int i = entryIndex + 1; i < entries.size(); i++) {
-            LogEntry nextEntry = entries.get(i);
-            if (nextEntry.depth == currentDepth + 1 && shouldLog(nextEntry.query, false)) {
-                return false;
-            }
-            if (nextEntry.depth <= currentDepth) {
-                break;
-            }
-        }
-        return true;
+    private static class TreeNode {
+        LogEntry entry;
+        TreeNode parent;
+        List<TreeNode> children = new ArrayList<>();
+        String cachedPrefix;
     }
 
     private String getBranchValueDescription(LogEntry entry) {
-        java.lang.reflect.Type queryType = entry.query.getType();
+        Type queryType = entry.query.getType();
         Class<?> valueClass = entry.value.getClass();
 
-        if (queryType instanceof java.lang.reflect.ParameterizedType) {
-            java.lang.reflect.ParameterizedType parameterizedQuery =
-                (java.lang.reflect.ParameterizedType) queryType;
-            java.lang.reflect.Type[] typeArguments = parameterizedQuery.getActualTypeArguments();
+        if (queryType instanceof ParameterizedType) {
+            ParameterizedType parameterizedQuery =
+                (ParameterizedType) queryType;
+            Type[] typeArguments = parameterizedQuery.getActualTypeArguments();
 
             String valueClassName = valueClass.getSimpleName();
             if (typeArguments.length > 0) {
@@ -217,11 +219,11 @@ class ResolutionLogger {
         return TypeFormatter.format(valueClass, false);
     }
 
-    private Class<?> getRawClass(java.lang.reflect.Type type) {
+    private Class<?> getRawClass(Type type) {
         if (type instanceof Class<?>) {
             return (Class<?>) type;
-        } else if (type instanceof java.lang.reflect.ParameterizedType) {
-            return (Class<?>) ((java.lang.reflect.ParameterizedType) type).getRawType();
+        } else if (type instanceof ParameterizedType) {
+            return (Class<?>) ((ParameterizedType) type).getRawType();
         }
         return Object.class;
     }

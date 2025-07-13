@@ -391,5 +391,5 @@ Implement `toLog(boolean verbose)` method for `FieldQuery` interface to support 
 - [x] Rename the `@LogVisible` annotation to `@LogVisibility` to better reflect its purpose.
 - [x] Format generic types in the log output to be more concise, e.g., `List<String>` instead of `List<java.lang.String>`.
 - [x] Update the JavaDoc log output examples to reflect the new log format.
-- [ ] Handle cases where the generated value is `null`.
-- [ ] Improve the performance of the implementation.
+- [x] Handle cases where the generated value is `null`.
+- [x] Improve the performance of the implementation.
