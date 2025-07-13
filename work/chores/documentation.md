@@ -208,13 +208,11 @@ The following tasks represent the first 5 priority items to begin implementation
     - [ ] Design creation: `Design.of(Class<T>)` basic usage
     - [ ] Property configuration: `.set()` method for fixed values (including type-safe method references and `.instantiate()` usage)
     - [ ] Property configuration: `.supply()` method for dynamic values
-  - [ ] Write advanced Design features:
     - [ ] Nested object configuration: `.design()` method for complex hierarchies
-    - [ ] Multiple instance creation: `.instantiate(int count)` method
+  - [ ] Write advanced Design features:
     - [ ] ResolutionContext integration: `.instantiate(ResolutionContext)` usage
-    - [ ] Creating reusable Customizers: Design as `Customizer` for integration with AutoParams framework
-  - [ ] Create domain models as needed for Design examples (if not already available)
-  - [ ] Write comprehensive example test classes demonstrating all Design capabilities
+    - [ ] Creating reusable Customizers: Design as `Customizer` for integration with AutoParams framework (using `CompositeCustomizer` and `@Customization` annotation for reusable test customizations)
+    - [ ] Multiple instance creation: `.instantiate(int count)` method
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
