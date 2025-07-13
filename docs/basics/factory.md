@@ -62,11 +62,11 @@ Product product = factory.get();
 
 **Multiple Object Generation**
 
-Use `getRange(int size)` to generate a specific number of objects:
+Use `get(int count)` to generate a specific number of objects:
 
 ```java
 Factory<Product> factory = Factory.create();
-List<Product> products = factory.getRange(5); // Creates exactly 5 products
+List<Product> products = factory.get(5); // Creates exactly 5 products
 ```
 
 **Stream Generation**
@@ -147,8 +147,8 @@ Product product = factory.get(
 // Multiple property customization
 Product premiumProduct = factory.get(
     set(Product::getName).to("Premium Product"),
-    set(Product::getPriceAmount).to(BigDecimal.valueOf(999.99)),
-    set(Product::getStockQuantity).to(100)
+    set(Product::getPrice).to(999.99),
+    set(Product::getStock).to(100)
 );
 ```
 
@@ -158,10 +158,10 @@ Apply customizations when generating multiple objects:
 
 ```java
 Factory<Product> factory = Factory.create();
-List<Product> products = factory.getRange(
+List<Product> products = factory.get(
     3,
     set(Product::getName).to("Bulk Product"),
-    set(Product::getStockQuantity).to(50)
+    set(Product::getStock).to(50)
 );
 ```
 

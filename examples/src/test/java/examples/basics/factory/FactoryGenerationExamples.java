@@ -21,21 +21,21 @@ public class FactoryGenerationExamples {
         assertThat(product.getName()).isNotEmpty();
         assertThat(product.getImageUri()).isNotEmpty();
         assertThat(product.getDescription()).isNotEmpty();
-        assertThat(product.getPriceAmount()).isNotNull();
-        assertThat(product.getStockQuantity()).isNotNegative();
+        assertThat(product.getPrice()).isNotNegative();
+        assertThat(product.getStock()).isNotNegative();
     }
 
     @Test
     void multipleObjectGeneration() {
-        // Generate multiple objects using getRange()
+        // Generate multiple objects using get(count)
         Factory<Product> factory = Factory.create();
-        List<Product> products = factory.getRange(5);
+        List<Product> products = factory.get(5);
 
         assertThat(products).hasSize(5);
         assertThat(products).allSatisfy(product -> {
             assertThat(product).isNotNull();
             assertThat(product.getName()).isNotEmpty();
-            assertThat(product.getPriceAmount()).isNotNull();
+            assertThat(product.getPrice()).isNotNegative();
         });
 
         // Each product should be unique
@@ -55,7 +55,7 @@ public class FactoryGenerationExamples {
         assertThat(products).allSatisfy(product -> {
             assertThat(product).isNotNull();
             assertThat(product.getName()).isNotEmpty();
-            assertThat(product.getPriceAmount()).isNotNull();
+            assertThat(product.getPrice()).isNotNegative();
         });
 
         // Each product should be unique

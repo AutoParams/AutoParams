@@ -1,22 +1,25 @@
 package examples;
 
-import java.math.BigDecimal;
-
 public class Product {
 
     private final String name;
     private final String imageUri;
     private final String description;
-    private final BigDecimal priceAmount;
-    private final int stockQuantity;
+    private final double price;
+    private final int stock;
 
-    public Product(String name, String imageUri, String description,
-                   BigDecimal priceAmount, int stockQuantity) {
+    public Product(
+        String name,
+        String imageUri,
+        String description,
+        double price,
+        int stock
+    ) {
         this.name = name;
         this.imageUri = imageUri;
         this.description = description;
-        this.priceAmount = priceAmount;
-        this.stockQuantity = stockQuantity;
+        this.price = price;
+        this.stock = stock;
     }
 
     public String getName() {
@@ -31,11 +34,11 @@ public class Product {
         return description;
     }
 
-    public BigDecimal getPriceAmount() {
-        return priceAmount;
+    public double getPrice() {
+        return price;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
+    public int getStock() {
+        return stock;
     }
 }

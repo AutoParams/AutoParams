@@ -21,8 +21,8 @@ public class FactoryInjectionExamples {
         assertThat(product.getName()).isNotEmpty();
         assertThat(product.getImageUri()).isNotEmpty();
         assertThat(product.getDescription()).isNotEmpty();
-        assertThat(product.getPriceAmount()).isNotNull();
-        assertThat(product.getStockQuantity()).isNotNegative();
+        assertThat(product.getPrice()).isNotNegative();
+        assertThat(product.getStock()).isNotNegative();
     }
 
     @Test
@@ -35,7 +35,7 @@ public class FactoryInjectionExamples {
         assertThat(products).hasSize(3); // Default collection size
         assertThat(products).allSatisfy(product -> {
             assertThat(product.getName()).isNotEmpty();
-            assertThat(product.getPriceAmount()).isNotNull();
+            assertThat(product.getPrice()).isNotNegative();
         });
     }
 

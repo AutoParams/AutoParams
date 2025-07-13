@@ -203,16 +203,19 @@ The following tasks represent the first 5 priority items to begin implementation
     - [x] Custom ObjectQuery.toLog() implementations
 
 - [ ] **Task 6: Create basic Design documentation with examples**
-  - [ ] Establish structure for docs/basics/design.md (including how to use and advanced patterns sections)
-  - [ ] Write basic Design creation examples:
-    - [ ] Design creation: `Design.of(Class<T>)` basic usage
-    - [ ] Property configuration: `.set()` method for fixed values (including type-safe method references and `.instantiate()` usage)
-    - [ ] Property configuration: `.supply()` method for dynamic values
-    - [ ] Nested object configuration: `.design()` method for complex hierarchies
-  - [ ] Write advanced Design features:
-    - [ ] ResolutionContext integration: `.instantiate(ResolutionContext)` usage
-    - [ ] Creating reusable Customizers: Design as `Customizer` for integration with AutoParams framework (using `CompositeCustomizer` and `@Customization` annotation for reusable test customizations)
-    - [ ] Multiple instance creation: `.instantiate(int count)` method
+  - [x] Establish structure for docs/basics/design.md (including how to use and advanced patterns sections)
+  - [x] Write basic Design creation examples:
+    - [x] Property configuration: `.set()` method for fixed values (including type-safe method references and `.instantiate()` usage)
+    - [x] Property configuration: `.supply()` method for dynamic values
+    - [x] Nested object configuration: `.design()` method for complex hierarchies
+  - [x] Create domain models for Design examples (Customer, Address, Order)
+  - [x] Write runnable example test class for Design features
+  - [x] Update Product class to use double price for documentation simplicity
+  - [x] Update all Factory examples to use new Product interface
+  - [x] Write advanced Design features:
+    - [x] ResolutionContext integration: `.instantiate(ResolutionContext)` usage
+    - [x] Creating reusable Customizers: Design as `Customizer` for integration with AutoParams framework (using `CompositeCustomizer` and `@Customization` annotation for reusable test customizations)
+    - [x] Multiple instance creation: `.instantiate(int count)` method
 
 These tasks can be adjusted or reordered based on project priorities and resource availability.
 
