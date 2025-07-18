@@ -4,6 +4,9 @@ import autoparams.AutoSource;
 import autoparams.DefaultObjectQuery;
 import autoparams.ResolutionContext;
 import autoparams.processor.InstancePropertyWriter;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.junit.jupiter.params.ParameterizedTest;
 import test.autoparams.HasSetter;
 
@@ -34,27 +37,12 @@ class SpecsForInstancePropertyWriter {
         assertThat(bag.getPrice()).isNotNull();
     }
 
+    @Getter
+    @Setter
+    @Accessors(chain = true)
     public static class Product {
 
         private String name;
         private Double price;
-
-        public String getName() {
-            return name;
-        }
-
-        public Product setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Double getPrice() {
-            return price;
-        }
-
-        public Product setPrice(Double price) {
-            this.price = price;
-            return this;
-        }
     }
 }
