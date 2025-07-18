@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [11.3.1] - 2025-07-18
+
+### Added
+- Enhanced `InstancePropertyWriter` to detect and handle chaining setters that return the object instance for improved fluent API compatibility
+
+### Changed
+- Optimized resolution logging performance by replacing O(n²×d) tree prefix generation with O(n×d) implementation using pre-built tree structure and optimized StringBuilder operations
+
 ## [11.3.0] - 2025-07-13
 
 ### Added
