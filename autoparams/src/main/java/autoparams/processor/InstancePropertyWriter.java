@@ -81,6 +81,18 @@ public final class InstancePropertyWriter implements ObjectProcessor {
                 setProperty(value, setter, context.resolve(query));
             }
         }
+
+        for (Method method : type.getMethods()) {
+            if (isChainingSetter(method, type)) {
+                Parameter parameter = method.getParameters()[0];
+                ParameterQuery query = new ParameterQuery(
+                    parameter,
+                    0,
+                    parameter.getParameterizedType()
+                );
+                setProperty(value, method, context.resolve(query));
+            }
+        }
     }
 
     private void setProperties(
@@ -94,6 +106,14 @@ public final class InstancePropertyWriter implements ObjectProcessor {
             if (setter != null) {
                 ObjectQuery query = resolvePropertyQuery(setter, typeResolver);
                 setProperty(value, setter, context.resolve(query));
+            }
+        }
+
+        Class<?> rawType = (Class<?>) type.getRawType();
+        for (Method method : rawType.getMethods()) {
+            if (isChainingSetter(method, rawType)) {
+                ObjectQuery query = resolvePropertyQuery(method, typeResolver);
+                setProperty(value, method, context.resolve(query));
             }
         }
     }
@@ -118,6 +138,22 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Type propertyType = parameter.getParameterizedType();
         Type runtimePropertyType = runtimeTypeResolver.resolve(propertyType);
         return new ParameterQuery(parameter, 0, runtimePropertyType);
+    }
+
+    private static boolean isChainingSetter(Method method, Class<?> type) {
+        return method.getName().startsWith("set") &&
+               method.getParameterCount() == 1 &&
+               method.getReturnType().equals(type) &&
+               !isAlreadyDetectedBySetter(method, type);
+    }
+
+    private static boolean isAlreadyDetectedBySetter(Method method, Class<?> type) {
+        for (PropertyDescriptor property : getProperties(type)) {
+            if (method.equals(property.getWriteMethod())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void setProperty(
