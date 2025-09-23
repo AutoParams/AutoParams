@@ -1,12 +1,14 @@
 package test.autoparams;
 
-import autoparams.Repeat;
-import autoparams.generator.ObjectGenerationContext;
-import autoparams.generator.ObjectQuery;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+
+import autoparams.ObjectQuery;
+import autoparams.ParameterQuery;
+import autoparams.Repeat;
+import autoparams.ResolutionContext;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -59,13 +61,17 @@ class SpecsForBigDecimal {
 
     @AutoParameterizedTest
     void sut_throws_if_max_constraint_is_less_than_min_constraint(
-        ObjectGenerationContext context
+        ResolutionContext context
     ) throws NoSuchMethodException {
         Parameter parameter = getClass()
             .getDeclaredMethod("maxConstraintLessThanMinConstraint", BigDecimal.class)
             .getParameters()[0];
-        ObjectQuery query = ObjectQuery.fromParameter(parameter);
-        assertThrows(IllegalArgumentException.class, () -> context.generate(query));
+        ObjectQuery query = new ParameterQuery(
+            parameter,
+            0,
+            parameter.getAnnotatedType().getType()
+        );
+        assertThrows(RuntimeException.class, () -> context.resolve(query));
     }
 
     void maxConstraintLessThanMinConstraint(@Min(100) @Max(99) BigDecimal arg) {

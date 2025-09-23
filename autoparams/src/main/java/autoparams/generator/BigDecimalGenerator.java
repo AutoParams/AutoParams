@@ -1,23 +1,22 @@
 package autoparams.generator;
 
 import java.math.BigDecimal;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
-import static java.lang.Long.MAX_VALUE;
-import static java.lang.Long.MIN_VALUE;
+import autoparams.ObjectQuery;
+import autoparams.ResolutionContext;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
-final class BigDecimalGenerator extends TypeMatchingGenerator {
+import static autoparams.generator.MaxAnnotation.findMaxAnnotation;
+import static autoparams.generator.MinAnnotation.findMinAnnotation;
 
-    BigDecimalGenerator() {
-        super((query, context) -> factory(query), BigDecimal.class, Number.class);
-    }
+final class BigDecimalGenerator extends ObjectGeneratorBase<BigDecimal> {
 
-    private static BigDecimal factory(ObjectQuery query) {
-        return factory(getMin(query), getMax(query));
-    }
+    @Override
+    protected BigDecimal generateObject(ObjectQuery query, ResolutionContext context) {
+        long min = getMin(query);
+        long max = getMax(query);
 
-    private static BigDecimal factory(long min, long max) {
         if (max < min) {
             throw new IllegalArgumentException("@Max must be greater than or equal to @Min");
         }
@@ -27,26 +26,22 @@ final class BigDecimalGenerator extends TypeMatchingGenerator {
         return BigRandom.between(BigDecimal.valueOf(min), BigDecimal.valueOf(max));
     }
 
-    private static long getMin(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMin((ParameterQuery) query) : MIN_VALUE;
+    private static int getBound() {
+        return 1000000 + 1;
     }
 
-    private static long getMin(ParameterQuery query) {
-        Min min = query.getParameter().getAnnotation(Min.class);
+    private static long getMin(ObjectQuery query) {
+        Min min = findMinAnnotation(query);
         if (min == null) {
-            Max max = query.getParameter().getAnnotation(Max.class);
-            return max == null || max.value() >= 1 ? 1 : MIN_VALUE;
+            Max max = findMaxAnnotation(query);
+            return max == null || max.value() >= 1 ? 1 : Long.MIN_VALUE;
         } else {
             return min.value();
         }
     }
 
     private static long getMax(ObjectQuery query) {
-        return query instanceof ParameterQuery ? getMax((ParameterQuery) query) : MAX_VALUE;
-    }
-
-    private static long getMax(ParameterQuery query) {
-        Max max = query.getParameter().getAnnotation(Max.class);
-        return max == null ? MAX_VALUE : max.value();
+        Max max = findMaxAnnotation(query);
+        return max == null ? getBound() : max.value();
     }
 }
