@@ -18,7 +18,7 @@ final class BigDecimalGenerator extends ObjectGeneratorBase<BigDecimal> {
         long max = getMax(query);
 
         if (max < min) {
-            throw new IllegalArgumentException("@Max must be greater than or equal to @Min");
+            throw new RuntimeException("@Max must be greater than or equal to @Min");
         }
         if (min == max) {
             return BigDecimal.valueOf(min);
