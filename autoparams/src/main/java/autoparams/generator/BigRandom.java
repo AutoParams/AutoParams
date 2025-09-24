@@ -6,7 +6,7 @@ import java.math.MathContext;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class BigRandom {
+class BigRandom {
 
     // Constants:
     private static final double log2 = Math.log10(2.0);
