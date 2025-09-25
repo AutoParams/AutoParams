@@ -118,7 +118,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         ResolutionContext context
     ) {
         RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
-        
+
         // First, set properties found by JavaBeans introspection (public setters)
         for (PropertyDescriptor property : getProperties(type)) {
             Method setter = property.getWriteMethod();
@@ -129,7 +129,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         }
 
         Class<?> rawType = (Class<?>) type.getRawType();
-        
+
         // Second, look for chaining setters (public methods that return the class type)
         for (Method method : rawType.getMethods()) {
             if (isChainingSetter(method, rawType)) {
@@ -202,14 +202,14 @@ public final class InstancePropertyWriter implements ObjectProcessor {
     private static Method[] getAllInheritedMethods(Class<?> type) {
         Set<Method> methods = new HashSet<>();
         Class<?> currentClass = type;
-        
+
         while (currentClass != null && currentClass != Object.class) {
             for (Method method : currentClass.getDeclaredMethods()) {
                 methods.add(method);
             }
             currentClass = currentClass.getSuperclass();
         }
-        
+
         return methods.toArray(new Method[0]);
     }
 
