@@ -8,11 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.junit.jupiter.params.ParameterizedTest;
-import test.autoparams.HasSetter;
-import test.autoparams.DerivedClassWithInheritedSetter;
 import test.autoparams.ComplexInheritanceDerived;
-import test.autoparams.InheritanceWithOverride;
+import test.autoparams.DerivedClassWithInheritedSetter;
+import test.autoparams.HasSetter;
 import test.autoparams.InheritanceVisibilityTest;
+import test.autoparams.InheritanceWithOverride;
 import test.autoparams.TrueInheritanceIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,7 +74,11 @@ class SpecsForInstancePropertyWriter {
         InheritanceWithOverride.DerivedWithOverriddenSetter bag,
         ResolutionContext context
     ) {
-        sut.process(new DefaultObjectQuery(InheritanceWithOverride.DerivedWithOverriddenSetter.class), bag, context);
+        sut.process(
+            new DefaultObjectQuery(InheritanceWithOverride.DerivedWithOverriddenSetter.class),
+            bag,
+            context
+        );
         assertThat(bag.getValue()).isNotNull();
         assertThat(bag.isSetterCalled()).isTrue(); // Base setter should be called
         assertThat(bag.isDerivedSetterCalled()).isTrue(); // Overridden setter should be called
@@ -87,21 +91,31 @@ class SpecsForInstancePropertyWriter {
         InheritanceVisibilityTest.DerivedFromProtectedSetter bag,
         ResolutionContext context
     ) {
-        sut.process(new DefaultObjectQuery(InheritanceVisibilityTest.DerivedFromProtectedSetter.class), bag, context);
+        sut.process(
+            new DefaultObjectQuery(InheritanceVisibilityTest.DerivedFromProtectedSetter.class),
+            bag,
+            context
+        );
         assertThat(bag.getDerivedValue()).isNotNull(); // Public setter should work
-        assertThat(bag.getProtectedValue()).isNotNull(); // Overridden public setter should be called
+        // Overridden public setter should be called
+        assertThat(bag.getProtectedValue()).isNotNull();
     }
 
     @ParameterizedTest
     @AutoSource
     void sut_sets_inherited_protected_setter(
         InstancePropertyWriter sut,
-        TrueInheritanceIssue.DerivedWithInheritedProtectedSetter bag,  
+        TrueInheritanceIssue.DerivedWithInheritedProtectedSetter bag,
         ResolutionContext context
     ) {
-        sut.process(new DefaultObjectQuery(TrueInheritanceIssue.DerivedWithInheritedProtectedSetter.class), bag, context);
+        sut.process(
+            new DefaultObjectQuery(TrueInheritanceIssue.DerivedWithInheritedProtectedSetter.class),
+            bag,
+            context
+        );
         assertThat(bag.getDerivedValue()).isNotNull(); // Public setter should work
-        assertThat(bag.getProtectedValue()).isNotNull(); // Protected setter from base class should NOW be called
+        // Protected setter from base class should NOW be called
+        assertThat(bag.getProtectedValue()).isNotNull();
     }
 
     @Getter
