@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Set;
 
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
@@ -69,6 +71,7 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Object value,
         ResolutionContext context
     ) {
+        // First, set properties found by JavaBeans introspection (public setters)
         for (PropertyDescriptor property : getProperties(type)) {
             Method setter = property.getWriteMethod();
             if (setter != null) {
@@ -82,8 +85,22 @@ public final class InstancePropertyWriter implements ObjectProcessor {
             }
         }
 
+        // Second, look for chaining setters (public methods that return the class type)
         for (Method method : type.getMethods()) {
             if (isChainingSetter(method, type)) {
+                Parameter parameter = method.getParameters()[0];
+                ParameterQuery query = new ParameterQuery(
+                    parameter,
+                    0,
+                    parameter.getParameterizedType()
+                );
+                setProperty(value, method, context.resolve(query));
+            }
+        }
+
+        // Third, find inherited non-public setters that JavaBeans introspection missed
+        for (Method method : getAllInheritedMethods(type)) {
+            if (isInheritedSetter(method, type)) {
                 Parameter parameter = method.getParameters()[0];
                 ParameterQuery query = new ParameterQuery(
                     parameter,
@@ -101,6 +118,8 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         ResolutionContext context
     ) {
         RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(type);
+        
+        // First, set properties found by JavaBeans introspection (public setters)
         for (PropertyDescriptor property : getProperties(type)) {
             Method setter = property.getWriteMethod();
             if (setter != null) {
@@ -110,8 +129,18 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         }
 
         Class<?> rawType = (Class<?>) type.getRawType();
+        
+        // Second, look for chaining setters (public methods that return the class type)
         for (Method method : rawType.getMethods()) {
             if (isChainingSetter(method, rawType)) {
+                ObjectQuery query = resolvePropertyQuery(method, typeResolver);
+                setProperty(value, method, context.resolve(query));
+            }
+        }
+
+        // Third, find inherited non-public setters that JavaBeans introspection missed
+        for (Method method : getAllInheritedMethods(rawType)) {
+            if (isInheritedSetter(method, rawType)) {
                 ObjectQuery query = resolvePropertyQuery(method, typeResolver);
                 setProperty(value, method, context.resolve(query));
             }
@@ -162,10 +191,42 @@ public final class InstancePropertyWriter implements ObjectProcessor {
         Object propertyValue
     ) {
         try {
+            setter.setAccessible(true);
             setter.invoke(instance, propertyValue);
         } catch (IllegalAccessException |
                  InvocationTargetException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private static Method[] getAllInheritedMethods(Class<?> type) {
+        Set<Method> methods = new HashSet<>();
+        Class<?> currentClass = type;
+        
+        while (currentClass != null && currentClass != Object.class) {
+            for (Method method : currentClass.getDeclaredMethods()) {
+                methods.add(method);
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        
+        return methods.toArray(new Method[0]);
+    }
+
+    private static boolean isInheritedSetter(Method method, Class<?> type) {
+        return method.getName().startsWith("set") &&
+               method.getParameterCount() == 1 &&
+               method.getReturnType() == void.class &&
+               !isAlreadyDetectedBySetter(method, type) &&
+               !isAlreadyDetectedByChainingSetter(method, type);
+    }
+
+    private static boolean isAlreadyDetectedByChainingSetter(Method method, Class<?> type) {
+        for (Method publicMethod : type.getMethods()) {
+            if (publicMethod.equals(method) && isChainingSetter(publicMethod, type)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
