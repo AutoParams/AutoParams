@@ -4,7 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +108,36 @@ class TestResolutionContext extends ResolutionContext {
 
     private ParameterQuery getQuery(Parameter parameter, int index) {
         Type type = parameter.getParameterizedType();
+
+        if (type instanceof TypeVariable) {
+            type = resolveTypeVariable((TypeVariable<?>) type);
+        }
+
         return new ParameterQuery(parameter, index, type);
+    }
+
+    private Type resolveTypeVariable(TypeVariable<?> typeVariable) {
+        ExtensionContext extensionContext = resolve(ExtensionContext.class);
+        Class<?> testClass = extensionContext.getRequiredTestClass();
+
+        Type genericSuperclass = testClass.getGenericSuperclass();
+
+        if (genericSuperclass instanceof ParameterizedType) {
+            ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
+            Class<?> rawSuperclass = (Class<?>) parameterizedSuperclass.getRawType();
+
+            TypeVariable<?>[] typeParameters = rawSuperclass.getTypeParameters();
+            Type[] actualTypeArguments = parameterizedSuperclass.getActualTypeArguments();
+
+            for (int i = 0; i < typeParameters.length; i++) {
+                if (typeParameters[i].equals(typeVariable)) {
+                    return actualTypeArguments[i];
+                }
+            }
+        }
+
+        Type[] bounds = typeVariable.getBounds();
+        return bounds.length > 0 ? bounds[0] : Object.class;
     }
 
     private Brake getBrake() {
