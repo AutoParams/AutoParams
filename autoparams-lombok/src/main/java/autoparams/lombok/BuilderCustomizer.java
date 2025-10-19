@@ -1,6 +1,7 @@
 package autoparams.lombok;
 
 import autoparams.customization.Customizer;
+import autoparams.customization.RecursionGuard;
 import autoparams.generator.ObjectGenerator;
 
 /**
@@ -16,6 +17,13 @@ import autoparams.generator.ObjectGenerator;
  * <p>
  * To use this customizer, annotate your test method or class with
  * {@code @Customization(BuilderCustomizer.class)}.
+ * </p>
+ * <p>
+ * This customizer automatically applies {@link RecursionGuard} to prevent
+ * infinite recursion when generating objects with self-referencing fields.
+ * For types with self-referencing fields (e.g., {@code Category parent} or
+ * {@code Set&lt;Category&gt; children}), the recursion depth is limited to 1
+ * by default, and self-referencing fields will be set to {@code null}.
  * </p>
  *
  * <p>
@@ -60,6 +68,7 @@ import autoparams.generator.ObjectGenerator;
  * @see lombok.Builder
  * @see Customizer
  * @see ObjectGenerator
+ * @see RecursionGuard
  * @see autoparams.customization.Customization
  */
 public class BuilderCustomizer implements Customizer {
@@ -108,6 +117,6 @@ public class BuilderCustomizer implements Customizer {
      */
     @Override
     public ObjectGenerator customize(ObjectGenerator generator) {
-        return invoker.customize(generator);
+        return new RecursionGuard().customize(invoker.customize(generator));
     }
 }
