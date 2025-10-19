@@ -120,24 +120,82 @@ class TestResolutionContext extends ResolutionContext {
         ExtensionContext extensionContext = resolve(ExtensionContext.class);
         Class<?> testClass = extensionContext.getRequiredTestClass();
 
-        Type genericSuperclass = testClass.getGenericSuperclass();
-
-        if (genericSuperclass instanceof ParameterizedType) {
-            ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
-            Class<?> rawSuperclass = (Class<?>) parameterizedSuperclass.getRawType();
-
-            TypeVariable<?>[] typeParameters = rawSuperclass.getTypeParameters();
-            Type[] actualTypeArguments = parameterizedSuperclass.getActualTypeArguments();
-
-            for (int i = 0; i < typeParameters.length; i++) {
-                if (typeParameters[i].equals(typeVariable)) {
-                    return actualTypeArguments[i];
-                }
-            }
+        Type resolvedType = resolveTypeVariableFromClass(testClass, typeVariable);
+        if (resolvedType != null) {
+            return resolvedType;
         }
 
         Type[] bounds = typeVariable.getBounds();
         return bounds.length > 0 ? bounds[0] : Object.class;
+    }
+
+    private Type resolveTypeVariableFromClass(
+        Class<?> clazz,
+        TypeVariable<?> typeVariable
+    ) {
+        if (clazz == null || clazz == Object.class) {
+            return null;
+        }
+
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        Type resolvedType = resolveTypeVariableFromType(
+            genericSuperclass,
+            typeVariable
+        );
+        if (resolvedType != null) {
+            return resolvedType;
+        }
+
+        for (Type genericInterface : clazz.getGenericInterfaces()) {
+            resolvedType = resolveTypeVariableFromType(
+                genericInterface,
+                typeVariable
+            );
+            if (resolvedType != null) {
+                return resolvedType;
+            }
+        }
+
+        if (genericSuperclass instanceof Class<?>) {
+            return resolveTypeVariableFromClass(
+                (Class<?>) genericSuperclass,
+                typeVariable
+            );
+        }
+
+        return null;
+    }
+
+    private Type resolveTypeVariableFromType(
+        Type type,
+        TypeVariable<?> typeVariable
+    ) {
+        if (!(type instanceof ParameterizedType)) {
+            return null;
+        }
+
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type rawType = parameterizedType.getRawType();
+
+        if (!(rawType instanceof Class<?>)) {
+            return null;
+        }
+
+        Class<?> rawClass = (Class<?>) rawType;
+        TypeVariable<?>[] typeParameters = rawClass.getTypeParameters();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+
+        for (int i = 0; i < typeParameters.length; i++) {
+            if (typeParameters[i].equals(typeVariable)) {
+                Type resolvedType = actualTypeArguments[i];
+                if (resolvedType instanceof TypeVariable<?>) {
+                    return resolveTypeVariable((TypeVariable<?>) resolvedType);
+                }
+                return resolvedType;
+            }
+        }
+
+        return resolveTypeVariableFromClass(rawClass, typeVariable);
     }
 
     private Brake getBrake() {
