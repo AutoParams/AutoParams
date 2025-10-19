@@ -14,7 +14,6 @@ import autoparams.customization.Customization;
 import autoparams.lombok.BuilderCustomizer;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Singular;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -94,9 +93,11 @@ public class SpecsForBuilderCustomizer {
         H parent;
         final Set<H> children = new HashSet<>();
 
-        protected HierarchyEntity(@Nullable H parent, @NonNull Set<H> children) {
+        protected HierarchyEntity(@Nullable H parent, @Nullable Set<H> children) {
             this.parent = parent;
-            this.children.addAll(children);
+            if (children != null) {
+                this.children.addAll(children);
+            }
         }
 
         public H getParent() {
@@ -114,7 +115,7 @@ public class SpecsForBuilderCustomizer {
         private final String name;
 
         @Builder
-        public Category(String name, Category parent, Set<Category> children) {
+        public Category(String name, Category parent, @Nullable Set<Category> children) {
             super(parent, children);
             this.name = name;
         }
