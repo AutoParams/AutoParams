@@ -52,9 +52,14 @@ public final class RecursionGuard implements Customizer {
      *
      * @param recursionDepth the maximum number of times a type can be
      *                       recursively generated. Must be a positive integer.
+     * @throws IllegalArgumentException if {@code recursionDepth} is less than 1
      * @see #RecursionGuard()
      */
     public RecursionGuard(int recursionDepth) {
+        if (recursionDepth < 1) {
+            throw new IllegalArgumentException(
+                "The argument 'recursionDepth' must not be less than 1.");
+        }
         this.recursionDepth = recursionDepth;
     }
 
@@ -133,9 +138,18 @@ public final class RecursionGuard implements Customizer {
                         .stream()
                         .filter(x -> x.equals(type))
                         .count();
-                    return depth > recursionDepth
-                        ? new ObjectContainer(null)
-                        : generator.generate(query, context);
+                    if (depth > recursionDepth) {
+                        String message = String.format(
+                            "RecursionGuard: Prevented infinite recursion for type %s "
+                            + "at depth %d (limit: %d). Returning null.",
+                            type.getTypeName(),
+                            depth,
+                            recursionDepth
+                        );
+                        System.err.println(message);
+                        return new ObjectContainer(null);
+                    }
+                    return generator.generate(query, context);
                 } finally {
                     monitor.pop();
                 }

@@ -21,9 +21,13 @@ import autoparams.generator.ObjectGenerator;
  * <p>
  * This customizer automatically applies {@link RecursionGuard} to prevent
  * infinite recursion when generating objects with self-referencing fields.
- * For types with self-referencing fields (e.g., {@code Category parent} or
- * {@code Set&lt;Category&gt; children}), the recursion depth is limited to 1
- * by default, and self-referencing fields will be set to {@code null}.
+ * Without this protection, attempting to generate objects with circular
+ * references (such as tree nodes or hierarchical entities) would result in
+ * {@link StackOverflowError}. The recursion depth is limited to 1 by default,
+ * meaning that when generating nested instances of the same type (e.g.,
+ * {@code Category parent} or {@code Set&lt;Category&gt; children}),
+ * {@code null} will be generated for the recursive type to prevent stack
+ * overflow errors.
  * </p>
  *
  * <p>
