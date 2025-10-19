@@ -31,6 +31,9 @@ import static autoparams.Instantiator.instantiate;
 class TestResolutionContext extends ResolutionContext {
 
     private static final Object[] EMPTY_ASSET = new Object[0];
+    private static final int MAX_TYPE_RESOLUTION_DEPTH = 50;
+    private static final boolean DEBUG_TYPE_RESOLUTION =
+        Boolean.getBoolean("autoparams.debug.typeResolution");
 
     static TestResolutionContext create(ExtensionContext extensionContext) {
         val resolutionContext = new TestResolutionContext();
@@ -117,11 +120,43 @@ class TestResolutionContext extends ResolutionContext {
     }
 
     private Type resolveTypeVariable(TypeVariable<?> typeVariable) {
+        return resolveTypeVariableWithDepth(typeVariable, 0);
+    }
+
+    private Type resolveTypeVariableWithDepth(
+        TypeVariable<?> typeVariable,
+        int depth
+    ) {
+        if (depth > MAX_TYPE_RESOLUTION_DEPTH) {
+            String message = String.format(
+                "Type variable resolution exceeded maximum depth of %d "
+                + "while resolving '%s'. This likely indicates circular "
+                + "type variable references in your test class hierarchy.",
+                MAX_TYPE_RESOLUTION_DEPTH,
+                typeVariable.getName()
+            );
+            throw new IllegalStateException(message);
+        }
+
+        if (DEBUG_TYPE_RESOLUTION) {
+            debugLog("Resolving type variable '%s' at depth %d",
+                typeVariable.getName(), depth);
+        }
+
         ExtensionContext extensionContext = resolve(ExtensionContext.class);
         Class<?> testClass = extensionContext.getRequiredTestClass();
 
-        Type resolvedType = resolveTypeVariableFromClass(testClass, typeVariable);
+        Type resolvedType = resolveTypeVariableFromClass(
+            testClass,
+            typeVariable,
+            depth
+        );
         if (resolvedType != null) {
+            if (DEBUG_TYPE_RESOLUTION) {
+                debugLog("Resolved '%s' to %s",
+                    typeVariable.getName(),
+                    TypeFormatter.format(resolvedType, false));
+            }
             return resolvedType;
         }
 
@@ -147,16 +182,27 @@ class TestResolutionContext extends ResolutionContext {
 
     private Type resolveTypeVariableFromClass(
         Class<?> clazz,
-        TypeVariable<?> typeVariable
+        TypeVariable<?> typeVariable,
+        int depth
     ) {
         if (clazz == null || clazz == Object.class) {
+            if (DEBUG_TYPE_RESOLUTION) {
+                debugLog("Reached Object.class at depth %d, stopping traversal",
+                    depth);
+            }
             return null;
+        }
+
+        if (DEBUG_TYPE_RESOLUTION) {
+            debugLog("Checking class %s at depth %d",
+                clazz.getSimpleName(), depth);
         }
 
         Type genericSuperclass = clazz.getGenericSuperclass();
         Type resolvedType = resolveTypeVariableFromType(
             genericSuperclass,
-            typeVariable
+            typeVariable,
+            depth
         );
         if (resolvedType != null) {
             return resolvedType;
@@ -165,7 +211,8 @@ class TestResolutionContext extends ResolutionContext {
         for (Type genericInterface : clazz.getGenericInterfaces()) {
             resolvedType = resolveTypeVariableFromType(
                 genericInterface,
-                typeVariable
+                typeVariable,
+                depth
             );
             if (resolvedType != null) {
                 return resolvedType;
@@ -175,7 +222,8 @@ class TestResolutionContext extends ResolutionContext {
         if (genericSuperclass instanceof Class<?>) {
             return resolveTypeVariableFromClass(
                 (Class<?>) genericSuperclass,
-                typeVariable
+                typeVariable,
+                depth
             );
         }
 
@@ -184,9 +232,14 @@ class TestResolutionContext extends ResolutionContext {
 
     private Type resolveTypeVariableFromType(
         Type type,
-        TypeVariable<?> typeVariable
+        TypeVariable<?> typeVariable,
+        int depth
     ) {
         if (!(type instanceof ParameterizedType)) {
+            if (DEBUG_TYPE_RESOLUTION && type != null) {
+                debugLog("Skipping non-parameterized type %s at depth %d",
+                    type, depth);
+            }
             return null;
         }
 
@@ -194,6 +247,10 @@ class TestResolutionContext extends ResolutionContext {
         Type rawType = parameterizedType.getRawType();
 
         if (!(rawType instanceof Class<?>)) {
+            if (DEBUG_TYPE_RESOLUTION) {
+                debugLog("Skipping non-class raw type %s at depth %d",
+                    rawType, depth);
+            }
             return null;
         }
 
@@ -204,14 +261,28 @@ class TestResolutionContext extends ResolutionContext {
         for (int i = 0; i < typeParameters.length; i++) {
             if (typeParameters[i].equals(typeVariable)) {
                 Type resolvedType = actualTypeArguments[i];
+                if (DEBUG_TYPE_RESOLUTION) {
+                    debugLog("Found match in %s: %s -> %s at depth %d",
+                        rawClass.getSimpleName(),
+                        typeVariable.getName(),
+                        TypeFormatter.format(resolvedType, false),
+                        depth);
+                }
                 if (resolvedType instanceof TypeVariable<?>) {
-                    return resolveTypeVariable((TypeVariable<?>) resolvedType);
+                    return resolveTypeVariableWithDepth(
+                        (TypeVariable<?>) resolvedType,
+                        depth + 1
+                    );
                 }
                 return resolvedType;
             }
         }
 
-        return resolveTypeVariableFromClass(rawClass, typeVariable);
+        return resolveTypeVariableFromClass(rawClass, typeVariable, depth);
+    }
+
+    private void debugLog(String format, Object... args) {
+        System.err.println("DEBUG [TypeResolution]: " + String.format(format, args));
     }
 
     private Brake getBrake() {
