@@ -126,4 +126,44 @@ public class SpecsForGenericTestClass {
     class CategoryRepositoryTest
         extends RepositoryTest<CategoryRepository, Category> {
     }
+
+    abstract static class UnboundTest<T> {
+        @ParameterizedTest
+        @AutoSource
+        void test_with_unbound_type(T value) {
+            assertNotNull(value);
+        }
+    }
+
+    @Nested
+    class ConcreteUnboundTest extends UnboundTest {
+    }
+
+    abstract static class BaseLevel<A> {
+        @ParameterizedTest
+        @AutoSource
+        void test_base(A value) {
+            assertNotNull(value);
+        }
+    }
+
+    abstract static class MiddleLevel<B> extends BaseLevel<B> {
+        @ParameterizedTest
+        @AutoSource
+        void test_middle(B value) {
+            assertNotNull(value);
+        }
+    }
+
+    abstract static class HigherLevel<C> extends MiddleLevel<C> {
+        @ParameterizedTest
+        @AutoSource
+        void test_higher(C value) {
+            assertNotNull(value);
+        }
+    }
+
+    @Nested
+    class ThreeLevelTest extends HigherLevel<Category> {
+    }
 }

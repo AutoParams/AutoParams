@@ -126,7 +126,23 @@ class TestResolutionContext extends ResolutionContext {
         }
 
         Type[] bounds = typeVariable.getBounds();
-        return bounds.length > 0 ? bounds[0] : Object.class;
+        Type fallbackType = bounds.length > 0 ? bounds[0] : Object.class;
+
+        String message = String.format(
+            "Failed to resolve type variable '%s' from test class "
+            + "hierarchy '%s'. Falling back to %s. "
+            + "This may indicate missing type parameter mapping in your "
+            + "test class hierarchy. For example, if you have "
+            + "'class MyTest extends BaseTest<T>', make sure to specify "
+            + "the type parameter like 'class MyTest extends BaseTest<MyType>'.",
+            typeVariable.getName(),
+            testClass.getName(),
+            TypeFormatter.format(fallbackType, false)
+        );
+
+        System.err.println("WARNING: " + message);
+
+        return fallbackType;
     }
 
     private Type resolveTypeVariableFromClass(
