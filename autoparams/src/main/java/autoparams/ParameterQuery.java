@@ -1,10 +1,13 @@
 package autoparams;
 
 import java.beans.ConstructorProperties;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import static java.lang.Character.isUpperCase;
+import static java.lang.Character.toLowerCase;
 import static java.lang.System.lineSeparator;
 
 /**
@@ -157,6 +160,115 @@ public final class ParameterQuery implements ObjectQuery {
     @Override
     public String toLog(boolean verbose) {
         String typeName = TypeFormatter.format(getType(), verbose);
-        return typeName + " " + parameter.getName();
+        String propertyName = getPropertyNameForLogging();
+        return typeName + " " + propertyName;
+    }
+
+    /**
+     * Returns the property name for logging purposes.
+     * <p>
+     * If the parameter name is available and not a synthetic name (like "arg0"),
+     * it returns the parameter name. Otherwise, if the parameter belongs to a
+     * setter method, it infers the property name from the method name.
+     * </p>
+     *
+     * @return the property name for logging
+     */
+    private String getPropertyNameForLogging() {
+        String parameterName = parameter.getName();
+
+        // If parameter name is present and not synthetic, use it
+        if (parameter.isNamePresent() && !isSyntheticParameterName(parameterName)) {
+            return parameterName;
+        }
+
+        // If this is a setter method, infer property name from method name
+        if (isSetterMethod()) {
+            return inferPropertyNameFromSetter(parameter.getDeclaringExecutable().getName());
+        }
+
+        // Fallback to parameter name (may be synthetic like "arg0")
+        return parameterName;
+    }
+
+    /**
+     * Checks if the parameter belongs to a setter method.
+     *
+     * @return true if the parameter belongs to a setter method
+     */
+    private boolean isSetterMethod() {
+        if (!(parameter.getDeclaringExecutable() instanceof Method)) {
+            return false;
+        }
+
+        Method method = (Method) parameter.getDeclaringExecutable();
+        String methodName = method.getName();
+
+        return methodName.startsWith("set") &&
+            methodName.length() > 3 &&
+            isUpperCase(methodName.charAt(3)) &&
+            method.getParameterCount() == 1;
+    }
+
+    /**
+     * Infers the property name from a setter method name.
+     * <p>
+     * For example, "setName" -> "name", "setUserName" -> "userName"
+     * </p>
+     *
+     * @param setterName the setter method name (e.g., "setName")
+     * @return the inferred property name (e.g., "name")
+     */
+    private static String inferPropertyNameFromSetter(String setterName) {
+        String withoutPrefix = setterName.substring(3); // Remove "set" prefix
+        return decapitalizeHead(withoutPrefix);
+    }
+
+    /**
+     * Checks if the parameter name is a synthetic name (like "arg0", "arg1").
+     *
+     * @param parameterName the parameter name to check
+     * @return true if the parameter name is synthetic
+     */
+    private static boolean isSyntheticParameterName(String parameterName) {
+        return parameterName != null &&
+            parameterName.startsWith("arg") &&
+            parameterName.length() > 3 &&
+            isNumeric(parameterName.substring(3));
+    }
+
+    /**
+     * Checks if a string contains only numeric characters.
+     *
+     * @param s the string to check
+     * @return true if the string contains only numeric characters
+     */
+    private static boolean isNumeric(String s) {
+        if (s == null || s.isEmpty()) {
+            return false;
+        }
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Converts the first character of a string to lowercase.
+     * <p>
+     * For example, "Name" -> "name", "UserName" -> "userName"
+     * </p>
+     *
+     * @param s the string to decapitalize
+     * @return the string with the first character in lowercase
+     */
+    private static String decapitalizeHead(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        char head = s.charAt(0);
+        return isUpperCase(head) ? toLowerCase(head) + s.substring(1) : s;
     }
 }
