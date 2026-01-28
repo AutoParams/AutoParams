@@ -95,7 +95,7 @@ public final class ParameterQuery implements ObjectQuery {
     }
 
     /**
-     * Returns the parameter name, or throws an exception if it cannot be
+     * Returns the parameter name or throws an exception if it cannot be
      * determined.
      * <p>
      * If the parameter name is not available at runtime, this method throws a
@@ -177,7 +177,7 @@ public final class ParameterQuery implements ObjectQuery {
     private String getPropertyNameForLogging() {
         String parameterName = parameter.getName();
 
-        // If parameter name is present and not synthetic, use it
+        // If the parameter name is present and not synthetic, use it
         if (parameter.isNamePresent() && !isSyntheticParameterName(parameterName)) {
             return parameterName;
         }
@@ -187,7 +187,7 @@ public final class ParameterQuery implements ObjectQuery {
             return inferPropertyNameFromSetter(parameter.getDeclaringExecutable().getName());
         }
 
-        // Fallback to parameter name (may be synthetic like "arg0")
+        // Fallback to parameter name (maybe synthetic like "arg0")
         return parameterName;
     }
 
@@ -262,7 +262,7 @@ public final class ParameterQuery implements ObjectQuery {
      * </p>
      *
      * @param s the string to decapitalize
-     * @return the string with the first character in lowercase
+     * @return the string with the first character in the lowercase
      */
     private static String decapitalizeHead(String s) {
         if (s == null || s.isEmpty()) {
