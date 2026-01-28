@@ -423,4 +423,11 @@ class SpecsForDesign {
         assertThat(tuple.value1()).isNotNull();
         assertThat(tuple.value2()).isNotNull();
     }
+
+    @Test
+    void sut_throws_exception_when_type_reference_is_null() {
+        assertThatThrownBy(() -> Design.of((TypeReference<Tuple<String, Point>>) null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'typeReference' must not be null");
+    }
 }
