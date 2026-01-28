@@ -402,4 +402,15 @@ class SpecsForDesign {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'generator' is null.");
     }
+
+    @Test
+    void set_configures_generic_type_property_value() {
+        List<String> tags = List.of("foo", "bar");
+
+        Product product = Design.of(Product.class)
+            .set(Product::tags, tags)
+            .instantiate();
+
+        assertThat(product.tags()).isEqualTo(tags);
+    }
 }
