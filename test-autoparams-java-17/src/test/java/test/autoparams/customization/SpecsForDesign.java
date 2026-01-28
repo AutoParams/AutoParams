@@ -412,4 +412,15 @@ class SpecsForDesign {
 
         assertThat(design).isNotNull();
     }
+
+    @Test
+    void sut_instantiates_generic_object_when_design_is_created_with_type_reference() {
+        Design<Tuple<String, Point>> design = Design.of(new TypeReference<>() { });
+
+        Tuple<String, Point> tuple = design.instantiate();
+
+        assertThat(tuple).isNotNull();
+        assertThat(tuple.value1()).isNotNull();
+        assertThat(tuple.value2()).isNotNull();
+    }
 }
