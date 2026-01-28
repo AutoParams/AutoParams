@@ -455,4 +455,20 @@ class SpecsForDesign {
         assertThat(product.category()).isNotNull();
         assertThat(product.category().name()).isEqualTo("Electronics");
     }
+
+    @Test
+    void sut_can_set_generic_parameter_type_property_value() {
+        Product expectedProduct = Design.of(Product.class)
+            .set(Product::name, "Configured Product")
+            .set(Product::stockQuantity, 50)
+            .instantiate();
+
+        Design<Container<Product>> design = Design.of(new TypeReference<Container<Product>>() { })
+            .set(Container::value, expectedProduct);
+
+        Container<Product> container = design.instantiate();
+
+        assertThat(container).isNotNull();
+        assertThat(container.value()).isSameAs(expectedProduct);
+    }
 }

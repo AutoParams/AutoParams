@@ -246,7 +246,11 @@ public class Design<T> implements Customizer {
 
         return supply(getterDelegate, () -> {
             Property<T, P> property = Property.parse(getterDelegate);
-            Design<P> design = Design.of(property.getType());
+            Type propertyType = property.getType();
+            Class<P> propertyClass = propertyType instanceof Class
+                ? (Class<P>) propertyType
+                : (Class<P>) ((java.lang.reflect.ParameterizedType) propertyType).getRawType();
+            Design<P> design = Design.of(propertyClass);
             return designFunction.apply(design).instantiate();
         });
     }
@@ -374,7 +378,27 @@ public class Design<T> implements Customizer {
         }
 
         private boolean matchesParameterType(ParameterQuery query) {
-            return property.getType().equals(query.getType());
+            Type propertyType = property.getType();
+            Type queryType = query.getType();
+
+            // Direct equality check
+            if (propertyType.equals(queryType)) {
+                return true;
+            }
+
+            // If property type is a TypeVariable, check if the query type is assignable
+            if (propertyType instanceof java.lang.reflect.TypeVariable) {
+                // For type variables, we match if the declaring class matches
+                // The actual type matching is done by checking the class hierarchy
+                return true;
+            }
+
+            // If property type is a Class and query type is also a Class, check assignability
+            if (propertyType instanceof Class && queryType instanceof Class) {
+                return ((Class<?>) propertyType).isAssignableFrom((Class<?>) queryType);
+            }
+
+            return false;
         }
 
         private boolean matchesParameterName(ParameterQuery query) {

@@ -3,6 +3,7 @@ package autoparams.internal.reflect;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 import autoparams.customization.dsl.FunctionDelegate;
 
@@ -23,10 +24,10 @@ import static java.lang.Character.toLowerCase;
 public final class Property<T, R> {
 
     private final Class<T> declaringClass;
-    private final Class<R> type;
+    private final Type type;
     private final String name;
 
-    private Property(Class<T> declaringClass, Class<R> type, String name) {
+    private Property(Class<T> declaringClass, Type type, String name) {
         this.declaringClass = declaringClass;
         this.type = type;
         this.name = name;
@@ -57,7 +58,7 @@ public final class Property<T, R> {
         Method getter = getGetter(getterDelegate);
         String propertyName = inferPropertyNameFromGetter(getter);
         Class<T> declaringClass = (Class<T>) getter.getDeclaringClass();
-        Class<R> returnType = (Class<R>) getter.getReturnType();
+        Type returnType = getter.getGenericReturnType();
         return new Property<>(declaringClass, returnType, propertyName);
     }
 
@@ -83,7 +84,7 @@ public final class Property<T, R> {
      *
      * @return the type of the property
      */
-    public Class<R> getType() {
+    public Type getType() {
         return type;
     }
 
