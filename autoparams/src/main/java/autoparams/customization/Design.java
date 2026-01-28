@@ -40,7 +40,8 @@ import static java.util.Collections.unmodifiableList;
  *
  * <p><b>Generic Type Support:</b></p>
  * <pre>
- * Design&lt;Container&lt;Product&gt;&gt; design = Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
+ * Design&lt;Container&lt;Product&gt;&gt; design =
+ *     Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
  * Container&lt;Product&gt; container = design.instantiate();
  * </pre>
  *
@@ -117,7 +118,8 @@ public class Design<T> implements Customizer {
      * <p><b>Example:</b></p>
      * <pre>
      * // Create a Design for a generic type
-     * Design&lt;Container&lt;Product&gt;&gt; design = Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
+     * Design&lt;Container&lt;Product&gt;&gt; design =
+     *     Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
      * Container&lt;Product&gt; container = design.instantiate();
      * </pre>
      *
