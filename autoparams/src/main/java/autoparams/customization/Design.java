@@ -326,7 +326,7 @@ public class Design<T> implements Customizer {
         }
 
         private boolean matchesParameterType(ParameterQuery query) {
-            return property.getType().equals(query.getType());
+            return property.getGenericType().equals(query.getType());
         }
 
         private boolean matchesParameterName(ParameterQuery query) {
