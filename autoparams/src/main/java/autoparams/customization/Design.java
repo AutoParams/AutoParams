@@ -1,11 +1,13 @@
 package autoparams.customization;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
@@ -13,6 +15,7 @@ import autoparams.customization.dsl.FunctionDelegate;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.Property;
+import autoparams.type.TypeReference;
 import lombok.AllArgsConstructor;
 
 import static java.util.Collections.unmodifiableList;
@@ -54,15 +57,30 @@ import static java.util.Collections.unmodifiableList;
 public class Design<T> implements Customizer {
 
     private final Class<T> type;
+    private final Type genericType;
     private final Customizer[] customizers;
 
     private Design(Class<T> type) {
         this.type = type;
+        this.genericType = null;
         this.customizers = new Customizer[0];
     }
 
     private Design(Class<T> type, Customizer[] customizers) {
         this.type = type;
+        this.genericType = null;
+        this.customizers = customizers;
+    }
+
+    private Design(Type genericType) {
+        this.type = null;
+        this.genericType = genericType;
+        this.customizers = new Customizer[0];
+    }
+
+    private Design(Type genericType, Customizer[] customizers) {
+        this.type = null;
+        this.genericType = genericType;
         this.customizers = customizers;
     }
 
@@ -87,6 +105,10 @@ public class Design<T> implements Customizer {
         }
 
         return new Design<>(type);
+    }
+
+    public static <T> Design<T> of(TypeReference<T> typeReference) {
+        return new Design<>(typeReference.getType());
     }
 
     /**
@@ -124,7 +146,9 @@ public class Design<T> implements Customizer {
 
         Property<T, P> property = Property.parse(getterDelegate);
         Customizer customizer = new ArgumentSupplier<>(property, supplier);
-        return new Design<>(type, append(customizers, customizer));
+        return type != null
+            ? new Design<>(type, append(customizers, customizer))
+            : new Design<>(genericType, append(customizers, customizer));
     }
 
     private static <E> E[] append(E[] source, E element) {
@@ -211,7 +235,9 @@ public class Design<T> implements Customizer {
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers);
-        return context.resolve(type);
+        return type != null
+            ? context.resolve(type)
+            : context.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
     }
 
     /**
@@ -228,7 +254,9 @@ public class Design<T> implements Customizer {
 
         ResolutionContext branch = context.branch();
         branch.customize(customizers);
-        return branch.resolve(type);
+        return type != null
+            ? branch.resolve(type)
+            : (T) branch.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
     }
 
     /**
@@ -271,7 +299,10 @@ public class Design<T> implements Customizer {
         branch.customize(customizers);
         List<T> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            result.add(branch.resolve(type));
+            T instance = type != null
+                ? branch.resolve(type)
+                : (T) branch.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
+            result.add(instance);
         }
         return unmodifiableList(result);
     }
