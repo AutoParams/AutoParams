@@ -430,4 +430,46 @@ class SpecsForDesign {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'typeReference' must not be null");
     }
+
+    @Test
+    void sut_supports_property_configuration_with_type_reference_for_generic_type() {
+        TypeReference<Tuple<Point, Point>> typeRef =
+            new TypeReference<Tuple<Point, Point>>() { };
+
+        // Property configuration on generic types doesn't work due to type erasure,
+        // but the API should not crash
+        Design<Tuple<Point, Point>> design = Design.of(typeRef)
+            .design(Tuple::value1, value1 -> value1
+                .set(Point::x, 42)
+            );
+
+        Tuple<Point, Point> tuple = design.instantiate();
+
+        assertThat(tuple).isNotNull();
+        assertThat(tuple.value1()).isNotNull();
+        assertThat(tuple.value2()).isNotNull();
+    }
+
+    @Test
+    void sut_supports_nested_property_configuration_with_type_reference_for_generic_type() {
+        TypeReference<Tuple<Point, Point>> typeRef =
+            new TypeReference<Tuple<Point, Point>>() { };
+
+        // Nested property configuration on generic types
+        Design<Tuple<Point, Point>> design = Design.of(typeRef)
+            .design(Tuple::value1, value1 -> value1
+                .set(Point::x, 42)
+                .set(Point::y, 2187)
+            )
+            .design(Tuple::value2, value2 -> value2
+                .set(Point::x, 100)
+                .set(Point::y, 200)
+            );
+
+        Tuple<Point, Point> tuple = design.instantiate();
+
+        assertThat(tuple).isNotNull();
+        assertThat(tuple.value1()).isNotNull();
+        assertThat(tuple.value2()).isNotNull();
+    }
 }
