@@ -413,4 +413,32 @@ class SpecsForDesign {
 
         assertThat(product.tags()).isEqualTo(tags);
     }
+
+    @Test
+    void set_distinguishes_properties_with_different_generic_type_arguments() {
+        List<String> tags = List.of("foo", "bar");
+        List<Integer> ratings = List.of(1, 2, 3);
+
+        Product product = Design.of(Product.class)
+            .set(Product::tags, tags)
+            .set(Product::ratings, ratings)
+            .instantiate();
+
+        assertThat(product.tags()).isEqualTo(tags);
+        assertThat(product.ratings()).isEqualTo(ratings);
+    }
+
+    @Test
+    void set_does_not_match_generic_properties_with_different_type_arguments() {
+        List<String> tags = List.of("foo", "bar");
+
+        Product product = Design.of(Product.class)
+            .set(Product::tags, tags)
+            .instantiate();
+
+        assertThat(product.tags()).isEqualTo(tags);
+        assertThat(product.ratings()).isNotNull();
+        assertThat(product.ratings()).isNotEmpty();
+        assertThat(product.ratings()).isNotEqualTo(tags);
+    }
 }

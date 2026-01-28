@@ -12,6 +12,7 @@ public record Product(
     String description,
     BigDecimal priceAmount,
     int stockQuantity,
-    List<String> tags
+    List<String> tags,
+    List<Integer> ratings
 ) {
 }
