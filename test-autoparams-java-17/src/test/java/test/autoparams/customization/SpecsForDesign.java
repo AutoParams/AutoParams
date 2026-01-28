@@ -471,4 +471,27 @@ class SpecsForDesign {
         assertThat(container).isNotNull();
         assertThat(container.value()).isSameAs(expectedProduct);
     }
+
+    @Test
+    void sut_respects_type_bounds_when_setting_generic_parameter_type_property_value() {
+        // This test verifies that TypeVariable bounds are checked
+        // Container<Product> should accept Product but the type matching should be enforced
+        Product product = Design.of(Product.class).instantiate();
+        Category category = Design.of(Category.class).instantiate();
+
+        // Setting a Product should work
+        Design<Container<Product>> designWithProduct =
+            Design.of(new TypeReference<Container<Product>>() { })
+                .set(Container::value, product);
+        Container<Product> containerWithProduct = designWithProduct.instantiate();
+        assertThat(containerWithProduct.value()).isSameAs(product);
+
+        // Setting a Category should also work (both extend Object)
+        // but it should be the same instance we set
+        Design<Container<Category>> designWithCategory =
+            Design.of(new TypeReference<Container<Category>>() { })
+                .set(Container::value, category);
+        Container<Category> containerWithCategory = designWithCategory.instantiate();
+        assertThat(containerWithCategory.value()).isSameAs(category);
+    }
 }

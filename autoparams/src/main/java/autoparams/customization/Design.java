@@ -386,10 +386,22 @@ public class Design<T> implements Customizer {
                 return true;
             }
 
-            // If property type is a TypeVariable, check if the query type is assignable
+            // If property type is a TypeVariable, we need to check compatibility
             if (propertyType instanceof java.lang.reflect.TypeVariable) {
-                // For type variables, we match if the declaring class matches
-                // The actual type matching is done by checking the class hierarchy
+                java.lang.reflect.TypeVariable<?> typeVar =
+                    (java.lang.reflect.TypeVariable<?>) propertyType;
+                // Check if the query type satisfies the type variable bounds
+                for (java.lang.reflect.Type bound : typeVar.getBounds()) {
+                    if (bound instanceof Class) {
+                        Class<?> boundClass = (Class<?>) bound;
+                        if (queryType instanceof Class) {
+                            if (!boundClass.isAssignableFrom((Class<?>) queryType)) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                // If all bounds are satisfied (or there are only Object bounds), accept the match
                 return true;
             }
 
