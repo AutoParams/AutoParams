@@ -93,7 +93,11 @@ public class Design<T> implements Customizer {
     }
 
     public static <T> Design<T> of(TypeReference<T> typeReference) {
-        return null;
+        if (typeReference == null) {
+            throw new IllegalArgumentException("The argument 'typeReference' must not be null");
+        }
+
+        return new Design<>(typeReference.getType());
     }
 
     /**

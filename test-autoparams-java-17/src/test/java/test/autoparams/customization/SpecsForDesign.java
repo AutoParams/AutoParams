@@ -30,7 +30,7 @@ class SpecsForDesign {
 
     @Test
     void of_throws_exception_when_type_argument_is_null() {
-        assertThatThrownBy(() -> Design.of(null))
+        assertThatThrownBy(() -> Design.of((Class<Product>) null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'type' must not be null");
     }
