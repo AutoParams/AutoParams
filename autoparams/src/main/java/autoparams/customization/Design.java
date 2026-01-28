@@ -1,11 +1,13 @@
 package autoparams.customization;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import autoparams.DefaultObjectQuery;
 import autoparams.ObjectQuery;
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
@@ -13,6 +15,7 @@ import autoparams.customization.dsl.FunctionDelegate;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.internal.reflect.Property;
+import autoparams.type.TypeReference;
 import lombok.AllArgsConstructor;
 
 import static java.util.Collections.unmodifiableList;
@@ -53,15 +56,15 @@ import static java.util.Collections.unmodifiableList;
  */
 public class Design<T> implements Customizer {
 
-    private final Class<T> type;
+    private final Type type;
     private final Customizer[] customizers;
 
-    private Design(Class<T> type) {
+    private Design(Type type) {
         this.type = type;
         this.customizers = new Customizer[0];
     }
 
-    private Design(Class<T> type, Customizer[] customizers) {
+    private Design(Type type, Customizer[] customizers) {
         this.type = type;
         this.customizers = customizers;
     }
@@ -87,6 +90,10 @@ public class Design<T> implements Customizer {
         }
 
         return new Design<>(type);
+    }
+
+    public static <T> Design<T> of(TypeReference<T> typeReference) {
+        return null;
     }
 
     /**
@@ -211,7 +218,7 @@ public class Design<T> implements Customizer {
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers);
-        return context.resolve(type);
+        return (T) context.resolve(new DefaultObjectQuery(type));
     }
 
     /**
@@ -228,7 +235,7 @@ public class Design<T> implements Customizer {
 
         ResolutionContext branch = context.branch();
         branch.customize(customizers);
-        return branch.resolve(type);
+        return (T) branch.resolve(new DefaultObjectQuery(type));
     }
 
     /**
@@ -271,7 +278,7 @@ public class Design<T> implements Customizer {
         branch.customize(customizers);
         List<T> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            result.add(branch.resolve(type));
+            result.add((T) branch.resolve(new DefaultObjectQuery(type)));
         }
         return unmodifiableList(result);
     }
