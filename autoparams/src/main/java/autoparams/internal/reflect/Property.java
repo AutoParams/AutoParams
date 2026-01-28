@@ -3,6 +3,7 @@ package autoparams.internal.reflect;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import autoparams.customization.dsl.FunctionDelegate;
@@ -24,13 +25,11 @@ import static java.lang.Character.toLowerCase;
 public final class Property<T, R> {
 
     private final Class<T> declaringClass;
-    private final Class<R> type;
     private final String name;
     private final Type genericType;
 
-    private Property(Class<T> declaringClass, Class<R> type, String name, Type genericType) {
+    private Property(Class<T> declaringClass, String name, Type genericType) {
         this.declaringClass = declaringClass;
-        this.type = type;
         this.name = name;
         this.genericType = genericType;
     }
@@ -60,9 +59,8 @@ public final class Property<T, R> {
         Method getter = getGetter(getterDelegate);
         String propertyName = inferPropertyNameFromGetter(getter);
         Class<T> declaringClass = (Class<T>) getter.getDeclaringClass();
-        Class<R> returnType = (Class<R>) getter.getReturnType();
         Type genericReturnType = getter.getGenericReturnType();
-        return new Property<>(declaringClass, returnType, propertyName, genericReturnType);
+        return new Property<>(declaringClass, propertyName, genericReturnType);
     }
 
     /**
@@ -87,8 +85,17 @@ public final class Property<T, R> {
      *
      * @return the type of the property
      */
+    @SuppressWarnings("unchecked")
     public Class<R> getType() {
-        return type;
+        if (genericType instanceof Class) {
+            return (Class<R>) genericType;
+        } else if (genericType instanceof ParameterizedType) {
+            return (Class<R>) ((ParameterizedType) genericType).getRawType();
+        } else {
+            throw new UnsupportedOperationException(
+                "Unsupported type: " + genericType.getClass().getName()
+            );
+        }
     }
 
     /**
