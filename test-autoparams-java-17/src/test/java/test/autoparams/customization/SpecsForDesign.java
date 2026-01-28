@@ -9,8 +9,10 @@ import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
 import autoparams.customization.Design;
 import autoparams.generator.ObjectGenerator;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
+import test.autoparams.Container;
 import test.autoparams.Product;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
@@ -401,5 +403,12 @@ class SpecsForDesign {
         assertThatThrownBy(() -> design.customize((ObjectGenerator) null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'generator' is null.");
+    }
+
+    @Test
+    void sut_returns_design_instance_when_called_with_type_reference_for_generic_type() {
+        Design<Container<Product>> design = Design.of(new TypeReference<>() { });
+
+        assertThat(design).isNotNull();
     }
 }
