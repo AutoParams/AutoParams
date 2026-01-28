@@ -411,4 +411,48 @@ class SpecsForDesign {
 
         assertThat(design).isNotNull();
     }
+
+    @Test
+    void sut_instantiates_generic_object_when_design_is_created_with_type_reference() {
+        Design<Container<Product>> design = Design.of(new TypeReference<>() { });
+
+        Container<Product> container = design.instantiate();
+
+        assertThat(container).isNotNull();
+        assertThat(container.value()).isInstanceOf(Product.class);
+    }
+
+    @Test
+    void sut_throws_exception_when_type_reference_is_null() {
+        assertThatThrownBy(() -> Design.of((TypeReference<Product>) null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("The argument 'typeReference' must not be null");
+    }
+
+    @Test
+    void sut_supports_property_configuration_with_type_reference_for_generic_type() {
+        Design<Product> design = Design.of(new TypeReference<Product>() { })
+            .set(Product::name, "Test Product")
+            .set(Product::stockQuantity, 100);
+
+        Product product = design.instantiate();
+
+        assertThat(product).isNotNull();
+        assertThat(product.name()).isEqualTo("Test Product");
+        assertThat(product.stockQuantity()).isEqualTo(100);
+    }
+
+    @Test
+    void sut_supports_nested_property_configuration_with_type_reference_for_generic_type() {
+        Design<Product> design = Design.of(new TypeReference<Product>() { })
+            .design(Product::category, category -> category
+                .set(Category::name, "Electronics")
+            );
+
+        Product product = design.instantiate();
+
+        assertThat(product).isNotNull();
+        assertThat(product.category()).isNotNull();
+        assertThat(product.category().name()).isEqualTo("Electronics");
+    }
 }
