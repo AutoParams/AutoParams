@@ -38,6 +38,12 @@ import static java.util.Collections.unmodifiableList;
  *     .instantiate();
  * </pre>
  *
+ * <p><b>Generic Type Support:</b></p>
+ * <pre>
+ * Design&lt;Container&lt;Product&gt;&gt; design = Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
+ * Container&lt;Product&gt; container = design.instantiate();
+ * </pre>
+ *
  * <p><b>ResolutionContext Integration:</b></p>
  * <pre>
  * Design&lt;Product&gt; design = Design.of(Product.class)
@@ -53,6 +59,7 @@ import static java.util.Collections.unmodifiableList;
  *
  * @see Customizer
  * @see ResolutionContext
+ * @see TypeReference
  */
 public class Design<T> implements Customizer {
 
@@ -92,6 +99,34 @@ public class Design<T> implements Customizer {
         return new Design<>(type);
     }
 
+    /**
+     * Creates a new Design instance for the specified generic type.
+     * <p>
+     * This method allows creating Design instances for generic types by using
+     * {@link TypeReference} to capture the full generic type information at
+     * compile time. This is particularly useful for parameterized types where
+     * the type parameter information would otherwise be lost due to type erasure.
+     * </p>
+     * <p>
+     * The returned Design can be further configured using
+     * {@link #set(FunctionDelegate, Object)},
+     * {@link #supply(FunctionDelegate, Supplier)}, and
+     * {@link #design(FunctionDelegate, Function)} methods.
+     * </p>
+     *
+     * <p><b>Example:</b></p>
+     * <pre>
+     * // Create a Design for a generic type
+     * Design&lt;Container&lt;Product&gt;&gt; design = Design.of(new TypeReference&lt;Container&lt;Product&gt;&gt;() { });
+     * Container&lt;Product&gt; container = design.instantiate();
+     * </pre>
+     *
+     * @param <T> the type of object to design
+     * @param typeReference the {@link TypeReference} capturing the generic type information
+     * @return a new Design instance for the specified generic type
+     * @throws IllegalArgumentException if {@code typeReference} is null
+     * @see TypeReference
+     */
     public static <T> Design<T> of(TypeReference<T> typeReference) {
         if (typeReference == null) {
             throw new IllegalArgumentException("The argument 'typeReference' must not be null");
