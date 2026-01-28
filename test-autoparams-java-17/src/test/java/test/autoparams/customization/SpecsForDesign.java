@@ -9,9 +9,12 @@ import autoparams.customization.CompositeCustomizer;
 import autoparams.customization.Customization;
 import autoparams.customization.Design;
 import autoparams.generator.ObjectGenerator;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import test.autoparams.Category;
+import test.autoparams.Point;
 import test.autoparams.Product;
+import test.autoparams.Tuple;
 
 import static autoparams.customization.dsl.ArgumentCustomizationDsl.set;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +31,7 @@ class SpecsForDesign {
 
     @Test
     void of_throws_exception_when_type_argument_is_null() {
-        assertThatThrownBy(() -> Design.of(null))
+        assertThatThrownBy(() -> Design.of((Class<Product>) null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'type' must not be null");
     }
@@ -401,5 +404,12 @@ class SpecsForDesign {
         assertThatThrownBy(() -> design.customize((ObjectGenerator) null))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("The argument 'generator' is null.");
+    }
+
+    @Test
+    void sut_returns_design_instance_when_called_with_type_reference_for_generic_type() {
+        Design<Tuple<String, Point>> design = Design.of(new TypeReference<>() { });
+
+        assertThat(design).isNotNull();
     }
 }

@@ -108,6 +108,10 @@ public class Design<T> implements Customizer {
     }
 
     public static <T> Design<T> of(TypeReference<T> typeReference) {
+        if (typeReference == null) {
+            throw new IllegalArgumentException("The argument 'typeReference' must not be null");
+        }
+
         return new Design<>(typeReference.getType());
     }
 
@@ -232,12 +236,13 @@ public class Design<T> implements Customizer {
      *
      * @return a new instance of type {@code T} with all configured properties applied
      */
+    @SuppressWarnings("unchecked")
     public T instantiate() {
         ResolutionContext context = new ResolutionContext();
         context.customize(customizers);
         return type != null
             ? context.resolve(type)
-            : context.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
+            : (T) context.resolve(new DefaultObjectQuery(genericType));
     }
 
     /**
@@ -247,6 +252,7 @@ public class Design<T> implements Customizer {
      * @return a new instance of type {@code T} with all configured properties applied
      * @throws IllegalArgumentException if {@code context} is null
      */
+    @SuppressWarnings("unchecked")
     public T instantiate(ResolutionContext context) {
         if (context == null) {
             throw new IllegalArgumentException("The argument 'context' must not be null");
@@ -256,7 +262,7 @@ public class Design<T> implements Customizer {
         branch.customize(customizers);
         return type != null
             ? branch.resolve(type)
-            : (T) branch.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
+            : (T) branch.resolve(new DefaultObjectQuery(genericType));
     }
 
     /**
@@ -286,6 +292,7 @@ public class Design<T> implements Customizer {
      * @return an unmodifiable list containing the created instances
      * @throws IllegalArgumentException if {@code count} is less than 0 or {@code context} is null
      */
+    @SuppressWarnings("unchecked")
     public List<T> instantiate(int count, ResolutionContext context) {
         if (count < 0) {
             throw new IllegalArgumentException("The argument 'count' must not be less than 0");
@@ -301,7 +308,7 @@ public class Design<T> implements Customizer {
         for (int i = 0; i < count; i++) {
             T instance = type != null
                 ? branch.resolve(type)
-                : (T) branch.resolve(new DefaultObjectQuery(genericType)).unwrapOrElseThrow();
+                : (T) branch.resolve(new DefaultObjectQuery(genericType));
             result.add(instance);
         }
         return unmodifiableList(result);
