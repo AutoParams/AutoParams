@@ -395,6 +395,17 @@ class SpecsForDesign {
     }
 
     @Test
+    void set_correctly_sets_property_with_generic_type() {
+        List<String> tags = List.of("foo", "bar");
+
+        Product product = Design.of(Product.class)
+            .set(Product::tags, tags)
+            .instantiate();
+
+        assertThat(product.tags()).isEqualTo(tags);
+    }
+
+    @Test
     void customize_with_generator_throws_exception_when_generator_is_null() {
         Design<Product> design = Design.of(Product.class);
 
