@@ -143,7 +143,8 @@ public final class InstancePropertyWriter implements ObjectProcessor {
     private static boolean isChainingSetter(Method method, Class<?> type) {
         return method.getName().startsWith("set") &&
                method.getParameterCount() == 1 &&
-               method.getReturnType().equals(type) &&
+               method.getReturnType().isAssignableFrom(type) &&
+               !method.getReturnType().equals(void.class) &&
                !isAlreadyDetectedBySetter(method, type);
     }
 

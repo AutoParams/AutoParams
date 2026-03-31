@@ -37,6 +37,18 @@ class SpecsForInstancePropertyWriter {
         assertThat(bag.getPrice()).isNotNull();
     }
 
+    @ParameterizedTest
+    @AutoSource
+    void sut_sets_inherited_property_using_chaining_setter(
+        InstancePropertyWriter sut,
+        ExtendedProduct bag,
+        ResolutionContext context
+    ) {
+        sut.process(new DefaultObjectQuery(ExtendedProduct.class), bag, context);
+        assertThat(bag.getName()).isNotNull();
+        assertThat(bag.getPrice()).isNotNull();
+    }
+
     @Getter
     @Setter
     @Accessors(chain = true)
@@ -44,5 +56,18 @@ class SpecsForInstancePropertyWriter {
 
         private String name;
         private Double price;
+    }
+
+    @Getter
+    @Setter
+    @Accessors(chain = true)
+    public static class BaseProduct {
+
+        private String name;
+        private Double price;
+    }
+
+    @Getter
+    public static class ExtendedProduct extends BaseProduct {
     }
 }
