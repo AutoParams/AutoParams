@@ -1,6 +1,7 @@
 package test.autoparams.customization;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import autoparams.AutoParams;
@@ -403,6 +404,20 @@ class SpecsForDesign {
             .instantiate();
 
         assertThat(product.tags()).isEqualTo(tags);
+    }
+
+    @Test
+    void set_correctly_sets_property_with_nested_generic_type() {
+        Map<String, List<String>> attributes = Map.of(
+            "colors", List.of("red", "blue"),
+            "sizes", List.of("S", "M", "L")
+        );
+
+        Product product = Design.of(Product.class)
+            .set(Product::attributes, attributes)
+            .instantiate();
+
+        assertThat(product.attributes()).isEqualTo(attributes);
     }
 
     @Test
