@@ -1,4 +1,4 @@
-package test.autoparams.execution;
+package test.autoparams.invocation;
 
 import java.lang.reflect.Parameter;
 import java.util.List;
@@ -9,16 +9,16 @@ import autoparams.ResolutionContext;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.customization.FreezeBy;
-import autoparams.execution.NullGuardValidator;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.invocation.NullGuardValidator;
 import org.junit.jupiter.api.Test;
 
 import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
-import static autoparams.execution.Selectors.allConstructors;
-import static autoparams.execution.Selectors.constructor;
-import static autoparams.execution.Selectors.method;
-import static autoparams.execution.Selectors.parameter;
+import static autoparams.invocation.Selectors.allConstructors;
+import static autoparams.invocation.Selectors.constructor;
+import static autoparams.invocation.Selectors.method;
+import static autoparams.invocation.Selectors.parameter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

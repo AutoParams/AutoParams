@@ -1,4 +1,4 @@
-package autoparams.execution;
+package autoparams.invocation;
 
 import java.lang.reflect.Method;
 import java.util.function.Predicate;

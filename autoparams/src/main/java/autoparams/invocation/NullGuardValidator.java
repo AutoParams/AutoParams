@@ -1,4 +1,4 @@
-package autoparams.execution;
+package autoparams.invocation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +36,7 @@ import static autoparams.internal.reflect.Parameters.getParameterName;
  * <b>Example with exclusions:</b>
  * </p>
  * <pre>
- * import static autoparams.execution.Selectors.*;
+ * import static autoparams.invocation.Selectors.*;
  *
  * validator.validate(Order.class, query -&gt; query
  *     .exclude(allConstructors())

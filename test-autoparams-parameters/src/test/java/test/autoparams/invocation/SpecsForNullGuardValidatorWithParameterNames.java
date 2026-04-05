@@ -1,12 +1,13 @@
-package test.autoparams.execution;
+package test.autoparams.invocation;
 
-import autoparams.execution.NullGuardValidator;
+import autoparams.invocation.NullGuardValidator;
 import org.junit.jupiter.api.Test;
 
-import static autoparams.execution.Selectors.parameter;
+import static autoparams.invocation.Selectors.parameter;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("unused")
 public class SpecsForNullGuardValidatorWithParameterNames {
 
     public static class GuardedNameUnguardedNote {
