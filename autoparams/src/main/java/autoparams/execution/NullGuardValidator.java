@@ -12,6 +12,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
 
 import static autoparams.internal.reflect.Parameters.getParameterName;
@@ -236,7 +237,11 @@ public class NullGuardValidator {
         int index
     ) {
         if (!resolved[index]) {
-            source[index] = context.resolve(params[index].getType());
+            Parameter param = params[index];
+            ParameterQuery query = new ParameterQuery(
+                param, index, param.getParameterizedType()
+            );
+            source[index] = context.resolve(query);
             resolved[index] = true;
         }
         return source[index];

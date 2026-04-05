@@ -1,6 +1,7 @@
 package test.autoparams.execution;
 
 import java.lang.reflect.Parameter;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import autoparams.AutoParams;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("unused")
 public class SpecsForNullGuardValidator {
 
     private static final String LINE_SEPARATOR =
@@ -361,14 +363,14 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessage(
                 "NullGuardValidator found 1 violation(s) in"
-                + " UnguardedConstructor. Expected"
-                + " IllegalArgumentException or an exception"
-                + " satisfying the configured condition"
-                + " for null arguments." + LINE_SEPARATOR
-                + LINE_SEPARATOR
-                + "  UnguardedConstructor(String):"
-                + " parameter at index 0 accepted null"
-                + " without throwing." + LINE_SEPARATOR
+                    + " UnguardedConstructor. Expected"
+                    + " IllegalArgumentException or an exception"
+                    + " satisfying the configured condition"
+                    + " for null arguments." + LINE_SEPARATOR
+                    + LINE_SEPARATOR
+                    + "  UnguardedConstructor(String):"
+                    + " parameter at index 0 accepted null"
+                    + " without throwing." + LINE_SEPARATOR
         );
     }
 
@@ -381,14 +383,14 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessage(
                 "NullGuardValidator found 1 violation(s) in"
-                + " UnguardedMethod. Expected"
-                + " IllegalArgumentException or an exception"
-                + " satisfying the configured condition"
-                + " for null arguments." + LINE_SEPARATOR
-                + LINE_SEPARATOR
-                + "  UnguardedMethod.execute(String):"
-                + " parameter at index 0 accepted null"
-                + " without throwing." + LINE_SEPARATOR
+                    + " UnguardedMethod. Expected"
+                    + " IllegalArgumentException or an exception"
+                    + " satisfying the configured condition"
+                    + " for null arguments." + LINE_SEPARATOR
+                    + LINE_SEPARATOR
+                    + "  UnguardedMethod.execute(String):"
+                    + " parameter at index 0 accepted null"
+                    + " without throwing." + LINE_SEPARATOR
         );
     }
 
@@ -419,7 +421,7 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessageContaining(
                 "threw NullPointerException,"
-                + " which does not satisfy the condition."
+                    + " which does not satisfy the condition."
         );
     }
 
@@ -434,8 +436,8 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessageContaining(
                 "threw NullPointerException with message"
-                + " \"value must not be null\","
-                + " which does not satisfy the condition."
+                    + " \"value must not be null\","
+                    + " which does not satisfy the condition."
         );
     }
 
@@ -463,7 +465,7 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessageContaining(
                 "threw NullPointerException,"
-                + " which does not satisfy the condition."
+                    + " which does not satisfy the condition."
         );
     }
 
@@ -478,8 +480,8 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class)
             .hasMessageContaining(
                 "threw NullPointerException with message"
-                + " \"value must not be null\","
-                + " which does not satisfy the condition."
+                    + " \"value must not be null\","
+                    + " which does not satisfy the condition."
         );
     }
 
@@ -552,8 +554,8 @@ public class SpecsForNullGuardValidator {
             return (query, context) ->
                 query.getType() == StaticFactoryUnguardedMethod.class
                     ? new ObjectContainer(
-                        StaticFactoryUnguardedMethod.create()
-                    )
+                    StaticFactoryUnguardedMethod.create()
+                )
                     : generator.generate(query, context);
         }
     }
@@ -786,5 +788,50 @@ public class SpecsForNullGuardValidator {
             UnguardedConstructor.class,
             q -> q.exclude(parameter("value"))
         )).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    void sut_resolves_generic_type_parameters_for_constructor_arguments() {
+        NullGuardValidator sut = new NullGuardValidator();
+
+        assertThatCode(
+            () -> sut.validate(GuardedConstructorWithGenericParameter.class)
+        ).doesNotThrowAnyException();
+    }
+
+    public static class GuardedConstructorWithGenericParameter {
+
+        public GuardedConstructorWithGenericParameter(
+            List<String> values,
+            String name
+        ) {
+            if (values == null) {
+                throw new IllegalArgumentException();
+            }
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
+    @Test
+    void sut_resolves_generic_type_parameters_for_method_arguments() {
+        NullGuardValidator sut = new NullGuardValidator();
+
+        assertThatCode(
+            () -> sut.validate(GuardedMethodWithGenericParameter.class)
+        ).doesNotThrowAnyException();
+    }
+
+    public static class GuardedMethodWithGenericParameter {
+
+        public void execute(List<String> values, String name) {
+            if (values == null) {
+                throw new IllegalArgumentException();
+            }
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+        }
     }
 }
