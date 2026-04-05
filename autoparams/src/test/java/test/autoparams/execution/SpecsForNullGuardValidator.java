@@ -27,7 +27,6 @@ public class SpecsForNullGuardValidator {
     private static final String LINE_SEPARATOR =
         System.lineSeparator();
 
-    // #1
     @Test
     void sut_throws_when_a_public_constructor_accepts_null_for_a_non_primitive_parameter() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -43,7 +42,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #2
     @Test
     void sut_does_not_throw_when_a_public_constructor_throws_IllegalArgumentException_for_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -61,7 +59,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #3
     @Test
     void sut_throws_when_a_public_method_accepts_null_for_a_non_primitive_parameter() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -77,7 +74,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #4
     @Test
     void sut_does_not_throw_when_a_public_method_throws_IllegalArgumentException_for_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -95,7 +91,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #5
     @Test
     void sut_throws_AssertionError_when_a_public_static_method_accepts_null_without_throwing() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -111,7 +106,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #6
     @Test
     void sut_does_not_throw_when_a_public_static_method_throws_IllegalArgumentException_for_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -129,7 +123,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #7
     @Test
     void sut_validates_public_methods_inherited_from_a_direct_superclass() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -142,7 +135,6 @@ public class SpecsForNullGuardValidator {
     public static class InheritedUnguardedMethod extends UnguardedMethod {
     }
 
-    // #8
     @Test
     void sut_validates_public_methods_inherited_from_a_grandparent_class() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -155,7 +147,6 @@ public class SpecsForNullGuardValidator {
     public static class GrandchildOfUnguardedMethod extends InheritedUnguardedMethod {
     }
 
-    // #9
     @Test
     void sut_does_not_throw_when_class_has_only_parameterless_public_methods() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -170,7 +161,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #10
     @Test
     void sut_skips_primitive_parameters() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -185,7 +175,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #11
     @Test
     void sut_skips_methods_declared_in_Object() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -197,7 +186,6 @@ public class SpecsForNullGuardValidator {
     public static class NoCustomMethods {
     }
 
-    // #12
     @Test
     void sut_throws_AssertionError_when_constructor_throws_non_IllegalArgumentException_for_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -216,7 +204,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #13
     @Test
     void sut_throws_AssertionError_when_method_throws_non_IllegalArgumentException_for_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -235,7 +222,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #14
     @Test
     void sut_does_not_throw_when_exception_satisfies_custom_Predicate() {
         NullGuardValidator sut = new NullGuardValidator(
@@ -247,7 +233,6 @@ public class SpecsForNullGuardValidator {
         ).doesNotThrowAnyException();
     }
 
-    // #15
     @Test
     void sut_throws_AssertionError_when_exception_does_not_satisfy_custom_Predicate() {
         NullGuardValidator sut = new NullGuardValidator(
@@ -259,7 +244,6 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class);
     }
 
-    // #16
     @Test
     void sut_does_not_throw_when_exception_satisfies_custom_BiPredicate() {
         NullGuardValidator sut = new NullGuardValidator(
@@ -271,7 +255,6 @@ public class SpecsForNullGuardValidator {
         ).doesNotThrowAnyException();
     }
 
-    // #17
     @Test
     void sut_throws_AssertionError_when_exception_does_not_satisfy_custom_BiPredicate() {
         NullGuardValidator sut = new NullGuardValidator(
@@ -283,7 +266,6 @@ public class SpecsForNullGuardValidator {
         ).isInstanceOf(AssertionError.class);
     }
 
-    // #18
     @Test
     void sut_correctly_passes_the_constructor_parameter_to_BiPredicate() {
         AtomicReference<Parameter> captured = new AtomicReference<>();
@@ -299,7 +281,6 @@ public class SpecsForNullGuardValidator {
         assertThat(captured.get()).isEqualTo(expected);
     }
 
-    // #19
     @Test
     void sut_correctly_passes_the_method_parameter_to_BiPredicate() {
         AtomicReference<Parameter> captured = new AtomicReference<>();
@@ -315,7 +296,6 @@ public class SpecsForNullGuardValidator {
         assertThat(captured.get()).isEqualTo(expected);
     }
 
-    // #20
     @Test
     @AutoParams
     void sut_uses_ResolutionContext_to_generate_arguments_for_non_null_constructor_parameters(
@@ -347,7 +327,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #21
     @Test
     @AutoParams
     void sut_uses_ResolutionContext_to_generate_arguments_for_non_null_method_parameters(
@@ -373,7 +352,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #22
     @Test
     void sut_sets_the_message_of_AssertionError_for_a_constructor_parameter_that_accepted_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -394,7 +372,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #23
     @Test
     void sut_sets_the_message_of_AssertionError_for_a_method_parameter_that_accepted_null() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -415,7 +392,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #24
     @Test
     void sut_uses_declaring_class_name_in_method_signature_for_inherited_methods() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -432,7 +408,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #25
     @Test
     void sut_sets_error_message_for_constructor_that_threw_rejected_exception_without_message() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -448,7 +423,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #26
     @Test
     void sut_sets_error_message_for_constructor_that_threw_rejected_exception_with_message() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -478,7 +452,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #27
     @Test
     void sut_sets_error_message_for_method_that_threw_rejected_exception_without_message() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -494,7 +467,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #28
     @Test
     void sut_sets_error_message_for_method_that_threw_rejected_exception_with_message() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -522,7 +494,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #29
     @Test
     void sut_reports_all_violations_in_a_single_AssertionError_message() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -547,7 +518,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #30
     @Test
     @AutoParams
     @Customization(StaticFactoryUnguardedMethodCustomizer.class)
@@ -588,7 +558,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #31
     @Test
     void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_predicate() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -599,7 +568,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #32
     @Test
     void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_parameter_types() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -610,7 +578,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #33
     @Test
     void sut_accumulates_exclusion_conditions_when_exclude_is_called_multiple_times() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -632,7 +599,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #34
     @Test
     void sut_skips_all_constructors_when_allConstructors_selector_is_used() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -643,7 +609,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #35
     @Test
     void sut_skips_a_method_excluded_by_MethodSelector_with_predicate() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -654,7 +619,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #36
     @Test
     void sut_skips_a_method_excluded_by_MethodSelector_with_name() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -665,7 +629,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #37
     @Test
     void sut_skips_a_method_excluded_by_MethodSelector_with_name_and_parameter_types() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -689,7 +652,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #38
     @Test
     void sut_skips_a_static_method_excluded_by_MethodSelector_with_name() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -700,7 +662,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #39
     @Test
     void sut_skips_a_static_method_excluded_by_MethodSelector_with_name_and_parameter_types() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -711,7 +672,6 @@ public class SpecsForNullGuardValidator {
         )).doesNotThrowAnyException();
     }
 
-    // #40
     @Test
     void sut_still_validates_non_excluded_methods_when_some_methods_are_excluded() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -726,7 +686,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #41
     @Test
     void sut_skips_a_parameter_excluded_by_ParameterSelector_with_predicate() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -746,7 +705,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #42
     @Test
     void sut_skips_a_parameter_excluded_by_ParameterSelector_with_BiPredicate_using_index() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -771,7 +729,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #43
     @Test
     void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_method() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -789,7 +746,6 @@ public class SpecsForNullGuardValidator {
         );
     }
 
-    // #44
     @Test
     void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_constructor() {
         NullGuardValidator sut = new NullGuardValidator();
@@ -822,7 +778,6 @@ public class SpecsForNullGuardValidator {
         }
     }
 
-    // #46
     @Test
     void sut_throws_when_parameter_name_is_used_but_parameter_names_are_not_available() {
         NullGuardValidator sut = new NullGuardValidator();
