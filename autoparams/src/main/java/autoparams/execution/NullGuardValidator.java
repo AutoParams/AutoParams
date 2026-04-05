@@ -147,11 +147,9 @@ public class NullGuardValidator {
         Query query,
         List<String> violations
     ) {
-        BiPredicate<Parameter, Integer> parameterPredicate =
-            query::selectsParameter;
         for (Constructor<?> constructor : query.selectConstructors(type)) {
             validateConstructor(
-                type, constructor, parameterPredicate, violations
+                type, constructor, query::selectsParameter, violations
             );
         }
     }
@@ -166,7 +164,7 @@ public class NullGuardValidator {
             constructor.getParameters(),
             formatConstructorSignature(type, constructor.getParameters()),
             parameterPredicate,
-            args -> constructor.newInstance(args),
+            constructor::newInstance,
             violations
         );
     }
@@ -176,13 +174,11 @@ public class NullGuardValidator {
         Query query,
         List<String> violations
     ) {
-        BiPredicate<Parameter, Integer> parameterPredicate =
-            query::selectsParameter;
         for (Method method : query.selectMethods(type)) {
             validateParameters(
                 method.getParameters(),
                 formatMethodSignature(method, method.getParameters()),
-                parameterPredicate,
+                query::selectsParameter,
                 args -> method.invoke(context.resolve(type), args),
                 violations
             );
@@ -197,20 +193,20 @@ public class NullGuardValidator {
         List<String> violations
     ) {
         Object[] source = new Object[params.length];
+        boolean[] resolved = new boolean[params.length];
         Object[] args = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
-            source[i] = context.resolve(params[i].getType());
-            args[i] = source[i];
-        }
-        for (int i = 0; i < params.length; i++) {
             if (i > 0) {
-                args[i - 1] = source[i - 1];
+                args[i - 1] = getArgument(params, source, resolved, i - 1);
             }
             if (params[i].getType().isPrimitive()) {
                 continue;
             }
             if (!parameterPredicate.test(params[i], i)) {
                 continue;
+            }
+            for (int j = i + 1; j < params.length; j++) {
+                args[j] = getArgument(params, source, resolved, j);
             }
             args[i] = null;
             try {
@@ -233,8 +229,22 @@ public class NullGuardValidator {
         }
     }
 
+    private Object getArgument(
+        Parameter[] params,
+        Object[] source,
+        boolean[] resolved,
+        int index
+    ) {
+        if (!resolved[index]) {
+            source[index] = context.resolve(params[index].getType());
+            resolved[index] = true;
+        }
+        return source[index];
+    }
+
     @FunctionalInterface
     private interface Invoker {
+
         void invoke(Object[] args) throws Exception;
     }
 
