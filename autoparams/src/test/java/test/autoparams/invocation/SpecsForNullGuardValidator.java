@@ -739,7 +739,7 @@ public class SpecsForNullGuardValidator {
             TwoUnguardedMethods.class,
             q -> q.exclude(
                 parameter(p -> p.getType() == String.class)
-                    .of(method("first"))
+                    .in(method("first"))
             )
         )).isInstanceOf(AssertionError.class)
             .hasMessageContaining("second(String)")
@@ -756,7 +756,7 @@ public class SpecsForNullGuardValidator {
             TwoConstructorsAndMethod.class,
             q -> q.exclude(
                 parameter(p -> p.getType() == Integer.class)
-                    .of(constructor(Integer.class))
+                    .in(constructor(Integer.class))
             )
         )).isInstanceOf(AssertionError.class)
             .hasMessageContaining("TwoConstructorsAndMethod(String)")

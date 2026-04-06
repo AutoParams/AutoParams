@@ -41,7 +41,7 @@ import static autoparams.internal.reflect.Parameters.getParameterName;
  * validator.validate(Order.class, query -&gt; query
  *     .exclude(allConstructors())
  *     .exclude(method("setNote", String.class))
- *     .exclude(parameter("commentOrNull").of(method("submitReview"))));
+ *     .exclude(parameter("commentOrNull").in(method("submitReview"))));
  * </pre>
  *
  * @see Selectors

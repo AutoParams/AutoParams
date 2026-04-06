@@ -8,8 +8,8 @@ import java.util.function.BiPredicate;
 /**
  * Holds a rule for selecting parameters.
  * <p>
- * Use the {@link #of(ConstructorSelector)} or
- * {@link #of(MethodSelector)} methods to scope the selector
+ * Use the {@link #in(ConstructorSelector)} or
+ * {@link #in(MethodSelector)} methods to scope the selector
  * to a specific constructor or method.
  * </p>
  *
@@ -32,7 +32,7 @@ public class ParameterSelector {
      * @param scope the constructor selector to scope to
      * @return a new scoped parameter selector
      */
-    public ParameterSelector of(ConstructorSelector scope) {
+    public ParameterSelector in(ConstructorSelector scope) {
         return new ParameterSelector((p, index) -> {
             if (!(p.getDeclaringExecutable() instanceof Constructor)) {
                 return false;
@@ -50,7 +50,7 @@ public class ParameterSelector {
      * @param scope the method selector to scope to
      * @return a new scoped parameter selector
      */
-    public ParameterSelector of(MethodSelector scope) {
+    public ParameterSelector in(MethodSelector scope) {
         return new ParameterSelector((p, index) -> {
             if (!(p.getDeclaringExecutable() instanceof Method)) {
                 return false;
