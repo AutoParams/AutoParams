@@ -19,6 +19,7 @@ import static autoparams.invocation.Selectors.allConstructors;
 import static autoparams.invocation.Selectors.constructor;
 import static autoparams.invocation.Selectors.method;
 import static autoparams.invocation.Selectors.parameter;
+import static autoparams.invocation.Selectors.parameterAt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -833,5 +834,24 @@ public class SpecsForNullGuardValidator {
                 throw new IllegalArgumentException();
             }
         }
+    }
+
+    @Test
+    void sut_correctly_excludes_a_parameter_at_the_specified_index() {
+        NullGuardValidator sut = new NullGuardValidator();
+
+        assertThatCode(() -> sut.validate(
+            FirstGuardedSecondUnguardedStrings.class,
+            q -> q.exclude(parameterAt(1))
+        )).doesNotThrowAnyException();
+    }
+
+    @Test
+    void sut_throws_IllegalArgumentException_when_index_is_negative() {
+        assertThatThrownBy(() -> parameterAt(-1))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage(
+                "The argument 'index' must not be less than 0."
+            );
     }
 }
