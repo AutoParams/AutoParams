@@ -33,6 +33,8 @@ Write test scenarios following these rules:
 - Start with lowercase (usable as test method name)
 - Refer to the system under test as 'sut'
 - Write as concisely as possible while preserving meaning
+- Use only characters that are valid in Java identifiers (letters, digits, and underscores) when spaces are replaced with `_`. Do not use special characters such as `'`, `-`, `.`, `,`, `(`, `)`, `/`, `@`, `<`, `>`, `"`, `:`, `;`, `!`, `?`, `#`, `%`, `&`, `*`, `+`, `=`, `{`, `}`, `[`, `]`, `|`, `\`, `~`, `^`, or backticks.
+- Do not start with a digit, because the scenario text becomes a Java method name when spaces are replaced with `_`
 - Order from most important to least important
 - Start with the simplest, most fundamental behavior
 
