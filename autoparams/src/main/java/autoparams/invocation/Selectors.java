@@ -150,4 +150,23 @@ public final class Selectors {
             return name.equals(parameterName);
         });
     }
+
+    /**
+     * Creates a selector that matches the parameter at the given
+     * index. If the index is out of bounds for a constructor or
+     * method, the selector simply does not match any parameter
+     * of that constructor or method.
+     *
+     * @param index the zero-based parameter index
+     * @return a new parameter selector
+     * @throws IllegalArgumentException if index is negative
+     */
+    public static ParameterSelector parameterAt(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "The argument 'index' must not be less than 0."
+            );
+        }
+        return new ParameterSelector((p, i) -> i == index);
+    }
 }
