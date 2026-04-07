@@ -56,6 +56,15 @@ public class NullGuardValidator {
     private final ResolutionContext context;
     private final BiPredicate<Parameter, Exception> exceptionPredicate;
 
+    private static BiPredicate<Parameter, Exception> liftExceptionPredicate(
+        Predicate<Exception> exceptionPredicate
+    ) {
+        if (exceptionPredicate == null) {
+            throw new IllegalArgumentException("exceptionPredicate");
+        }
+        return (parameter, exception) -> exceptionPredicate.test(exception);
+    }
+
     /**
      * Creates a new validator with the given
      * {@link ResolutionContext} that checks for
@@ -76,7 +85,10 @@ public class NullGuardValidator {
      *                           a thrown exception is acceptable
      */
     public NullGuardValidator(Predicate<Exception> exceptionPredicate) {
-        this(new ResolutionContext(), (parameter, exception) -> exceptionPredicate.test(exception));
+        this(
+            new ResolutionContext(),
+            liftExceptionPredicate(exceptionPredicate)
+        );
     }
 
     /**
@@ -92,7 +104,7 @@ public class NullGuardValidator {
         ResolutionContext context,
         Predicate<Exception> exceptionPredicate
     ) {
-        this(context, (parameter, exception) -> exceptionPredicate.test(exception));
+        this(context, liftExceptionPredicate(exceptionPredicate));
     }
 
     /**
@@ -104,7 +116,9 @@ public class NullGuardValidator {
      *                           a thrown exception is acceptable,
      *                           given the parameter and the exception
      */
-    public NullGuardValidator(BiPredicate<Parameter, Exception> exceptionPredicate) {
+    public NullGuardValidator(
+        BiPredicate<Parameter, Exception> exceptionPredicate
+    ) {
         this(new ResolutionContext(), exceptionPredicate);
     }
 
@@ -123,6 +137,12 @@ public class NullGuardValidator {
         ResolutionContext context,
         BiPredicate<Parameter, Exception> exceptionPredicate
     ) {
+        if (context == null) {
+            throw new IllegalArgumentException("context");
+        }
+        if (exceptionPredicate == null) {
+            throw new IllegalArgumentException("exceptionPredicate");
+        }
         this.context = context;
         this.exceptionPredicate = exceptionPredicate;
     }
@@ -140,6 +160,12 @@ public class NullGuardValidator {
         Class<?> type,
         Function<Query, Query> queryFunction
     ) {
+        if (type == null) {
+            throw new IllegalArgumentException("type");
+        }
+        if (queryFunction == null) {
+            throw new IllegalArgumentException("queryFunction");
+        }
         Query query = queryFunction.apply(new Query());
         List<String> violations = new ArrayList<>();
         validateConstructors(type, query, violations);
@@ -159,7 +185,7 @@ public class NullGuardValidator {
      * @throws AssertionError if any violations are found
      */
     public void validate(Class<?> type) {
-        validate(type, q -> q);
+        validate(type, Function.identity());
     }
 
     private void validateConstructors(

@@ -3,16 +3,24 @@ package test.autoparams.invocation;
 import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import autoparams.AutoParams;
+import autoparams.ObjectQuery;
 import autoparams.ResolutionContext;
+import autoparams.ValueAutoSource;
 import autoparams.customization.Customization;
 import autoparams.customization.Customizer;
 import autoparams.customization.FreezeBy;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectGeneratorBase;
 import autoparams.invocation.NullGuardValidator;
+import autoparams.invocation.NullGuardValidator.Query;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import static autoparams.customization.Matching.IMPLEMENTED_INTERFACES;
 import static autoparams.invocation.Selectors.allConstructors;
@@ -1097,5 +1105,52 @@ public class SpecsForNullGuardValidator {
                 throw new IllegalArgumentException();
             }
         }
+    }
+
+    public static class AlwaysTrueBiPredicateGenerator
+        extends ObjectGeneratorBase<BiPredicate<Parameter, Exception>> {
+
+        @Override
+        protected BiPredicate<Parameter, Exception> generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return (p, e) -> true;
+        }
+    }
+
+    public static class AlwaysTruePredicateGenerator
+        extends ObjectGeneratorBase<Predicate<Exception>> {
+
+        @Override
+        protected Predicate<Exception> generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return e -> true;
+        }
+    }
+
+    public static class IdentityFunctionGenerator
+        extends ObjectGeneratorBase<Function<Query, Query>> {
+
+        @Override
+        protected Function<Query, Query> generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return Function.identity();
+        }
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(classes = { NullGuardValidator.class, Query.class })
+    @Customization({
+        AlwaysTrueBiPredicateGenerator.class,
+        AlwaysTruePredicateGenerator.class,
+        IdentityFunctionGenerator.class
+    })
+    void sut_had_null_guards(Class<?> sut, ResolutionContext context) {
+        new NullGuardValidator(context).validate(sut);
     }
 }
