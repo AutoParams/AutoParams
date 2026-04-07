@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 import autoparams.ParameterQuery;
 import autoparams.ResolutionContext;
+import autoparams.internal.reflect.RuntimeTypeResolver;
 
 import static autoparams.internal.reflect.Parameters.getParameterName;
 
@@ -256,8 +257,13 @@ public class NullGuardValidator {
     ) {
         if (!resolved[index]) {
             Parameter param = params[index];
+            RuntimeTypeResolver typeResolver = RuntimeTypeResolver.create(
+                param.getDeclaringExecutable().getDeclaringClass()
+            );
             ParameterQuery query = new ParameterQuery(
-                param, index, param.getParameterizedType()
+                param,
+                index,
+                typeResolver.resolve(param.getParameterizedType())
             );
             source[index] = context.resolve(query);
             resolved[index] = true;

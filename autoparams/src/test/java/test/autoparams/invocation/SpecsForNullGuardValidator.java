@@ -1045,4 +1045,57 @@ public class SpecsForNullGuardValidator {
             () -> sut.validate(PartiallyGuardedConstructor.class)
         ).isInstanceOf(AssertionError.class);
     }
+
+    @Test
+    @AutoParams
+    void sut_resolves_bounded_type_parameter_for_constructor_arguments(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
+
+        assertThatCode(
+            () -> sut.validate(GuardedConstructorWithBoundedTypeParameter.class)
+        ).doesNotThrowAnyException();
+    }
+
+    public static class GuardedConstructorWithBoundedTypeParameter<T extends Number> {
+
+        public GuardedConstructorWithBoundedTypeParameter(
+            List<T> values,
+            String name
+        ) {
+            if (values == null) {
+                throw new IllegalArgumentException();
+            }
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
+    @Test
+    @AutoParams
+    void sut_resolves_multiple_bounded_type_parameters_for_method_arguments(
+        ResolutionContext context
+    ) {
+        NullGuardValidator sut = new NullGuardValidator(context);
+
+        assertThatCode(
+            () -> sut.validate(GuardedMethodWithMultipleBoundedTypeParameters.class)
+        ).doesNotThrowAnyException();
+    }
+
+    public static class GuardedMethodWithMultipleBoundedTypeParameters<
+        T extends Number, U extends Comparable<U>> {
+
+        public void execute(List<T> numbers, List<U> keys, String name) {
+            if (numbers == null) {
+                throw new IllegalArgumentException();
+            }
+            if (keys == null) {
+                throw new IllegalArgumentException();
+            }
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
 }

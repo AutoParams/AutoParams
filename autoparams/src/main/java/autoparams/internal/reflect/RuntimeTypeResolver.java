@@ -4,9 +4,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toMap;
@@ -76,30 +77,53 @@ public final class RuntimeTypeResolver {
      * @return the resolved type.
      */
     public Type resolve(Type type) {
-        if (type instanceof TypeVariable<?> &&
-            typeArguments.containsKey(type)) {
-            return typeArguments.get(type);
+        return resolve(type, new HashSet<>());
+    }
+
+    private Type resolve(Type type, Set<TypeVariable<?>> visiting) {
+        if (type instanceof TypeVariable<?>) {
+            TypeVariable<?> variable = (TypeVariable<?>) type;
+            if (typeArguments.containsKey(variable)) {
+                return typeArguments.get(variable);
+            }
+            if (!visiting.add(variable)) {
+                return null;
+            }
+            Type bound = variable.getBounds()[0];
+            Type resolved = resolve(bound, visiting);
+            visiting.remove(variable);
+            return resolved != null ? resolved : toRawType(bound);
         } else if (type instanceof ParameterizedType) {
-            return resolve((ParameterizedType) type);
+            return resolve((ParameterizedType) type, visiting);
         } else if (type instanceof WildcardType) {
-            return resolve((WildcardType) type);
+            return resolveWildcardTypeBounds((WildcardType) type);
         } else {
             return type;
         }
     }
 
-    private Type resolve(ParameterizedType parameterizedType) {
+    private Type resolve(
+        ParameterizedType type,
+        Set<TypeVariable<?>> visiting
+    ) {
+        Type[] args = type.getActualTypeArguments();
+        Type[] resolved = new Type[args.length];
+        for (int i = 0; i < args.length; i++) {
+            resolved[i] = resolve(args[i], visiting);
+            if (resolved[i] == null) {
+                return type.getRawType();
+            }
+        }
         return new ParameterizedTypeDescriptor(
-            Arrays
-                .stream(parameterizedType.getActualTypeArguments())
-                .map(this::resolve)
-                .toArray(Type[]::new),
-            resolve(parameterizedType.getRawType()),
-            resolve(parameterizedType.getOwnerType())
+            resolved,
+            resolve(type.getRawType(), visiting),
+            resolve(type.getOwnerType(), visiting)
         );
     }
 
-    private Type resolve(WildcardType wildcardType) {
-        return resolveWildcardTypeBounds(wildcardType);
+    private static Type toRawType(Type type) {
+        return type instanceof ParameterizedType
+            ? ((ParameterizedType) type).getRawType()
+            : type;
     }
 }
