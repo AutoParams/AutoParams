@@ -1,5 +1,7 @@
 package test.autoparams.invocation;
 
+import autoparams.AutoParams;
+import autoparams.ResolutionContext;
 import autoparams.invocation.NullGuardValidator;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +22,9 @@ public class SpecsForNullGuardValidatorWithParameterNames {
     }
 
     @Test
-    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_name() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_name(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             GuardedNameUnguardedNote.class,
@@ -30,8 +33,9 @@ public class SpecsForNullGuardValidatorWithParameterNames {
     }
 
     @Test
-    void sut_includes_parameter_name_in_the_message_when_available() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_includes_parameter_name_in_the_message_when_available(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             GuardedNameUnguardedNote.class

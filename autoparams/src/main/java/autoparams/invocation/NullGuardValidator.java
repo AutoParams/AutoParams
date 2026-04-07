@@ -56,15 +56,6 @@ public class NullGuardValidator {
     private final BiPredicate<Parameter, Exception> exceptionPredicate;
 
     /**
-     * Creates a new validator with a default
-     * {@link ResolutionContext} that checks for
-     * {@link IllegalArgumentException}.
-     */
-    public NullGuardValidator() {
-        this(new ResolutionContext(), DEFAULT_PREDICATE);
-    }
-
-    /**
      * Creates a new validator with the given
      * {@link ResolutionContext} that checks for
      * {@link IllegalArgumentException}.
@@ -88,6 +79,22 @@ public class NullGuardValidator {
     }
 
     /**
+     * Creates a new validator with the given
+     * {@link ResolutionContext} and a custom exception predicate.
+     *
+     * @param context            the resolution context used to generate
+     *                           argument values and create instances
+     * @param exceptionPredicate a predicate that determines whether
+     *                           a thrown exception is acceptable
+     */
+    public NullGuardValidator(
+        ResolutionContext context,
+        Predicate<Exception> exceptionPredicate
+    ) {
+        this(context, (parameter, exception) -> exceptionPredicate.test(exception));
+    }
+
+    /**
      * Creates a new validator with a default
      * {@link ResolutionContext} and a custom exception predicate
      * that also receives the parameter being tested.
@@ -100,7 +107,18 @@ public class NullGuardValidator {
         this(new ResolutionContext(), exceptionPredicate);
     }
 
-    private NullGuardValidator(
+    /**
+     * Creates a new validator with the given
+     * {@link ResolutionContext} and a custom exception predicate
+     * that also receives the parameter being tested.
+     *
+     * @param context            the resolution context used to generate
+     *                           argument values and create instances
+     * @param exceptionPredicate a predicate that determines whether
+     *                           a thrown exception is acceptable,
+     *                           given the parameter and the exception
+     */
+    public NullGuardValidator(
         ResolutionContext context,
         BiPredicate<Parameter, Exception> exceptionPredicate
     ) {
