@@ -31,8 +31,9 @@ public class SpecsForNullGuardValidator {
         System.lineSeparator();
 
     @Test
-    void sut_throws_when_a_public_constructor_accepts_null_for_a_non_primitive_parameter() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_when_a_public_constructor_accepts_null_for_a_non_primitive_parameter(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(UnguardedConstructor.class)
@@ -46,8 +47,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_does_not_throw_when_a_public_constructor_throws_IllegalArgumentException_for_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_does_not_throw_when_a_public_constructor_throws_IllegalArgumentException_for_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(GuardedConstructor.class))
             .doesNotThrowAnyException();
@@ -63,8 +65,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_throws_when_a_public_method_accepts_null_for_a_non_primitive_parameter() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_when_a_public_method_accepts_null_for_a_non_primitive_parameter(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(UnguardedMethod.class)
@@ -78,8 +81,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_does_not_throw_when_a_public_method_throws_IllegalArgumentException_for_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_does_not_throw_when_a_public_method_throws_IllegalArgumentException_for_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(GuardedMethod.class))
             .doesNotThrowAnyException();
@@ -95,8 +99,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_throws_AssertionError_when_a_public_static_method_accepts_null_without_throwing() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_AssertionError_when_a_public_static_method_accepts_null_without_throwing(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(UnguardedStaticMethod.class)
@@ -110,8 +115,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_does_not_throw_when_a_public_static_method_throws_IllegalArgumentException_for_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_does_not_throw_when_a_public_static_method_throws_IllegalArgumentException_for_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(GuardedStaticMethod.class))
             .doesNotThrowAnyException();
@@ -127,8 +133,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_validates_public_methods_inherited_from_a_direct_superclass() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_validates_public_methods_inherited_from_a_direct_superclass(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(InheritedUnguardedMethod.class)
@@ -139,8 +146,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_validates_public_methods_inherited_from_a_grandparent_class() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_validates_public_methods_inherited_from_a_grandparent_class(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(GrandchildOfUnguardedMethod.class)
@@ -151,8 +159,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_does_not_throw_when_class_has_only_parameterless_public_methods() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_does_not_throw_when_class_has_only_parameterless_public_methods(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(ParameterlessMethod.class))
             .doesNotThrowAnyException();
@@ -165,8 +174,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_primitive_parameters() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_primitive_parameters(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(PrimitiveParameterOnly.class))
             .doesNotThrowAnyException();
@@ -179,8 +189,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_methods_declared_in_Object() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_methods_declared_in_Object(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(NoCustomMethods.class))
             .doesNotThrowAnyException();
@@ -190,8 +201,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_throws_AssertionError_when_constructor_throws_non_IllegalArgumentException_for_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_AssertionError_when_constructor_throws_non_IllegalArgumentException_for_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(ConstructorThrowingNullPointerException.class)
@@ -208,8 +220,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_throws_AssertionError_when_method_throws_non_IllegalArgumentException_for_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_AssertionError_when_method_throws_non_IllegalArgumentException_for_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(MethodThrowingNullPointerException.class)
@@ -356,8 +369,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_the_message_of_AssertionError_for_a_constructor_parameter_that_accepted_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_the_message_of_AssertionError_for_a_constructor_parameter_that_accepted_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(UnguardedConstructor.class)
@@ -376,8 +390,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_the_message_of_AssertionError_for_a_method_parameter_that_accepted_null() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_the_message_of_AssertionError_for_a_method_parameter_that_accepted_null(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(UnguardedMethod.class)
@@ -396,8 +411,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_uses_declaring_class_name_in_method_signature_for_inherited_methods() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_uses_declaring_class_name_in_method_signature_for_inherited_methods(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(InheritedUnguardedMethod.class)
@@ -412,8 +428,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_error_message_for_constructor_that_threw_rejected_exception_without_message() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_error_message_for_constructor_that_threw_rejected_exception_without_message(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(
@@ -427,8 +444,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_error_message_for_constructor_that_threw_rejected_exception_with_message() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_error_message_for_constructor_that_threw_rejected_exception_with_message(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(
@@ -456,8 +474,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_error_message_for_method_that_threw_rejected_exception_without_message() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_error_message_for_method_that_threw_rejected_exception_without_message(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(
@@ -471,8 +490,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_sets_error_message_for_method_that_threw_rejected_exception_with_message() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_sets_error_message_for_method_that_threw_rejected_exception_with_message(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(
@@ -498,8 +518,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_reports_all_violations_in_a_single_AssertionError_message() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_reports_all_violations_in_a_single_AssertionError_message(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(
             () -> sut.validate(TwoUnguardedMethods.class)
@@ -562,8 +583,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_predicate() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_predicate(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedConstructor.class,
@@ -572,8 +594,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_parameter_types() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_constructor_excluded_by_ConstructorSelector_with_parameter_types(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedConstructor.class,
@@ -582,8 +605,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_accumulates_exclusion_conditions_when_exclude_is_called_multiple_times() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_accumulates_exclusion_conditions_when_exclude_is_called_multiple_times(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             TwoUnguardedConstructors.class,
@@ -603,8 +627,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_all_constructors_when_allConstructors_selector_is_used() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_all_constructors_when_allConstructors_selector_is_used(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedConstructor.class,
@@ -613,8 +638,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_method_excluded_by_MethodSelector_with_predicate() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_method_excluded_by_MethodSelector_with_predicate(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedMethod.class,
@@ -623,8 +649,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_method_excluded_by_MethodSelector_with_name() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_method_excluded_by_MethodSelector_with_name(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedMethod.class,
@@ -633,8 +660,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_method_excluded_by_MethodSelector_with_name_and_parameter_types() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_method_excluded_by_MethodSelector_with_name_and_parameter_types(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             OverloadedUnguardedMethods.class,
@@ -656,8 +684,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_static_method_excluded_by_MethodSelector_with_name() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_static_method_excluded_by_MethodSelector_with_name(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedStaticMethod.class,
@@ -666,8 +695,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_static_method_excluded_by_MethodSelector_with_name_and_parameter_types() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_static_method_excluded_by_MethodSelector_with_name_and_parameter_types(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             UnguardedStaticMethod.class,
@@ -676,8 +706,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_still_validates_non_excluded_methods_when_some_methods_are_excluded() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_still_validates_non_excluded_methods_when_some_methods_are_excluded(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             TwoUnguardedMethods.class,
@@ -690,8 +721,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_predicate() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_predicate(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             GuardedStringUnguardedInteger.class,
@@ -709,8 +741,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_BiPredicate_using_index() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_parameter_excluded_by_ParameterSelector_with_BiPredicate_using_index(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             FirstGuardedSecondUnguardedStrings.class,
@@ -733,8 +766,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_method() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_method(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             TwoUnguardedMethods.class,
@@ -750,8 +784,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_constructor() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_skips_a_parameter_excluded_by_ParameterSelector_scoped_to_a_constructor(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             TwoConstructorsAndMethod.class,
@@ -782,8 +817,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_throws_when_parameter_name_is_used_but_parameter_names_are_not_available() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_throws_when_parameter_name_is_used_but_parameter_names_are_not_available(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatThrownBy(() -> sut.validate(
             UnguardedConstructor.class,
@@ -792,8 +828,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_resolves_generic_type_parameters_for_constructor_arguments() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_resolves_generic_type_parameters_for_constructor_arguments(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(
             () -> sut.validate(GuardedConstructorWithGenericParameter.class)
@@ -816,8 +853,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_resolves_generic_type_parameters_for_method_arguments() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_resolves_generic_type_parameters_for_method_arguments(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(
             () -> sut.validate(GuardedMethodWithGenericParameter.class)
@@ -837,8 +875,9 @@ public class SpecsForNullGuardValidator {
     }
 
     @Test
-    void sut_correctly_excludes_a_parameter_at_the_specified_index() {
-        NullGuardValidator sut = new NullGuardValidator();
+    @AutoParams
+    void sut_correctly_excludes_a_parameter_at_the_specified_index(ResolutionContext context) {
+        NullGuardValidator sut = new NullGuardValidator(context);
 
         assertThatCode(() -> sut.validate(
             FirstGuardedSecondUnguardedStrings.class,
