@@ -101,7 +101,9 @@ public abstract class ObjectGeneratorBase<T> implements ObjectGenerator {
     }
 
     private boolean matches(Type type) {
-        return type instanceof Class && matches((Class<?>) type);
+        return type instanceof Class
+            ? matches((Class<?>) type)
+            : type.equals(this.type);
     }
 
     private boolean matches(Class<?> type) {

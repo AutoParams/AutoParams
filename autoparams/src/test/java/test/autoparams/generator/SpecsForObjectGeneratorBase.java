@@ -1,7 +1,9 @@
 package test.autoparams.generator;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.temporal.Temporal;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
@@ -12,6 +14,7 @@ import autoparams.ResolutionContext;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
 import autoparams.generator.ObjectGeneratorBase;
+import autoparams.type.TypeReference;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -157,5 +160,53 @@ public class SpecsForObjectGeneratorBase {
 
         assert actual != null;
         assertThat(actual.unwrapOrElseThrow()).isSameAs(value);
+    }
+
+    public static class StringListGenerator
+        extends ObjectGeneratorBase<List<String>> {
+
+        private final List<String> value;
+
+        public StringListGenerator(List<String> value) {
+            this.value = value;
+        }
+
+        @Override
+        protected List<String> generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return value;
+        }
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_generates_object_for_parameterized_type_query(
+        ResolutionContext context,
+        List<String> values
+    ) {
+        Type type = new TypeReference<List<String>>() { }.getType();
+        ObjectQuery query = new DefaultObjectQuery(type);
+        ObjectGenerator sut = new StringListGenerator(values);
+
+        ObjectContainer actual = sut.generate(query, context);
+
+        assertThat(actual.unwrapOrElseThrow()).isSameAs(values);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    void sut_returns_empty_for_non_matching_parameterized_type_query(
+        ResolutionContext context,
+        List<String> values
+    ) {
+        Type type = new TypeReference<List<Integer>>() { }.getType();
+        ObjectQuery query = new DefaultObjectQuery(type);
+        ObjectGenerator sut = new StringListGenerator(values);
+
+        ObjectContainer actual = sut.generate(query, context);
+
+        assertThat(actual).isSameAs(ObjectContainer.EMPTY);
     }
 }
