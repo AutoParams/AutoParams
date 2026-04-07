@@ -1,5 +1,6 @@
 package test.autoparams;
 
+import java.util.List;
 import java.util.UUID;
 
 import autoparams.AutoParams;
@@ -10,6 +11,7 @@ import autoparams.customization.Customizer;
 import autoparams.customization.Freeze;
 import autoparams.generator.ObjectContainer;
 import autoparams.generator.ObjectGenerator;
+import autoparams.generator.ObjectGeneratorBase;
 import autoparams.processor.ObjectProcessor;
 import autoparams.type.TypeReference;
 import org.junit.jupiter.api.Test;
@@ -145,5 +147,52 @@ class SpecsForResolutionContext {
 
         Object actual = sut.resolve(int.class);
         assertThat(actual).isEqualTo(value2);
+    }
+
+    public static class StringListGenerator
+        extends ObjectGeneratorBase<List<String>> {
+
+        private final List<String> value;
+
+        public StringListGenerator(List<String> value) {
+            this.value = value;
+        }
+
+        @Override
+        protected List<String> generateObject(
+            ObjectQuery query,
+            ResolutionContext context
+        ) {
+            return value;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class HasListOfStringParameter<T> {
+
+        private final List<String> values;
+
+        public HasListOfStringParameter(List<String> values) {
+            this.values = values;
+        }
+
+        public List<String> getValues() {
+            return values;
+        }
+    }
+
+    @Test
+    @AutoParams
+    void sut_resolves_generic_class_with_constructor_parameter_of_generic_type(
+        ResolutionContext sut,
+        List<String> values
+    ) {
+        sut.customize(new StringListGenerator(values));
+
+        HasListOfStringParameter<?> actual = sut.resolve(
+            new TypeReference<HasListOfStringParameter<Object>>() { }
+        );
+
+        assertThat(actual.getValues()).isSameAs(values);
     }
 }

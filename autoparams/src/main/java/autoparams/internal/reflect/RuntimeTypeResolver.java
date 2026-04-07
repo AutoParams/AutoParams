@@ -106,19 +106,39 @@ public final class RuntimeTypeResolver {
         ParameterizedType type,
         Set<TypeVariable<?>> visiting
     ) {
-        Type[] args = type.getActualTypeArguments();
-        Type[] resolved = new Type[args.length];
-        for (int i = 0; i < args.length; i++) {
-            resolved[i] = resolve(args[i], visiting);
-            if (resolved[i] == null) {
-                return type.getRawType();
-            }
+        Type[] originalArgs = type.getActualTypeArguments();
+        Type[] resolvedArgs = resolveTypeArguments(originalArgs, visiting);
+        if (resolvedArgs == null) {
+            return type.getRawType();
+        }
+        if (resolvedArgs == originalArgs) {
+            return type;
         }
         return new ParameterizedTypeDescriptor(
-            resolved,
+            resolvedArgs,
             resolve(type.getRawType(), visiting),
             resolve(type.getOwnerType(), visiting)
         );
+    }
+
+    private Type[] resolveTypeArguments(
+        Type[] originalArgs,
+        Set<TypeVariable<?>> visiting
+    ) {
+        Type[] resolvedArgs = null;
+        for (int i = 0; i < originalArgs.length; i++) {
+            Type arg = resolve(originalArgs[i], visiting);
+            if (arg == null) {
+                return null;
+            }
+            if (arg != originalArgs[i] && resolvedArgs == null) {
+                resolvedArgs = originalArgs.clone();
+            }
+            if (resolvedArgs != null) {
+                resolvedArgs[i] = arg;
+            }
+        }
+        return resolvedArgs != null ? resolvedArgs : originalArgs;
     }
 
     private static Type toRawType(Type type) {
