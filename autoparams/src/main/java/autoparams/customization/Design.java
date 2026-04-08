@@ -1,5 +1,7 @@
 package autoparams.customization;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -326,7 +328,13 @@ public class Design<T> implements Customizer {
         }
 
         private boolean matchesParameterType(ParameterQuery query) {
-            return property.getType().equals(query.getType());
+            Type queryType = query.getType();
+            if (queryType instanceof ParameterizedType) {
+                return property.getType().equals(
+                    ((ParameterizedType) queryType).getRawType()
+                );
+            }
+            return property.getType().equals(queryType);
         }
 
         private boolean matchesParameterName(ParameterQuery query) {
