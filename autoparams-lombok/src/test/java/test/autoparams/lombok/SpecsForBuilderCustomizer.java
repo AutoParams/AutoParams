@@ -1,8 +1,11 @@
 package test.autoparams.lombok;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 import autoparams.AutoParams;
 import autoparams.AutoSource;
@@ -83,5 +86,81 @@ public class SpecsForBuilderCustomizer {
     void sut_creates_instance_with_singular_list(User user) {
         assertThat(user.getRoles()).isNotNull();
         assertThat(user.getRoles()).isNotEmpty();
+    }
+
+    public abstract static class HierarchyEntity<H> {
+
+        H parent;
+        final Set<H> children = new HashSet<>();
+
+        protected HierarchyEntity(@Nullable H parent, @Nullable Set<H> children) {
+            this.parent = parent;
+            if (children != null) {
+                this.children.addAll(children);
+            }
+        }
+
+        public H getParent() {
+            return parent;
+        }
+
+        public Set<H> getChildren() {
+            return children;
+        }
+    }
+
+    @Getter
+    public static class Category extends HierarchyEntity<Category> {
+
+        private final String name;
+
+        @Builder
+        public Category(String name, Category parent, @Nullable Set<Category> children) {
+            super(parent, children);
+            this.name = name;
+        }
+    }
+
+    @Test
+    @AutoParams
+    @Customization(BuilderCustomizer.class)
+    void sut_handles_self_reference_without_stackoverflow(Category category) {
+        assertThat(category).isNotNull();
+        assertThat(category.getName()).isNotNull();
+        assertThat(category.getParent()).isNull();
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @Customization(BuilderCustomizer.class)
+    void sut_handles_collection_with_self_reference(Category category) {
+        assertThat(category).isNotNull();
+        assertThat(category.getName()).isNotNull();
+        assertThat(category.getChildren()).isNotNull();
+    }
+
+    @Getter
+    public static class Node {
+
+        private final String value;
+        private final Node left;
+        private final Node right;
+
+        @Builder
+        public Node(String value, Node left, Node right) {
+            this.value = value;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    @Test
+    @AutoParams
+    @Customization(BuilderCustomizer.class)
+    void sut_handles_tree_structure_without_stackoverflow(Node node) {
+        assertThat(node).isNotNull();
+        assertThat(node.getValue()).isNotNull();
+        assertThat(node.getLeft()).isNull();
+        assertThat(node.getRight()).isNull();
     }
 }
